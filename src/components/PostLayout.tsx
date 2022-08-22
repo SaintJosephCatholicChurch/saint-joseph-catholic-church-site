@@ -31,8 +31,8 @@ export default function PostLayout({
   description = "",
   children,
 }: Props) {
-  const keywords = tags.map(it => getTag(it).name);
-  const authorName = getAuthor(author).name;
+  const keywords = tags.map(it => getTag(it)?.name ?? 'N/A');
+  const authorName = getAuthor(author)?.name ?? 'N/A';
   return (
     <Layout>
       <BasicMeta

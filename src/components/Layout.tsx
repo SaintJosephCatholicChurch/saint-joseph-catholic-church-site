@@ -20,6 +20,9 @@ export default function Layout({ children }: Props) {
       <main>{children}</main>
       <style jsx>
         {`
+          #__next {
+            height: 100%;
+          }
           .root {
             display: block;
             padding: 4rem 0;

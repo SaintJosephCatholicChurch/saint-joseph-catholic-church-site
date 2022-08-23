@@ -10,10 +10,6 @@ body {
   height: 100%;
 }
 
-#__next {
-  height: 100%;
-}
-
 a {
   color: #9b9b9b;
   text-decoration: none;

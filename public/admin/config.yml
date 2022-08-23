@@ -4,6 +4,11 @@ backend:
 media_folder: public/images
 public_folder: /images
 
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "_"
+
 collections:
   - name: "config"
     label: "Config"

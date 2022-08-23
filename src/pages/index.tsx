@@ -10,6 +10,7 @@ import useNavigate from "../util/useNavigate";
 export default function Index() {
   const { hash = '', pathname = '' } = useLocation();
   const navigate = useNavigate();
+  console.log('hash', hash);
 
   useEffect(() => {
     if (hash === undefined || hash.trim() === '') {
@@ -17,6 +18,7 @@ export default function Index() {
     }
 
     const hashParts = hash.split('=');
+    console.log('hashParts', hashParts);
     if (hashParts.length == 2) {
       switch(hashParts[0]) {
         case '#invite_token':

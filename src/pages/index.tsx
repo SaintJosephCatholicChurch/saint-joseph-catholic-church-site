@@ -1,10 +1,34 @@
+import { useEffect } from "react";
 import Layout from "../components/Layout";
 import BasicMeta from "../components/meta/BasicMeta";
 import OpenGraphMeta from "../components/meta/OpenGraphMeta";
 import TwitterCardMeta from "../components/meta/TwitterCardMeta";
 import { SocialList } from "../components/SocialList";
+import useLocation from "../util/useLocation";
+import useNavigate from "../util/useNavigate";
 
 export default function Index() {
+  const { hash = '', pathname = '' } = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (hash === undefined || hash.trim() === '') {
+      return;
+    }
+
+    const hashParts = hash.split('=');
+    if (hashParts.length == 2) {
+      switch(hashParts[0]) {
+        case '#invite_token':
+        case '#recovery_token':
+        case '#email_change_token':
+        case '#confirmation_token':
+          navigate(`${pathname.replace(/\/$/g, '')}/admin${hash}`);
+          return;
+      }
+    }
+  }, [hash]);
+
   return (
     <Layout>
       <BasicMeta url={"/"} />

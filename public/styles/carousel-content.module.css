@@ -1,0 +1,27 @@
+.carouselContent {
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.carouselContent h1,
+.carouselContent h2,
+.carouselContent h3,
+.carouselContent h4,
+.carouselContent h5 {
+  margin: 0;
+  line-height: 1em;
+  font-weight: 700;
+  background-color: rgba(0, 0, 0, 0.64);
+  color: white;
+  padding: 8px;
+}
+
+.carouselContent h1 {
+  font-size: 3.5em;
+}
+
+.carouselContent h2 {
+  font-size: 2.5em;
+}

@@ -1,0 +1,279 @@
+{
+  "times": [
+    {
+      "name": "Mass Times",
+      "sections": [
+        {
+          "name": "Sunday Mass",
+          "days": [
+            {
+              "day": "Saturday",
+              "times": [
+                {
+                  "time": "5:00 PM",
+                  "note": "Rosary at 4:35 PM",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Sunday",
+              "times": [
+                {
+                  "time": "7:30 AM",
+                  "note": "Rosary at 7:10 AM",
+                  "end_time": ""
+                },
+                {
+                  "time": "10:00 AM",
+                  "note": "Rosary at 9:40 AM",
+                  "end_time": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Weekday Mass",
+          "days": [
+            {
+              "day": "Monday",
+              "times": [
+                {
+                  "note": "No Mass",
+                  "time": "",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Tuesday",
+              "times": [
+                {
+                  "time": "8:00 AM",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Wednesday",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Thursday",
+              "times": [
+                {
+                  "time": "8:00 AM",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Friday",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": ""
+                }
+              ]
+            },
+            {
+              "day": "Saturday",
+              "times": [
+                {
+                  "time": "8:00 AM",
+                  "end_time": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Latin Mass",
+          "days": [
+            {
+              "day": "First Friday of the Month",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "note": "Ordinary Form in Latin",
+                  "end_time": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Confession Times",
+      "sections": [
+        {
+          "days": [
+            {
+              "day": "Tuesday",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": "9:00 AM",
+                  "note": "After morning Mass"
+                }
+              ]
+            },
+            {
+              "day": "Wednesday",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "6:45 PM",
+                  "note": "Before evening Mass"
+                }
+              ]
+            },
+            {
+              "day": "Saturday",
+              "times": [
+                {
+                  "time": "4:00 PM",
+                  "end_time": "4:45 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "days": [
+            {
+              "day": "First Friday of the Month",
+              "times": [
+                {
+                  "time": "5:00 PM",
+                  "end_time": "5:45 PM"
+                }
+              ]
+            },
+            {
+              "day": "First Saturday of the Month",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": "9:00 AM",
+                  "note": "After morning Mass"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Adoration Times",
+      "sections": [
+        {
+          "days": [
+            {
+              "day": "After morning Mass",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": "6:00 PM",
+                  "note": ""
+                }
+              ]
+            },
+            {
+              "day": "Litany of the Eucharist/Benediction",
+              "times": [
+                {
+                  "time": "5:45 PM",
+                  "end_time": ""
+                }
+              ]
+            }
+          ],
+          "name": "First Friday of Each Month"
+        },
+        {
+          "name": "Every Tuesday Morning",
+          "days": [
+            {
+              "day": "Simple Reposition",
+              "times": [
+                {
+                  "time": "7:00 AM",
+                  "end_time": "8:00 AM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Every Wednesday Evening",
+          "days": [
+            {
+              "day": "Before evening Mass",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Litany of the Eucharist/Benediction",
+              "times": [
+                {
+                  "time": "6:45 PM",
+                  "end_time": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stations of the Cross",
+      "sections": [
+        {
+          "name": "",
+          "days": [
+            {
+              "day": "Every Friday during Lent",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "end_time": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Parish Office Hours",
+      "sections": [
+        {
+          "name": "",
+          "days": [
+            {
+              "day": "Monday - Friday",
+              "times": [
+                {
+                  "time": "9:00 AM",
+                  "end_time": "4:00 PM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

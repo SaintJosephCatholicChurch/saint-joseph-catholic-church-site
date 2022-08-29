@@ -1,0 +1,97 @@
+{
+  "menu_items": [
+    {
+      "title": "Home",
+      "url": "/"
+    },
+    {
+      "title": "Live Stream",
+      "url": "https://www.facebook.com/stjosephchurchbluffton/live"
+    },
+    {
+      "title": "Parish",
+      "menu_links": [
+        {
+          "title": "Event Calendar"
+        },
+        {
+          "page": "mass-confession-times",
+          "title": "Mass & Confession Times"
+        },
+        {
+          "title": "News Archive",
+          "url": "/posts"
+        },
+        {
+          "title": "Parish Bulletins",
+          "url": "/parish-bulletins"
+        },
+        {
+          "title": "Parish History"
+        },
+        {
+          "title": "Parish Membership"
+        },
+        {
+          "title": "Parish Staff"
+        }
+      ]
+    },
+    {
+      "title": "Ministries",
+      "menu_links": [
+        {
+          "title": "Finance"
+        },
+        {
+          "title": "Knights Of Columbus"
+        },
+        {
+          "title": "Lay Ministries"
+        },
+        {
+          "title": "Parish Council"
+        },
+        {
+          "title": "Prayer Chain"
+        },
+        {
+          "title": "RCIA"
+        },
+        {
+          "title": "Religious Education"
+        },
+        {
+          "title": "Social Group"
+        },
+        {
+          "title": "Women"
+        },
+        {
+          "title": "Youth"
+        }
+      ]
+    },
+    {
+      "title": "Resources",
+      "menu_links": [
+        {
+          "title": "Diocese of Fort Wayne - South Bend",
+          "url": "http://www.diocesefwsb.org/"
+        },
+        {
+          "title": "Today's Catholic",
+          "url": "https://todayscatholic.org/"
+        },
+        {
+          "title": "The Vatican",
+          "url": "http://w2.vatican.va/content/vatican/en.html"
+        }
+      ]
+    },
+    {
+      "title": "Contact",
+      "url": "/contact"
+    }
+  ]
+}

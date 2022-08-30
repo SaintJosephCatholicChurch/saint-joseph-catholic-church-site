@@ -1,4 +1,5 @@
 import React from 'react';
+import churchDetails from '../../lib/church_details';
 import { getTag } from '../../lib/tags';
 import Layout from '../Layout';
 import Footer from '../layout/footer/Footer';
@@ -28,7 +29,7 @@ const PageLayout = ({ title, date, slug, tags = [], description = '', children }
       <PageView title={title} tags={tags}>
         {children}
       </PageView>
-      <Footer />
+      <Footer churchDetails={churchDetails} />
     </Layout>
   );
 };

@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import churchDetails from '../../../lib/church_details';
-import styles from '../../../lib/styles';
+import { ChurchDetails, StylesConfig } from '../../../interface';
 import Container from '../Container';
 import ContactDetails from './ContactDetails';
 import Copyright from './Copyright';
@@ -9,7 +8,12 @@ import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
 import SearchBox from './SearchBox';
 
-const Footer = () => {
+interface FooterProps {
+  styles?: StylesConfig;
+  churchDetails: ChurchDetails;
+}
+
+const Footer = ({ styles, churchDetails }: FooterProps) => {
   const theme = useTheme();
 
   return (
@@ -22,7 +26,7 @@ const Footer = () => {
       <Box
         sx={{
           backgroundColor: '#e8e5e1',
-          backgroundImage: `url(${styles.footer_background})`,
+          backgroundImage: styles ? `url(${styles.footer_background})` : undefined,
           backgroundRepeat: 'repeat',
           backgroundPosition: 'center top',
           display: 'flex',
@@ -58,7 +62,7 @@ const Footer = () => {
           <Box>
             <FooterHeader text="Search Our Site" />
             <SearchBox />
-            <ContactDetails />
+            <ContactDetails churchDetails={churchDetails} />
           </Box>
         </Container>
       </Box>

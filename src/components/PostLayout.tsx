@@ -1,5 +1,6 @@
 import React from 'react';
 import { getAuthor } from '../lib/authors';
+import churchDetails from '../lib/church_details';
 import { getTag } from '../lib/tags';
 import Author from './Author';
 import Date from './Date';
@@ -59,7 +60,7 @@ const PostLayout = ({ title, date, slug, author, tags, description = '', childre
             ))}
           </ul>
         </article>
-        <Footer />
+        <Footer churchDetails={churchDetails} />
       </div>
     </Layout>
   );

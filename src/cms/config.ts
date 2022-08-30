@@ -99,7 +99,7 @@ const config: CmsConfig = {
       },
       files: [
         {
-          name: 'general',
+          name: 'church_details',
           label: 'General Church Details',
           file: 'content/church_details.json',
           description: 'General church details',
@@ -162,83 +162,6 @@ const config: CmsConfig = {
               label: 'Times',
               widget: 'times'
             }
-            // {
-            //   name: 'times',
-            //   label: 'Times',
-            //   widget: 'list',
-            //   summary: '{{fields.name}}',
-            //   fields: [
-            //     {
-            //       name: 'name',
-            //       label: 'Name',
-            //       widget: 'string'
-            //     },
-            //     {
-            //       name: 'sections',
-            //       label: 'Secitions',
-            //       label_singular: 'Secition',
-            //       widget: 'list',
-            //       summary: '{{fields.name}}',
-            //       fields: [
-            //         {
-            //           name: 'name',
-            //           label: 'Name',
-            //           widget: 'string',
-            //           required: false
-            //         },
-            //         {
-            //           name: 'days',
-            //           label: 'Days / Lines',
-            //           label_singular: 'Day / Line',
-            //           widget: 'list',
-            //           summary: '{{fields.day}}',
-            //           fields: [
-            //             {
-            //               name: 'day',
-            //               label: 'Day / Line Name',
-            //               widget: 'string'
-            //             },
-            //             {
-            //               name: 'times',
-            //               label: 'Times',
-            //               label_singular: 'Time',
-            //               widget: 'list',
-            //               summary: "{{time}} {{note}}",
-            //               fields: [
-            //                 {
-            //                   name: 'time',
-            //                   label: 'Start Time',
-            //                   widget: 'datetime',
-            //                   date_format: false,
-            //                   time_format: 'h:mm A',
-            //                   format: 'h:mm A',
-            //                   required: false,
-            //                   default: ""
-            //                 },
-            //                 {
-            //                   name: 'end_time',
-            //                   label: 'End Time',
-            //                   widget: 'datetime',
-            //                   date_format: false,
-            //                   time_format: 'h:mm A',
-            //                   format: 'h:mm A',
-            //                   required: false,
-            //                   default: ""
-            //                 },
-            //                 {
-            //                   name: 'note',
-            //                   label: 'Note',
-            //                   widget: 'text',
-            //                   required: false
-            //                 }
-            //               ]
-            //             }
-            //           ]
-            //         }
-            //       ]
-            //     }
-            //   ]
-            // }
           ]
         },
         {

@@ -5,8 +5,9 @@ import PageView from '../pages/PageView';
 const PagePreview = ({ entry, widgetFor, document }: PreviewTemplateComponentProps) => {
   return (
     <>
-      <StyleCopy document={document} />
-      <PageView title={entry.getIn(['data', 'title'])}>{widgetFor('body')}</PageView>
+      <StyleCopy document={document}>
+        <PageView title={entry.getIn(['data', 'title'])}>{widgetFor('body')}</PageView>
+      </StyleCopy>
     </>
   );
 };

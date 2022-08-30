@@ -1,9 +1,4 @@
 import details from "../../content/bulletins.json";
-
-type Bulletin = {
-  readonly name: string;
-  readonly date: string;
-  readonly pdf: string;
-};
+import { Bulletin } from "../interface";
 
 export default details.bulletins as Bulletin[];

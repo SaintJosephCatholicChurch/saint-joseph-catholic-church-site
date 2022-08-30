@@ -15,7 +15,6 @@ const SchedulePreview = ({ entry, document }: PreviewTemplateComponentProps) => 
   }, []);
 
   const handleTabChangeEvent = useCallback((event: ScheduleTabChangeEvent) => {
-    console.log('[data] event.detail', event.detail);
     setTab(event.detail);
   }, []);
 

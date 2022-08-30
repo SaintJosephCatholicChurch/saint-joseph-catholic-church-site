@@ -45,3 +45,28 @@ export interface Times {
   readonly name: string;
   readonly sections?: TimesSection[];
 }
+
+export interface StylesConfig {
+  readonly header_background: string;
+  readonly header_color: string;
+  readonly header_font_style: 'normal' | 'italic';
+  readonly footer_background: string;
+}
+
+export interface ChurchDetails {
+  readonly name: string;
+  readonly address: string;
+  readonly city: string;
+  readonly state: string;
+  readonly zipcode: string;
+  readonly phone: string;
+  readonly email: string;
+  readonly mission_statement: string;
+  readonly vision_statement: string;
+}
+
+export interface Bulletin {
+  readonly name: string;
+  readonly date: string;
+  readonly pdf: string;
+}

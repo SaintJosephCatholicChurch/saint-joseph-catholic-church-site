@@ -44,7 +44,7 @@ const PageView = ({ title, tags = [], children }: PageViewProps) => {
           }
         }}
       >
-        <Box sx={{ display: 'flex', gap: 4 }}>
+        <Box sx={{ display: 'flex', gap: 4, width: '100%' }}>
           <Box
             sx={{
               flexGrow: 1,

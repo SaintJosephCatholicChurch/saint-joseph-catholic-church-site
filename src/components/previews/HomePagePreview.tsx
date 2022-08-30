@@ -43,8 +43,9 @@ const PagePreview = ({ entry, document }: PreviewTemplateComponentProps) => {
   return useMemo(
     () => (
       <>
-        <StyleCopy document={document} />
-        <HomepageView slides={slides} homePageData={data} times={times} />
+        <StyleCopy document={document}>
+          <HomepageView slides={slides} homePageData={data} times={times} />
+        </StyleCopy>
       </>
     ),
     [data, document, slides]

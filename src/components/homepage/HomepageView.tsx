@@ -2,6 +2,7 @@
 import Box from '@mui/material/Box';
 import { memo } from 'react';
 import { HomePageData, SerializedSlide, Times } from '../../interface';
+import churchDetails from '../../lib/church_details';
 import CarouselView from '../carousel/CarouselView';
 import Footer from '../layout/footer/Footer';
 import Schedule from '../schedule/Schedule';
@@ -18,7 +19,7 @@ const HomepageView = memo(
       <Box sx={{ width: '100%' }}>
         <CarouselView slides={slides} />
         <Schedule times={times} background={schedule_background} backgroundColor={schedule_background_fallback_color} />
-        <Footer />
+        <Footer churchDetails={churchDetails} />
       </Box>
     );
   }

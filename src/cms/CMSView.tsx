@@ -2,6 +2,8 @@ import cmsApp from 'netlify-cms-app';
 import { CmsConfig } from 'netlify-cms-core';
 import { useEffect } from 'react';
 import BlogPostPreview from '../components/previews/BlogPostPreview';
+import BulletinsPreview from '../components/previews/BulletinsPreview';
+import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
 import PagePreview from '../components/previews/PagePreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
@@ -35,6 +37,8 @@ const CMSView = () => {
     cmsApp.registerPreviewTemplate('pages', PagePreview);
     cmsApp.registerPreviewTemplate('homepage', HomePagePreview);
     cmsApp.registerPreviewTemplate('times', SchedulePreview);
+    cmsApp.registerPreviewTemplate('church_details', ChurchDetailsPreview);
+    cmsApp.registerPreviewTemplate('bulletins', BulletinsPreview);
   }, []);
 
   return <div />;

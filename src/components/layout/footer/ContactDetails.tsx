@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
-import churchDetails from '../../../lib/church_details';
+import { ChurchDetails } from '../../../interface';
 
 const ChurchDetailsLink = styled('a')`
   display: flex;
@@ -19,7 +19,11 @@ const ChurchDetailsLink = styled('a')`
   }
 `;
 
-const ContactDetails = () => {
+interface ContactDetailsProps {
+  churchDetails: ChurchDetails;
+}
+
+const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
   return (
     <Box
       sx={{

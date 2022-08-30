@@ -10,8 +10,6 @@ import ScheduleWidget from './ScheduleWidget';
 export default class TimesWidget extends Component<CmsWidgetControlProps<Immutable.List<unknown>>> {
   handleOnChange(times: Times[]) {
     const { onChange } = this.props;
-
-    console.log('[data] onChange', times, Immutable.List(times));
     onChange(Immutable.List(times));
   }
 
@@ -19,7 +17,6 @@ export default class TimesWidget extends Component<CmsWidgetControlProps<Immutab
     const { value } = this.props;
 
     const plainValue = value.toJS();
-    console.log('[data]', plainValue);
 
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>

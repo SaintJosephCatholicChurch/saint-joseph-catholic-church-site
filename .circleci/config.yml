@@ -9,6 +9,10 @@ jobs:
       - run:
           name: Update NPM
           command: "sudo npm install -g npm"
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "package-lock.json" }}
+            - nextjs-public-cache-{{ .Branch }}
       - run:
           name: Install Dependencies
           command: npm install --legacy-peer-deps

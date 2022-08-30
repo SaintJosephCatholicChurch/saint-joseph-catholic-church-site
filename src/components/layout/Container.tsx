@@ -5,10 +5,11 @@ import { MAX_APP_WIDTH } from '../../constants';
 
 interface ContainerProps {
   children: ReactNode;
+  disablePadding?: boolean;
   sx?: SxProps<Theme>;
 }
 
-const Container = ({ children, sx }: ContainerProps) => {
+const Container = ({ children, disablePadding = false, sx }: ContainerProps) => {
   return (
     <Box
       sx={{
@@ -16,9 +17,8 @@ const Container = ({ children, sx }: ContainerProps) => {
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        pl: 3,
-        pr: 3,
         boxSizing: 'border-box',
+        p: !disablePadding ? '0 24px' : undefined,
         ...sx
       }}
     >

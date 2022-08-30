@@ -108,7 +108,7 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
         justifyContent: 'center'
       }}
     >
-      <Container>
+      <Container disablePadding>
         <Box
           sx={{
             display: 'grid',

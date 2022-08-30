@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+import List from '@mui/material/List';
+import { styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
@@ -14,8 +15,10 @@ import {
   TIMES_TITLE_HEIGHT
 } from '../../constants';
 import { Times } from '../../interface';
+import useSmallScreen from '../../util/smallScreen.util';
 import { isNotEmpty } from '../../util/string.util';
 import Container from '../layout/Container';
+import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
 const StyledTabs = styled(Tabs)`
@@ -30,16 +33,22 @@ const StyledTabs = styled(Tabs)`
 const StyledTab = styled(Tab)`
   color: #414141;
   align-items: flex-start;
-  padding: 32px;
-  font-size: 24px;
   font-weight: 400;
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
   letter-spacing: 0;
-  min-height: 124px;
 
   &.Mui-selected {
     color: #414141;
     background-color: #ffffff;
+  }
+
+  font-size: 18px;
+  padding: 16px;
+  min-height: 100px;
+  @media screen and (min-width: 1200px) {
+    font-size: 24px;
+    padding: 32px;
+    min-height: 124px;
   }
 `;
 
@@ -63,53 +72,77 @@ interface ScheduleProps {
 }
 
 const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
+  const theme = useTheme();
+
   const [value, setValue] = useState(0);
 
   const handleChange = useCallback((_event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   }, []);
 
-  const tabsHeight = useMemo(
-    () =>
-      times.reduce((height, timesEntry) => {
-        const linesHeight =
-          timesEntry.sections?.reduce((lineCount, section) => {
-            return (
-              lineCount +
-                section.days?.reduce((tempLineHeight, line) => {
-                  const lines = line.times?.length ?? 0;
-                  let lineTimesHeight = 0;
-                  if (lines > 0) {
-                    lineTimesHeight =
-                      lines * TIMES_LINE_TIMES_HEIGHT +
-                      TIMES_LINE_PADDING_MARGIN_HEIGHT +
-                      (lines - 1) * TIMES_LINE_TIMES_GAP;
-                  }
-                  return tempLineHeight + Math.max(lineTimesHeight, TIMES_LINE_MIN_HEIGHT);
-                }, 0) ?? 0
-            );
-          }, 0) ?? 0;
+  const isMobile = useSmallScreen();
+  const isSmallScreen = useSmallScreen(900);
+  const isMediumScreen = useSmallScreen(1200);
 
-        const sectionsWithTitles =
-          timesEntry.sections?.reduce((count, section) => {
-            return count + (isNotEmpty(section.name) ? 1 : 0);
-          }, 0) ?? 0;
+  const size = useMemo(() => {
+    if (isMobile) {
+      return 'mobile';
+    }
 
-        const calculatedHeight =
-          TIMES_TITLE_HEIGHT +
-          TIMES_PADDING_HEIGHT +
-          TIMES_SECTION_MARGIN_HEIGHT * (timesEntry.sections?.length ?? 0) +
-          TIMES_SECTION_TITLE_HEIGHT * sectionsWithTitles +
-          linesHeight;
+    if (isSmallScreen) {
+      return 'small';
+    }
 
-        if (calculatedHeight > height) {
-          return calculatedHeight;
-        }
+    if (isMediumScreen) {
+      return 'medium';
+    }
 
-        return height;
-      }, 0),
-    [times]
-  );
+    return 'large';
+  }, [isMediumScreen, isMobile, isSmallScreen]);
+
+  const tabsHeight = useMemo(() => {
+    if (size === 'mobile') {
+      return 0;
+    }
+
+    return times.reduce((height, timesEntry) => {
+      const linesHeight =
+        timesEntry.sections?.reduce((lineCount, section) => {
+          return (
+            lineCount +
+              section.days?.reduce((tempLineHeight, line) => {
+                const lines = line.times?.length ?? 0;
+                let lineTimesHeight = 0;
+                if (lines > 0) {
+                  lineTimesHeight =
+                    lines * TIMES_LINE_TIMES_HEIGHT(size) +
+                    TIMES_LINE_PADDING_MARGIN_HEIGHT +
+                    (lines - 1) * TIMES_LINE_TIMES_GAP;
+                }
+                return tempLineHeight + Math.max(lineTimesHeight, TIMES_LINE_MIN_HEIGHT);
+              }, 0) ?? 0
+          );
+        }, 0) ?? 0;
+
+      const sectionsWithTitles =
+        timesEntry.sections?.reduce((count, section) => {
+          return count + (isNotEmpty(section.name) ? 1 : 0);
+        }, 0) ?? 0;
+
+      const calculatedHeight =
+        TIMES_TITLE_HEIGHT(size) +
+        TIMES_PADDING_HEIGHT(size) +
+        TIMES_SECTION_MARGIN_HEIGHT * (timesEntry.sections?.length ?? 0) +
+        TIMES_SECTION_TITLE_HEIGHT * sectionsWithTitles +
+        linesHeight;
+
+      if (calculatedHeight > height) {
+        return calculatedHeight;
+      }
+
+      return height;
+    }, 0);
+  }, [size, times]);
 
   return (
     <Box
@@ -126,11 +159,30 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
       }}
     >
       <Container>
+        <List
+          sx={{
+            width: '100%',
+            bgcolor: 'background.paper',
+            [theme.breakpoints.up('md')]: {
+              display: 'none'
+            }
+          }}
+          component="div"
+          aria-labelledby="nested-list-subheader"
+          disablePadding
+        >
+          {times.map((timeSchedule, index) => (
+            <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
+          ))}
+        </List>
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: '2fr 5fr',
-            width: '100%'
+            width: '100%',
+            [theme.breakpoints.down('md')]: {
+              display: 'none'
+            }
           }}
         >
           <StyledTabs

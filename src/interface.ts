@@ -1,6 +1,8 @@
 import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
+export type ScreenSize = 'large' | 'medium' | 'small' | 'mobile';
+
 export interface FileMatter {
   readonly fileName: string;
   readonly fullPath: string;

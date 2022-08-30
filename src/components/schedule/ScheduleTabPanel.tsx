@@ -1,15 +1,22 @@
 /* eslint-disable react/display-name */
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { memo } from 'react';
 import { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import TabPanel from '../TabPanel';
 
 const StyledTabPanel = styled(TabPanel)`
-  padding: 50px;
-  padding-left: 100px;
   flex-direction: column;
   width: 100%;
+
+  padding: 50px;
+  @media screen and (min-width: 1200px) {
+    padding-left: 100px;
+  }
+
+  @media screen and (max-width: 900px) {
+    padding: 36px;
+  }
 
   &:not([hidden]) {
     display: flex;
@@ -21,7 +28,6 @@ const StyledTabPanelTitleWrapper = styled('div')`
 `;
 
 const StyledTabPanelTitle = styled('h2')`
-  font-size: 30px;
   font-weight: 500;
   color: #333;
   padding: 0;
@@ -29,6 +35,12 @@ const StyledTabPanelTitle = styled('h2')`
   margin: 0;
   border-bottom: 2px solid #bbbbbb;
   text-transform: uppercase;
+
+  font-size: 24px;
+  line-height: 24px;
+  @media screen and (min-width: 1200px) {
+    font-size: 30px;
+  }
 `;
 
 const StyledSectionTitle = styled('h3')`
@@ -61,8 +73,13 @@ const StyledDayTimeLineTitle = styled('div')`
   text-transform: uppercase;
   color: #d2ac54;
   font-weight: 500;
-  font-size: 16px;
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
+
+  font-size: 16px;
+  @media screen and (max-width: 900px) {
+    font-size: 14px;
+    line-height: 16px;
+  }
 `;
 
 const StyledDayTimeLineTimes = styled('div')`
@@ -80,12 +97,21 @@ const StyledDayTimeLineTime = styled('div')`
 
 const StyledDayTimeLineTimeTimes = styled('div')`
   text-transform: uppercase;
+
   font-size: 15px;
+  @media screen and (max-width: 900px) {
+    font-size: 14px;
+    line-height: 16px;
+  }
 `;
 
 const StyledDivider = styled('div')`
   color: #aaa;
+
   font-size: 15px;
+  @media screen and (max-width: 900px) {
+    font-size: 13px;
+  }
 `;
 
 const StyledDayTimeLineTimeComment = styled('div')`
@@ -103,6 +129,8 @@ interface ScheduleTabPanelProps {
 }
 
 const ScheduleTabPanel = memo(({ times, value, index }: ScheduleTabPanelProps) => {
+  const theme = useTheme();
+
   return (
     <StyledTabPanel value={value} index={index}>
       <StyledTabPanelTitleWrapper>

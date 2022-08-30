@@ -14,7 +14,8 @@ import TextField from '@mui/material/TextField';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
-import { memo, useCallback, useState } from 'react';
+import { memo, MouseEvent, useCallback, useState } from 'react';
+import CollapseSection from '../../../components/layout/CollapseSection';
 import TabPanel from '../../../components/TabPanel';
 import { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 import { isNotNullish } from '../../../util/null.util';
@@ -54,13 +55,18 @@ const StyledSectionTitle = styled(TextField)`
 `;
 
 const StyledSections = styled('div')`
-  margin-top: 32px;
+  margin-top: 24px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 16px;
   padding-bottom: 16px;
   border-bottom: 1px solid #333;
+
+  .MuiCollapse-wrapperInner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const StyledDayTimeLine = styled('div')`
@@ -69,9 +75,9 @@ const StyledDayTimeLine = styled('div')`
   align-items: flex-start;
   justify-content: space-between;
   min-height: 20px;
-  margin-top: 2px;
+  margin-top: 0;
   padding: 8px 0;
-  padding-left: 40px;
+  margin-left: 30px;
   padding-bottom: 16px;
   border-bottom: 1px solid #ccc;
   gap: 16px;
@@ -90,7 +96,7 @@ const StyledDayTimeLineTimes = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-left: 40px;
+  margin-left: 40px;
 `;
 
 const StyledDayTimeLineTime = styled('div')`
@@ -134,8 +140,15 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
     index: number;
   }
 
+  const stopPropagationOnClick = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   const [deletingSection, setDeletingSection] = useState<SectionId | null>(null);
-  const handleOnSectionDelete = useCallback((sectionId: SectionId) => () => setDeletingSection(sectionId), []);
+  const handleOnSectionDelete = useCallback((sectionId: SectionId) => (event: MouseEvent) => {
+    event.stopPropagation();
+    setDeletingSection(sectionId);
+  }, []);
   const handleOnSectionDeleteConfirm = useCallback(() => {
     if (deletingSection) {
       const { index } = deletingSection;
@@ -149,14 +162,11 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
   }, [deletingSection, onChange, times.sections]);
   const handleOnSectionDeleteClose = useCallback(() => setDeletingSection(null), []);
 
-  const onSectionAdd = useCallback(
-    () => {
-      const newSections = [...times.sections];
-      newSections.push({ name: 'New Section', days: [] });
-      onChange({ sections: newSections });
-    },
-    [onChange, times.sections]
-  );
+  const onSectionAdd = useCallback(() => {
+    const newSections = [...times.sections];
+    newSections.push({ name: 'New Section', days: [] });
+    onChange({ sections: newSections });
+  }, [onChange, times.sections]);
 
   const onSectionChange = useCallback(
     (section: TimesSection, index: number, data: Partial<TimesSection>) => {
@@ -276,19 +286,25 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
           const handleOnDayLineAdd = onDayLineAdd(section, sectionIndex);
           const onSectionDelete = handleOnSectionDelete({ section, index: sectionIndex });
           return (
-            <>
-              <StyledSections key={`section-${sectionIndex}`}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <StyledSectionTitle
-                    label="Section"
-                    value={section.name}
-                    size="small"
-                    onChange={(event) => onSectionChange(section, sectionIndex, { name: event.target.value })}
-                  />
-                  <IconButton onClick={onSectionDelete} color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
+            <StyledSections key={`section-${sectionIndex}`}>
+              <CollapseSection
+                header={
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <StyledSectionTitle
+                      label="Section"
+                      value={section.name}
+                      size="small"
+                      onChange={(event) => onSectionChange(section, sectionIndex, { name: event.target.value })}
+                      onClick={stopPropagationOnClick}
+                    />
+                    <IconButton onClick={onSectionDelete} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                }
+                position="before"
+                sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}
+              >
                 {section.days?.map((day, dayIndex) => {
                   const onAddDayTime = onTimeAdd(section, sectionIndex, day, dayIndex);
                   const onDayLineDelete = handleOnDayLineDelete({
@@ -395,13 +411,13 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                   );
                 })}
                 <Box sx={{ display: 'flex' }}>
-                  <Button onClick={handleOnDayLineAdd} sx={{ ml: 5 }}>
+                  <Button onClick={handleOnDayLineAdd} sx={{ ml: '30px' }}>
                     <AddIcon />
                     <Box>Add Day / Line</Box>
                   </Button>
                 </Box>
-              </StyledSections>
-            </>
+              </CollapseSection>
+            </StyledSections>
           );
         })}
         <Box sx={{ display: 'flex' }}>

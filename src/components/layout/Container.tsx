@@ -10,7 +10,18 @@ interface ContainerProps {
 
 const Container = ({ children, sx }: ContainerProps) => {
   return (
-    <Box sx={{ maxWidth: MAX_APP_WIDTH, width: '100%', display: 'flex', justifyContent: 'center', ...sx }}>
+    <Box
+      sx={{
+        maxWidth: MAX_APP_WIDTH,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        pl: 3,
+        pr: 3,
+        boxSizing: 'border-box',
+        ...sx
+      }}
+    >
       {children}
     </Box>
   );

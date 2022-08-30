@@ -16,6 +16,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+            - ./.next/cache
       - run:
           name: NextJS Build
           command: npm run export

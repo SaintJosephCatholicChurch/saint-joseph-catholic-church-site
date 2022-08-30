@@ -95,7 +95,7 @@ const config: CmsConfig = {
       label: 'Church Details',
       delete: false,
       editor: {
-        preview: false
+        preview: true
       },
       files: [
         {

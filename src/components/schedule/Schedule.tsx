@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   TIMES_LINE_MIN_HEIGHT,
   TIMES_LINE_PADDING_MARGIN_HEIGHT,
@@ -69,16 +69,28 @@ interface ScheduleProps {
   times: Times[];
   background?: string;
   backgroundColor?: string;
+  tab?: number;
+  onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
+const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
 
   const [value, setValue] = useState(0);
 
-  const handleChange = useCallback((_event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  }, []);
+  const handleChange = useCallback(
+    (_event: SyntheticEvent, newValue: number) => {
+      setValue(newValue);
+      onTabChange?.(newValue);
+    },
+    [onTabChange]
+  );
+
+  useEffect(() => {
+    if (tab !== undefined && tab !== value) {
+      setValue(tab);
+    }
+  }, [tab, value]);
 
   const isMobile = useSmallScreen();
   const isSmallScreen = useSmallScreen(900);
@@ -187,7 +199,7 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
         >
           <StyledTabs
             orientation="vertical"
-            variant="scrollable"
+            variant="fullWidth"
             value={value}
             onChange={handleChange}
             aria-label="Vertical tabs example"

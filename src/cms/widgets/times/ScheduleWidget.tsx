@@ -7,6 +7,8 @@ import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import Container from '../../../components/layout/Container';
 import { Times } from '../../../interface';
+import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
+import { useWindowEvent } from '../../../util/window.util';
 import ScheduleTabPanel from './ScheduleTabPanelWidget';
 
 const StyledTabs = styled(Tabs)`
@@ -70,7 +72,14 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
 
   const handleTabChange = useCallback((_event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    window.dispatchEvent(new ScheduleTabChangeEvent(newValue));
   }, []);
+
+  const handleTabChangeEvent = useCallback((event: ScheduleTabChangeEvent) => {
+    setValue(event.detail);
+  }, []);
+
+  useWindowEvent('scheduleTabChange', handleTabChangeEvent);
 
   const handleDataChange = useCallback(
     (timesValue: Times, index: number) => (newData: Partial<Times>) => {

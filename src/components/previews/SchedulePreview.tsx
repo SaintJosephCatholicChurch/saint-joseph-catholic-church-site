@@ -1,0 +1,36 @@
+import { PreviewTemplateComponentProps } from 'netlify-cms-core';
+import { useCallback, useMemo, useState } from 'react';
+import StyleCopy from '../../cms/StyleCopy';
+import { Times } from '../../interface';
+import ScheduleTabChangeEvent from '../../util/events/ScheduleTabChangeEvent';
+import { useWindowEvent } from '../../util/window.util';
+import Schedule from '../schedule/Schedule';
+
+const SchedulePreview = ({ entry, document }: PreviewTemplateComponentProps) => {
+  const data = useMemo(() => entry.toJS().data.times as Times[], [entry]);
+  const [tab, setTab] = useState(0);
+
+  const handleTabChange = useCallback((index: number) => {
+    window.dispatchEvent(new ScheduleTabChangeEvent(index));
+  }, []);
+
+  const handleTabChangeEvent = useCallback((event: ScheduleTabChangeEvent) => {
+    console.log('[data] event.detail', event.detail);
+    setTab(event.detail);
+  }, []);
+
+  useWindowEvent('scheduleTabChange', handleTabChangeEvent, parent.window);
+
+  return useMemo(
+    () => (
+      <>
+        <StyleCopy document={document}>
+          <Schedule times={data} tab={tab} onTabChange={handleTabChange} />
+        </StyleCopy>
+      </>
+    ),
+    [data, document, handleTabChange, tab]
+  );
+};
+
+export default SchedulePreview;

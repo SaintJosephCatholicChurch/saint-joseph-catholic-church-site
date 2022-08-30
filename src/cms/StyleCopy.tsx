@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 interface StyleCopyProps {
   document: Document;
+  children?: ReactNode;
 }
 
-const StyleCopy = ({ document }: StyleCopyProps) => {
+const StyleCopy = ({ document, children }: StyleCopyProps) => {
   const [styles, setStyles] = useState<HTMLStyleElement[]>([]);
+  const [show, setShow] = useState(false);
 
   const getStyles = useCallback(() => {
     if (typeof window === undefined) {
@@ -25,13 +27,20 @@ const StyleCopy = ({ document }: StyleCopyProps) => {
       setStyles(newStyles);
     }
   }, [styles.length]);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       getStyles();
     }, 250);
     return () => clearTimeout(timer);
   }, [getStyles]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShow(true);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (parent) {
@@ -46,7 +55,7 @@ const StyleCopy = ({ document }: StyleCopyProps) => {
     return () => {};
   }, [document, styles]);
 
-  return null;
+  return <div style={!show ? { visibility: 'hidden' } : {}}>{children}</div>;
 };
 
 export default StyleCopy;

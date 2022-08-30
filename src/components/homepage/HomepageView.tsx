@@ -14,8 +14,6 @@ interface HomepageViewProps {
 
 const HomepageView = memo(
   ({ slides, homePageData: { schedule_background, schedule_background_fallback_color }, times }: HomepageViewProps) => {
-    console.log('[data]', slides, schedule_background, schedule_background_fallback_color);
-
     return (
       <Box sx={{ width: '100%' }}>
         <CarouselView slides={slides} />

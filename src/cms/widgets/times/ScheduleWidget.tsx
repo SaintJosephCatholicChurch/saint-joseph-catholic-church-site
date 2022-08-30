@@ -1,8 +1,11 @@
+import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import Container from '../../../components/layout/Container';
 import {
   TIMES_LINE_MIN_HEIGHT,
   TIMES_LINE_PADDING_MARGIN_HEIGHT,
@@ -11,11 +14,10 @@ import {
   TIMES_SECTION_MARGIN_HEIGHT,
   TIMES_SECTION_TITLE_HEIGHT,
   TIMES_TITLE_HEIGHT
-} from '../../constants';
-import { Times } from '../../interface';
-import { isNotEmpty } from '../../util/string.util';
-import Container from '../layout/Container';
-import ScheduleTabPanel from './ScheduleTabPanel';
+} from '../../../constants';
+import { Times } from '../../../interface';
+import { isNotEmpty } from '../../../util/string.util';
+import ScheduleTabPanel from './ScheduleTabPanelWidget';
 
 const StyledTabs = styled(Tabs)`
   background-color: rgba(241, 241, 241, 0.75);
@@ -30,16 +32,29 @@ const StyledTab = styled(Tab)`
   color: #414141;
   align-items: flex-start;
   padding: 32px;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
   letter-spacing: 0;
-  min-height: 124px;
+  min-height: 80px;
 
   &.Mui-selected {
     color: #414141;
     background-color: #ffffff;
   }
+`;
+
+const AddTabButton = styled(Button)`
+  align-items: flex-start;
+  padding: 28px 32px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Oswald', Helvetica, Arial, sans-serif;
+  letter-spacing: 0;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 const StyledTabPanels = styled('div')`
@@ -57,16 +72,39 @@ function a11yProps(index: number) {
 
 interface ScheduleProps {
   times: Times[];
-  background?: string;
-  backgroundColor?: string;
+  onChange: (times: Times[]) => void;
 }
 
-const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
+const Schedule = ({ times, onChange }: ScheduleProps) => {
   const [value, setValue] = useState(0);
 
-  const handleChange = useCallback((_event: SyntheticEvent, newValue: number) => {
+  const handleTabChange = useCallback((_event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   }, []);
+
+  const handleDataChange = useCallback(
+    (timesValue: Times, index: number) => (newData: Partial<Times>) => {
+      const newTimes = [...times];
+      newTimes[index] = { ...timesValue, ...newData };
+      onChange(newTimes);
+    },
+    [onChange, times]
+  );
+
+  const handleAddTimes = useCallback(() => {
+    const newTimes = [...times];
+    newTimes.push({ name: 'New Times', sections: [] });
+    onChange(newTimes);
+  }, [onChange, times]);
+
+  const handleRemoveTimes = useCallback(
+    (index: number) => () => {
+      const newTimes = [...times];
+      newTimes.splice(index, 1);
+      onChange(newTimes);
+    },
+    [onChange, times]
+  );
 
   const tabsHeight = useMemo(
     () =>
@@ -107,10 +145,8 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
   return (
     <Box
       sx={{
-        pt: 5,
-        pb: 5,
-        backgroundColor: backgroundColor,
-        backgroundImage: background ? `url(${background})` : undefined,
+        border: '1px solid rgb(223, 223, 227)',
+        backgroundColor: 'rgba(241, 241, 241, 0.75)',
         backgroundRepeat: 'repeat',
         backgroundPosition: 'center top',
         display: 'flex',
@@ -130,7 +166,7 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
             orientation="vertical"
             variant="scrollable"
             value={value}
-            onChange={handleChange}
+            onChange={handleTabChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
             sx={{
@@ -140,10 +176,21 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
             {times.map((timeSchedule, index) => (
               <StyledTab key={`time-schedule-${index}`} label={timeSchedule.name} {...a11yProps(index)} />
             ))}
+            <AddTabButton onClick={handleAddTimes}>
+              <AddIcon />
+              <Box>Add Category</Box>
+            </AddTabButton>
           </StyledTabs>
           <StyledTabPanels>
             {times.map((timeSchedule, index) => (
-              <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
+              <ScheduleTabPanel
+                key={`schedule-tab-${index}`}
+                value={value}
+                index={index}
+                times={timeSchedule}
+                onChange={handleDataChange(timeSchedule, index)}
+                onDelete={handleRemoveTimes(index)}
+              />
             ))}
           </StyledTabPanels>
         </Box>

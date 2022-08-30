@@ -10,9 +10,9 @@
               "day": "Saturday",
               "times": [
                 {
+                  "end_time": "",
                   "time": "5:00 PM",
-                  "note": "Rosary at 4:35 PM",
-                  "end_time": ""
+                  "note": "Rosary at 4:35 PM"
                 }
               ]
             },

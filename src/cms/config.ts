@@ -1,4 +1,34 @@
-import { CmsConfig } from 'netlify-cms-core';
+import {
+  CmsConfig as NetlifyCmsConfig,
+  CmsCollection as NetlifyCmsCollection,
+  CmsCollectionFile as NetlifyCmsCollectionFile,
+  CmsField as NetlifyCmsField,
+  CmsFieldBase
+} from 'netlify-cms-core';
+
+export interface CmsFieldTimes {
+  widget: 'times';
+}
+
+export type CmsField =
+  | NetlifyCmsField
+  | (CmsFieldBase &
+      (
+        | CmsFieldTimes
+      ));
+
+export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
+  fields: CmsField[];
+}
+
+export interface CmsCollection extends Omit<NetlifyCmsCollection, 'files' | 'fields'> {
+  files?: CmsCollectionFile[];
+  fields?: CmsField[];
+}
+
+export interface CmsConfig extends Omit<NetlifyCmsConfig, 'collections'> {
+  collections: CmsCollection[];
+}
 
 const config: CmsConfig = {
   backend: {
@@ -130,80 +160,85 @@ const config: CmsConfig = {
             {
               name: 'times',
               label: 'Times',
-              widget: 'list',
-              summary: '{{fields.name}}',
-              fields: [
-                {
-                  name: 'name',
-                  label: 'Name',
-                  widget: 'string'
-                },
-                {
-                  name: 'sections',
-                  label: 'Secitions',
-                  label_singular: 'Secition',
-                  widget: 'list',
-                  summary: '{{fields.name}}',
-                  fields: [
-                    {
-                      name: 'name',
-                      label: 'Name',
-                      widget: 'string',
-                      required: false
-                    },
-                    {
-                      name: 'days',
-                      label: 'Days / Lines',
-                      label_singular: 'Day / Line',
-                      widget: 'list',
-                      summary: '{{fields.day}}',
-                      fields: [
-                        {
-                          name: 'day',
-                          label: 'Day / Line Name',
-                          widget: 'string'
-                        },
-                        {
-                          name: 'times',
-                          label: 'Times',
-                          label_singular: 'Time',
-                          widget: 'list',
-                          summary: "{{time}} {{note}}",
-                          fields: [
-                            {
-                              name: 'time',
-                              label: 'Start Time',
-                              widget: 'datetime',
-                              date_format: false,
-                              time_format: 'h:mm A',
-                              format: 'h:mm A',
-                              required: false,
-                              default: ""
-                            },
-                            {
-                              name: 'end_time',
-                              label: 'End Time',
-                              widget: 'datetime',
-                              date_format: false,
-                              time_format: 'h:mm A',
-                              format: 'h:mm A',
-                              required: false,
-                              default: ""
-                            },
-                            {
-                              name: 'note',
-                              label: 'Note',
-                              widget: 'text',
-                              required: false
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              widget: 'times'
             }
+            // {
+            //   name: 'times',
+            //   label: 'Times',
+            //   widget: 'list',
+            //   summary: '{{fields.name}}',
+            //   fields: [
+            //     {
+            //       name: 'name',
+            //       label: 'Name',
+            //       widget: 'string'
+            //     },
+            //     {
+            //       name: 'sections',
+            //       label: 'Secitions',
+            //       label_singular: 'Secition',
+            //       widget: 'list',
+            //       summary: '{{fields.name}}',
+            //       fields: [
+            //         {
+            //           name: 'name',
+            //           label: 'Name',
+            //           widget: 'string',
+            //           required: false
+            //         },
+            //         {
+            //           name: 'days',
+            //           label: 'Days / Lines',
+            //           label_singular: 'Day / Line',
+            //           widget: 'list',
+            //           summary: '{{fields.day}}',
+            //           fields: [
+            //             {
+            //               name: 'day',
+            //               label: 'Day / Line Name',
+            //               widget: 'string'
+            //             },
+            //             {
+            //               name: 'times',
+            //               label: 'Times',
+            //               label_singular: 'Time',
+            //               widget: 'list',
+            //               summary: "{{time}} {{note}}",
+            //               fields: [
+            //                 {
+            //                   name: 'time',
+            //                   label: 'Start Time',
+            //                   widget: 'datetime',
+            //                   date_format: false,
+            //                   time_format: 'h:mm A',
+            //                   format: 'h:mm A',
+            //                   required: false,
+            //                   default: ""
+            //                 },
+            //                 {
+            //                   name: 'end_time',
+            //                   label: 'End Time',
+            //                   widget: 'datetime',
+            //                   date_format: false,
+            //                   time_format: 'h:mm A',
+            //                   format: 'h:mm A',
+            //                   required: false,
+            //                   default: ""
+            //                 },
+            //                 {
+            //                   name: 'note',
+            //                   label: 'Note',
+            //                   widget: 'text',
+            //                   required: false
+            //                 }
+            //               ]
+            //             }
+            //           ]
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
           ]
         },
         {

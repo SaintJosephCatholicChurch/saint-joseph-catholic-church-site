@@ -6,6 +6,7 @@ import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import {
   TIMES_LINE_MIN_HEIGHT,
   TIMES_LINE_PADDING_MARGIN_HEIGHT,
+  TIMES_LINE_TIMES_GAP,
   TIMES_LINE_TIMES_HEIGHT,
   TIMES_PADDING_HEIGHT,
   TIMES_SECTION_MARGIN_HEIGHT,
@@ -76,8 +77,14 @@ const Schedule = ({ times, background, backgroundColor }: ScheduleProps) => {
             return (
               lineCount +
                 section.days?.reduce((tempLineHeight, line) => {
-                  const lineTimesHeight =
-                    (line.times?.length ?? 0) * TIMES_LINE_TIMES_HEIGHT + TIMES_LINE_PADDING_MARGIN_HEIGHT;
+                  const lines = line.times?.length ?? 0;
+                  let lineTimesHeight = 0;
+                  if (lines > 0) {
+                    lineTimesHeight =
+                      lines * TIMES_LINE_TIMES_HEIGHT +
+                      TIMES_LINE_PADDING_MARGIN_HEIGHT +
+                      (lines - 1) * TIMES_LINE_TIMES_GAP;
+                  }
                   return tempLineHeight + Math.max(lineTimesHeight, TIMES_LINE_MIN_HEIGHT);
                 }, 0) ?? 0
             );

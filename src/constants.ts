@@ -9,6 +9,7 @@ export const TIMES_PADDING_HEIGHT = 100;
 export const TIMES_TITLE_HEIGHT = 52.5;
 export const TIMES_LINE_MIN_HEIGHT = 33;
 export const TIMES_LINE_TIMES_HEIGHT = 17.25;
+export const TIMES_LINE_TIMES_GAP = 4;
 export const TIMES_LINE_PADDING_MARGIN_HEIGHT = 13;
 export const TIMES_SECTION_TITLE_HEIGHT = 31;
 export const TIMES_SECTION_MARGIN_HEIGHT = 32;

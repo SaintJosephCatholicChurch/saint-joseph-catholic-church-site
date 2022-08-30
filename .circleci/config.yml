@@ -12,20 +12,27 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "package-lock.json" }}
-            - nextjs-public-cache-{{ .Branch }}
+            - nextjs-cache-{{ checksum "package-lock.json" }}
+            - nextjs-public-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
           command: npm install --legacy-peer-deps
-      - run:
-          name: NextJS Build
-          command: npm run export
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./.next/cache
+      - run:
+          name: NextJS Build
+          command: npm run export
       - save_cache:
-          key: nextjs-public-cache-{{ .Branch }}
+          key: nextjs-cache-{{ checksum "package-lock.json" }}
+          when: on_success
+          paths:
+            - ./.next/cache
+      - save_cache:
+          key: nextjs-public-cache-{{ checksum "package-lock.json" }}
+          when: on_success
           paths:
             - ./dist
       - run:

@@ -1,6 +1,5 @@
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig } from 'netlify-cms-core';
-import Head from 'next/head';
 import { useEffect } from 'react';
 import BlogPostPreview from '../components/previews/BlogPostPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
@@ -37,11 +36,7 @@ const CMSView = () => {
     (cmsApp.registerWidget as any)('markdown', controlComponent, previewComponent, schema);
   }, []);
 
-  return (
-    <Head>
-      <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async />
-    </Head>
-  );
+  return <div />;
 };
 
 export default CMSView;

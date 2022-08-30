@@ -4,19 +4,9 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { SyntheticEvent, useCallback, useMemo, useState } from 'react';
+import { SyntheticEvent, useCallback, useState } from 'react';
 import Container from '../../../components/layout/Container';
-import {
-  TIMES_LINE_MIN_HEIGHT,
-  TIMES_LINE_PADDING_MARGIN_HEIGHT,
-  TIMES_LINE_TIMES_HEIGHT,
-  TIMES_PADDING_HEIGHT,
-  TIMES_SECTION_MARGIN_HEIGHT,
-  TIMES_SECTION_TITLE_HEIGHT,
-  TIMES_TITLE_HEIGHT
-} from '../../../constants';
 import { Times } from '../../../interface';
-import { isNotEmpty } from '../../../util/string.util';
 import ScheduleTabPanel from './ScheduleTabPanelWidget';
 
 const StyledTabs = styled(Tabs)`
@@ -106,42 +96,6 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
     [onChange, times]
   );
 
-  const tabsHeight = useMemo(
-    () =>
-      times.reduce((height, timesEntry) => {
-        const linesHeight =
-          timesEntry.sections?.reduce((lineCount, section) => {
-            return (
-              lineCount +
-                section.days?.reduce((tempLineHeight, line) => {
-                  const lineTimesHeight =
-                    (line.times?.length ?? 0) * TIMES_LINE_TIMES_HEIGHT + TIMES_LINE_PADDING_MARGIN_HEIGHT;
-                  return tempLineHeight + Math.max(lineTimesHeight, TIMES_LINE_MIN_HEIGHT);
-                }, 0) ?? 0
-            );
-          }, 0) ?? 0;
-
-        const sectionsWithTitles =
-          timesEntry.sections?.reduce((count, section) => {
-            return count + (isNotEmpty(section.name) ? 1 : 0);
-          }, 0) ?? 0;
-
-        const calculatedHeight =
-          TIMES_TITLE_HEIGHT +
-          TIMES_PADDING_HEIGHT +
-          TIMES_SECTION_MARGIN_HEIGHT * (timesEntry.sections?.length ?? 0) +
-          TIMES_SECTION_TITLE_HEIGHT * sectionsWithTitles +
-          linesHeight;
-
-        if (calculatedHeight > height) {
-          return calculatedHeight;
-        }
-
-        return height;
-      }, 0),
-    [times]
-  );
-
   return (
     <Box
       sx={{
@@ -169,9 +123,6 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
             onChange={handleTabChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
-            sx={{
-              minHeight: tabsHeight > 0 ? tabsHeight : undefined
-            }}
           >
             {times.map((timeSchedule, index) => (
               <StyledTab key={`time-schedule-${index}`} label={timeSchedule.name} {...a11yProps(index)} />

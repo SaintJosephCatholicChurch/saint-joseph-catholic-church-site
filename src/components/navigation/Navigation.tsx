@@ -1,33 +1,27 @@
-/* eslint-disable @next/next/no-img-element */
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import { styled } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { useTheme } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { MAX_APP_WIDTH } from '../../constants';
-import config from '../../lib/config';
 import navItems from '../../lib/menu';
+import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 import NavItem from './NavItem';
 
 const DRAWER_WIDTH = 240;
 
-const StyledLink = styled('a')`
-  display: flex;
-`;
-
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const theme = useTheme();
-  const trigger = useScrollTrigger();
+  const trigger = useScrollTrigger({ disableHysteresis: true });
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -44,25 +38,8 @@ export default function Navigation() {
           textAlign: 'center'
         }}
       >
-        <Box
-          component="img"
-          src={config.logo}
-          alt={config.site_title}
-          sx={{
-            [theme.breakpoints.down('md')]: {
-              height: '50px',
-              padding: '3px 0',
-              boxSizing: 'border-box'
-            },
-            [theme.breakpoints.up('md')]: {
-              transition: 'height,padding 0.5s ease;',
-              height: '100%',
-              padding: trigger ? '8px 0' : '16px 0',
-              boxSizing: 'border-box'
-            }
-          }}
-        />
-        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 1 }} />
+        <Logo responsive={false} />
+        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List>
           {navItems.map((item) => (
             <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
@@ -70,7 +47,7 @@ export default function Navigation() {
         </List>
       </Box>
     ),
-    [handleDrawerToggle, theme.breakpoints, trigger]
+    [handleDrawerToggle]
   );
 
   const container = useMemo(() => (typeof window !== 'undefined' ? window.document.body : undefined), []);
@@ -80,7 +57,7 @@ export default function Navigation() {
       <AppBar
         component="nav"
         sx={{
-          backgroundColor: 'rgba(10, 10, 10, 1)',
+          backgroundColor: '#bc2f3b',
           alignItems: 'center'
         }}
       >
@@ -90,10 +67,10 @@ export default function Navigation() {
             boxSizing: 'border-box',
             [theme.breakpoints.down('md')]: {
               pl: 3,
-              pr: 1
+              pr: 0
             },
             [theme.breakpoints.up('md')]: {
-              transition: 'height 0.5s ease;',
+              transition: 'height 250ms ease',
               height: trigger ? 64 : 92,
               maxWidth: MAX_APP_WIDTH
             }
@@ -116,26 +93,7 @@ export default function Navigation() {
               }
             }}
           />
-          <StyledLink sx={{ height: '100%' }} href="/">
-            <Box
-              component="img"
-              src={config.logo}
-              alt={config.site_title}
-              sx={{
-                [theme.breakpoints.down('md')]: {
-                  height: '50px',
-                  padding: '3px 0',
-                  boxSizing: 'border-box'
-                },
-                [theme.breakpoints.up('md')]: {
-                  transition: 'height,padding 0.5s ease;',
-                  height: '100%',
-                  padding: trigger ? '8px 0' : '16px 0',
-                  boxSizing: 'border-box'
-                }
-              }}
-            />
-          </StyledLink>
+          <Logo trigger={trigger} />
           <Box
             sx={{
               flexGrow: 1,
@@ -173,7 +131,7 @@ export default function Navigation() {
           sx={{
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': {
-              backgroundColor: '#680b12',
+              backgroundColor: '#bc2f3b',
               boxSizing: 'border-box',
               width: DRAWER_WIDTH
             }

@@ -2,8 +2,9 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useMemo } from 'react';
 import PageLayout from '../../../components/PageLayout';
 import TagPostList from '../../../components/TagPostList';
+import { PostContent } from '../../../interface';
 import config from '../../../lib/config';
-import { countPosts, listPostContent, PostContent } from '../../../lib/posts';
+import { countPosts, listPostContent } from '../../../lib/posts';
 import { getTag, listTags, TagContent } from '../../../lib/tags';
 
 type Props = {
@@ -33,15 +34,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     current: page ? parseInt(page as string) : 1,
     pages: Math.ceil(countPosts(slug) / config.posts_per_page)
   };
+
   const props: {
     posts: PostContent[];
     tag: TagContent;
     pagination: { current: number; pages: number };
     page?: string;
   } = { posts, tag, pagination };
+
   if (page) {
     props.page = page;
   }
+
   return {
     props
   };

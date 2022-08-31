@@ -383,11 +383,6 @@ const config: CmsConfig = {
               widget: 'string'
             },
             {
-              name: 'logo',
-              label: 'Logo',
-              widget: 'image'
-            },
-            {
               name: 'site_keywords',
               label: 'Site keywords',
               widget: 'list',

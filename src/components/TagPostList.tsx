@@ -1,18 +1,18 @@
-import React from "react";
-import { PostContent } from "../lib/posts";
-import { TagContent } from "../lib/tags";
-import PostItem from "./PostItem";
-import Pagination from "./Pagination";
+import { PostContent } from '../interface';
+import { TagContent } from '../lib/tags';
+import Pagination from './Pagination';
+import PostItem from './PostItem';
 
-type Props = {
+interface TagPostListProps {
   posts: PostContent[];
   tag: TagContent;
   pagination: {
     current: number;
     pages: number;
   };
-};
-export default function TagPostList({ posts, tag, pagination }: Props) {
+}
+
+const TagPostList = ({ posts, tag, pagination }: TagPostListProps) => {
   return (
     <div>
       <h1>
@@ -29,13 +29,12 @@ export default function TagPostList({ posts, tag, pagination }: Props) {
         current={pagination.current}
         pages={pagination.pages}
         link={{
-          href: () => "/posts/tags/[[...slug]]",
-          as: (page) =>
-            page === 1
-              ? "/posts/tags/" + tag.slug
-              : `/posts/tags/${tag.slug}/${page}`,
+          href: () => '/posts/tags/[[...slug]]',
+          as: (page) => (page === 1 ? '/posts/tags/' + tag.slug : `/posts/tags/${tag.slug}/${page}`)
         }}
       />
     </div>
   );
-}
+};
+
+export default TagPostList;

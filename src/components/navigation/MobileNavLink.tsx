@@ -11,7 +11,7 @@ interface MobileNavLinkProps {
 
 const MobileNavLink = ({ link: { url, page, title }, onClick }: MobileNavLinkProps) => {
   return (
-    <ListItemButton sx={{ pl: 4, color: '#d6bf86' }} onClick={onClick}>
+    <ListItemButton sx={{ pl: 4, color: '#ffffff' }} onClick={onClick}>
       {url || page ? (
         <CleanLink target={url?.startsWith('http') ? '_blank' : undefined} href={url ?? `/${page}`}>
           {<ListItemText primary={title} />}

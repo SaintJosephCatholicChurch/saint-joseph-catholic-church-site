@@ -10,9 +10,9 @@ import { CleanLink } from '../common-styled';
 import NavLink from './NavLink';
 
 const StyledButton = styled(Button)`
-  color: #d6bf86;
+  color: #fde7a5;
   lineheight: 60px;
-  padding: 10px 20px;
+  padding: 14px 20px 14px;
   whitespace: nowrap;
 
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
@@ -25,9 +25,10 @@ const StyledButton = styled(Button)`
 
   &:hover {
     color: #ffffff;
+    background-color: #d34f5a;
 
     .menu-item-underline {
-      width: 100%;
+      width: 90%;
     }
   }
 `;
@@ -36,7 +37,7 @@ const StyledUnderlineWrapper = styled('div')`
   position: absolute;
   width: 80%;
   left: 10%;
-  top: 40px;
+  top: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +166,7 @@ const NavItem = ({ item }: NavItemProps) => {
             flexDirection: 'column',
             background: '#f2f2f2',
             boxShadow: '2px 2px 2px 0 rgb(0 0 0 / 3%)',
-            top: '46px'
+            top: '54px'
           }}
           onMouseOver={handleOnMouseOver('menu')}
           onMouseOut={handleOnMouseOut('menu')}

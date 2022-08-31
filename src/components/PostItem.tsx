@@ -1,18 +1,21 @@
-import { PostContent } from "../lib/posts";
-import Date from "./Date";
-import Link from "next/link";
-import { parseISO } from "date-fns";
+import { parseISO } from 'date-fns';
+import Link from 'next/link';
+import { PostContent } from '../interface';
+import Date from './Date';
 
-type Props = {
+interface PostItemProps {
   post: PostContent;
-};
-export default function PostItem({ post }: Props) {
+}
+
+const PostItem = ({ post }: PostItemProps) => {
   return (
-    <Link href={"/posts/" + post.slug}>
+    <Link href={'/posts/' + post.data.slug}>
       <a>
-        <Date date={parseISO(post.date)} />
-        <h2>{post.title}</h2>
+        <Date date={parseISO(post.data.date)} />
+        <h2>{post.data.title}</h2>
       </a>
     </Link>
   );
-}
+};
+
+export default PostItem;

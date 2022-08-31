@@ -37,7 +37,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     <>
       <ListItemButton
         key={`drawer-nav-item-${item.title}`}
-        sx={{ color: '#d6bf86', textTransform: 'uppercase' }}
+        sx={{ color: '#fde7a5', textTransform: 'uppercase' }}
         onClick={handleOnClick(item)}
       >
         {item.menu_links?.length ? (

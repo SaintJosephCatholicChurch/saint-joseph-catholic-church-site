@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha1",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev",

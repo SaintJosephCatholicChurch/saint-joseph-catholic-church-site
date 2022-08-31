@@ -11,20 +11,10 @@ jobs:
           command: "sudo npm install -g npm"
       - restore_cache:
           keys:
-            - dependency-cache-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          keys:
             - nextjs-cache-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          keys:
-            - nextjs-public-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
           command: npm install --no-save --legacy-peer-deps
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
       - run:
           name: NextJS Build
           command: npm run export
@@ -32,12 +22,10 @@ jobs:
           key: nextjs-cache-{{ checksum "package-lock.json" }}
           when: on_success
           paths:
+            - ./node_modules
             - ./.next/cache
-      - save_cache:
-          key: nextjs-public-cache-{{ checksum "package-lock.json" }}
-          when: on_success
-          paths:
             - ./dist
+      - save_cache:
       - run:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./dist

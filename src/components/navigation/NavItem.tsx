@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
-import { MenuItem, MenuLink } from '../../lib/menu';
+import { MenuItem, MenuLink } from '../../interface';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import { CleanLink } from '../common-styled';
 import NavLink from './NavLink';

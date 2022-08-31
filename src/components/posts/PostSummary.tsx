@@ -4,14 +4,14 @@ import parseISO from 'date-fns/parseISO';
 import { MDXRemote } from 'next-mdx-remote';
 import { memo, useMemo } from 'react';
 import { SerializedPostContent } from '../../interface';
-import PageContent from '../pages/PageContent';
+import PageContentView from '../pages/PageContentView';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
 import PostTitle from './PostTitle';
 
-type PostSummaryProps = {
+interface PostSummaryProps {
   post: SerializedPostContent;
-};
+}
 
 const PostSummary = memo(
   ({
@@ -21,16 +21,15 @@ const PostSummary = memo(
     }
   }: PostSummaryProps) => {
     const date = useMemo(() => parseISO(dateString), [dateString]);
-    console.log('[data] source', source);
     return (
       <Link href={`/posts/${slug}`} underline="none">
         <PostImage title={title} image={image} />
         <PostTitle title={title} sx={{ mt: 3, mb: 2 }} />
         <PostDateAuthorLine date={date} />
         <Box>
-          <PageContent>
+          <PageContentView>
             <MDXRemote {...source} />
-          </PageContent>
+          </PageContentView>
         </Box>
         <Box>Read More</Box>
       </Link>

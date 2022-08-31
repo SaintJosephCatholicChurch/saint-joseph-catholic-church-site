@@ -1,9 +1,9 @@
-import Box from '@mui/material/Box';
 import { styled, SxProps, Theme } from '@mui/material/styles';
 import format from 'date-fns/format';
+import formatISO from 'date-fns/formatISO';
 import { memo } from 'react';
 
-const StyledDate = styled(Box)`
+const StyledDate = styled('time')`
   color: #757575;
   margin-bottom: 16px;
   font-size: 13px;
@@ -11,13 +11,17 @@ const StyledDate = styled(Box)`
   line-height: 17px;
 `;
 
-type PostDateAuthorLineProps = {
+interface PostDateAuthorLineProps {
   date: Date;
   sx?: SxProps<Theme>;
-};
+}
 
 const PostDateAuthorLine = memo(({ date, sx }: PostDateAuthorLineProps) => {
-  return <StyledDate sx={sx}>{format(date, 'MMMM d, yyyy')}</StyledDate>;
+  return (
+    <StyledDate sx={sx} dateTime={formatISO(date)}>
+      {format(date, 'LLLL d, yyyy')}
+    </StyledDate>
+  );
 });
 
 PostDateAuthorLine.displayName = 'PostDateAuthorLine';

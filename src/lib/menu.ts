@@ -1,13 +1,4 @@
-import data from "../../content/menu.json";
-
-export interface MenuItem extends MenuLink {
-  menu_links?: MenuLink[];
-}
-
-export interface MenuLink {
-  readonly title: string
-  readonly url?: string;
-  readonly page?: string;
-};
+import data from '../../content/menu.json';
+import { MenuItem } from '../interface';
 
 export default data.menu_items as MenuItem[];

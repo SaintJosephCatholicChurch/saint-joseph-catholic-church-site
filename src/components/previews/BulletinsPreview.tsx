@@ -6,7 +6,6 @@ import ParishBulletinsView from '../pages/custom/ParishBulletinsView';
 
 const BulletinsPreview = ({ entry, document }: PreviewTemplateComponentProps) => {
   const data = useMemo(() => entry.toJS().data.bulletins as Bulletin[], [entry]);
-  console.log('[data] bulletins', data);
 
   return useMemo(
     () => (

@@ -1,5 +1,6 @@
 import { serialize } from 'next-mdx-remote/serialize';
 import Head from 'next/head';
+import { GetStaticProps } from 'next/types';
 import HomepageView from '../components/homepage/HomepageView';
 import Layout from '../components/Layout';
 import BasicMeta from '../components/meta/BasicMeta';
@@ -13,7 +14,7 @@ interface HomepageProps {
   slides: SerializedSlide[];
 }
 
-export default function Homepage({ slides }: HomepageProps) {
+const Homepage = ({ slides }: HomepageProps) => {
   return (
     <>
       <Head>
@@ -29,9 +30,11 @@ export default function Homepage({ slides }: HomepageProps) {
       </Layout>
     </>
   );
-}
+};
 
-export async function getStaticProps() {
+export default Homepage;
+
+export const getStaticProps: GetStaticProps = async (): Promise<{ props: HomepageProps }> => {
   const serializedSlides: SerializedSlide[] = [];
   for (const slide of homePageData.slides) {
     const mdxTitle = await serialize(slide.title);
@@ -42,4 +45,4 @@ export async function getStaticProps() {
   }
 
   return { props: { slides: serializedSlides } };
-}
+};

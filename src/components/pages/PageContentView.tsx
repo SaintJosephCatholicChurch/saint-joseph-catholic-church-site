@@ -8,7 +8,7 @@ interface PageViewProps {
   children: ReactNode;
 }
 
-const PageContent = ({ tags = [], children }: PageViewProps) => {
+const PageContentView = ({ tags = [], children }: PageViewProps) => {
   return (
     <>
       <div className={`content ${contentStyles.content}`}>{children}</div>
@@ -25,4 +25,4 @@ const PageContent = ({ tags = [], children }: PageViewProps) => {
   );
 };
 
-export default PageContent;
+export default PageContentView;

@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { GetStaticProps } from 'next';
+import { GetStaticProps } from 'next/types';
 import contentStyles from '../../public/styles/content.module.css';
 import PageLayout from '../components/PageLayout';
 import { FileMatter } from '../interface';
@@ -23,7 +23,7 @@ const Search = ({ searchMatter }: SearchProps) => {
 
 export default Search;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchProps }> => {
   const searchMatter = [...fetchPageMatter(), ...fetchPostMatter()];
 
   return {

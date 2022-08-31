@@ -16,27 +16,27 @@ interface PageProps {
   url: string;
   description?: string;
   tags?: string[];
-  postDetails?: {
+  pageDetails?: {
     date: Date;
     image?: string;
   };
   showHeader?: boolean;
 }
 
-const PageLayout = ({ children, title, url, description, tags, postDetails, showHeader = true }: PageProps) => {
+const PageLayout = ({ children, title, url, description, tags, pageDetails, showHeader = true }: PageProps) => {
   const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
   return (
     <Layout>
       <BasicMeta url={url} title={title} keywords={keywords} description={description} />
-      <OpenGraphMeta url={url} title={title} image={postDetails?.image} description={description} />
+      <OpenGraphMeta url={url} title={title} image={pageDetails?.image} description={description} />
       <TwitterCardMeta url={url} title={title} description={description} />
-      {postDetails ? (
+      {pageDetails ? (
         <JsonLdMeta
           url={url}
           title={title}
           keywords={keywords}
-          date={postDetails.date}
-          image={postDetails.image}
+          date={pageDetails.date}
+          image={pageDetails.image}
           description={description}
         />
       ) : null}

@@ -2,17 +2,9 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 import yaml from 'js-yaml';
-import { FileMatter } from '../interface';
+import { FileMatter, PageContent, PageContentData } from '../interface';
 
 const pagesDirectory = path.join(process.cwd(), 'content/pages');
-
-export type PageContent = {
-  readonly date: string;
-  readonly title: string;
-  readonly slug: string;
-  readonly tags?: string[];
-  readonly fullPath: string;
-};
 
 let pageMatterCache: FileMatter[];
 let pageCache: PageContent[];
@@ -56,29 +48,24 @@ export function fetchPageContent(): PageContent[] {
     return pageCache;
   }
 
-  const allPagesData = fetchPageMatter().map(({ fileName, fullPath, matterResult }) => {
-    const matterData = matterResult.data as {
-      date: string;
-      title: string;
-      tags: string[];
-      slug: string;
-      fullPath: string;
-    };
-    matterData.fullPath = fullPath;
-
-    const slug = fileName.replace(/\.mdx$/, '');
-
+  const allPagesData = fetchPageMatter().map(({ fileName, fullPath, matterResult: { data, content } }) => {
+    // TODO Auto generate slugs
+    // const slug = fileName.replace(/\.mdx$/, '');
     // Validate slug string
-    if (matterData.slug !== slug) {
-      throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
-    }
+    // if (matterData.slug !== slug) {
+    //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
+    // }
 
-    return matterData;
+    return {
+      fullPath,
+      data: data as PageContentData,
+      content
+    };
   });
 
   // Sort pages by date
   pageCache = allPagesData.sort((a, b) => {
-    if (a.date < b.date) {
+    if (a.data.date < b.data.date) {
       return 1;
     } else {
       return -1;
@@ -89,11 +76,11 @@ export function fetchPageContent(): PageContent[] {
 }
 
 export function countPages(tag?: string): number {
-  return fetchPageContent().filter((it) => !tag || (it.tags && it.tags.includes(tag))).length;
+  return fetchPageContent().filter((it) => !tag || (it.data.tags && it.data.tags.includes(tag))).length;
 }
 
 export function listPageContent(page: number, limit: number, tag?: string): PageContent[] {
   return fetchPageContent()
-    .filter((it) => !tag || (it.tags && it.tags.includes(tag)))
+    .filter((it) => !tag || (it.data.tags && it.data.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }

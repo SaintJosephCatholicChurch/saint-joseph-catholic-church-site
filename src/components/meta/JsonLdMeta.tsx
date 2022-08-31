@@ -1,39 +1,35 @@
-import { BlogPosting } from "schema-dts";
-import { jsonLdScriptProps } from "react-schemaorg";
-import config from "../../lib/config";
-import { formatISO } from "date-fns";
-import Head from "next/head";
+import { BlogPosting } from 'schema-dts';
+import { jsonLdScriptProps } from 'react-schemaorg';
+import config from '../../lib/config';
+import { formatISO } from 'date-fns';
+import Head from 'next/head';
 
-type Props = {
+interface JsonLdMetaProps {
   url: string;
   title: string;
   keywords?: string[];
   date: Date;
   image?: string;
   description?: string;
-};
-export default function JsonLdMeta({
-  url,
-  title,
-  keywords,
-  date,
-  image,
-  description,
-}: Props) {
+}
+
+const JsonLdMeta = ({ url, title, keywords, date, image, description }: JsonLdMetaProps) => {
   return (
     <Head>
       <script
         {...jsonLdScriptProps<BlogPosting>({
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
           mainEntityOfPage: config.base_url + url,
           headline: title,
-          keywords: keywords ? keywords.join(",") : undefined,
+          keywords: keywords ? keywords.join(',') : undefined,
           datePublished: date ? formatISO(date) : undefined,
           image: image,
-          description: description,
+          description: description
         })}
       />
     </Head>
   );
-}
+};
+
+export default JsonLdMeta;

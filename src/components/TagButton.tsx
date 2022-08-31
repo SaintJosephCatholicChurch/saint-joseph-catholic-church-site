@@ -1,15 +1,17 @@
-import Link from "next/link";
-import { TagContent } from "../lib/tags";
+import { TagContent } from '../interface';
 
-type Props = {
+interface TagButtonProps {
   tag: TagContent;
-};
-export default function TagButton({ tag }: Props) {
+}
+
+const TagButton = ({ tag }: TagButtonProps) => {
   return (
     <>
-      <Link href={"/posts/tags/[[...slug]]"} as={`/posts/tags/${tag.slug}`}>
+      <a href={`/posts/tags/${tag.slug}`}>
         <a>{tag.name}</a>
-      </Link>
+      </a>
     </>
   );
-}
+};
+
+export default TagButton;

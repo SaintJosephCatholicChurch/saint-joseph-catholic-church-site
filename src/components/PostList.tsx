@@ -1,19 +1,18 @@
 import Box from '@mui/material/Box';
-import { SerializedPostContent } from '../interface';
-import { TagContent } from '../lib/tags';
+import { SerializedPostContent, TagContent } from '../interface';
 import Pagination from './Pagination';
 import PostSummary from './posts/PostSummary';
 
-type Props = {
+interface PostListProps {
   posts: SerializedPostContent[];
   tags: TagContent[];
   pagination: {
     current: number;
     pages: number;
   };
-};
-export default function PostList({ posts, tags, pagination }: Props) {
-  console.log('[data]', posts);
+}
+
+const PostList = ({ posts, tags, pagination }: PostListProps) => {
   return (
     <Box>
       {posts.map((post) => (
@@ -29,4 +28,6 @@ export default function PostList({ posts, tags, pagination }: Props) {
       />
     </Box>
   );
-}
+};
+
+export default PostList;

@@ -1,29 +1,32 @@
-import { GetStaticProps } from 'next';
 import { serialize } from 'next-mdx-remote/serialize';
+import { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import PostList from '../../components/PostList';
-import { SerializedPostContent } from '../../interface';
+import { SerializedPostContent, TagContent } from '../../interface';
 import config from '../../lib/config';
 import { countPosts, listPostContent } from '../../lib/posts';
-import { listTags, TagContent } from '../../lib/tags';
+import { listTags } from '../../lib/tags';
 
-type Props = {
+interface PostsIndexProps {
   posts: SerializedPostContent[];
   tags: TagContent[];
   pagination: {
     current: number;
     pages: number;
   };
-};
-export default function Index({ posts, tags, pagination }: Props) {
+}
+
+const PostsIndex = ({ posts, tags, pagination }: PostsIndexProps) => {
   return (
     <PageLayout url="/posts" title="News">
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );
-}
+};
 
-export const getStaticProps: GetStaticProps = async () => {
+export default PostsIndex;
+
+export const getStaticProps: GetStaticProps = async (): Promise<{ props: PostsIndexProps }> => {
   const posts = listPostContent(1, config.posts_per_page);
   const tags = listTags();
   const pagination = {

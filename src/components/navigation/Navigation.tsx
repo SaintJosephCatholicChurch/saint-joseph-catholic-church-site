@@ -17,7 +17,7 @@ import NavItem from './NavItem';
 
 const DRAWER_WIDTH = 240;
 
-export default function Navigation() {
+const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const theme = useTheme();
@@ -142,4 +142,6 @@ export default function Navigation() {
       </Box>
     </Box>
   );
-}
+};
+
+export default Navigation;

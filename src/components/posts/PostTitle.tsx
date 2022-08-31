@@ -17,13 +17,17 @@ const StyledTitle = styled(Box)`
   }
 `;
 
-type PostTitleProps = {
+interface PostTitleProps {
   title: string;
   sx?: SxProps<Theme>;
-};
+}
 
 const PostTitle = memo(({ title, sx }: PostTitleProps) => {
-  return <StyledTitle component="h3" sx={sx}>{title}</StyledTitle>;
+  return (
+    <StyledTitle component="h3" sx={sx}>
+      {title}
+    </StyledTitle>
+  );
 });
 
 PostTitle.displayName = 'PostTitle';

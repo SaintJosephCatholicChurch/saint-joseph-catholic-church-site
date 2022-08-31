@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { MouseEvent } from 'react';
-import { MenuLink } from '../../lib/menu';
+import { MenuLink } from '../../interface';
 import { CleanLink } from '../common-styled';
 
 const StyledButton = styled(Button)`

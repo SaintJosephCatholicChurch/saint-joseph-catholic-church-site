@@ -5,7 +5,7 @@ import format from 'date-fns/format';
 import { useMemo } from 'react';
 import churchDetails from '../../../lib/church_details';
 
-export default function Copyright() {
+const Copyright = () => {
   const theme = useTheme();
   const year = useMemo(() => format(new Date(), 'yyyy'), []);
 
@@ -55,4 +55,6 @@ export default function Copyright() {
       </Box>
     </Box>
   );
-}
+};
+
+export default Copyright;

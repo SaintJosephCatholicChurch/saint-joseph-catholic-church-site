@@ -6,7 +6,6 @@ import Footer from '../layout/footer/Footer';
 
 const ChurchDetailsPreview = ({ entry, document }: PreviewTemplateComponentProps) => {
   const data = useMemo(() => entry.toJS().data as ChurchDetails, [entry]);
-  console.log('[data] church_details', data);
 
   return useMemo(
     () => (

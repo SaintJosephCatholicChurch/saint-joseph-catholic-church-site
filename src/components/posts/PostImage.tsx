@@ -1,22 +1,18 @@
-import Image from 'next/image';
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
-import { BLOG_IMAGE_DEFAULT_HEIGHT, BLOG_IMAGE_DEFAULT_WIDTH } from '../../constants';
 
-type PostImageProps = {
+const StyledImage = styled('img')`
+  width: 100%;
+  height: auto;
+`;
+
+interface PostImageProps {
   title: string;
   image: string;
-};
+}
 
 const PostImage = memo(({ title, image }: PostImageProps) => {
-  return (
-    <Image
-      src={image}
-      width={BLOG_IMAGE_DEFAULT_WIDTH}
-      height={BLOG_IMAGE_DEFAULT_HEIGHT}
-      alt={title}
-      layout="responsive"
-    />
-  );
+  return <StyledImage src={image} alt={title} />;
 });
 
 PostImage.displayName = 'PostImage';

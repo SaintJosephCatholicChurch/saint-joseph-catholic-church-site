@@ -1,36 +1,25 @@
-import Head from "next/head";
-import config from "../../lib/config";
+import Head from 'next/head';
+import config from '../../lib/config';
 
-type Props = {
+interface BasicMetaProps {
   title?: string;
   description?: string;
   keywords?: string[];
   url: string;
-};
-export default function BasicMeta({
-  title,
-  description,
-  keywords,
-  url,
-}: Props) {
+}
+
+const BasicMeta = ({ title, description, keywords, url }: BasicMetaProps) => {
   return (
     <Head>
-      <title>
-        {title ? [title, config.site_title].join(" | ") : config.site_title}
-      </title>
-      <meta
-        name="description"
-        content={description ? description : config.site_description}
-      />
+      <title>{title ? [title, config.site_title].join(' | ') : config.site_title}</title>
+      <meta name="description" content={description ? description : config.site_description} />
       <meta
         name="keywords"
-        content={
-          keywords
-            ? keywords.join(",")
-            : config.site_keywords.map((it) => it.keyword).join(",")
-        }
+        content={keywords ? keywords.join(',') : config.site_keywords.map((it) => it.keyword).join(',')}
       />
       <link rel="canonical" href={config.base_url + url} />
     </Head>
   );
-}
+};
+
+export default BasicMeta;

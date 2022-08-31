@@ -90,6 +90,24 @@ export interface SerializedPostContent extends Omit<PostContent, 'content' | 'su
   readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
 }
 
+export interface PageContentData {
+  readonly date: string;
+  readonly title: string;
+  readonly image: string;
+  readonly slug: string;
+  readonly tags?: string[];
+}
+
+export interface PageContent {
+  readonly fullPath: string;
+  readonly content: string;
+  readonly data: PageContentData;
+};
+
+export interface SerializedPageContent extends Omit<PageContent, 'content'> {
+  readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
+}
+
 export interface SiteConfig {
   readonly base_url: string;
   readonly site_title: string;
@@ -98,4 +116,26 @@ export interface SiteConfig {
   readonly posts_per_page: number;
   readonly twitter_account: string;
   readonly github_account: string;
+}
+
+export interface MenuItem extends MenuLink {
+  menu_links?: MenuLink[];
+}
+
+export interface MenuLink {
+  readonly title: string;
+  readonly url?: string;
+  readonly page?: string;
+}
+
+export interface TagContent {
+  readonly slug: string;
+  readonly name: string;
+}
+
+export interface QuickLink {
+  readonly title: string;
+  readonly subtitle?: string;
+  readonly url: string;
+  readonly background: string;
 };

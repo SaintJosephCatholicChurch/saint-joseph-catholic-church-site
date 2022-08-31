@@ -1,61 +1,62 @@
 import { parseISO } from 'date-fns';
-import fs from 'fs';
-import matter from 'gray-matter';
-import yaml from 'js-yaml';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { GetStaticPaths, GetStaticProps } from 'next/types';
 import remarkGfm from 'remark-gfm';
 import PageLayout from '../components/PageLayout';
-import PageContent from '../components/pages/PageContent';
+import PageContentView from '../components/pages/PageContentView';
+import { PageContent } from '../interface';
 import { fetchPageContent } from '../lib/pages';
 
-export type Props = {
+interface PageProps {
   title: string;
   dateString: string;
   slug: string;
   tags: string[];
   description?: string;
   source: MDXRemoteProps;
-};
+}
 
-const slugToPageContent = ((pageContents) => {
-  let hash = {};
-  pageContents.forEach((it) => (hash[it.slug] = it));
-  return hash;
-})(fetchPageContent());
-
-export default function Page({ title, dateString, slug, tags, description = '', source }: Props) {
+const Page = ({ title, dateString, slug, tags, description = '', source }: PageProps) => {
   return (
     <PageLayout
       url={`/pages/${slug}`}
       title={title}
-      postDetails={{ date: parseISO(dateString) }}
+      pageDetails={{ date: parseISO(dateString) }}
       tags={tags}
       description={description}
     >
-      <PageContent tags={tags}>
+      <PageContentView tags={tags}>
         <MDXRemote {...source} />
-      </PageContent>
+      </PageContentView>
     </PageLayout>
   );
-}
+};
+
+export default Page;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPageContent().map((it) => '/' + it.slug);
+  const paths = fetchPageContent().map((it) => '/' + it.data.slug);
   return {
     paths,
     fallback: false
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+const slugToPageContent: Record<string, PageContent> = ((pageContents) => {
+  let hash = {};
+  pageContents.forEach((page) => (hash[page.data.slug] = page));
+  return hash;
+})(fetchPageContent());
+
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PageProps }> => {
   const slug = params.page as string;
-  const source = fs.readFileSync(slugToPageContent[slug].fullPath, 'utf8');
-  const { content, data } = matter(source, {
-    engines: { yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object }
+  const { content, data } = slugToPageContent[slug];
+  const mdxSource = await serialize(content, {
+    scope: data as Record<string, any>,
+    mdxOptions: { remarkPlugins: [remarkGfm] }
   });
-  const mdxSource = await serialize(content, { scope: data, mdxOptions: { remarkPlugins: [remarkGfm] } });
+
   return {
     props: {
       title: data.title,

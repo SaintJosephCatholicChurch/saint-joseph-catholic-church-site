@@ -1,7 +1,7 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { MouseEvent } from 'react';
-import { MenuLink } from '../../lib/menu';
+import { MenuLink } from '../../interface';
 import { CleanLink } from '../common-styled';
 
 interface MobileNavLinkProps {

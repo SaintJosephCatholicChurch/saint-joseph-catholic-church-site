@@ -1,11 +1,12 @@
 import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
+import remarkGfm from 'remark-gfm';
 import PageLayout from '../../components/PageLayout';
-import PageContent from '../../components/pages/PageContent';
+import PageContentView from '../../components/pages/PageContentView';
 import PostDateAuthorLine from '../../components/posts/PostDateAuthorLine';
 import PostImage from '../../components/posts/PostImage';
 import PostTitle from '../../components/posts/PostTitle';
@@ -16,7 +17,7 @@ const StyledPageContentWrapper = styled('div')`
   margin-top: 32px;
 `;
 
-export type Props = {
+interface PostProps {
   title: string;
   image: string;
   dateString: string;
@@ -24,16 +25,16 @@ export type Props = {
   tags: string[];
   description?: string;
   source: MDXRemoteProps;
-};
+}
 
-export default function Post({ title, image, dateString, slug, tags, description = '', source }: Props) {
+const Post = ({ title, image, dateString, slug, tags, description = '', source }: PostProps) => {
   const date = useMemo(() => parseISO(dateString), [dateString]);
 
   return (
     <PageLayout
       url={`/pages/${slug}`}
       title={title}
-      postDetails={{ date, image }}
+      pageDetails={{ date, image }}
       tags={tags}
       description={description}
       showHeader={false}
@@ -42,13 +43,15 @@ export default function Post({ title, image, dateString, slug, tags, description
       <PostDateAuthorLine date={date} />
       <PostImage title={title} image={image} />
       <StyledPageContentWrapper>
-        <PageContent>
+        <PageContentView>
           <MDXRemote {...source} />
-        </PageContent>
+        </PageContentView>
       </StyledPageContentWrapper>
     </PageLayout>
   );
-}
+};
+
+export default Post;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = fetchPostContent().map((post) => '/posts/' + post.data.slug);
@@ -64,10 +67,13 @@ const slugToPostContent: Record<string, PostContent> = ((postContents) => {
   return hash;
 })(fetchPostContent());
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PostProps }> => {
   const slug = params.post as string;
   const { content, data } = slugToPostContent[slug];
-  const mdxSource = await serialize(content, { scope: data as Record<string, any> });
+  const mdxSource = await serialize(content, {
+    scope: data as Record<string, any>,
+    mdxOptions: { remarkPlugins: [remarkGfm] }
+  });
   return {
     props: {
       title: data.title,

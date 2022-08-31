@@ -1,9 +1,5 @@
-import tags from "../../content/meta/tags.yml";
-
-export type TagContent = {
-  readonly slug: string;
-  readonly name: string;
-};
+import tags from '../../content/meta/tags.yml';
+import { TagContent } from '../interface';
 
 const tagMap: { [key: string]: TagContent } = generateTagMap();
 

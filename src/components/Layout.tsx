@@ -7,7 +7,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   const isSmallScreen = useSmallScreen();
 
   return (
@@ -43,3 +43,5 @@ export default function Layout({ children }: LayoutProps) {
     </Box>
   );
 }
+
+export default Layout;

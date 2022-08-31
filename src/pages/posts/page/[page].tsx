@@ -1,13 +1,13 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { serialize } from 'next-mdx-remote/serialize';
+import { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../../../components/PageLayout';
 import PostList from '../../../components/PostList';
-import { SerializedPostContent } from '../../../interface';
+import { SerializedPostContent, TagContent } from '../../../interface';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';
-import { listTags, TagContent } from '../../../lib/tags';
+import { listTags } from '../../../lib/tags';
 
-type Props = {
+interface PostPageProps {
   posts: SerializedPostContent[];
   tags: TagContent[];
   page: number;
@@ -15,14 +15,17 @@ type Props = {
     current: number;
     pages: number;
   };
-};
-export default function Page({ posts, tags, pagination, page }: Props) {
+}
+
+const PostPage = ({ posts, tags, pagination, page }: PostPageProps) => {
   return (
     <PageLayout url={`/posts/page/${page}`} title="News">
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );
-}
+};
+
+export default PostPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const pages = Math.ceil(countPosts() / config.posts_per_page);
@@ -36,7 +39,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PostPageProps }> => {
   const page = parseInt(params.page as string);
   const posts = listPostContent(page, config.posts_per_page);
   const tags = listTags();
@@ -57,7 +60,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       page,
-      posts,
+      posts: serializedPostContent,
       tags,
       pagination
     }

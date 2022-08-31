@@ -17,7 +17,7 @@ interface StyledButtonProps {
   selected: boolean;
 }
 
-const StyledButton = styled(Button)<StyledButtonProps>(
+const StyledButton = styled(Button)<StyledButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>>(
   ({ selected }) => `
     padding: 12px 18px 14px;
     whitespace: nowrap;
@@ -219,6 +219,7 @@ const NavItem = ({ item }: NavItemProps) => {
             fontSize="small"
             onMouseOver={handleOnMouseOver('icon')}
             onMouseOut={handleOnMouseOut('icon')}
+            debouncedIsOpen={debouncedIsOpen}
           />
         ) : null}
         <StyledUnderlineWrapper>

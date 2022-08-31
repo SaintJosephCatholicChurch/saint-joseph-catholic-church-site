@@ -1,5 +1,6 @@
 .content {
-  font-family: 'Oswald', 'Ubuntu', sans-serif;
+  font-family: 'Open Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+    'Helvetica Neue', sans-serif;
   color: #222;
   font-weight: 200;
 }
@@ -11,7 +12,7 @@
 .content p {
   line-height: 1.5rem;
   margin: 0 0 16px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .content a {
@@ -57,16 +58,12 @@
   color: #616169;
   font-weight: 700;
   font-size: 16px;
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-    'Helvetica Neue', sans-serif;
 }
 
 .content h6 {
   color: #616169;
   font-weight: 500;
   font-size: 14px;
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
-    'Helvetica Neue', sans-serif;
 }
 
 .content h2::before {
@@ -95,7 +92,6 @@
 }
 
 .content code {
-  font-family: 'Oswald', 'Ubuntu Mono', monospace;
   font-size: 85%;
   padding: 0.2em 0.4em;
   margin: 0;

@@ -22,6 +22,10 @@ function ToastUIGlobalStyles() {
         .toastui-editor-main .toastui-editor-md-vertical-style .toastui-editor-md-preview {
           display: none;
         }
+
+        .toastui-editor-pseudo-clipboard {
+          display: none;
+        }
       `}
     />
   );

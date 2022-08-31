@@ -15,7 +15,7 @@ const StyledButton = styled(Button)`
   padding: 10px 20px;
   whitespace: nowrap;
 
-  font-family: 'Oswald', 'Ubuntu', sans-serif;
+  font-family: 'Oswald', Helvetica, Arial, sans-serif;
   font-size: 17px;
 
   display: flex;

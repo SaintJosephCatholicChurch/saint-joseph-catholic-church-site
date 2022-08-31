@@ -212,39 +212,6 @@ const config: CmsConfig = {
       },
       files: [
         {
-          name: 'authors',
-          label: 'Authors',
-          file: 'content/meta/authors.yml',
-          description: 'Author descriptions',
-          fields: [
-            {
-              name: 'authors',
-              label: 'Authors',
-              label_singular: 'Author',
-              widget: 'list',
-              fields: [
-                {
-                  name: 'slug',
-                  label: 'Slug',
-                  widget: 'string',
-                  hint: 'The part of a URL identifies the author'
-                },
-                {
-                  name: 'name',
-                  label: 'Name',
-                  widget: 'string',
-                  hint: 'First and Last'
-                },
-                {
-                  name: 'introduction',
-                  label: 'Introduction',
-                  widget: 'text'
-                }
-              ]
-            }
-          ]
-        },
-        {
           name: 'tags',
           label: 'Tags',
           file: 'content/meta/tags.yml',
@@ -296,22 +263,17 @@ const config: CmsConfig = {
           widget: 'string'
         },
         {
+          name: 'image',
+          label: 'Image',
+          widget: 'image'
+        },
+        {
           name: 'date',
           label: 'Publish Date',
           widget: 'datetime',
           format: 'YYYY-MM-DD',
           date_format: 'YYYY-MM-DD',
           time_format: false
-        },
-        {
-          name: 'author',
-          label: 'Author',
-          widget: 'relation',
-          collection: 'meta',
-          file: 'authors',
-          search_fields: ['authors.*.name'],
-          display_fields: ['authors.*.name'],
-          value_field: 'authors.*.slug'
         },
         {
           name: 'tags',

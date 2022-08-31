@@ -1,5 +1,6 @@
-import { generatePagination } from "../lib/pagination";
-import Link from "next/link";
+import Link from 'next/link';
+import MuiPagination from '@mui/material/Pagination';
+import Box from '@mui/material/Box';
 
 type Props = {
   current: number;
@@ -10,20 +11,9 @@ type Props = {
   };
 };
 export default function Pagination({ current, pages, link }: Props) {
-  const pagination = generatePagination(current, pages);
   return (
-    <ul>
-      {pagination.map((it, i) => (
-        <li key={i}>
-          {it.excerpt ? (
-            "..."
-          ) : (
-            <Link href={link.href(it.page)} as={link.as(it.page)}>
-              <a className={it.page === current ? "active" : null}>{it.page}</a>
-            </Link>
-          )}
-        </li>
-      ))}
-    </ul>
+    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 5 }}>
+      <MuiPagination count={pages} defaultPage={current} showFirstButton showLastButton />
+    </Box>
   );
 }

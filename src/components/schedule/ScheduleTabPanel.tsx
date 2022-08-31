@@ -10,10 +10,6 @@ const StyledTabPanel = styled(TabPanel)`
   width: 100%;
 
   padding: 50px;
-  @media screen and (min-width: 1200px) {
-    padding-left: 100px;
-  }
-
   @media screen and (max-width: 900px) {
     padding: 36px;
   }

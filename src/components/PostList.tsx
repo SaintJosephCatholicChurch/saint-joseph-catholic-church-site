@@ -1,12 +1,11 @@
-import React from "react";
-import { PostContent } from "../lib/posts";
-import PostItem from "./PostItem";
-import TagLink from "./TagLink";
-import Pagination from "./Pagination";
-import { TagContent } from "../lib/tags";
+import Box from '@mui/material/Box';
+import { SerializedPostContent } from '../interface';
+import { TagContent } from '../lib/tags';
+import Pagination from './Pagination';
+import PostSummary from './posts/PostSummary';
 
 type Props = {
-  posts: PostContent[];
+  posts: SerializedPostContent[];
   tags: TagContent[];
   pagination: {
     current: number;
@@ -14,32 +13,20 @@ type Props = {
   };
 };
 export default function PostList({ posts, tags, pagination }: Props) {
+  console.log('[data]', posts);
   return (
-    <div>
-      <div>
-        <ul>
-          {posts.map((it, i) => (
-            <li key={i}>
-              <PostItem post={it} />
-            </li>
-          ))}
-        </ul>
-        <Pagination
-          current={pagination.current}
-          pages={pagination.pages}
-          link={{
-            href: (page) => (page === 1 ? "/posts" : "/posts/page/[page]"),
-            as: (page) => (page === 1 ? null : "/posts/page/" + page),
-          }}
-        />
-      </div>
-      <ul>
-        {tags.map((it, i) => (
-          <li key={i}>
-            <TagLink tag={it} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box>
+      {posts.map((post) => (
+        <PostSummary key={`post-${post.data.slug}`} post={post} />
+      ))}
+      <Pagination
+        current={pagination.current}
+        pages={pagination.pages}
+        link={{
+          href: (page) => (page === 1 ? '/posts' : '/posts/page/[page]'),
+          as: (page) => (page === 1 ? null : '/posts/page/' + page)
+        }}
+      />
+    </Box>
   );
 }

@@ -10,11 +10,11 @@ import TagButton from '../TagButton';
 
 interface PageViewProps {
   title: string;
-  tags?: string[];
   children: ReactNode;
+  showHeader: boolean;
 }
 
-const PageView = ({ title, tags = [], children }: PageViewProps) => {
+const PageView = ({ title, children, showHeader }: PageViewProps) => {
   const theme = useTheme();
 
   return (
@@ -28,14 +28,23 @@ const PageView = ({ title, tags = [], children }: PageViewProps) => {
         width: '100%'
       }}
     >
-      <Box
-        component="header"
-        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}
-      >
-        <PageHeader title={title} />
-      </Box>
+      {showHeader ? (
+        <Box
+          component="header"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%'
+          }}
+        >
+          <PageHeader title={title} />
+        </Box>
+      ) : null}
       <Container
         sx={{
+          mt: !showHeader ? '98px' : undefined,
           [theme.breakpoints.down('md')]: {
             pt: 0
           },
@@ -44,7 +53,7 @@ const PageView = ({ title, tags = [], children }: PageViewProps) => {
           }
         }}
       >
-        <Box sx={{ display: 'flex', gap: 4, width: '100%' }}>
+        <Box sx={{ display: 'flex', gap: 8, width: '100%' }}>
           <Box
             sx={{
               flexGrow: 1,
@@ -54,16 +63,7 @@ const PageView = ({ title, tags = [], children }: PageViewProps) => {
               }
             }}
           >
-            <div className={`content ${contentStyles.content}`}>{children}</div>
-            {tags.length ? (
-              <ul>
-                {tags.map((it, i) => (
-                  <li key={i}>
-                    <TagButton tag={getTag(it)} />
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            {children}
           </Box>
           <QuickLinks />
         </Box>

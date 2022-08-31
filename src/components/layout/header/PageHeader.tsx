@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import styles from '../../../lib/styles';
-import useSmallScreen from '../../../util/smallScreen.util';
 import ChurchDetailsHeader from './ChurchDetailsHeader';
 
 interface PageHeaderProps {
@@ -10,7 +9,6 @@ interface PageHeaderProps {
 
 const PageHeader = ({ title }: PageHeaderProps) => {
   const theme = useTheme();
-  const isSmallScreen = useSmallScreen();
 
   return (
     <>

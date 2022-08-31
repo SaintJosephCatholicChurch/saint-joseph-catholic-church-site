@@ -5,14 +5,12 @@ type Props = {
   title?: string;
   description?: string;
   keywords?: string[];
-  author?: string;
   url: string;
 };
 export default function BasicMeta({
   title,
   description,
   keywords,
-  author,
   url,
 }: Props) {
   return (
@@ -32,7 +30,6 @@ export default function BasicMeta({
             : config.site_keywords.map((it) => it.keyword).join(",")
         }
       />
-      {author ? <meta name="author" content={author} /> : null}
       <link rel="canonical" href={config.base_url + url} />
     </Head>
   );

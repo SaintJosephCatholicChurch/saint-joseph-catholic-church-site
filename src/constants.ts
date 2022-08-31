@@ -32,3 +32,6 @@ export const TIMES_SECTION_TITLE_HEIGHT = 31;
 export const TIMES_SECTION_MARGIN_HEIGHT = 32;
 
 export const MENU_DELAY = 75;
+
+export const BLOG_IMAGE_DEFAULT_WIDTH = 640;
+export const BLOG_IMAGE_DEFAULT_HEIGHT = 360;

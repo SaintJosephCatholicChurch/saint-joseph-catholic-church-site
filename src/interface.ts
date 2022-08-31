@@ -70,3 +70,22 @@ export interface Bulletin {
   readonly date: string;
   readonly pdf: string;
 }
+
+export interface PostContentData {
+  readonly date: string;
+  readonly title: string;
+  readonly image: string;
+  readonly slug: string;
+  readonly tags?: string[];
+}
+
+export interface PostContent {
+  readonly fullPath: string;
+  readonly summary: string;
+  readonly content: string;
+  readonly data: PostContentData;
+}
+
+export interface SerializedPostContent extends Omit<PostContent, 'content' | 'summary'> {
+  readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
+}

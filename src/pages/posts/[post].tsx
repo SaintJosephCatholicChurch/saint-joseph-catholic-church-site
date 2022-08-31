@@ -1,73 +1,82 @@
-import { GetStaticProps, GetStaticPaths } from "next";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
-import matter from "gray-matter";
-import { fetchPostContent } from "../../lib/posts";
-import fs from "fs";
-import yaml from "js-yaml";
-import { parseISO } from "date-fns";
-import PostLayout from "../../components/PostLayout";
+import { styled } from '@mui/material/styles';
+import parseISO from 'date-fns/parseISO';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+import { useMemo } from 'react';
+import PageLayout from '../../components/PageLayout';
+import PageContent from '../../components/pages/PageContent';
+import PostDateAuthorLine from '../../components/posts/PostDateAuthorLine';
+import PostImage from '../../components/posts/PostImage';
+import PostTitle from '../../components/posts/PostTitle';
+import { PostContent } from '../../interface';
+import { fetchPostContent } from '../../lib/posts';
 
-import InstagramEmbed from "react-instagram-embed";
-import YouTube from "react-youtube";
-import { TwitterTweetEmbed } from "react-twitter-embed";
+const StyledPageContentWrapper = styled('div')`
+  margin-top: 32px;
+`;
 
 export type Props = {
   title: string;
+  image: string;
   dateString: string;
   slug: string;
   tags: string[];
-  author: string;
   description?: string;
   source: MDXRemoteProps;
 };
 
-const components = { InstagramEmbed, YouTube, TwitterTweetEmbed };
-const slugToPostContent = ((postContents) => {
-  let hash = {};
-  postContents.forEach((it) => (hash[it.slug] = it));
-  return hash;
-})(fetchPostContent());
+export default function Post({ title, image, dateString, slug, tags, description = '', source }: Props) {
+  const date = useMemo(() => parseISO(dateString), [dateString]);
 
-export default function Post({ title, dateString, slug, tags, author, description = "", source }: Props) {
   return (
-    <PostLayout
+    <PageLayout
+      url={`/pages/${slug}`}
       title={title}
-      date={parseISO(dateString)}
-      slug={slug}
+      postDetails={{ date, image }}
       tags={tags}
-      author={author}
       description={description}
+      showHeader={false}
     >
-      <MDXRemote {...source} components={components} />
-    </PostLayout>
+      <PostTitle title={title} />
+      <PostDateAuthorLine date={date} />
+      <PostImage title={title} image={image} />
+      <StyledPageContentWrapper>
+        <PageContent>
+          <MDXRemote {...source} />
+        </PageContent>
+      </StyledPageContentWrapper>
+    </PageLayout>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPostContent().map((it) => "/posts/" + it.slug);
+  const paths = fetchPostContent().map((post) => '/posts/' + post.data.slug);
   return {
     paths,
-    fallback: false,
+    fallback: false
   };
 };
 
+const slugToPostContent: Record<string, PostContent> = ((postContents) => {
+  let hash = {};
+  postContents.forEach((post) => (hash[post.data.slug] = post));
+  return hash;
+})(fetchPostContent());
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params.post as string;
-  const source = fs.readFileSync(slugToPostContent[slug].fullPath, "utf8");
-  const { content, data } = matter(source, {
-    engines: { yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object },
-  });
-  const mdxSource = await serialize(content, { scope: data });
+  const { content, data } = slugToPostContent[slug];
+  const mdxSource = await serialize(content, { scope: data as Record<string, any> });
   return {
     props: {
       title: data.title,
+      image: data.image,
       dateString: data.date,
       slug: data.slug,
-      description: "",
-      tags: data.tags,
-      author: data.author,
-      source: mdxSource,
-    },
+      description: '',
+      tags: data.tags ?? [],
+      source: mdxSource
+    }
   };
 };

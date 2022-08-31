@@ -18,7 +18,6 @@ const StyledButton = styled(Button)`
 const StyledMenuItem = styled(MenuItem)`
   width: 100%;
   font-size: 14px;
-  font-family: inherit;
   padding: 10px 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 `;

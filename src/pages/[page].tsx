@@ -5,11 +5,9 @@ import yaml from 'js-yaml';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
-import InstagramEmbed from 'react-instagram-embed';
-import { TwitterTweetEmbed } from 'react-twitter-embed';
-import YouTube from 'react-youtube';
 import remarkGfm from 'remark-gfm';
-import PageLayout from '../components/pages/PageLayout';
+import PageLayout from '../components/PageLayout';
+import PageContent from '../components/pages/PageContent';
 import { fetchPageContent } from '../lib/pages';
 
 export type Props = {
@@ -21,7 +19,6 @@ export type Props = {
   source: MDXRemoteProps;
 };
 
-const components = { InstagramEmbed, YouTube, TwitterTweetEmbed };
 const slugToPageContent = ((pageContents) => {
   let hash = {};
   pageContents.forEach((it) => (hash[it.slug] = it));
@@ -30,8 +27,16 @@ const slugToPageContent = ((pageContents) => {
 
 export default function Page({ title, dateString, slug, tags, description = '', source }: Props) {
   return (
-    <PageLayout title={title} date={parseISO(dateString)} slug={slug} tags={tags} description={description}>
-      <MDXRemote {...source} components={components} />
+    <PageLayout
+      url={`/pages/${slug}`}
+      title={title}
+      postDetails={{ date: parseISO(dateString) }}
+      tags={tags}
+      description={description}
+    >
+      <PageContent tags={tags}>
+        <MDXRemote {...source} />
+      </PageContent>
     </PageLayout>
   );
 }

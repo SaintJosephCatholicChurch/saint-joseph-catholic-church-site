@@ -2,17 +2,9 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'path';
-import { FileMatter } from '../interface';
+import { FileMatter, PostContent, PostContentData } from '../interface';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
-
-export interface PostContent {
-  readonly date: string;
-  readonly title: string;
-  readonly slug: string;
-  readonly tags?: string[];
-  readonly fullPath: string;
-};
 
 let postMatterCache: FileMatter[];
 let postCache: PostContent[];
@@ -56,29 +48,27 @@ export function fetchPostContent(): PostContent[] {
     return postCache;
   }
 
-  const allPostsData = fetchPostMatter().map(({ fileName, fullPath, matterResult }) => {
-    const matterData = matterResult.data as {
-      date: string;
-      title: string;
-      tags: string[];
-      slug: string;
-      fullPath: string;
+  const allPostsData: PostContent[] = fetchPostMatter().map(({ fileName, fullPath, matterResult: { data, content } }) => {
+    // TODO Auto generate slugs
+    // const slug = fileName.replace(/\.mdx$/, '');
+    // if (matterData.slug !== slug) {
+    //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
+    // }
+
+    const summaryRegex = /^([^\n]+)/g
+    const summaryMatch = summaryRegex.exec(content);
+
+    return {
+      fullPath,
+      data: data as PostContentData,
+      summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
+      content
     };
-    matterData.fullPath = fullPath;
-
-    const slug = fileName.replace(/\.mdx$/, '');
-
-    // Validate slug string
-    if (matterData.slug !== slug) {
-      throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
-    }
-
-    return matterData;
   });
 
   // Sort posts by date
   postCache = allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
+    if (a.data.date < b.data.date) {
       return 1;
     } else {
       return -1;
@@ -89,11 +79,11 @@ export function fetchPostContent(): PostContent[] {
 }
 
 export function countPosts(tag?: string): number {
-  return fetchPostContent().filter((it) => !tag || (it.tags && it.tags.includes(tag))).length;
+  return fetchPostContent().filter((post) => !tag || (post.data.tags && post.data.tags.includes(tag))).length;
 }
 
 export function listPostContent(page: number, limit: number, tag?: string): PostContent[] {
   return fetchPostContent()
-    .filter((it) => !tag || (it.tags && it.tags.includes(tag)))
+    .filter((post) => !tag || (post.data.tags && post.data.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }

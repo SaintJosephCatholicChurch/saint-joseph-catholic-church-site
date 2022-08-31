@@ -10,6 +10,17 @@ import { memo, useCallback, useState } from 'react';
 import { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 
+interface StyledMobileScheduleTabPanelProps {
+  open: boolean;
+}
+
+const StyledMobileScheduleTabPanel = styled('div')<StyledMobileScheduleTabPanelProps>(
+  ({ open }) => `
+    backgroundColor: ${open ? '#ffffff' : '#f1f1f1'};
+    borderBottom: 1px solid #ccc;
+  `
+);
+
 const StyledTabPanelTitle = styled(ListItemText)`
   .MuiListItemText-primary {
     font-weight: 500;
@@ -146,32 +157,36 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
   }, [open]);
 
   return (
-    <Box sx={{ backgroundColor: open ? '#ffffff' : '#f1f1f1', borderBottom: '1px solid #ccc' }}>
+    <StyledMobileScheduleTabPanel open={open}>
       <ListItemButton onClick={handleClick}>
         <StyledTabPanelTitle primary={times.name} />
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         {times.sections?.map((section) => (
-          <StyledSections key={`section-${section.name}`}>
+          <StyledSections key={`mobile-section-${section.name}`}>
             {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
             {section.days?.map((day) => (
-              <StyledDayTimeLine key={`section-${section.name}-day-${day.day}`}>
+              <StyledDayTimeLine key={`mobile-section-${section.name}-day-${day.day}`}>
                 <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                 <StyledDayTimeLineTimes>
                   {day.times?.map((time, timeIndex) => (
-                    <StyledDayTimeLineTimeWrapper key={`section-${section.name}-day-${day.day}-times`}>
+                    <StyledDayTimeLineTimeWrapper
+                      key={`mobile-section-${section.name}-day-${day.day}-times-${timeIndex}`}
+                    >
                       <StyledDayTimeLineTime>
                         <StyledDayTimeLineTimeTimes>
                           {isNotEmpty(time.time) ? time.time : null}
                         </StyledDayTimeLineTimeTimes>
                         {isNotEmpty(time.end_time) ? (
                           <>
-                            <StyledDivider key={`section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}>
+                            <StyledDivider
+                              key={`mobile-section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}
+                            >
                               -
                             </StyledDivider>
                             <StyledDayTimeLineTimeTimes
-                              key={`section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
+                              key={`mobile-section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
                             >
                               {time.end_time}
                             </StyledDayTimeLineTimeTimes>
@@ -179,7 +194,9 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                         ) : null}
                       </StyledDayTimeLineTime>
                       {isNotEmpty(time.note) ? (
-                        <StyledDayTimeLineTimeComment key={`section-${section.name}-day-${day.day}-note-${timeIndex}`}>
+                        <StyledDayTimeLineTimeComment
+                          key={`mobile-section-${section.name}-day-${day.day}-note-${timeIndex}`}
+                        >
                           {time.note}
                         </StyledDayTimeLineTimeComment>
                       ) : null}
@@ -191,7 +208,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
           </StyledSections>
         ))}
       </Collapse>
-    </Box>
+    </StyledMobileScheduleTabPanel>
   );
 });
 

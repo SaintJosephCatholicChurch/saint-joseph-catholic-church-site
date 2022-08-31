@@ -1,7 +1,10 @@
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
 import Head from 'next/head';
 import useSmallScreen from '../util/smallScreen.util';
 import Navigation from './navigation/Navigation';
+import ScrollTop from './navigation/ScrollTop';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -27,6 +30,7 @@ const Layout = ({ children }: LayoutProps) => {
         <link rel="apple-touch-icon" href="/icon.png" />
         <meta name="theme-color" content="#fff" />
       </Head>
+      <Box id="back-to-top-anchor" />
       <Navigation />
       <Box
         component="main"
@@ -40,8 +44,13 @@ const Layout = ({ children }: LayoutProps) => {
       >
         {children}
       </Box>
+      <ScrollTop>
+        <Fab size="small" aria-label="scroll back to top">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
     </Box>
   );
-}
+};
 
 export default Layout;

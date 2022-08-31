@@ -1,12 +1,9 @@
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';
-import contentStyles from '../../../public/styles/content.module.css';
-import { getTag } from '../../lib/tags';
 import Container from '../layout/Container';
 import PageHeader from '../layout/header/PageHeader';
-import QuickLinks from '../layout/sidebar/QuickLinks';
-import TagButton from '../TagButton';
+import Sidebar from '../layout/sidebar/Sidebar';
 
 interface PageViewProps {
   title: string;
@@ -53,19 +50,26 @@ const PageView = ({ title, children, showHeader }: PageViewProps) => {
           }
         }}
       >
-        <Box sx={{ display: 'flex', gap: 8, width: '100%' }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gap: 8,
+            width: '100%',
+            gridTemplateColumns: '2fr 1fr',
+            [theme.breakpoints.down('md')]: {
+              gridTemplateColumns: '1fr'
+            }
+          }}
+        >
           <Box
             sx={{
               flexGrow: 1,
-              overflow: 'hidden',
-              [theme.breakpoints.down('md')]: {
-                p: 3
-              }
+              overflow: 'hidden'
             }}
           >
             {children}
           </Box>
-          <QuickLinks />
+          <Sidebar />
         </Box>
       </Container>
     </Box>

@@ -6,21 +6,25 @@
     },
     {
       "title": "Live Stream",
-      "url": "https://www.facebook.com/stjosephchurchbluffton/live"
+      "url": "/live-stream"
     },
     {
       "title": "Parish",
       "menu_links": [
+        {
+          "url": "/contact",
+          "title": "Contact"
+        },
+        {
+          "title": "News",
+          "url": "/posts"
+        },
         {
           "title": "Event Calendar"
         },
         {
           "page": "mass-confession-times",
           "title": "Mass & Confession Times"
-        },
-        {
-          "title": "News Archive",
-          "url": "/posts"
         },
         {
           "title": "Parish Bulletins",
@@ -88,10 +92,6 @@
           "url": "http://w2.vatican.va/content/vatican/en.html"
         }
       ]
-    },
-    {
-      "title": "Contact",
-      "url": "/contact"
     }
   ]
 }

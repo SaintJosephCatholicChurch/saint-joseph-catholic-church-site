@@ -81,7 +81,12 @@ const Navigation = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: 'none' } }}
+            sx={{
+              display: 'none',
+              [theme.breakpoints.down('md')]: {
+                display: 'block'
+              }
+            }}
           >
             <MenuIcon fontSize="large" />
           </IconButton>
@@ -107,7 +112,8 @@ const Navigation = () => {
               display: 'flex',
               [theme.breakpoints.down('md')]: {
                 display: 'none'
-              }
+              },
+              gap: 1
             }}
           >
             {navItems.map((item) => (
@@ -129,7 +135,10 @@ const Navigation = () => {
             keepMounted: true // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: 'none',
+            [theme.breakpoints.down('md')]: {
+              display: 'block'
+            },
             '& .MuiDrawer-paper': {
               backgroundColor: '#bc2f3b',
               boxSizing: 'border-box',

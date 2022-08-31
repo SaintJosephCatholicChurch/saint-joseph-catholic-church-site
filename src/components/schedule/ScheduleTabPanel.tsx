@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 import { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
@@ -125,8 +125,6 @@ interface ScheduleTabPanelProps {
 }
 
 const ScheduleTabPanel = memo(({ times, value, index }: ScheduleTabPanelProps) => {
-  const theme = useTheme();
-
   return (
     <StyledTabPanel value={value} index={index}>
       <StyledTabPanelTitleWrapper>
@@ -140,7 +138,7 @@ const ScheduleTabPanel = memo(({ times, value, index }: ScheduleTabPanelProps) =
               <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
               <StyledDayTimeLineTimes>
                 {day.times?.map((time, timeIndex) => (
-                  <StyledDayTimeLineTime key={`section-${section.name}-day-${day.day}-times`}>
+                  <StyledDayTimeLineTime key={`section-${section.name}-day-${day.day}-times-${timeIndex}`}>
                     <StyledDayTimeLineTimeTimes>
                       {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
                     </StyledDayTimeLineTimeTimes>

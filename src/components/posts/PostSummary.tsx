@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
 import { MDXRemote } from 'next-mdx-remote';
 import { memo, useMemo } from 'react';
@@ -8,6 +9,16 @@ import PageContentView from '../pages/PageContentView';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
 import PostTitle from './PostTitle';
+
+const StyledLink = styled(Link)`
+  &:hover .read-more {
+    color: #333;
+  }
+`;
+
+const StyledReadMore = styled('div')`
+  color: #bf303c;
+`;
 
 interface PostSummaryProps {
   post: SerializedPostContent;
@@ -22,7 +33,7 @@ const PostSummary = memo(
   }: PostSummaryProps) => {
     const date = useMemo(() => parseISO(dateString), [dateString]);
     return (
-      <Link href={`/posts/${slug}`} underline="none">
+      <StyledLink href={`/posts/${slug}`} underline="none">
         <PostImage title={title} image={image} />
         <PostTitle title={title} sx={{ mt: 3, mb: 2 }} />
         <PostDateAuthorLine date={date} />
@@ -31,8 +42,8 @@ const PostSummary = memo(
             <MDXRemote {...source} />
           </PageContentView>
         </Box>
-        <Box>Read More</Box>
-      </Link>
+        <StyledReadMore className="read-more">Read More</StyledReadMore>
+      </StyledLink>
     );
   }
 );

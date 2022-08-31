@@ -1,24 +1,37 @@
 import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import { MAX_QUICK_LINK_HEIGHT, MAX_QUICK_LINK_WIDTH } from '../../../constants';
+import { styled, useTheme } from '@mui/material/styles';
 import quickLinks from '../../../lib/quick_links';
+import SearchBox from '../../SearchBox';
+import DailyReadings from './DailyReadings';
 
-const QuickLinks = () => {
+const StyledSidebar = styled('div')(
+  ({ theme }) => `
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `
+);
+
+const StyledSection = styled('div')`
+  border-bottom: 1px solid #adadad;
+  padding-bottom: 32px;
+`;
+
+const Sidebar = () => {
   const theme = useTheme();
 
   return (
-    <Box
-      sx={{
-        maxWidth: MAX_QUICK_LINK_WIDTH,
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 5,
-        [theme.breakpoints.down('md')]: {
-          display: 'none'
-        }
-      }}
-    >
+    <StyledSidebar>
+      <StyledSection>
+        <SearchBox disableMargin />
+      </StyledSection>
+      <StyledSection>
+        <DailyReadings />
+      </StyledSection>
       {quickLinks?.map((quickLink) => (
         <Box
           sx={{
@@ -26,7 +39,7 @@ const QuickLinks = () => {
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             width: '100%',
-            height: MAX_QUICK_LINK_HEIGHT,
+            height: 'auto',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -109,8 +122,8 @@ const QuickLinks = () => {
           />
         </Box>
       ))}
-    </Box>
+    </StyledSidebar>
   );
 };
 
-export default QuickLinks;
+export default Sidebar;

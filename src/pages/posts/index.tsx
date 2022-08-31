@@ -1,7 +1,7 @@
 import { serialize } from 'next-mdx-remote/serialize';
 import { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
-import PostList from '../../components/PostList';
+import PostList from '../../components/posts/PostList';
 import { SerializedPostContent, TagContent } from '../../interface';
 import config from '../../lib/config';
 import { countPosts, listPostContent } from '../../lib/posts';
@@ -18,7 +18,7 @@ interface PostsIndexProps {
 
 const PostsIndex = ({ posts, tags, pagination }: PostsIndexProps) => {
   return (
-    <PageLayout url="/posts" title="News">
+    <PageLayout url="/posts" title="News" showHeader={false}>
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );

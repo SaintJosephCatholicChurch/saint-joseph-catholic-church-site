@@ -4,6 +4,7 @@ import formatISO from 'date-fns/formatISO';
 import { memo } from 'react';
 
 const StyledDate = styled('time')`
+  display: flex;
   color: #757575;
   margin-bottom: 16px;
   font-size: 13px;

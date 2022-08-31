@@ -1,37 +1,65 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import { MenuItem, MenuLink } from '../../interface';
+import { isNotEmpty } from '../../util/string.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
-import { CleanLink } from '../common-styled';
+import useLocation from '../../util/useLocation';
 import NavLink from './NavLink';
 
-const StyledButton = styled(Button)`
-  color: #fde7a5;
-  lineheight: 60px;
-  padding: 14px 20px 14px;
-  whitespace: nowrap;
-
-  font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  font-size: 17px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-
-  &:hover {
-    color: #ffffff;
-    background-color: #d34f5a;
-
-    .menu-item-underline {
-      width: 90%;
-    }
-  }
+const StyledNavItem = styled('div')`
+  position: relative;
 `;
+
+interface StyledButtonProps {
+  selected: boolean;
+}
+
+const StyledButton = styled(Button)<StyledButtonProps>(
+  ({ selected }) => `
+    padding: 12px 18px 14px;
+    whitespace: nowrap;
+
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-size: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+
+    color: ${selected ? '#ffffff' : '#fde7a5'};
+
+    &:hover {
+      color: #ffffff;
+      background-color: #d34f5a;
+
+      .menu-item-underline {
+        width: 90%;
+      }
+    }
+  `
+);
+
+const StyledButtonTitle = styled('div')`
+  display: flex;
+  height: 26px;
+`;
+
+interface StyledExpandMoreIconProps {
+  debouncedIsOpen: boolean;
+}
+
+const StyledExpandMoreIcon = styled(ExpandMoreIcon)<StyledExpandMoreIconProps>(
+  ({ debouncedIsOpen }) => `
+    top: 2px;
+    position: relative;
+    transition: transform 333ms ease-out;
+    transform: rotate(${debouncedIsOpen ? '-180deg' : '0deg'});
+  `
+);
 
 const StyledUnderlineWrapper = styled('div')`
   position: absolute;
@@ -50,6 +78,15 @@ const StyledUnderline = styled('div')`
   background: #ffffff;
 `;
 
+const StyledPopUpMenu = styled('div')`
+  position: absolute;
+  display: flex;
+  flexdirection: column;
+  background: #f2f2f2;
+  boxshadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
+  top: 54px;
+`;
+
 interface NavItemProps {
   item: MenuItem;
 }
@@ -66,6 +103,8 @@ interface HoverState {
 }
 
 const NavItem = ({ item }: NavItemProps) => {
+  const { pathname } = useLocation();
+
   const [open, setOpen] = useState<HoverState>({
     button: false,
     menu: false,
@@ -125,58 +164,75 @@ const NavItem = ({ item }: NavItemProps) => {
     [handleOnMouseOut, handleOnMouseOver]
   );
 
+  const getUrl = useCallback((link: MenuLink) => {
+    if (isNotEmpty(link.url)) {
+      return link.url;
+    }
+
+    if (isNotEmpty(link.page)) {
+      return `/${link.page}`;
+    }
+
+    return '';
+  }, []);
+
+  const url = useMemo(() => {
+    if (item.menu_links?.length) {
+      return getUrl(item.menu_links[0]);
+    }
+
+    return getUrl(item);
+  }, [getUrl, item]);
+
+  const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    if (pathname === getUrl(item)) {
+      setSelected(true);
+      return;
+    }
+
+    if (item.menu_links?.length) {
+      setSelected(Boolean(item.menu_links.find((link) => pathname === getUrl(link))));
+      return;
+    }
+
+    setSelected(false);
+  }, [getUrl, item, pathname]);
+
   return (
-    <Box sx={{ position: 'relative' }}>
+    <StyledNavItem>
       <StyledButton
         onClick={handleOnClick(item, 'button')}
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
         size="large"
+        target={url?.startsWith('http') ? '_blank' : undefined}
+        href={url}
+        selected={selected}
       >
-        <Box
-          sx={{ display: 'flex', height: '26px' }}
-          onMouseOver={handleOnMouseOver('text')}
-          onMouseOut={handleOnMouseOut('text')}
-        >
-          {item.menu_links?.length ? (
-            item.title
-          ) : (
-            <CleanLink target={item.url?.startsWith('http') ? '_blank' : undefined} href={item.url ?? `/${item.page}`}>
-              {item.title}
-            </CleanLink>
-          )}
-        </Box>
+        <StyledButtonTitle onMouseOver={handleOnMouseOver('text')} onMouseOut={handleOnMouseOut('text')}>
+          {item.title}
+        </StyledButtonTitle>
         {item.menu_links?.length ? (
-          <ExpandMoreIcon
+          <StyledExpandMoreIcon
             fontSize="small"
             onMouseOver={handleOnMouseOver('icon')}
             onMouseOut={handleOnMouseOut('icon')}
           />
-        ) : (
-          <StyledUnderlineWrapper>
-            <StyledUnderline className="menu-item-underline" />
-          </StyledUnderlineWrapper>
-        )}
+        ) : null}
+        <StyledUnderlineWrapper>
+          <StyledUnderline className="menu-item-underline" />
+        </StyledUnderlineWrapper>
       </StyledButton>
       {item.menu_links?.length && debouncedIsOpen ? (
-        <Box
-          sx={{
-            position: 'absolute',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#f2f2f2',
-            boxShadow: '2px 2px 2px 0 rgb(0 0 0 / 3%)',
-            top: '54px'
-          }}
-          onMouseOver={handleOnMouseOver('menu')}
-          onMouseOut={handleOnMouseOut('menu')}
-        >
+        <StyledPopUpMenu onMouseOver={handleOnMouseOver('menu')} onMouseOut={handleOnMouseOut('menu')}>
           {item.menu_links.map((link) => (
             <NavLink key={`menu-${item.title}-link-${link.title}`} link={link} onClick={handleOnClick(link, 'menu')} />
           ))}
-        </Box>
+        </StyledPopUpMenu>
       ) : null}
-    </Box>
+    </StyledNavItem>
   );
 };
 

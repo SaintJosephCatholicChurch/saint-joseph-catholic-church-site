@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
-import { SerializedPostContent, TagContent } from '../interface';
-import Pagination from './Pagination';
-import PostSummary from './posts/PostSummary';
+import { SerializedPostContent, TagContent } from '../../interface';
+import Pagination from '../Pagination';
+import PostSummary from './PostSummary';
 
 interface PostListProps {
   posts: SerializedPostContent[];

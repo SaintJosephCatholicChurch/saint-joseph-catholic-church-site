@@ -344,7 +344,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                             });
 
                             return (
-                              <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times`}>
+                              <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
                                 <Box sx={{ display: 'flex', gap: 1 }}>
                                   <StyledDayTimeLineTimeTimes
                                     label="Start Time"

@@ -1,7 +1,7 @@
 import { serialize } from 'next-mdx-remote/serialize';
 import { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../../../components/PageLayout';
-import PostList from '../../../components/PostList';
+import PostList from '../../../components/posts/PostList';
 import { SerializedPostContent, TagContent } from '../../../interface';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';

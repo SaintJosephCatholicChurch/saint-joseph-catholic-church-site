@@ -6,7 +6,7 @@ import ContactDetails from './ContactDetails';
 import Copyright from './Copyright';
 import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
-import SearchBox from './SearchBox';
+import SearchBox from '../../SearchBox';
 
 interface FooterProps {
   styles?: StylesConfig;

@@ -25,7 +25,6 @@ jobs:
             - ./node_modules
             - ./.next/cache
             - ./dist
-      - save_cache:
       - run:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./dist

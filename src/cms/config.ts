@@ -10,7 +10,11 @@ export interface CmsFieldTimes {
   widget: 'times';
 }
 
-export type CmsField = NetlifyCmsField | (CmsFieldBase & CmsFieldTimes);
+export interface CmsFieldHtml {
+  widget: 'html';
+}
+
+export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml));
 
 export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
   fields: CmsField[];
@@ -290,7 +294,7 @@ const config: CmsConfig = {
         {
           name: 'body',
           label: 'Body',
-          widget: 'markdown'
+          widget: 'html'
         }
       ]
     },
@@ -343,7 +347,7 @@ const config: CmsConfig = {
         {
           name: 'body',
           label: 'Body',
-          widget: 'markdown'
+          widget: 'html'
         }
       ]
     },

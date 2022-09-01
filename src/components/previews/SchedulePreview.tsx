@@ -22,11 +22,9 @@ const SchedulePreview = ({ entry, document }: PreviewTemplateComponentProps) => 
 
   return useMemo(
     () => (
-      <>
-        <StyleCopy document={document}>
-          <Schedule times={data} tab={tab} onTabChange={handleTabChange} />
-        </StyleCopy>
-      </>
+      <StyleCopy document={document}>
+        <Schedule times={data} tab={tab} onTabChange={handleTabChange} />
+      </StyleCopy>
     ),
     [data, document, handleTabChange, tab]
   );

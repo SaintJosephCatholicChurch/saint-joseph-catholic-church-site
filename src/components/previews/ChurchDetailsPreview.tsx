@@ -9,11 +9,9 @@ const ChurchDetailsPreview = ({ entry, document }: PreviewTemplateComponentProps
 
   return useMemo(
     () => (
-      <>
-        <StyleCopy document={document}>
-          <Footer churchDetails={data} />
-        </StyleCopy>
-      </>
+      <StyleCopy document={document}>
+        <Footer churchDetails={data} />
+      </StyleCopy>
     ),
     [data, document]
   );

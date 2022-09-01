@@ -1,8 +1,5 @@
 import { parseISO } from 'date-fns';
-import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
 import { GetStaticPaths, GetStaticProps } from 'next/types';
-import remarkGfm from 'remark-gfm';
 import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';
 import { PageContent } from '../interface';
@@ -14,10 +11,10 @@ interface PageProps {
   slug: string;
   tags: string[];
   description?: string;
-  source: MDXRemoteProps;
+  content: string;
 }
 
-const Page = ({ title, dateString, slug, tags, description = '', source }: PageProps) => {
+const Page = ({ title, dateString, slug, tags, description = '', content }: PageProps) => {
   return (
     <PageLayout
       url={`/pages/${slug}`}
@@ -27,7 +24,11 @@ const Page = ({ title, dateString, slug, tags, description = '', source }: PageP
       description={description}
     >
       <PageContentView tags={tags}>
-        <MDXRemote {...source} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: content
+          }}
+        />
       </PageContentView>
     </PageLayout>
   );
@@ -43,19 +44,22 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const slugToPageContent: Record<string, PageContent> = ((pageContents) => {
-  let hash = {};
+const buildSlugToPageContent = (pageContents: PageContent[]) => {
+  const hash: Record<string, PageContent> = {};
   pageContents.forEach((page) => (hash[page.data.slug] = page));
   return hash;
-})(fetchPageContent());
+};
+
+let slugToPageContent = buildSlugToPageContent(fetchPageContent());
 
 export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PageProps }> => {
   const slug = params.page as string;
+
+  if (process.env.NODE_ENV === 'development') {
+    slugToPageContent = buildSlugToPageContent(fetchPageContent());
+  }
+
   const { content, data } = slugToPageContent[slug];
-  const mdxSource = await serialize(content, {
-    scope: data as Record<string, any>,
-    mdxOptions: { remarkPlugins: [remarkGfm] }
-  });
 
   return {
     props: {
@@ -64,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       slug: data.slug,
       description: '',
       tags: data.tags ?? [],
-      source: mdxSource
+      content
     }
   };
 };

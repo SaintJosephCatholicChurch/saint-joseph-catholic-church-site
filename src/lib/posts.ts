@@ -10,7 +10,7 @@ let postMatterCache: FileMatter[];
 let postCache: PostContent[];
 
 export function fetchPostMatter(): FileMatter[] {
-  if (postMatterCache) {
+  if (postMatterCache && process.env.NODE_ENV !== 'development') {
     return postMatterCache;
   }
   // Get file names under /posts
@@ -44,7 +44,7 @@ export function fetchPostMatter(): FileMatter[] {
 }
 
 export function fetchPostContent(): PostContent[] {
-  if (postCache) {
+  if (postCache && process.env.NODE_ENV !== 'development') {
     return postCache;
   }
 

@@ -2,14 +2,17 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { MouseEvent } from 'react';
 import { MenuLink } from '../../interface';
-import { CleanLink } from '../common-styled';
+import useMenuLinkUrl from './hooks/useUrl';
 
 interface NavLinkProps {
   link: MenuLink;
   onClick: (event: MouseEvent) => void;
 }
 
-const NavLink = ({ link: { url, page, title }, onClick }: NavLinkProps) => {
+const NavLink = ({ link, onClick }: NavLinkProps) => {
+  const url = useMenuLinkUrl(link);
+  const { title } = link;
+
   return (
     <Button
       sx={{
@@ -20,6 +23,8 @@ const NavLink = ({ link: { url, page, title }, onClick }: NavLinkProps) => {
           color: '#2e2e2e'
         }
       }}
+      href={url}
+      target={url?.startsWith('http') ? '_blank' : undefined}
     >
       <MenuItem
         onClick={onClick}
@@ -30,13 +35,7 @@ const NavLink = ({ link: { url, page, title }, onClick }: NavLinkProps) => {
           borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
         }}
       >
-        {url || page ? (
-          <CleanLink target={url?.startsWith('http') ? '_blank' : undefined} href={url ?? `/${page}`}>
-            {title}
-          </CleanLink>
-        ) : (
-          title
-        )}
+        {title}
       </MenuItem>
     </Button>
   );

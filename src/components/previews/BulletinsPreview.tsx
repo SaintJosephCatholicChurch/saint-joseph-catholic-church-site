@@ -9,11 +9,9 @@ const BulletinsPreview = ({ entry, document }: PreviewTemplateComponentProps) =>
 
   return useMemo(
     () => (
-      <>
-        <StyleCopy document={document}>
-          <ParishBulletinsView bulletins={data} />
-        </StyleCopy>
-      </>
+      <StyleCopy document={document}>
+        <ParishBulletinsView bulletins={data} />
+      </StyleCopy>
     ),
     [data, document]
   );

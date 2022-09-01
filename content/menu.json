@@ -31,7 +31,8 @@
           "url": "/parish-bulletins"
         },
         {
-          "title": "Parish History"
+          "title": "Parish History",
+          "page": "parish-history"
         },
         {
           "title": "Parish Membership"

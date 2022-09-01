@@ -34,3 +34,6 @@ yarn-error.log*
 .mdx-data
 sw.js*
 workbox-*
+
+# tinymce
+/public/tinymce/

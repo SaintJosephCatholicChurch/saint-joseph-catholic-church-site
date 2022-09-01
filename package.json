@@ -10,7 +10,8 @@
     "export": "cross-env NODE_ENV=production next build && next export -o ./dist",
     "test": "jest",
     "local-cms": "npx netlify-cms-proxy-server",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts"
+    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",
+    "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
     "@emotion/core": "10.0.35",
@@ -22,6 +23,7 @@
     "@mui/x-date-pickers": "5.0.0-beta.7",
     "@next/bundle-analyzer": "12.2.5",
     "@svgr/webpack": "6.3.1",
+    "@tinymce/tinymce-react": "4.2.0",
     "@toast-ui/editor": "3.1.10",
     "@toast-ui/react-editor": "3.1.10",
     "@types/js-yaml": "4.0.5",
@@ -52,6 +54,7 @@
     "remark-rehype": "4.0.0",
     "remark-stringify": "6.0.4",
     "schema-dts": "1.1.0",
+    "tinymce": "6.1.2",
     "unified": "7.1.0",
     "unist-builder": "1.0.3",
     "unist-util-visit-parents": "2.0.1"
@@ -63,6 +66,7 @@
     "cross-env": "7.0.3",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
+    "fs-extra": "^10.1.0",
     "jest": "28.1.3",
     "netlify-cli": "11.5.0",
     "netlify-cms-core": "2.55.2",

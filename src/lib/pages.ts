@@ -10,7 +10,7 @@ let pageMatterCache: FileMatter[];
 let pageCache: PageContent[];
 
 export function fetchPageMatter(): FileMatter[] {
-  if (pageMatterCache) {
+  if (pageMatterCache && process.env.NODE_ENV !== 'development') {
     return pageMatterCache;
   }
   // Get file names under /pages
@@ -44,7 +44,7 @@ export function fetchPageMatter(): FileMatter[] {
 }
 
 export function fetchPageContent(): PageContent[] {
-  if (pageCache) {
+  if (pageCache && process.env.NODE_ENV !== 'development') {
     return pageCache;
   }
 

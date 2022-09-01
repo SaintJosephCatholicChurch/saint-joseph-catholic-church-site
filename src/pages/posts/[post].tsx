@@ -1,21 +1,10 @@
 import parseISO from 'date-fns/parseISO';
-import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
 import { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
-import remarkGfm from 'remark-gfm';
 import PageLayout from '../../components/PageLayout';
-import PageContentView from '../../components/pages/PageContentView';
-import PostDateAuthorLine from '../../components/posts/PostDateAuthorLine';
-import PostImage from '../../components/posts/PostImage';
-import PostTitle from '../../components/posts/PostTitle';
+import PostView from '../../components/posts/PostView';
 import { PostContent } from '../../interface';
 import { fetchPostContent } from '../../lib/posts';
-import styled from '../../util/styled.util';
-
-const StyledPageContentWrapper = styled('div')`
-  margin-top: 32px;
-`;
 
 interface PostProps {
   title: string;
@@ -24,10 +13,10 @@ interface PostProps {
   slug: string;
   tags: string[];
   description?: string;
-  source: MDXRemoteProps;
+  content: string;
 }
 
-const Post = ({ title, image, dateString, slug, tags, description = '', source }: PostProps) => {
+const Post = ({ title, image, dateString, slug, tags, description = '', content }: PostProps) => {
   const date = useMemo(() => parseISO(dateString), [dateString]);
 
   return (
@@ -39,14 +28,13 @@ const Post = ({ title, image, dateString, slug, tags, description = '', source }
       description={description}
       showHeader={false}
     >
-      <PostTitle title={title} />
-      <PostDateAuthorLine date={date} />
-      <PostImage title={title} image={image} />
-      <StyledPageContentWrapper>
-        <PageContentView>
-          <MDXRemote {...source} />
-        </PageContentView>
-      </StyledPageContentWrapper>
+      <PostView title={title} date={date} image={image}>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: content
+          }}
+        />
+      </PostView>
     </PageLayout>
   );
 };
@@ -61,19 +49,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const slugToPostContent: Record<string, PostContent> = ((postContents) => {
-  let hash = {};
+const buildSlugToPostContent = (postContents: PostContent[]) => {
+  const hash: Record<string, PostContent> = {};
   postContents.forEach((post) => (hash[post.data.slug] = post));
   return hash;
-})(fetchPostContent());
+};
+
+let slugToPostContent = buildSlugToPostContent(fetchPostContent());
 
 export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PostProps }> => {
   const slug = params.post as string;
+
+  if (process.env.NODE_ENV === 'development') {
+    slugToPostContent = buildSlugToPostContent(fetchPostContent());
+  }
+
   const { content, data } = slugToPostContent[slug];
-  const mdxSource = await serialize(content, {
-    scope: data as Record<string, any>,
-    mdxOptions: { remarkPlugins: [remarkGfm] }
-  });
+
   return {
     props: {
       title: data.title,
@@ -82,7 +74,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       slug: data.slug,
       description: '',
       tags: data.tags ?? [],
-      source: mdxSource
+      content
     }
   };
 };

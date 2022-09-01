@@ -3,10 +3,10 @@ import Button from '@mui/material/Button';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import { MenuItem, MenuLink } from '../../interface';
-import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
+import { getMenuLinkUrl } from './hooks/useUrl';
 import NavLink from './NavLink';
 
 const StyledNavItem = styled('div')`
@@ -121,41 +121,29 @@ const NavItem = ({ item }: NavItemProps) => {
     [handleOnMouseOut, handleOnMouseOver]
   );
 
-  const getUrl = useCallback((link: MenuLink) => {
-    if (isNotEmpty(link.url)) {
-      return link.url;
-    }
-
-    if (isNotEmpty(link.page)) {
-      return `/${link.page}`;
-    }
-
-    return '';
-  }, []);
-
   const url = useMemo(() => {
     if (item.menu_links?.length) {
-      return getUrl(item.menu_links[0]);
+      return getMenuLinkUrl(item.menu_links[0]);
     }
 
-    return getUrl(item);
-  }, [getUrl, item]);
+    return getMenuLinkUrl(item);
+  }, [item]);
 
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    if (pathname === getUrl(item)) {
+    if (pathname === getMenuLinkUrl(item)) {
       setSelected(true);
       return;
     }
 
     if (item.menu_links?.length) {
-      setSelected(Boolean(item.menu_links.find((link) => pathname === getUrl(link))));
+      setSelected(Boolean(item.menu_links.find((link) => pathname === getMenuLinkUrl(link))));
       return;
     }
 
     setSelected(false);
-  }, [getUrl, item, pathname]);
+  }, [item, pathname]);
 
   return (
     <StyledNavItem>

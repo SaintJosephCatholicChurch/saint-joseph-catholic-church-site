@@ -21,17 +21,15 @@ import Container from '../layout/Container';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
-interface StyledScheduledProps {
+interface StyledScheduleProps {
   background: string;
-  backgroundColor: string;
 }
 
-const StyledScheduled = styled('div', ['background', 'backgroundColor'])<StyledScheduledProps>(
-  ({ background, backgroundColor }) => `
+const StyledSchedule = styled('div', ['background'])<StyledScheduleProps>(
+  ({ background }) => `
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: ${backgroundColor};
-    ${background ? `background-image: url(${background});` : ''}
+    background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${background}), #c7c7c7;
     background-repeat: repeat;
     background-position: center top;
     display: flex;
@@ -39,6 +37,61 @@ const StyledScheduled = styled('div', ['background', 'backgroundColor'])<StyledS
     justify-content: center;
   `
 );
+
+const StyledContainerContents = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+const StyledHeader = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+
+    ${theme.breakpoints.down('md')} {
+      font-size: 24px;
+    }
+  `
+);
+
+const StyledHeaderPreText = styled('h1')(
+  ({ theme }) => `
+    font-weight: 500;
+    color: #9d7b2a;
+
+    font-size: 18px;
+    ${theme.breakpoints.up('lg')} {
+      font-size: 16px;
+    }
+  `
+);
+
+const StyledHeaderText = styled('h1')(
+  ({ theme }) => `
+    font-weight: 500;
+    color: #333;
+    padding: 0;
+    padding-bottom: 16px;
+    margin: 0;
+    text-transform: uppercase;
+
+    font-size: 24px;
+    line-height: 24px;
+    ${theme.breakpoints.up('lg')} {
+      font-size: 30px;
+    }
+  `
+);
+
+const StyledHeaderBorder = styled('div')`
+  border-bottom: 2px solid #bbbbbb;
+  width: 50%;
+`;
 
 const StyledTabsWrapper = styled('div')(
   ({ theme }) => `
@@ -67,12 +120,11 @@ function a11yProps(index: number) {
 interface ScheduleProps {
   times: Times[];
   background?: string;
-  backgroundColor?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: ScheduleProps) => {
+const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -155,75 +207,85 @@ const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: Sche
   }, [size, times]);
 
   return (
-    <StyledScheduled background={background} backgroundColor={backgroundColor}>
+    <StyledSchedule background={background}>
       <Container>
-        <List
-          component="div"
-          aria-labelledby="nested-list-subheader"
-          disablePadding
-          sx={{
-            width: '100%',
-            [theme.breakpoints.up('md')]: {
-              display: 'none'
-            }
-          }}
-        >
-          {times.map((timeSchedule, index) => (
-            <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
-          ))}
-        </List>
-        <StyledTabsWrapper>
-          <Tabs
-            orientation="vertical"
-            variant="fullWidth"
-            value={value}
-            onChange={handleChange}
-            aria-label="Vertical tabs example"
-            scrollButtons={false}
+        <StyledContainerContents>
+          <StyledHeader>
+            <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
+            <StyledHeaderText>Come Worship with Us</StyledHeaderText>
+            <StyledHeaderBorder />
+          </StyledHeader>
+          <List
+            component="div"
+            aria-labelledby="nested-list-subheader"
+            disablePadding
             sx={{
-              backgroundColor: 'rgba(241, 241, 241, 0.75)',
-              minHeight: tabsHeight > 0 ? tabsHeight : undefined,
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#d2ac54',
-                width: '4px'
+              width: '100%',
+              [theme.breakpoints.up('md')]: {
+                display: 'none'
               }
             }}
           >
             {times.map((timeSchedule, index) => (
-              <Tab
-                key={`time-schedule-${index}`}
-                label={timeSchedule.name}
-                {...a11yProps(index)}
-                sx={{
-                  color: '#414141',
-                  alignItems: 'flex-start',
-                  fontWeight: 400,
-                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
-                  letterSpacing: 0,
-                  '&.Mui-selected': {
+              <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
+            ))}
+          </List>
+          <StyledTabsWrapper>
+            <Tabs
+              orientation="vertical"
+              variant="fullWidth"
+              value={value}
+              onChange={handleChange}
+              aria-label="Vertical tabs example"
+              scrollButtons={false}
+              sx={{
+                backgroundColor: 'rgba(241, 241, 241, 0.35)',
+                minHeight: tabsHeight > 0 ? tabsHeight : undefined,
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#b58d30',
+                  width: '4px'
+                }
+              }}
+            >
+              {times.map((timeSchedule, index) => (
+                <Tab
+                  key={`time-schedule-${index}`}
+                  label={timeSchedule.name}
+                  {...a11yProps(index)}
+                  sx={{
                     color: '#414141',
-                    backgroundColor: '#ffffff'
-                  },
-                  fontSize: '18px',
-                  padding: '16px',
-                  minHeight: '100px',
-                  '@media screen and (min-width: 1200px)': {
-                    fontSize: '24px',
-                    padding: '32px',
-                    minHeight: '124px'
-                  }
-                }}
-              />
-            ))}
-          </Tabs>
-          <StyledTabPanels>
-            {times.map((timeSchedule, index) => (
-              <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
-            ))}
-          </StyledTabPanels>
-        </StyledTabsWrapper>
+                    alignItems: 'flex-start',
+                    fontWeight: 400,
+                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                    letterSpacing: 0,
+                    '&.Mui-selected': {
+                      color: '#414141',
+                      backgroundColor: '#ffffff'
+                    },
+                    fontSize: '18px',
+                    padding: '16px',
+                    minHeight: '100px',
+                    '@media screen and (min-width: 1200px)': {
+                      fontSize: '24px',
+                      padding: '32px',
+                      minHeight: '124px'
+                    },
+                    '&:not(.Mui-selected):hover': {
+                      backgroundColor: 'rgba(241, 241, 241, 0.5)'
+                    }
+                  }}
+                />
+              ))}
+            </Tabs>
+            <StyledTabPanels>
+              {times.map((timeSchedule, index) => (
+                <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
+              ))}
+            </StyledTabPanels>
+          </StyledTabsWrapper>
+        </StyledContainerContents>
       </Container>
-    </StyledScheduled>
+    </StyledSchedule>
   );
 };
 

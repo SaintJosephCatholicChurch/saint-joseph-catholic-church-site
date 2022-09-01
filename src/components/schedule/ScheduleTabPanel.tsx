@@ -4,40 +4,45 @@ import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 import TabPanel from '../TabPanel';
 
-const StyledTabPanelContent = styled('div')`
-  flex-direction: column;
-  width: 100%;
-  padding: 50px;
-  box-sizing: border-box;
+const StyledTabPanelContent = styled('div')(
+  ({ theme }) => `
+    flex-direction: column;
+    width: 100%;
+    padding: 50px;
+    box-sizing: border-box;
 
-  @media screen and (max-width: 900px) {
-    padding: 36px;
-  }
+    ${theme.breakpoints.down('md')} {
+      padding: 36px;
+    }
 
-  &:not([hidden]) {
-    display: flex;
-  }
-`;
+    &:not([hidden]) {
+      display: flex;
+    }
+  `
+);
 
 const StyledTabPanelTitleWrapper = styled('div')`
   display: flex;
 `;
 
-const StyledTabPanelTitle = styled('h2')`
-  font-weight: 500;
-  color: #333;
-  padding: 0;
-  padding-bottom: 16px;
-  margin: 0;
-  border-bottom: 2px solid #bbbbbb;
-  text-transform: uppercase;
+const StyledTabPanelTitle = styled('h2')(
+  ({ theme }) => `
+    font-weight: 500;
+    color: #333;
+    padding: 0;
+    padding-bottom: 16px;
+    margin: 0;
+    border-bottom: 2px solid #bbbbbb;
+    text-transform: uppercase;
 
-  font-size: 24px;
-  line-height: 24px;
-  @media screen and (min-width: 1200px) {
-    font-size: 30px;
-  }
-`;
+    font-size: 24px;
+    line-height: 24px;
+    
+    ${theme.breakpoints.up('lg')} {
+      font-size: 30px;
+    }
+  `
+);
 
 const StyledSectionTitle = styled('h3')`
   font-size: 20px;
@@ -65,18 +70,21 @@ const StyledDayTimeLine = styled('div')`
   border-bottom: 1px solid #ccc;
 `;
 
-const StyledDayTimeLineTitle = styled('div')`
-  text-transform: uppercase;
-  color: #d2ac54;
-  font-weight: 500;
-  font-family: 'Oswald', Helvetica, Arial, sans-serif;
+const StyledDayTimeLineTitle = styled('div')(
+  ({ theme }) => `
+    text-transform: uppercase;
+    color: #b58d30;
+    font-weight: 500;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
-  font-size: 16px;
-  @media screen and (max-width: 900px) {
-    font-size: 14px;
-    line-height: 16px;
-  }
-`;
+    font-size: 17px;
+    line-height: 21px;
+    ${theme.breakpoints.down('md')} {
+      font-size: 15px;
+      line-height: 18px;
+    }
+  `
+);
 
 const StyledDayTimeLineTimes = styled('div')`
   display: flex;
@@ -91,24 +99,28 @@ const StyledDayTimeLineTime = styled('div')`
   gap: 4px;
 `;
 
-const StyledDayTimeLineTimeTimes = styled('div')`
-  text-transform: uppercase;
+const StyledDayTimeLineTimeTimes = styled('div')(
+  ({ theme }) => `
+    text-transform: uppercase;
 
-  font-size: 15px;
-  @media screen and (max-width: 900px) {
-    font-size: 14px;
-    line-height: 16px;
-  }
-`;
+    font-size: 15px;
+    ${theme.breakpoints.down('md')} {
+      font-size: 14px;
+      line-height: 16px;
+    }
+  `
+);
 
-const StyledDivider = styled('div')`
-  color: #aaa;
+const StyledDivider = styled('div')(
+  ({ theme }) => `
+    color: #aaa;
 
-  font-size: 15px;
-  @media screen and (max-width: 900px) {
-    font-size: 13px;
-  }
-`;
+    font-size: 15px;
+    ${theme.breakpoints.down('md')} {
+      font-size: 13px;
+    }
+  `
+);
 
 const StyledDayTimeLineTimeComment = styled('div')`
   display: flex;

@@ -17,11 +17,11 @@ interface HomepageViewProps {
 }
 
 const HomepageView = memo(
-  ({ slides, homePageData: { schedule_background, schedule_background_fallback_color }, times }: HomepageViewProps) => {
+  ({ slides, homePageData: { schedule_background }, times }: HomepageViewProps) => {
     return (
       <StyledHomepageView>
         <CarouselView slides={slides} />
-        <Schedule times={times} background={schedule_background} backgroundColor={schedule_background_fallback_color} />
+        <Schedule times={times} background={schedule_background} />
         <Footer churchDetails={churchDetails} />
       </StyledHomepageView>
     );

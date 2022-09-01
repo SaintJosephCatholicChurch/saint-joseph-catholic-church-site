@@ -79,11 +79,6 @@ const config: CmsConfig = {
               name: 'schedule_background',
               label: 'Schedule Background',
               widget: 'image'
-            },
-            {
-              name: 'schedule_background_fallback_color',
-              label: 'Schedule Background Fallback Color',
-              widget: 'color'
             }
           ]
         }

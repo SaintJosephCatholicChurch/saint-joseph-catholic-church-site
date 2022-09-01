@@ -12,7 +12,6 @@ export interface FileMatter {
 export interface HomePageData {
   slides: Slide[];
   schedule_background: string;
-  schedule_background_fallback_color: string;
 }
 
 export interface Slide {

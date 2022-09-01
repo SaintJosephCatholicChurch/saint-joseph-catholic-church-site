@@ -14,8 +14,9 @@ interface StyledMobileScheduleTabPanelProps {
 
 const StyledMobileScheduleTabPanel = styled('div', ['open'])<StyledMobileScheduleTabPanelProps>(
   ({ open }) => `
-    backgroundColor: ${open ? '#ffffff' : '#f1f1f1'};
-    borderBottom: 1px solid #ccc;
+    background-color: ${open ? '#ffffff' : '#f1f1f1'};
+    border-bottom: 1px solid #ccc;
+    width: 100%;
   `
 );
 

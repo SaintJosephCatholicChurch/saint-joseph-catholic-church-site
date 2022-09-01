@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PageLayout from '../components/PageLayout';
 import styled from '../util/styled.util';
+import useElementSize from '../util/useElementSize';
 
 const StyledLiveStreamWrapper = styled('div')`
   width: 100%;
@@ -8,15 +9,12 @@ const StyledLiveStreamWrapper = styled('div')`
 `;
 
 const LiveStream = () => {
-  const ref = useRef(null);
-
-  const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  const [ref, { width }] = useElementSize();
 
   useEffect(() => {
-    setWidth(ref.current.offsetWidth);
-    setHeight((ref.current.offsetWidth / 16) * 9);
-  }, []);
+    setHeight((width / 16) * 9);
+  }, [width]);
 
   return (
     <PageLayout url="/live-stream" title="Live Stream">

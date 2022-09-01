@@ -26,6 +26,7 @@ interface StyledPageContentsWrapperProps {
 
 const StyledPageContentsWrapper = styled('div', ['showHeader'])<StyledPageContentsWrapperProps>(
   ({ theme, showHeader }) => `
+    width: 100%;
     ${!showHeader ? 'margin-top: 98px;' : ''}
 
     ${theme.breakpoints.down('md')} {

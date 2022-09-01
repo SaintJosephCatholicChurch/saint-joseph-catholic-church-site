@@ -7,8 +7,9 @@ import TabPanel from '../TabPanel';
 const StyledTabPanelContent = styled('div')`
   flex-direction: column;
   width: 100%;
-
   padding: 50px;
+  box-sizing: border-box;
+
   @media screen and (max-width: 900px) {
     padding: 36px;
   }
@@ -130,32 +131,32 @@ const ScheduleTabPanel = memo(({ times, value, index }: ScheduleTabPanelProps) =
         <StyledTabPanelTitleWrapper>
           <StyledTabPanelTitle>{times.name}</StyledTabPanelTitle>
         </StyledTabPanelTitleWrapper>
-        {times.sections?.map((section) => (
-          <StyledSections key={`section-${section.name}`}>
+        {times.sections?.map((section, sectionIndex) => (
+          <StyledSections key={`section-${sectionIndex}`}>
             <StyledSectionTitle>{section.name}</StyledSectionTitle>
-            {section.days?.map((day) => (
-              <StyledDayTimeLine key={`section-${section.name}-day-${day.day}`}>
+            {section.days?.map((day, dayIndex) => (
+              <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
                 <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                 <StyledDayTimeLineTimes>
                   {day.times?.map((time, timeIndex) => (
-                    <StyledDayTimeLineTime key={`section-${section.name}-day-${day.day}-times-${timeIndex}`}>
+                    <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
                       <StyledDayTimeLineTimeTimes>
                         {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
                       </StyledDayTimeLineTimeTimes>
                       {isNotEmpty(time.end_time) ? (
                         <>
-                          <StyledDivider key={`section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}>
+                          <StyledDivider key={`section-${sectionIndex}-day-${dayIndex}-divider-end-time-${timeIndex}`}>
                             -
                           </StyledDivider>
                           <StyledDayTimeLineTimeTimes
-                            key={`section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
+                            key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
                           >
                             {time.end_time}
                           </StyledDayTimeLineTimeTimes>
                         </>
                       ) : null}
                       {isNotEmpty(time.note) ? (
-                        <StyledDayTimeLineTimeComment key={`section-${section.name}-day-${day.day}-note-${timeIndex}`}>
+                        <StyledDayTimeLineTimeComment key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}>
                           {time.note}
                         </StyledDayTimeLineTimeComment>
                       ) : null}

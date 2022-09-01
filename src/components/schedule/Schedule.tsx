@@ -51,23 +51,6 @@ const StyledTabsWrapper = styled('div')(
   `
 );
 
-interface StyledTabsContentProps {
-  tabsHeight: number;
-}
-
-const StyledTabsContent = styled('div', ['tabsHeight'])<StyledTabsContentProps>(
-  ({ tabsHeight }) => `
-    background-color: rgba(241, 241, 241, 0.75);
-    
-    ${tabsHeight > 0 ? 'minHeight: ${tabsHeight};' : ''}
-
-    & .MuiTabs-indicator {
-      background-color: #d2ac54;
-      width: 4px;
-    }
-  `
-);
-
 const StyledTabPanels = styled('div')`
   width: 100%;
   background-color: #ffffff;
@@ -197,35 +180,41 @@ const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: Sche
             onChange={handleChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
+            sx={{
+              backgroundColor: 'rgba(241, 241, 241, 0.75)',
+              minHeight: tabsHeight > 0 ? tabsHeight : undefined,
+              '& .MuiTabs-indicator': {
+                backgroundColor: '#d2ac54',
+                width: '4px'
+              }
+            }}
           >
-            <StyledTabsContent tabsHeight={tabsHeight}>
-              {times.map((timeSchedule, index) => (
-                <Tab
-                  key={`time-schedule-${index}`}
-                  label={timeSchedule.name}
-                  {...a11yProps(index)}
-                  sx={{
+            {times.map((timeSchedule, index) => (
+              <Tab
+                key={`time-schedule-${index}`}
+                label={timeSchedule.name}
+                {...a11yProps(index)}
+                sx={{
+                  color: '#414141',
+                  alignItems: 'flex-start',
+                  fontWeight: 400,
+                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                  letterSpacing: 0,
+                  '&.Mui-selected': {
                     color: '#414141',
-                    alignItems: 'flex-start',
-                    fontWeight: 400,
-                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
-                    letterSpacing: 0,
-                    '&.Mui-selected': {
-                      color: '#414141',
-                      backgroundColor: '#ffffff'
-                    },
-                    fontSize: '18px',
-                    padding: '16px',
-                    minHeight: '100px',
-                    '@media screen and (min-width: 1200px)': {
-                      fontSize: '24px',
-                      padding: '32px',
-                      minHeight: '124px'
-                    }
-                  }}
-                />
-              ))}
-            </StyledTabsContent>
+                    backgroundColor: '#ffffff'
+                  },
+                  fontSize: '18px',
+                  padding: '16px',
+                  minHeight: '100px',
+                  '@media screen and (min-width: 1200px)': {
+                    fontSize: '24px',
+                    padding: '32px',
+                    minHeight: '124px'
+                  }
+                }}
+              />
+            ))}
           </Tabs>
           <StyledTabPanels>
             {times.map((timeSchedule, index) => (

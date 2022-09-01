@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import { CmsWidgetControlProps } from 'netlify-cms-core';
 import { Component } from 'react';
 import { Times } from '../../../interface';
-import ScheduleWidget from './ScheduleWidgetControl';
+import ScheduleWidget from './TimesWidgetControl';
 
 export default class TimesWidget extends Component<CmsWidgetControlProps<Immutable.List<unknown>>> {
   handleOnChange(times: Times[]) {

@@ -1,5 +1,6 @@
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig } from 'netlify-cms-core';
+import Head from 'next/head';
 import { useEffect } from 'react';
 import BulletinsPreview from '../components/previews/BulletinsPreview';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
@@ -9,12 +10,13 @@ import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
 import { useScript } from '../util/useScript';
 import config from './config';
+import useCollectionIcons from './hooks/useCollectionIcons';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
-import ScheduleWidget from './widgets/times/ScheduleWidget';
+import ScheduleWidget from './widgets/times/TimesWidget';
 
 const CMSView = () => {
-  useScript('https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js');
+  useScript('https://kit.fontawesome.com/0636016ebf.js');
 
   useEffect(() => {
     if (!cmsApp) {
@@ -39,6 +41,29 @@ const CMSView = () => {
     cmsApp.registerPreviewTemplate('church_details', ChurchDetailsPreview);
     cmsApp.registerPreviewTemplate('bulletins', BulletinsPreview);
   }, []);
+
+  useCollectionIcons([
+    {
+      name: 'homepage',
+      icon: 'fa-solid fa-house'
+    },
+    {
+      name: 'church',
+      icon: 'fa-solid fa-church'
+    },
+    {
+      name: 'meta',
+      icon: 'fa-solid fa-tag'
+    },
+    {
+      name: 'pages',
+      icon: 'fa-solid fa-file-lines'
+    },
+    {
+      name: 'config',
+      icon: 'fa-solid fa-gear'
+    }
+  ]);
 
   return <div />;
 };

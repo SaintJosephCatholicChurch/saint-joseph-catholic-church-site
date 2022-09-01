@@ -44,6 +44,7 @@ const StyledSections = styled('div')`
   width: 100%;
   padding-bottom: 16px;
   border-bottom: 1px solid #333;
+  gap: 8px;
 
   .MuiCollapse-wrapperInner {
     display: flex;
@@ -354,7 +355,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                               fullWidth
                               sx={{
                                 input: {
-                                  color: '#d2ac54',
+                                  color: '#b58d30',
                                   fontWeight: 500,
                                   fontSize: '14px',
                                   fontFamily: "'Oswald', Helvetica, Arial, sans-serif"

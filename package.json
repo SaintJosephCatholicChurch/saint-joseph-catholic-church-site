@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0-alpha2",
+  "version": "1.0.0-alpha3",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development next dev",
@@ -24,8 +24,6 @@
     "@next/bundle-analyzer": "12.2.5",
     "@svgr/webpack": "6.3.1",
     "@tinymce/tinymce-react": "4.2.0",
-    "@toast-ui/editor": "3.1.10",
-    "@toast-ui/react-editor": "3.1.10",
     "@types/js-yaml": "4.0.5",
     "date-fns": "2.29.2",
     "dompurify": "2.3.12",

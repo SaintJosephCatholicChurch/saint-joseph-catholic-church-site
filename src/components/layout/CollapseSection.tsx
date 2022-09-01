@@ -17,7 +17,7 @@ const StyledArrowIconWrapper = styled('div', ['collapsed'])<StyledArrowIconWrapp
 );
 
 const StyledHeader = styled('div')`
-  flexgrow: 1;
+  flex-grow: 1;
   display: flex;
   align-items: center;
   gap: 4px;

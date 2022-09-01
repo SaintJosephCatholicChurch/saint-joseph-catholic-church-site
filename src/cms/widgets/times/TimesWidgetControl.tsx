@@ -9,7 +9,7 @@ import { Times } from '../../../interface';
 import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
 import styled from '../../../util/styled.util';
 import { useWindowEvent } from '../../../util/window.util';
-import ScheduleTabPanel from './ScheduleTabPanelWidget';
+import ScheduleTabPanel from './TimesWidgetTabPanelWidget';
 
 const StyledScheduleWidget = styled('div')`
   border: 1px solid rgb(223, 223, 227);
@@ -25,15 +25,6 @@ const StyledScheduleWidgetContent = styled('div')`
   display: grid;
   grid-template-columns: 2fr 5fr;
   width: 100%;
-`;
-
-const StyledTabsContent = styled('div')`
-  background-color: rgba(241, 241, 241, 0.75);
-
-  & .MuiTabs-indicator {
-    background-color: #d2ac54;
-    width: 4px;
-  }
 `;
 
 const StyledTabPanels = styled('div')`
@@ -103,47 +94,52 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
             onChange={handleTabChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
+            sx={{
+              backgroundColor: 'rgba(241, 241, 241, 0.75)',
+              '& .MuiTabs-indicator': {
+                backgroundColor: '#b58d30',
+                width: '4px'
+              }
+            }}
           >
-            <StyledTabsContent>
-              {times.map((timeSchedule, index) => (
-                <Tab
-                  key={`time-schedule-${index}`}
-                  label={timeSchedule.name}
-                  {...a11yProps(index)}
-                  sx={{
-                    color: '#414141',
-                    alignItems: 'flex-start',
-                    padding: '32px',
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
-                    letterSpacing: 0,
-                    minHeight: '80px',
-                    '&.Mui-selected': {
-                      color: '#414141',
-                      backgroundColor: '#ffffff'
-                    }
-                  }}
-                />
-              ))}
-              <Button
-                onClick={handleAddTimes}
+            {times.map((timeSchedule, index) => (
+              <Tab
+                key={`time-schedule-${index}`}
+                label={timeSchedule.name}
+                {...a11yProps(index)}
                 sx={{
-                  padding: '28px 32px',
+                  color: '#414141',
+                  alignItems: 'flex-start',
+                  padding: '32px',
                   fontSize: '16px',
                   fontWeight: 400,
                   fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
                   letterSpacing: 0,
                   minHeight: '80px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start'
+                  '&.Mui-selected': {
+                    color: '#414141',
+                    backgroundColor: '#ffffff'
+                  }
                 }}
-              >
-                <AddIcon />
-                <Box>Add Category</Box>
-              </Button>
-            </StyledTabsContent>
+              />
+            ))}
+            <Button
+              onClick={handleAddTimes}
+              sx={{
+                padding: '28px 32px',
+                fontSize: '16px',
+                fontWeight: 400,
+                fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                letterSpacing: 0,
+                minHeight: '80px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start'
+              }}
+            >
+              <AddIcon />
+              <Box>Add Category</Box>
+            </Button>
           </Tabs>
           <StyledTabPanels>
             {times.map((timeSchedule, index) => (

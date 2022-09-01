@@ -1,13 +1,12 @@
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
+import styled from '../../util/styled.util';
 
-const HeaderPrimaryTextWrapper = styled(Box)`
+const StyledHeaderPrimaryTextWrapper = styled('div')`
   display: flex;
   gap: 10px;
 `;
 
-const HeaderPrimaryText = styled(Box)`
+const StyledHeaderPrimaryText = styled('h1')`
   color: #ffffff;
   margin: 0;
   letter-spacing: 1.5px;
@@ -29,13 +28,11 @@ const LogoPrimaryText = ({ children }: LogoPrimaryTextProps) => {
   const words = useMemo(() => children.split(' '), [children]);
 
   return (
-    <HeaderPrimaryTextWrapper>
+    <StyledHeaderPrimaryTextWrapper>
       {words?.map((word) => (
-        <HeaderPrimaryText key={`header-primary-text-${word}`} component="h1">
-          {word}
-        </HeaderPrimaryText>
+        <StyledHeaderPrimaryText key={`header-primary-text-${word}`}>{word}</StyledHeaderPrimaryText>
       ))}
-    </HeaderPrimaryTextWrapper>
+    </StyledHeaderPrimaryTextWrapper>
   );
 };
 

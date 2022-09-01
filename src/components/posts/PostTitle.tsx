@@ -1,8 +1,7 @@
-import Box from '@mui/material/Box';
-import { styled, SxProps, Theme } from '@mui/material/styles';
 import { memo } from 'react';
+import styled from '../../util/styled.util';
 
-const StyledTitle = styled(Box)`
+const StyledTitle = styled('h3')`
   font-weight: 500;
   color: #333;
   padding: 0;
@@ -19,15 +18,10 @@ const StyledTitle = styled(Box)`
 
 interface PostTitleProps {
   title: string;
-  sx?: SxProps<Theme>;
 }
 
-const PostTitle = memo(({ title, sx }: PostTitleProps) => {
-  return (
-    <StyledTitle component="h3" sx={sx}>
-      {title}
-    </StyledTitle>
-  );
+const PostTitle = memo(({ title }: PostTitleProps) => {
+  return <StyledTitle>{title}</StyledTitle>;
 });
 
 PostTitle.displayName = 'PostTitle';

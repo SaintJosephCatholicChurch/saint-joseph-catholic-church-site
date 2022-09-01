@@ -1,56 +1,56 @@
-import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
 import styles from '../../../lib/styles';
-import ChurchDetailsHeader from './ChurchDetailsHeader';
+import styled from '../../../util/styled.util';
+
+const StyledPageHeader = styled('div')(
+  ({ theme }) => `
+    background-image: url(${styles.header_background});
+    background-repeat: repeat-x;
+    background-position: center top;
+
+    ${theme.breakpoints.down('md')} {
+      padding: 98px 0 40px;
+    }
+
+    ${theme.breakpoints.up('md')} {
+      padding: 130px 0 40px;
+    }
+
+    width: 100%;
+  `
+);
+
+const StyledTitle = styled('h1')(
+  ({ theme }) => `
+    color: ${styles.header_color};
+    font-style: ${styles.header_font_style};
+    text-align: center;
+    margin: 0;
+    
+    ${theme.breakpoints.down('md')} {
+      font-size: 30px;
+      line-height: 30px;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    ${theme.breakpoints.up('md')} {
+      font-size: 50px;
+      line-height: 50px;
+    }
+
+    font-weight: 400;
+  `
+);
 
 interface PageHeaderProps {
   title: string;
 }
 
 const PageHeader = ({ title }: PageHeaderProps) => {
-  const theme = useTheme();
-
   return (
-    <>
-      <Box
-        sx={{
-          backgroundImage: `url(${styles.header_background})`,
-          backgroundRepeat: 'repeat-x',
-          backgroundPosition: 'center top',
-          [theme.breakpoints.down('md')]: {
-            padding: '98px 0 40px'
-          },
-          [theme.breakpoints.up('md')]: {
-            padding: '130px 0 40px'
-          },
-          width: '100%'
-        }}
-      >
-        <Box
-          component="h1"
-          sx={{
-            color: styles.header_color,
-            fontStyle: styles.header_font_style,
-            textAlign: 'center',
-            margin: 0,
-            [theme.breakpoints.down('md')]: {
-              fontSize: '30px',
-              lineHeight: '30px',
-              pl: 3,
-              pr: 3
-            },
-            [theme.breakpoints.up('md')]: {
-              fontSize: '50px',
-              lineHeight: '50px'
-            },
-            fontWeight: 400
-          }}
-        >
-          {title}
-        </Box>
-      </Box>
-      <ChurchDetailsHeader />
-    </>
+    <StyledPageHeader>
+      <StyledTitle>{title}</StyledTitle>
+    </StyledPageHeader>
   );
 };
 

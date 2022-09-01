@@ -102,7 +102,7 @@ export interface PageContent {
   readonly fullPath: string;
   readonly content: string;
   readonly data: PageContentData;
-};
+}
 
 export interface SerializedPageContent extends Omit<PageContent, 'content'> {
   readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
@@ -132,10 +132,3 @@ export interface TagContent {
   readonly slug: string;
   readonly name: string;
 }
-
-export interface QuickLink {
-  readonly title: string;
-  readonly subtitle?: string;
-  readonly url: string;
-  readonly background: string;
-};

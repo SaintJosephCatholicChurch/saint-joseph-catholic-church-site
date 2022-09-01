@@ -1,10 +1,17 @@
-import styled from '@emotion/styled';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { ChurchDetails } from '../../../interface';
+import styled from '../../../util/styled.util';
 
-const ChurchDetailsLink = styled('a')`
+const StyledContactDetails = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  fontsize: 16px;
+`;
+
+const StyledChurchDetailsLink = styled('a')`
   display: flex;
   align-items: center;
   gap: 4px;
@@ -25,14 +32,7 @@ interface ContactDetailsProps {
 
 const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 0.5,
-        fontSize: 16
-      }}
-    >
+    <StyledContactDetails>
       <Box>
         <strong>{churchDetails.name}</strong>
       </Box>
@@ -41,18 +41,18 @@ const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
         {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
       </Box>
       <Box>
-        <ChurchDetailsLink href={`tel:${churchDetails.phone}`}>
+        <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
           <PhoneEnabledIcon fontSize="small" />
           {churchDetails.phone}
-        </ChurchDetailsLink>
+        </StyledChurchDetailsLink>
       </Box>
       <Box>
-        <ChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
+        <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
           <EmailIcon fontSize="small" />
           {churchDetails.email}
-        </ChurchDetailsLink>
+        </StyledChurchDetailsLink>
       </Box>
-    </Box>
+    </StyledContactDetails>
   );
 };
 

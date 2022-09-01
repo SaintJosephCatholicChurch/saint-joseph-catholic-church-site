@@ -1,5 +1,18 @@
-import Box from '@mui/material/Box';
+import styled from '../../../util/styled.util';
 import FooterHeader from './FooterHeader';
+
+const StyledFooterAside = styled('aside')`
+  margin-bottom: 32px;
+`;
+
+const StyledFooterAsideText = styled('div')`
+  color: rgb(68, 68, 68);
+  font-size: 16px;
+  line-height: 24px;
+  font-style: italic;
+  font-weight: 400;
+  margin: 0;
+`;
 
 interface FooterAsideProps {
   title: string;
@@ -8,21 +21,10 @@ interface FooterAsideProps {
 
 const FooterAside = ({ title, text }: FooterAsideProps) => {
   return (
-    <Box component="aside" sx={{ mb: 4 }}>
+    <StyledFooterAside>
       <FooterHeader text={title} />
-      <Box
-        sx={{
-          color: 'rgb(68, 68, 68)',
-          fontSize: '16px',
-          lineHeight: '24px',
-          fontStyle: 'italic',
-          fontWeight: 400,
-          m: 0
-        }}
-      >
-        {text}
-      </Box>
-    </Box>
+      <StyledFooterAsideText>{text}</StyledFooterAsideText>
+    </StyledFooterAside>
   );
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
@@ -9,7 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
@@ -20,8 +18,9 @@ import TabPanel from '../../../components/TabPanel';
 import { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
+import styled from '../../../util/styled.util';
 
-const StyledTabPanel = styled(TabPanel)`
+const StyledTabPanelContent = styled('div')`
   padding: 16px;
   padding-left: 32px;
   flex-direction: column;
@@ -36,22 +35,6 @@ const StyledTabPanelTitleWrapper = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-`;
-
-const StyledTabPanelTitle = styled(TextField)`
-  input {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-    font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  }
-`;
-
-const StyledSectionTitle = styled(TextField)`
-  input {
-    font-size: 16x;
-    font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  }
 `;
 
 const StyledSections = styled('div')`
@@ -69,6 +52,17 @@ const StyledSections = styled('div')`
   }
 `;
 
+const StyledSectionHeader = styled('div')`
+  display: flex;
+  gap: 8px;
+`;
+
+const StyledDayTimeLines = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
 const StyledDayTimeLine = styled('div')`
   display: flex;
   flex-direction: column;
@@ -83,13 +77,12 @@ const StyledDayTimeLine = styled('div')`
   gap: 16px;
 `;
 
-const StyledDayTimeLineTitle = styled(TextField)`
-  input {
-    color: #d2ac54;
-    font-weight: 500;
-    font-size: 14px;
-    font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  }
+const StyledDayTimeLineTitleWrapper = styled('div')`
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding-right: 48px;
+  box-sizing: border-box;
 `;
 
 const StyledDayTimeLineTimes = styled('div')`
@@ -107,15 +100,31 @@ const StyledDayTimeLineTime = styled('div')`
   gap: 16px;
 `;
 
-const StyledDayTimeLineTimeTimes = styled(TimePicker<Date, Date>)`
-  font-size: 15px;
+const StyledDayTimeLineTimeTimesWrapper = styled('div')`
+  display: flex;
+  gap: 8px;
 `;
 
-const StyledDayTimeLineTimeComment = styled(TextField)`
-  input {
-    font-size: 13px;
-    color: #777;
-  }
+const StyledDayTimeLineTimeCommentWrapper = styled('div')`
+  display: flex;
+  gap: 8px;
+  padding-left: 40px;
+  width: 100%;
+`;
+
+const StyledAddButtonWrapper = styled('div')`
+  display: flex;
+`;
+
+const StyledDeletingTimeDetails = styled('div')`
+  display: flex;
+  margin-top: 16px;
+  gap: 16px;
+  align-items: baseline;
+`;
+
+const StyledDeletingTimeDetailsNote = styled('div')`
+  font-size: 12px;
 `;
 
 interface ScheduleTabPanelProps {
@@ -145,10 +154,13 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
   }, []);
 
   const [deletingSection, setDeletingSection] = useState<SectionId | null>(null);
-  const handleOnSectionDelete = useCallback((sectionId: SectionId) => (event: MouseEvent) => {
-    event.stopPropagation();
-    setDeletingSection(sectionId);
-  }, []);
+  const handleOnSectionDelete = useCallback(
+    (sectionId: SectionId) => (event: MouseEvent) => {
+      event.stopPropagation();
+      setDeletingSection(sectionId);
+    },
+    []
+  );
   const handleOnSectionDeleteConfirm = useCallback(() => {
     if (deletingSection) {
       const { index } = deletingSection;
@@ -262,171 +274,215 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
 
   return (
     <>
-      <StyledTabPanel value={value} index={index}>
-        <StyledTabPanelTitleWrapper>
-          <StyledTabPanelTitle
-            label="Category"
-            value={times.name}
-            size="small"
-            onChange={(event) => onChange({ name: event.target.value })}
-          />
-          <Button
-            variant="outlined"
-            aria-label="delete recipe"
-            color="error"
-            onClick={handleOnDelete}
-            title="Delete recipe"
-            size="small"
-          >
-            <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-            Delete
-          </Button>
-        </StyledTabPanelTitleWrapper>
-        {times.sections?.map((section, sectionIndex) => {
-          const handleOnDayLineAdd = onDayLineAdd(section, sectionIndex);
-          const onSectionDelete = handleOnSectionDelete({ section, index: sectionIndex });
-          return (
-            <StyledSections key={`section-${sectionIndex}`}>
-              <CollapseSection
-                header={
-                  <Box sx={{ display: 'flex', gap: 1 }}>
-                    <StyledSectionTitle
-                      label="Section"
-                      value={section.name}
-                      size="small"
-                      onChange={(event) => onSectionChange(section, sectionIndex, { name: event.target.value })}
-                      onClick={stopPropagationOnClick}
-                    />
-                    <IconButton onClick={onSectionDelete} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
+      <TabPanel value={value} index={index}>
+        <StyledTabPanelContent>
+          <StyledTabPanelTitleWrapper>
+            <TextField
+              label="Category"
+              value={times.name}
+              size="small"
+              onChange={(event) => onChange({ name: event.target.value })}
+              sx={{
+                input: {
+                  fontSize: '20px',
+                  fontWeight: '500',
+                  color: '#333',
+                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
                 }
-                position="before"
-                sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}
-              >
-                {section.days?.map((day, dayIndex) => {
-                  const onAddDayTime = onTimeAdd(section, sectionIndex, day, dayIndex);
-                  const onDayLineDelete = handleOnDayLineDelete({
-                    section,
-                    sectionIndex,
-                    day,
-                    index: dayIndex
-                  });
-
-                  return (
-                    <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
-                      <Box sx={{ display: 'flex', gap: 1, width: '100%', pr: 6, boxSizing: 'border-box' }}>
-                        <StyledDayTimeLineTitle
-                          label="Day / Line Title"
-                          value={day.day}
-                          size="small"
-                          onChange={(event) =>
-                            onDayLineChange(section, sectionIndex, day, dayIndex, { day: event.target.value })
+              }}
+            />
+            <Button
+              variant="outlined"
+              aria-label="delete recipe"
+              color="error"
+              onClick={handleOnDelete}
+              title="Delete recipe"
+              size="small"
+            >
+              <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
+              Delete
+            </Button>
+          </StyledTabPanelTitleWrapper>
+          {times.sections?.map((section, sectionIndex) => {
+            const handleOnDayLineAdd = onDayLineAdd(section, sectionIndex);
+            const onSectionDelete = handleOnSectionDelete({ section, index: sectionIndex });
+            return (
+              <StyledSections key={`section-${sectionIndex}`}>
+                <CollapseSection
+                  header={
+                    <StyledSectionHeader>
+                      <TextField
+                        label="Section"
+                        value={section.name}
+                        size="small"
+                        onChange={(event) => onSectionChange(section, sectionIndex, { name: event.target.value })}
+                        onClick={stopPropagationOnClick}
+                        sx={{
+                          input: {
+                            fontSize: '16x',
+                            fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
                           }
-                          fullWidth
-                        />
-                        <IconButton onClick={onDayLineDelete} color="error">
-                          <DeleteIcon />
-                        </IconButton>
-                      </Box>
-                      {(day.times?.length ?? 0) > 0 ? (
-                        <StyledDayTimeLineTimes>
-                          {day.times?.map((time, timeIndex) => {
-                            const onDayTimeChange = onTimeChange(section, sectionIndex, day, dayIndex, time, timeIndex);
-                            const onDayTimeDelete = handleOnTimeDelete({
-                              section,
-                              sectionIndex,
-                              day,
-                              dayIndex,
-                              time,
-                              index: timeIndex
-                            });
+                        }}
+                      />
+                      <IconButton onClick={onSectionDelete} color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledSectionHeader>
+                  }
+                  position="before"
+                >
+                  <StyledDayTimeLines>
+                    {section.days?.map((day, dayIndex) => {
+                      const onAddDayTime = onTimeAdd(section, sectionIndex, day, dayIndex);
+                      const onDayLineDelete = handleOnDayLineDelete({
+                        section,
+                        sectionIndex,
+                        day,
+                        index: dayIndex
+                      });
 
-                            return (
-                              <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                  <StyledDayTimeLineTimeTimes
-                                    label="Start Time"
-                                    value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
-                                    onChange={(newValue) => {
-                                      let newDate = '';
-                                      try {
-                                        if (newValue) {
-                                          newDate = format(newValue, 'h:mm a');
+                      return (
+                        <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
+                          <StyledDayTimeLineTitleWrapper>
+                            <TextField
+                              label="Day / Line Title"
+                              value={day.day}
+                              size="small"
+                              onChange={(event) =>
+                                onDayLineChange(section, sectionIndex, day, dayIndex, { day: event.target.value })
+                              }
+                              fullWidth
+                              sx={{
+                                input: {
+                                  color: '#d2ac54',
+                                  fontWeight: 500,
+                                  fontSize: '14px',
+                                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
+                                }
+                              }}
+                            />
+                            <IconButton onClick={onDayLineDelete} color="error">
+                              <DeleteIcon />
+                            </IconButton>
+                          </StyledDayTimeLineTitleWrapper>
+                          {(day.times?.length ?? 0) > 0 ? (
+                            <StyledDayTimeLineTimes>
+                              {day.times?.map((time, timeIndex) => {
+                                const onDayTimeChange = onTimeChange(
+                                  section,
+                                  sectionIndex,
+                                  day,
+                                  dayIndex,
+                                  time,
+                                  timeIndex
+                                );
+                                const onDayTimeDelete = handleOnTimeDelete({
+                                  section,
+                                  sectionIndex,
+                                  day,
+                                  dayIndex,
+                                  time,
+                                  index: timeIndex
+                                });
+
+                                return (
+                                  <StyledDayTimeLineTime
+                                    key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}
+                                  >
+                                    <StyledDayTimeLineTimeTimesWrapper>
+                                      <TimePicker
+                                        label="Start Time"
+                                        value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
+                                        onChange={(newValue) => {
+                                          let newDate = '';
+                                          try {
+                                            if (newValue) {
+                                              newDate = format(newValue, 'h:mm a');
+                                            }
+                                          } catch {}
+                                          onDayTimeChange({ time: newDate });
+                                        }}
+                                        renderInput={(params) => (
+                                          <TextField size="small" {...params} sx={{ fontSize: '15px' }} />
+                                        )}
+                                        inputFormat="h:mm a"
+                                        ampm
+                                      />
+                                      <TimePicker
+                                        key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
+                                        label="End Time"
+                                        value={
+                                          isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null
                                         }
-                                      } catch {}
-                                      onDayTimeChange({ time: newDate });
-                                    }}
-                                    renderInput={(params) => <TextField size="small" {...params} />}
-                                    inputFormat="h:mm a"
-                                    ampm
-                                  />
-                                  <StyledDayTimeLineTimeTimes
-                                    key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
-                                    label="End Time"
-                                    value={
-                                      isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null
-                                    }
-                                    onChange={(newValue) => {
-                                      let newDate = '';
-                                      try {
-                                        if (newValue) {
-                                          newDate = format(newValue, 'h:mm a');
+                                        onChange={(newValue) => {
+                                          let newDate = '';
+                                          try {
+                                            if (newValue) {
+                                              newDate = format(newValue, 'h:mm a');
+                                            }
+                                          } catch {}
+                                          onDayTimeChange({ end_time: newDate });
+                                        }}
+                                        renderInput={(params) => (
+                                          <TextField size="small" {...params} sx={{ fontSize: '15px' }} />
+                                        )}
+                                        inputFormat="h:mm a"
+                                        ampm
+                                      />
+                                      <IconButton onClick={onDayTimeDelete} color="error">
+                                        <DeleteIcon />
+                                      </IconButton>
+                                    </StyledDayTimeLineTimeTimesWrapper>
+                                    <StyledDayTimeLineTimeCommentWrapper>
+                                      <TextField
+                                        label="Notes"
+                                        value={time.note}
+                                        size="small"
+                                        onChange={(event) =>
+                                          onDayTimeChange({
+                                            note: event.target.value
+                                          })
                                         }
-                                      } catch {}
-                                      onDayTimeChange({ end_time: newDate });
-                                    }}
-                                    renderInput={(params) => <TextField size="small" {...params} />}
-                                    inputFormat="h:mm a"
-                                    ampm
-                                  />
-                                  <IconButton onClick={onDayTimeDelete} color="error">
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </Box>
-                                <Box sx={{ display: 'flex', gap: 1, pl: 5, width: '100%' }}>
-                                  <StyledDayTimeLineTimeComment
-                                    label="Notes"
-                                    value={time.note}
-                                    size="small"
-                                    onChange={(event) =>
-                                      onDayTimeChange({
-                                        note: event.target.value
-                                      })
-                                    }
-                                    fullWidth
-                                  />
-                                </Box>
-                              </StyledDayTimeLineTime>
-                            );
-                          })}
-                        </StyledDayTimeLineTimes>
-                      ) : null}
-                      <Button onClick={onAddDayTime} sx={{ ml: 5 }}>
-                        <AddIcon />
-                        <Box>Add Time</Box>
-                      </Button>
-                    </StyledDayTimeLine>
-                  );
-                })}
-                <Box sx={{ display: 'flex' }}>
-                  <Button onClick={handleOnDayLineAdd} sx={{ ml: '30px' }}>
-                    <AddIcon />
-                    <Box>Add Day / Line</Box>
-                  </Button>
-                </Box>
-              </CollapseSection>
-            </StyledSections>
-          );
-        })}
-        <Box sx={{ display: 'flex' }}>
-          <Button onClick={onSectionAdd} sx={{ mt: 2 }}>
-            <AddIcon />
-            <Box>Add Section</Box>
-          </Button>
-        </Box>
-      </StyledTabPanel>
+                                        fullWidth
+                                        sx={{
+                                          input: {
+                                            fontSize: '13px',
+                                            color: '#777'
+                                          }
+                                        }}
+                                      />
+                                    </StyledDayTimeLineTimeCommentWrapper>
+                                  </StyledDayTimeLineTime>
+                                );
+                              })}
+                            </StyledDayTimeLineTimes>
+                          ) : null}
+                          <Button onClick={onAddDayTime} sx={{ ml: 5 }}>
+                            <AddIcon />
+                            <Box>Add Time</Box>
+                          </Button>
+                        </StyledDayTimeLine>
+                      );
+                    })}
+                  </StyledDayTimeLines>
+                  <StyledAddButtonWrapper>
+                    <Button onClick={handleOnDayLineAdd} sx={{ ml: '30px' }}>
+                      <AddIcon />
+                      <Box>Add Day / Line</Box>
+                    </Button>
+                  </StyledAddButtonWrapper>
+                </CollapseSection>
+              </StyledSections>
+            );
+          })}
+          <StyledAddButtonWrapper>
+            <Button onClick={onSectionAdd} sx={{ mt: 2 }}>
+              <AddIcon />
+              <Box>Add Section</Box>
+            </Button>
+          </StyledAddButtonWrapper>
+        </StyledTabPanelContent>
+      </TabPanel>
       <Dialog
         open={deleting}
         onClose={handleOnDeleteClose}
@@ -509,7 +565,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
           <DialogContent>
             <DialogContentText id="deleting-times category-description">
               Are you sure you want to delete this time?
-              <Box sx={{ display: 'flex', mt: 2, gap: 2, alignItems: 'baseline' }}>
+              <StyledDeletingTimeDetails>
                 <Box>{isNotEmpty(deletingTime.time.time) ? deletingTime.time.time : <div>&nbsp;</div>}</Box>
                 {isNotEmpty(deletingTime.time.end_time) ? (
                   <>
@@ -518,11 +574,11 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                   </>
                 ) : null}
                 {isNotEmpty(deletingTime.time.note) ? (
-                  <Box sx={{ fontSize: 12 }} key="deleting-time-note">
+                  <StyledDeletingTimeDetailsNote key="deleting-time-note">
                     {deletingTime.time.note}
-                  </Box>
+                  </StyledDeletingTimeDetailsNote>
                 ) : null}
-              </Box>
+              </StyledDeletingTimeDetails>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -538,5 +594,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
     </>
   );
 });
+
+ScheduleTabPanel.displayName = 'ScheduleTabPanel';
 
 export default ScheduleTabPanel;

@@ -1,9 +1,27 @@
-/* eslint-disable react/display-name */
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import { SxProps, Theme } from '@mui/material/styles';
 import { memo, useCallback, useMemo, useState } from 'react';
+import styled from '../../util/styled.util';
+
+interface StyledArrowIconWrapperProps {
+  collapsed: boolean;
+}
+
+const StyledArrowIconWrapper = styled('div', ['collapsed'])<StyledArrowIconWrapperProps>(
+  ({ collapsed }) => `
+    transition: transform 333ms ease-out;
+    transform: rotate(${collapsed ? '-90deg' : '0deg'});
+    width: 24px;
+    height: 24px;
+  `
+);
+
+const StyledHeader = styled('div')`
+  flexgrow: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
 
 interface CollapseSectionProps {
   header: React.ReactNode;
@@ -11,18 +29,10 @@ interface CollapseSectionProps {
   startCollapsed?: boolean;
   disableCollapse?: boolean;
   position?: 'before' | 'after';
-  sx?: SxProps<Theme>;
 }
 
 const CollapseSection = memo(
-  ({
-    header,
-    children,
-    startCollapsed = false,
-    disableCollapse = false,
-    position = 'after',
-    sx = {}
-  }: CollapseSectionProps) => {
+  ({ header, children, startCollapsed = false, disableCollapse = false, position = 'after' }: CollapseSectionProps) => {
     const [collapsed, setCollapsed] = useState(startCollapsed);
 
     const toggleCollapse = useCallback(() => {
@@ -34,31 +44,26 @@ const CollapseSection = memo(
 
     const collapseButton = useMemo(
       () => (
-        <Box
-          sx={{
-            transition: 'transform 333ms ease-out',
-            transform: `rotate(${collapsed ? '-90deg' : '0deg'});`,
-            width: 24,
-            height: 24
-          }}
-        >
+        <StyledArrowIconWrapper collapsed={collapsed}>
           <KeyboardArrowDownIcon />
-        </Box>
+        </StyledArrowIconWrapper>
       ),
       [collapsed]
     );
 
     return (
-      <Box sx={{ ...sx }}>
-        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 0.5 }} onClick={toggleCollapse}>
+      <>
+        <StyledHeader onClick={toggleCollapse}>
           {position === 'before' ? collapseButton : null}
           {header}
           {position === 'after' ? collapseButton : null}
-        </Box>
+        </StyledHeader>
         <Collapse in={!collapsed}>{children}</Collapse>
-      </Box>
+      </>
     );
   }
 );
+
+CollapseSection.displayName = 'CollapseSection';
 
 export default CollapseSection;

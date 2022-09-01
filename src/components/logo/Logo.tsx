@@ -1,9 +1,8 @@
-import Box from '@mui/material/Box';
-import { styled, useTheme } from '@mui/material/styles';
+import styled from '../../util/styled.util';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
 
-const HeaderLink = styled('a')`
+const StyledHeaderLink = styled('a')`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,12 +10,24 @@ const HeaderLink = styled('a')`
   position: relative;
 `;
 
-const LogoWrapper = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 250ms ease;
-`;
+interface LogoWrapperProps {
+  trigger: boolean;
+  responsive: boolean;
+}
+
+const StyledLogoWrapper = styled('div', ['trigger', 'responsive'])<LogoWrapperProps>(
+  ({ theme, trigger, responsive }) => `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 250ms ease;
+
+    transform: ${trigger ? 'scale(0.75)' : 'scale(1)'};
+    ${theme.breakpoints.down('md')} {
+      transform: ${responsive ? 'scale(0.75)' : 'scale(1)'};
+    }
+  `
+);
 
 interface LogoProps {
   trigger?: boolean;
@@ -24,28 +35,13 @@ interface LogoProps {
 }
 
 const Logo = ({ trigger = false, responsive = true }: LogoProps) => {
-  const theme = useTheme();
-
   return (
-    <HeaderLink href="/">
-      <LogoWrapper
-        sx={
-          trigger
-            ? {
-                transform: 'scale(0.75)'
-              }
-            : {
-                transform: 'scale(1)',
-                [theme.breakpoints.down('md')]: {
-                  transform: responsive ? 'scale(0.75)' : 'scale(1)'
-                }
-              }
-        }
-      >
+    <StyledHeaderLink href="/">
+      <StyledLogoWrapper trigger={trigger} responsive={responsive}>
         <LogoPrimaryText>St. Joseph</LogoPrimaryText>
         <LogoSecondaryText>Catholic Church</LogoSecondaryText>
-      </LogoWrapper>
-    </HeaderLink>
+      </StyledLogoWrapper>
+    </StyledHeaderLink>
   );
 };
 

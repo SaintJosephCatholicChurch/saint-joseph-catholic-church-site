@@ -1,7 +1,7 @@
-import { styled, SxProps, Theme } from '@mui/material/styles';
 import format from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import { memo } from 'react';
+import styled from '../../util/styled.util';
 
 const StyledDate = styled('time')`
   display: flex;
@@ -14,15 +14,10 @@ const StyledDate = styled('time')`
 
 interface PostDateAuthorLineProps {
   date: Date;
-  sx?: SxProps<Theme>;
 }
 
-const PostDateAuthorLine = memo(({ date, sx }: PostDateAuthorLineProps) => {
-  return (
-    <StyledDate sx={sx} dateTime={formatISO(date)}>
-      {format(date, 'LLLL d, yyyy')}
-    </StyledDate>
-  );
+const PostDateAuthorLine = memo(({ date }: PostDateAuthorLineProps) => {
+  return <StyledDate dateTime={formatISO(date)}>{format(date, 'LLLL d, yyyy')}</StyledDate>;
 });
 
 PostDateAuthorLine.displayName = 'PostDateAuthorLine';

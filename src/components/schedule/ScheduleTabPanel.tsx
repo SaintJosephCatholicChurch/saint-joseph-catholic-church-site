@@ -1,11 +1,10 @@
-/* eslint-disable react/display-name */
-import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 import { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
+import styled from '../../util/styled.util';
 import TabPanel from '../TabPanel';
 
-const StyledTabPanel = styled(TabPanel)`
+const StyledTabPanelContent = styled('div')`
   flex-direction: column;
   width: 100%;
 
@@ -126,48 +125,52 @@ interface ScheduleTabPanelProps {
 
 const ScheduleTabPanel = memo(({ times, value, index }: ScheduleTabPanelProps) => {
   return (
-    <StyledTabPanel value={value} index={index}>
-      <StyledTabPanelTitleWrapper>
-        <StyledTabPanelTitle>{times.name}</StyledTabPanelTitle>
-      </StyledTabPanelTitleWrapper>
-      {times.sections?.map((section) => (
-        <StyledSections key={`section-${section.name}`}>
-          <StyledSectionTitle>{section.name}</StyledSectionTitle>
-          {section.days?.map((day) => (
-            <StyledDayTimeLine key={`section-${section.name}-day-${day.day}`}>
-              <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
-              <StyledDayTimeLineTimes>
-                {day.times?.map((time, timeIndex) => (
-                  <StyledDayTimeLineTime key={`section-${section.name}-day-${day.day}-times-${timeIndex}`}>
-                    <StyledDayTimeLineTimeTimes>
-                      {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
-                    </StyledDayTimeLineTimeTimes>
-                    {isNotEmpty(time.end_time) ? (
-                      <>
-                        <StyledDivider key={`section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}>
-                          -
-                        </StyledDivider>
-                        <StyledDayTimeLineTimeTimes
-                          key={`section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
-                        >
-                          {time.end_time}
-                        </StyledDayTimeLineTimeTimes>
-                      </>
-                    ) : null}
-                    {isNotEmpty(time.note) ? (
-                      <StyledDayTimeLineTimeComment key={`section-${section.name}-day-${day.day}-note-${timeIndex}`}>
-                        {time.note}
-                      </StyledDayTimeLineTimeComment>
-                    ) : null}
-                  </StyledDayTimeLineTime>
-                ))}
-              </StyledDayTimeLineTimes>
-            </StyledDayTimeLine>
-          ))}
-        </StyledSections>
-      ))}
-    </StyledTabPanel>
+    <TabPanel value={value} index={index}>
+      <StyledTabPanelContent>
+        <StyledTabPanelTitleWrapper>
+          <StyledTabPanelTitle>{times.name}</StyledTabPanelTitle>
+        </StyledTabPanelTitleWrapper>
+        {times.sections?.map((section) => (
+          <StyledSections key={`section-${section.name}`}>
+            <StyledSectionTitle>{section.name}</StyledSectionTitle>
+            {section.days?.map((day) => (
+              <StyledDayTimeLine key={`section-${section.name}-day-${day.day}`}>
+                <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
+                <StyledDayTimeLineTimes>
+                  {day.times?.map((time, timeIndex) => (
+                    <StyledDayTimeLineTime key={`section-${section.name}-day-${day.day}-times-${timeIndex}`}>
+                      <StyledDayTimeLineTimeTimes>
+                        {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
+                      </StyledDayTimeLineTimeTimes>
+                      {isNotEmpty(time.end_time) ? (
+                        <>
+                          <StyledDivider key={`section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}>
+                            -
+                          </StyledDivider>
+                          <StyledDayTimeLineTimeTimes
+                            key={`section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
+                          >
+                            {time.end_time}
+                          </StyledDayTimeLineTimeTimes>
+                        </>
+                      ) : null}
+                      {isNotEmpty(time.note) ? (
+                        <StyledDayTimeLineTimeComment key={`section-${section.name}-day-${day.day}-note-${timeIndex}`}>
+                          {time.note}
+                        </StyledDayTimeLineTimeComment>
+                      ) : null}
+                    </StyledDayTimeLineTime>
+                  ))}
+                </StyledDayTimeLineTimes>
+              </StyledDayTimeLine>
+            ))}
+          </StyledSections>
+        ))}
+      </StyledTabPanelContent>
+    </TabPanel>
   );
 });
+
+ScheduleTabPanel.displayName = 'ScheduleTabPanel';
 
 export default ScheduleTabPanel;

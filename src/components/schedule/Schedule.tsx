@@ -1,6 +1,5 @@
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
@@ -17,40 +16,57 @@ import {
 import { Times } from '../../interface';
 import useSmallScreen from '../../util/smallScreen.util';
 import { isNotEmpty } from '../../util/string.util';
+import styled from '../../util/styled.util';
 import Container from '../layout/Container';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
-const StyledTabs = styled(Tabs)`
-  background-color: rgba(241, 241, 241, 0.75);
+interface StyledScheduledProps {
+  background: string;
+  backgroundColor: string;
+}
 
-  & .MuiTabs-indicator {
-    background-color: #d2ac54;
-    width: 4px;
-  }
-`;
+const StyledScheduled = styled('div', ['background', 'backgroundColor'])<StyledScheduledProps>(
+  ({ background, backgroundColor }) => `
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: ${backgroundColor};
+    ${background ? `background-image: url(${background});` : ''}
+    background-repeat: repeat;
+    background-position: center top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `
+);
 
-const StyledTab = styled(Tab)`
-  color: #414141;
-  align-items: flex-start;
-  font-weight: 400;
-  font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  letter-spacing: 0;
+const StyledTabsWrapper = styled('div')(
+  ({ theme }) => `
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    width: 100%;
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `
+);
 
-  &.Mui-selected {
-    color: #414141;
-    background-color: #ffffff;
-  }
+interface StyledTabsContentProps {
+  tabsHeight: number;
+}
 
-  font-size: 18px;
-  padding: 16px;
-  min-height: 100px;
-  @media screen and (min-width: 1200px) {
-    font-size: 24px;
-    padding: 32px;
-    min-height: 124px;
-  }
-`;
+const StyledTabsContent = styled('div', ['tabsHeight'])<StyledTabsContentProps>(
+  ({ tabsHeight }) => `
+    background-color: rgba(241, 241, 241, 0.75);
+    
+    ${tabsHeight > 0 ? 'minHeight: ${tabsHeight};' : ''}
+
+    & .MuiTabs-indicator {
+      background-color: #d2ac54;
+      width: 4px;
+    }
+  `
+);
 
 const StyledTabPanels = styled('div')`
   width: 100%;
@@ -75,7 +91,6 @@ interface ScheduleProps {
 
 const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
-
   const [value, setValue] = useState(0);
 
   const handleChange = useCallback(
@@ -157,69 +172,69 @@ const Schedule = ({ times, background, backgroundColor, tab, onTabChange }: Sche
   }, [size, times]);
 
   return (
-    <Box
-      sx={{
-        pt: 5,
-        pb: 5,
-        backgroundColor: backgroundColor,
-        backgroundImage: background ? `url(${background})` : undefined,
-        backgroundRepeat: 'repeat',
-        backgroundPosition: 'center top',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
+    <StyledScheduled background={background} backgroundColor={backgroundColor}>
       <Container>
         <List
+          component="div"
+          aria-labelledby="nested-list-subheader"
+          disablePadding
           sx={{
             width: '100%',
-            bgcolor: 'background.paper',
             [theme.breakpoints.up('md')]: {
               display: 'none'
             }
           }}
-          component="div"
-          aria-labelledby="nested-list-subheader"
-          disablePadding
         >
           {times.map((timeSchedule, index) => (
             <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
           ))}
         </List>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '2fr 5fr',
-            width: '100%',
-            [theme.breakpoints.down('md')]: {
-              display: 'none'
-            }
-          }}
-        >
-          <StyledTabs
+        <StyledTabsWrapper>
+          <Tabs
             orientation="vertical"
             variant="fullWidth"
             value={value}
             onChange={handleChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
-            sx={{
-              minHeight: tabsHeight > 0 ? tabsHeight : undefined
-            }}
           >
-            {times.map((timeSchedule, index) => (
-              <StyledTab key={`time-schedule-${index}`} label={timeSchedule.name} {...a11yProps(index)} />
-            ))}
-          </StyledTabs>
+            <StyledTabsContent tabsHeight={tabsHeight}>
+              {times.map((timeSchedule, index) => (
+                <Tab
+                  key={`time-schedule-${index}`}
+                  label={timeSchedule.name}
+                  {...a11yProps(index)}
+                  sx={{
+                    color: '#414141',
+                    alignItems: 'flex-start',
+                    fontWeight: 400,
+                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                    letterSpacing: 0,
+                    '&.Mui-selected': {
+                      color: '#414141',
+                      backgroundColor: '#ffffff'
+                    },
+                    fontSize: '18px',
+                    padding: '16px',
+                    minHeight: '100px',
+                    '@media screen and (min-width: 1200px)': {
+                      fontSize: '24px',
+                      padding: '32px',
+                      minHeight: '124px'
+                    }
+                  }}
+                />
+              ))}
+            </StyledTabsContent>
+          </Tabs>
           <StyledTabPanels>
             {times.map((timeSchedule, index) => (
               <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
             ))}
           </StyledTabPanels>
-        </Box>
+        </StyledTabsWrapper>
       </Container>
-    </Box>
+    </StyledScheduled>
   );
 };
 

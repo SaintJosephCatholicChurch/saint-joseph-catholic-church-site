@@ -1,10 +1,10 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import { MenuItem, MenuLink } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
+import styled from '../../util/styled.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
 import NavLink from './NavLink';
@@ -13,53 +13,10 @@ const StyledNavItem = styled('div')`
   position: relative;
 `;
 
-interface StyledButtonProps {
-  selected: boolean;
-}
-
-const StyledButton = styled(Button)<StyledButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>>(
-  ({ selected }) => `
-    padding: 12px 18px 14px;
-    whitespace: nowrap;
-
-    font-family: 'Oswald', Helvetica, Arial, sans-serif;
-    font-size: 17px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-
-    color: ${selected ? '#ffffff' : '#fde7a5'};
-
-    &:hover {
-      color: #ffffff;
-      background-color: #d34f5a;
-
-      .menu-item-underline {
-        width: 90%;
-      }
-    }
-  `
-);
-
 const StyledButtonTitle = styled('div')`
   display: flex;
   height: 26px;
 `;
-
-interface StyledExpandMoreIconProps {
-  debouncedIsOpen: boolean;
-}
-
-const StyledExpandMoreIcon = styled(ExpandMoreIcon)<StyledExpandMoreIconProps>(
-  ({ debouncedIsOpen }) => `
-    top: 2px;
-    position: relative;
-    transition: transform 333ms ease-out;
-    transform: rotate(${debouncedIsOpen ? '-180deg' : '0deg'});
-  `
-);
 
 const StyledUnderlineWrapper = styled('div')`
   position: absolute;
@@ -81,9 +38,9 @@ const StyledUnderline = styled('div')`
 const StyledPopUpMenu = styled('div')`
   position: absolute;
   display: flex;
-  flexdirection: column;
+  flex-direction: column;
   background: #f2f2f2;
-  boxshadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
+  box-shadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
   top: 54px;
 `;
 
@@ -202,30 +159,52 @@ const NavItem = ({ item }: NavItemProps) => {
 
   return (
     <StyledNavItem>
-      <StyledButton
+      <Button
         onClick={handleOnClick(item, 'button')}
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
         size="large"
         target={url?.startsWith('http') ? '_blank' : undefined}
         href={url}
-        selected={selected}
+        sx={{
+          padding: '12px 18px 14px',
+          whitespace: 'nowrap',
+          fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+          fontSize: '17px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '2px',
+          color: selected ? '#ffffff' : '#fde7a5',
+          '&:hover': {
+            color: '#ffffff',
+            backgroundColor: '#d34f5a',
+            '.menu-item-underline': {
+              width: '90%'
+            }
+          }
+        }}
       >
         <StyledButtonTitle onMouseOver={handleOnMouseOver('text')} onMouseOut={handleOnMouseOut('text')}>
           {item.title}
         </StyledButtonTitle>
         {item.menu_links?.length ? (
-          <StyledExpandMoreIcon
+          <ExpandMoreIcon
             fontSize="small"
             onMouseOver={handleOnMouseOver('icon')}
             onMouseOut={handleOnMouseOut('icon')}
-            debouncedIsOpen={debouncedIsOpen}
+            sx={{
+              top: '2px',
+              position: 'relative',
+              transition: 'transform 333ms ease-out',
+              transform: `rotate(${debouncedIsOpen ? '-180deg' : '0deg'})`
+            }}
           />
         ) : null}
         <StyledUnderlineWrapper>
           <StyledUnderline className="menu-item-underline" />
         </StyledUnderlineWrapper>
-      </StyledButton>
+      </Button>
       {item.menu_links?.length && debouncedIsOpen ? (
         <StyledPopUpMenu onMouseOver={handleOnMouseOver('menu')} onMouseOut={handleOnMouseOut('menu')}>
           {item.menu_links.map((link) => (

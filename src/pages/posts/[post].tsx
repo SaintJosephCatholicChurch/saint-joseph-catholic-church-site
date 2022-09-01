@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -12,6 +11,7 @@ import PostImage from '../../components/posts/PostImage';
 import PostTitle from '../../components/posts/PostTitle';
 import { PostContent } from '../../interface';
 import { fetchPostContent } from '../../lib/posts';
+import styled from '../../util/styled.util';
 
 const StyledPageContentWrapper = styled('div')`
   margin-top: 32px;

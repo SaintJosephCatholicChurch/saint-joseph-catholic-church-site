@@ -1,5 +1,13 @@
-import Box from '@mui/material/Box';
 import MuiPagination from '@mui/material/Pagination';
+import styled from '../util/styled.util';
+
+const StyledPagination = styled('div')`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+`;
 
 interface PaginationProps {
   current: number;
@@ -12,9 +20,9 @@ interface PaginationProps {
 
 const Pagination = ({ current, pages, link }: PaginationProps) => {
   return (
-    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 5 }}>
+    <StyledPagination>
       <MuiPagination count={pages} defaultPage={current} showFirstButton showLastButton />
-    </Box>
+    </StyledPagination>
   );
 };
 

@@ -1,7 +1,17 @@
-import Box from '@mui/material/Box';
 import format from 'date-fns/format';
-import { Bulletin } from '../../../interface';
 import contentStyles from '../../../../public/styles/content.module.css';
+import { Bulletin } from '../../../interface';
+import styled from '../../../util/styled.util';
+
+const StyledParishBulletinsView = styled('div')`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledBulletinLink = styled('a')`
+  font-size: 18px;
+  line-height: 18px;
+`;
 
 interface ParishBulletinsView {
   bulletins: Bulletin[];
@@ -9,18 +19,18 @@ interface ParishBulletinsView {
 
 const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }} className={contentStyles.content}>
+    <StyledParishBulletinsView className={contentStyles.content}>
       <h3>Parish Bulletins</h3>
       {bulletins?.map((bulletin) => (
         <p key={bulletin.date}>
-          <Box component="a" href={bulletin.pdf} sx={{ fontSize: '18px', lineHeight: '18px' }}>
+          <StyledBulletinLink href={bulletin.pdf}>
             <strong>
               {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name} (PDF)
             </strong>
-          </Box>
+          </StyledBulletinLink>
         </p>
       ))}
-    </Box>
+    </StyledParishBulletinsView>
   );
 };
 

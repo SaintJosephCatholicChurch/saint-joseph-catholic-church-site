@@ -1,7 +1,7 @@
 import {
-  CmsConfig as NetlifyCmsConfig,
   CmsCollection as NetlifyCmsCollection,
   CmsCollectionFile as NetlifyCmsCollectionFile,
+  CmsConfig as NetlifyCmsConfig,
   CmsField as NetlifyCmsField,
   CmsFieldBase
 } from 'netlify-cms-core';
@@ -10,12 +10,7 @@ export interface CmsFieldTimes {
   widget: 'times';
 }
 
-export type CmsField =
-  | NetlifyCmsField
-  | (CmsFieldBase &
-      (
-        | CmsFieldTimes
-      ));
+export type CmsField = NetlifyCmsField | (CmsFieldBase & CmsFieldTimes);
 
 export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
   fields: CmsField[];
@@ -467,44 +462,6 @@ const config: CmsConfig = {
                       required: false
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: 'quick_links',
-          label: 'Quick Links',
-          file: 'content/quick_links.json',
-          description: 'Parish bulletins',
-          fields: [
-            {
-              name: 'quick_links',
-              label: 'Quick Links',
-              widget: 'list',
-              summary: '{{fields.title}} ({{url}})',
-              fields: [
-                {
-                  name: 'title',
-                  label: 'Title',
-                  widget: 'string'
-                },
-                {
-                  name: 'subtitle',
-                  label: 'Subtitle',
-                  widget: 'string',
-                  required: false
-                },
-                {
-                  name: 'url',
-                  label: 'URL',
-                  widget: 'string',
-                  time_format: false
-                },
-                {
-                  name: 'background',
-                  label: 'Background Image',
-                  widget: 'image'
                 }
               ]
             }

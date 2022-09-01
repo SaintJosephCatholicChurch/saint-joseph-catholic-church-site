@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
 import { memo } from 'react';
+import styled from '../../util/styled.util';
 
 const StyledImage = styled('img')`
   width: 100%;

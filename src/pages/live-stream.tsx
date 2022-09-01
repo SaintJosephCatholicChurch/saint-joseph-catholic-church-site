@@ -1,6 +1,11 @@
-import Box from '@mui/material/Box';
 import { useEffect, useRef, useState } from 'react';
 import PageLayout from '../components/PageLayout';
+import styled from '../util/styled.util';
+
+const StyledLiveStreamWrapper = styled('div')`
+  width: 100%;
+  display: flex;
+`;
 
 const LiveStream = () => {
   const ref = useRef(null);
@@ -15,7 +20,7 @@ const LiveStream = () => {
 
   return (
     <PageLayout url="/live-stream" title="Live Stream">
-      <Box ref={ref} sx={{ width: '100%', display: 'flex' }}>
+      <StyledLiveStreamWrapper ref={ref}>
         <iframe
           src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2Flive&show_text=false"
           width={width}
@@ -29,7 +34,7 @@ const LiveStream = () => {
           allowFullScreen={true}
           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
         />
-      </Box>
+      </StyledLiveStreamWrapper>
     </PageLayout>
   );
 };

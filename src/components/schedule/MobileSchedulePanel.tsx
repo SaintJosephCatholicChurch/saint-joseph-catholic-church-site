@@ -1,36 +1,23 @@
-/* eslint-disable react/display-name */
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 import { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
+import styled from '../../util/styled.util';
 
 interface StyledMobileScheduleTabPanelProps {
   open: boolean;
 }
 
-const StyledMobileScheduleTabPanel = styled('div')<StyledMobileScheduleTabPanelProps>(
+const StyledMobileScheduleTabPanel = styled('div', ['open'])<StyledMobileScheduleTabPanelProps>(
   ({ open }) => `
     backgroundColor: ${open ? '#ffffff' : '#f1f1f1'};
     borderBottom: 1px solid #ccc;
   `
 );
-
-const StyledTabPanelTitle = styled(ListItemText)`
-  .MuiListItemText-primary {
-    font-weight: 500;
-    color: #333;
-    text-transform: uppercase;
-    font-size: 18px;
-    line-height: 20px;
-    font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  }
-`;
 
 const StyledSectionTitle = styled('h3')`
   font-size: 20px;
@@ -159,7 +146,19 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
   return (
     <StyledMobileScheduleTabPanel open={open}>
       <ListItemButton onClick={handleClick}>
-        <StyledTabPanelTitle primary={times.name} />
+        <ListItemText
+          primary={times.name}
+          sx={{
+            '.MuiListItemText-primary': {
+              fontWeight: 500,
+              color: '#333',
+              textTransform: 'uppercase',
+              fontSize: '18px',
+              lineHeight: '20px',
+              fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
+            }
+          }}
+        />
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -211,5 +210,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
     </StyledMobileScheduleTabPanel>
   );
 });
+
+MobileScheduleTabPanel.displayName = 'MobileScheduleTabPanel';
 
 export default MobileScheduleTabPanel;

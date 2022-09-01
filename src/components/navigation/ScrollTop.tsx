@@ -1,7 +1,13 @@
-import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { useCallback } from 'react';
+import styled from '../../util/styled.util';
+
+const StyledScrollTop = styled('div')`
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+`;
 
 interface ScrollTopProps {
   children: React.ReactNode;
@@ -25,9 +31,9 @@ const ScrollTop = ({ children }: ScrollTopProps) => {
 
   return (
     <Fade in={trigger}>
-      <Box onClick={handleClick} role="presentation" sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+      <StyledScrollTop onClick={handleClick} role="presentation">
         {children}
-      </Box>
+      </StyledScrollTop>
     </Fade>
   );
 };

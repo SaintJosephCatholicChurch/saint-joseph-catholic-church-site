@@ -11,11 +11,50 @@ import { useTheme } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { MAX_APP_WIDTH } from '../../constants';
 import navItems from '../../lib/menu';
+import styled from '../../util/styled.util';
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 import NavItem from './NavItem';
 
 const DRAWER_WIDTH = 240;
+
+const StyledNavigation = styled('div')`
+  display: flex;
+`;
+
+const StyledDrawerContents = styled('div')`
+  padding-top: 16px;
+  text-align: center;
+`;
+
+const StyledMobileSpacer = styled('div')(
+  ({ theme }) => `
+    flex-grow: 1;
+    ${theme.breakpoints.up('md')}: {
+      display: none;
+    }
+  `
+);
+
+const StyledDesktopSpacer = styled('div')(
+  ({ theme }) => `
+    flex-grow: 1;
+    ${theme.breakpoints.down('md')}: {
+      display: none;
+    }
+  `
+);
+
+const StyledDesktopNavItems = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    gap: 8px;
+
+    ${theme.breakpoints.down('md')} {
+      display: none;
+    }
+  `
+);
 
 const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,13 +70,7 @@ const Navigation = () => {
 
   const drawer = useMemo(
     () => (
-      <Box
-        onClick={handleDrawerToggle}
-        sx={{
-          pt: 2,
-          textAlign: 'center'
-        }}
-      >
+      <StyledDrawerContents onClick={handleDrawerToggle}>
         <Logo responsive={false} />
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List>
@@ -45,7 +78,7 @@ const Navigation = () => {
             <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
           ))}
         </List>
-      </Box>
+      </StyledDrawerContents>
     ),
     [handleDrawerToggle]
   );
@@ -53,7 +86,7 @@ const Navigation = () => {
   const container = useMemo(() => (typeof window !== 'undefined' ? window.document.body : undefined), []);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <StyledNavigation>
       <AppBar
         component="nav"
         sx={{
@@ -90,36 +123,14 @@ const Navigation = () => {
           >
             <MenuIcon fontSize="large" />
           </IconButton>
-          <Box
-            sx={{
-              flexGrow: 1,
-              [theme.breakpoints.up('md')]: {
-                display: 'none'
-              }
-            }}
-          />
+          <StyledMobileSpacer />
           <Logo trigger={trigger} />
-          <Box
-            sx={{
-              flexGrow: 1,
-              [theme.breakpoints.down('md')]: {
-                display: 'none'
-              }
-            }}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              [theme.breakpoints.down('md')]: {
-                display: 'none'
-              },
-              gap: 1
-            }}
-          >
+          <StyledDesktopSpacer />
+          <StyledDesktopNavItems>
             {navItems.map((item) => (
               <NavItem key={`nav-item-${item.title}`} item={item} />
             ))}
-          </Box>
+          </StyledDesktopNavItems>
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -149,7 +160,7 @@ const Navigation = () => {
           {drawer}
         </SwipeableDrawer>
       </Box>
-    </Box>
+    </StyledNavigation>
   );
 };
 

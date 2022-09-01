@@ -1,9 +1,13 @@
 import SearchIcon from '@mui/icons-material/Search';
-import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { memo } from 'react';
 import useSmallScreen from '../util/smallScreen.util';
+import styled from '../util/styled.util';
+
+const StyledSearchBox = styled('div')`
+  display: flex;
+`;
 
 interface SearchBoxProps {
   disableMargin?: boolean;
@@ -13,7 +17,7 @@ const SearchBox = memo(({ disableMargin = false }: SearchBoxProps) => {
   const isSmallScreen = useSmallScreen();
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <StyledSearchBox>
       <TextField
         variant="outlined"
         size={isSmallScreen ? 'medium' : 'small'}
@@ -28,7 +32,7 @@ const SearchBox = memo(({ disableMargin = false }: SearchBoxProps) => {
           )
         }}
       />
-    </Box>
+    </StyledSearchBox>
   );
 });
 

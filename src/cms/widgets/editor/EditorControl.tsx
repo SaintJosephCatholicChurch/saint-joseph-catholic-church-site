@@ -1,5 +1,5 @@
 import { Editor } from '@tinymce/tinymce-react';
-import { ChangeEvent, forwardRef, useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import styled from '../../../util/styled.util';
 
 const StyledEditorControl = styled('div')`
@@ -11,7 +11,7 @@ interface MarkdownControlProps {
   onChange: (value: string) => void;
 }
 
-const EditorControl = forwardRef(({ value = '', onChange }: MarkdownControlProps, ref) => {
+const EditorControl = ({ value = '', onChange }: MarkdownControlProps) => {
   const editorRef = useRef(null);
 
   const handleOnChange = useCallback(() => {
@@ -25,7 +25,7 @@ const EditorControl = forwardRef(({ value = '', onChange }: MarkdownControlProps
 
   return useMemo(
     () => (
-      <StyledEditorControl ref={ref}>
+      <StyledEditorControl>
         <Editor
           tinymceScriptSrc="/tinymce/tinymce.min.js"
           onInit={(_event, editor) => (editorRef.current = editor)}
@@ -91,9 +91,9 @@ const EditorControl = forwardRef(({ value = '', onChange }: MarkdownControlProps
         />
       </StyledEditorControl>
     ),
-    [handleOnChange, initialValue, ref]
+    [handleOnChange, initialValue]
   );
-});
+};
 
 EditorControl.displayName = 'EditorControl';
 

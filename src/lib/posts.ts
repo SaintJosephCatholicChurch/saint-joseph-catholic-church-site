@@ -18,7 +18,7 @@ export function fetchPostMatter(): FileMatter[] {
   const allPostsMatter = fileNames
     .filter((it) => it.endsWith('.mdx'))
     .map((fileName) => {
-      // Read markdown file as string
+      // Read file as string
       const fullPath = path.join(postsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
 

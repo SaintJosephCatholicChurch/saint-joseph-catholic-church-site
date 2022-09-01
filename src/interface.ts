@@ -1,5 +1,4 @@
 import matter from 'gray-matter';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 export type ScreenSize = 'large' | 'medium' | 'small' | 'mobile';
 
@@ -17,11 +16,6 @@ export interface HomePageData {
 export interface Slide {
   readonly image: string;
   readonly title: string;
-}
-
-export interface SerializedSlide {
-  readonly image: string;
-  readonly titleSource: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
 }
 
 export interface TimesTime {
@@ -85,10 +79,6 @@ export interface PostContent {
   readonly data: PostContentData;
 }
 
-export interface SerializedPostContent extends Omit<PostContent, 'content' | 'summary'> {
-  readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
-}
-
 export interface PageContentData {
   readonly date: string;
   readonly title: string;
@@ -101,10 +91,6 @@ export interface PageContent {
   readonly fullPath: string;
   readonly content: string;
   readonly data: PageContentData;
-}
-
-export interface SerializedPageContent extends Omit<PageContent, 'content'> {
-  readonly source: MDXRemoteSerializeResult<Record<string, unknown>, Record<string, string>>;
 }
 
 export interface SiteConfig {

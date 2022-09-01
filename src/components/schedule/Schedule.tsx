@@ -265,7 +265,7 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
                     fontSize: '18px',
                     padding: '16px',
                     minHeight: '100px',
-                    '@media screen and (min-width: 1200px)': {
+                    [theme.breakpoints.up('lg')]: {
                       fontSize: '24px',
                       padding: '32px',
                       minHeight: '124px'

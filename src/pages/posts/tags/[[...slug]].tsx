@@ -1,15 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from 'next/types';
-import { serialize } from 'next-mdx-remote/serialize';
 import { useMemo } from 'react';
 import PageLayout from '../../../components/PageLayout';
 import TagPostList from '../../../components/TagPostList';
-import { SerializedPostContent, TagContent } from '../../../interface';
+import { PostContent, TagContent } from '../../../interface';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { getTag, listTags } from '../../../lib/tags';
 
 interface TagsIndexProps {
-  posts: SerializedPostContent[];
+  posts: PostContent[];
   tag: TagContent;
   page?: string;
   pagination: {
@@ -58,16 +57,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
     pages: Math.ceil(countPosts(slug) / config.posts_per_page)
   };
 
-  const serializedPostContent: SerializedPostContent[] = [];
-  for (const { summary, data, fullPath } of posts) {
-    serializedPostContent.push({
-      fullPath,
-      data,
-      source: await serialize(summary, { scope: data as Record<string, any> })
-    });
-  }
-
-  const props: TagsIndexProps = { posts: serializedPostContent, tag, pagination };
+  const props: TagsIndexProps = { posts, tag, pagination };
 
   if (page) {
     props.page = page;

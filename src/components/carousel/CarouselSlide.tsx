@@ -1,7 +1,6 @@
-import { MDXRemote } from 'next-mdx-remote';
 import carouselStyles from '../../../public/styles/carousel-content.module.css';
 import { CAROUSEL_MAX_HEIGHT, MAX_APP_WIDTH } from '../../constants';
-import { SerializedSlide } from '../../interface';
+import { Slide } from '../../interface';
 import styled from '../../util/styled.util';
 
 const StyledCarouselSlide = styled('div')`
@@ -37,23 +36,24 @@ const StyledTitleWrapper = styled('div')`
   justify-content: center;
 `;
 
-const StyledTitle = styled('div')`
-  max-width: ${MAX_APP_WIDTH}px;
-  width: 100%;
+const StyledTitle = styled('h1')`
+  color: #fff;
+  font-size: 64px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 2px;
 `;
 
 interface CarouselSlideProps {
-  slide: SerializedSlide;
+  slide: Slide;
 }
 
-const CarouselSlide = ({ slide: { image, titleSource } }: CarouselSlideProps) => {
+const CarouselSlide = ({ slide: { image, title } }: CarouselSlideProps) => {
   return (
     <StyledCarouselSlide className="each-fade">
       <StyledImage className="image-container" image={image} />
       <StyledTitleWrapper>
-        <StyledTitle className={`${carouselStyles.carouselContent}`}>
-          <MDXRemote {...titleSource} />
-        </StyledTitle>
+        <StyledTitle className={`${carouselStyles.carouselContent}`}>{title}</StyledTitle>
       </StyledTitleWrapper>
     </StyledCarouselSlide>
   );

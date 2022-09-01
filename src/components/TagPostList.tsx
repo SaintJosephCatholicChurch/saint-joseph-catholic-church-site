@@ -1,9 +1,9 @@
-import { SerializedPostContent, TagContent } from '../interface';
+import { PostContent, TagContent } from '../interface';
 import Pagination from './Pagination';
 import PostSummary from './posts/PostSummary';
 
 interface TagPostListProps {
-  posts: SerializedPostContent[];
+  posts: PostContent[];
   tag: TagContent;
   pagination: {
     current: number;

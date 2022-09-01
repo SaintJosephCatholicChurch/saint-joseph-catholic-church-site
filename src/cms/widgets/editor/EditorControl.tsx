@@ -6,12 +6,12 @@ const StyledEditorControl = styled('div')`
   width: 100%;
 `;
 
-interface MarkdownControlProps {
+interface EditorControlProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-const EditorControl = ({ value = '', onChange }: MarkdownControlProps) => {
+const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
   const editorRef = useRef(null);
 
   const handleOnChange = useCallback(() => {

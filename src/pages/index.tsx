@@ -1,20 +1,13 @@
-import { serialize } from 'next-mdx-remote/serialize';
 import Head from 'next/head';
-import { GetStaticProps } from 'next/types';
 import HomepageView from '../components/homepage/HomepageView';
 import Layout from '../components/Layout';
 import BasicMeta from '../components/meta/BasicMeta';
 import OpenGraphMeta from '../components/meta/OpenGraphMeta';
 import TwitterCardMeta from '../components/meta/TwitterCardMeta';
-import { SerializedSlide } from '../interface';
 import homePageData from '../lib/homepage';
 import times from '../lib/times';
 
-interface HomepageProps {
-  slides: SerializedSlide[];
-}
-
-const Homepage = ({ slides }: HomepageProps) => {
+const Homepage = () => {
   return (
     <>
       <Head>
@@ -25,7 +18,7 @@ const Homepage = ({ slides }: HomepageProps) => {
         <OpenGraphMeta url={'/'} />
         <TwitterCardMeta url={'/'} />
         <div>
-          <HomepageView slides={slides} homePageData={homePageData} times={times} />
+          <HomepageView homePageData={homePageData} times={times} />
         </div>
       </Layout>
     </>
@@ -33,16 +26,3 @@ const Homepage = ({ slides }: HomepageProps) => {
 };
 
 export default Homepage;
-
-export const getStaticProps: GetStaticProps = async (): Promise<{ props: HomepageProps }> => {
-  const serializedSlides: SerializedSlide[] = [];
-  for (const slide of homePageData.slides) {
-    const mdxTitle = await serialize(slide.title);
-    serializedSlides.push({
-      image: slide.image,
-      titleSource: mdxTitle
-    });
-  }
-
-  return { props: { slides: serializedSlides } };
-};

@@ -1,7 +1,7 @@
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { CAROUSEL_MAX_HEIGHT } from '../../constants';
-import { SerializedSlide } from '../../interface';
+import { Slide } from '../../interface';
 import styled from '../../util/styled.util';
 import CarouselSlide from './CarouselSlide';
 
@@ -41,7 +41,7 @@ const StyledCarouselView = styled('div')`
 `;
 
 interface CarouselViewProps {
-  slides: SerializedSlide[];
+  slides: Slide[];
 }
 
 const CarouselView = ({ slides }: CarouselViewProps) => {

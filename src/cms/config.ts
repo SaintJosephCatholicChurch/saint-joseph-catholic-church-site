@@ -70,7 +70,7 @@ const config: CmsConfig = {
                 {
                   name: 'title',
                   label: 'Title',
-                  widget: 'markdown',
+                  widget: 'string',
                   required: false
                 }
               ]

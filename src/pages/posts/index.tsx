@@ -1,14 +1,13 @@
-import { serialize } from 'next-mdx-remote/serialize';
 import { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import PostList from '../../components/posts/PostList';
-import { SerializedPostContent, TagContent } from '../../interface';
+import { PostContent, TagContent } from '../../interface';
 import config from '../../lib/config';
 import { countPosts, listPostContent } from '../../lib/posts';
 import { listTags } from '../../lib/tags';
 
 interface PostsIndexProps {
-  posts: SerializedPostContent[];
+  posts: PostContent[];
   tags: TagContent[];
   pagination: {
     current: number;
@@ -34,18 +33,9 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: PostsIn
     pages: Math.ceil(countPosts() / config.posts_per_page)
   };
 
-  const serializedPostContent: SerializedPostContent[] = [];
-  for (const { summary, data, fullPath } of posts) {
-    serializedPostContent.push({
-      fullPath,
-      data,
-      source: await serialize(summary, { scope: data as Record<string, any> })
-    });
-  }
-
   return {
     props: {
-      posts: serializedPostContent,
+      posts,
       tags,
       pagination
     }

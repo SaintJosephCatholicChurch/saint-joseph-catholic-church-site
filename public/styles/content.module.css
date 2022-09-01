@@ -175,7 +175,7 @@
   width: 100%;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 900px) {
   .content h2,
   .content h3,
   .content h4,

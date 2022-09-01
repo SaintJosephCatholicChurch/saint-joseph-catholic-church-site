@@ -26,6 +26,13 @@ const StyledChurchDetailsLink = styled('a')`
   }
 `;
 
+const StyledAddress = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+`;
+
 interface ContactDetailsProps {
   churchDetails: ChurchDetails;
 }
@@ -33,13 +40,15 @@ interface ContactDetailsProps {
 const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
   return (
     <StyledContactDetails>
-      <Box>
-        <strong>{churchDetails.name}</strong>
-      </Box>
-      <Box>{churchDetails.address}</Box>
-      <Box>
-        {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
-      </Box>
+      <StyledAddress>
+        <Box>
+          <strong>{churchDetails.name}</strong>
+        </Box>
+        <Box>{churchDetails.address}</Box>
+        <Box>
+          {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
+        </Box>
+      </StyledAddress>
       <Box>
         <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
           <PhoneEnabledIcon fontSize="small" />

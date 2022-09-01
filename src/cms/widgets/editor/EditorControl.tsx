@@ -82,7 +82,8 @@ const EditorControl = ({ value = '', onChange }: MarkdownControlProps) => {
               'bold italic forecolor | alignnone alignleft aligncenter ' +
               'alignright alignjustify | bullist numlist outdent indent | ' +
               'removeformat',
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            body_class: 'content editor',
+            content_css: ['/styles/global.css', '/styles/content.module.css'],
             resize: false,
             elementpath: false,
             branding: false,

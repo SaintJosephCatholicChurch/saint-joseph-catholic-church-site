@@ -9,9 +9,6 @@ import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
 import { useScript } from '../util/useScript';
 import config from './config';
-import controlComponent from './markdown/MarkdownControl';
-import previewComponent from './markdown/MarkdownPreview';
-import schema from './markdown/schema';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/ScheduleWidget';
@@ -31,7 +28,6 @@ const CMSView = () => {
     cmsApp.init({ config } as { config: CmsConfig });
 
     cmsApp.registerWidget('times', ScheduleWidget);
-    (cmsApp.registerWidget as any)('markdown', controlComponent, previewComponent, schema);
     cmsApp.registerWidget('html', EditorWidget, EditorPreview);
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');

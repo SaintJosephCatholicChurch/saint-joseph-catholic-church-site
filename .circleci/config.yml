@@ -5,6 +5,9 @@ jobs:
     docker:
       - image: cimg/node:14.19.0
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08"
       - checkout
       - run:
           name: Update NPM
@@ -15,9 +18,6 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install --no-save --legacy-peer-deps
-      - add_ssh_keys:
-          fingerprints:
-            - "96:12:7d:12:3b:cf:48:c9:e6:cf:b0:c4:c1:e4:ae:f9"
       - run:
           name: Process Bulletins
           command: |

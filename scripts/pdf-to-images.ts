@@ -16,12 +16,9 @@ const publicPath = 'public';
       continue;
     }
 
-    console.log('Making bulletin folder', folderFullPath);
     mkdirSync(folderFullPath);
 
     const images = await pdf2img.convert(pdfFullPath);
-    console.log('Images', images);
-    console.log('Saving...');
 
     const pageImages: string[] = [];
     for (let i = 0; i < images.length; i++) {

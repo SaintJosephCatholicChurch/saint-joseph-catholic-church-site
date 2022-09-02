@@ -17,7 +17,7 @@ jobs:
           command: npm install --no-save --legacy-peer-deps
       - add_ssh_keys:
           fingerprints:
-            - "4e:b2:6f:67:40:ff:99:cf:2d:f9:c3:d2:4a:d1:01:b4"
+            - "96:12:7d:12:3b:cf:48:c9:e6:cf:b0:c4:c1:e4:ae:f9"
       - run:
           name: Process Bulletins
           command: |

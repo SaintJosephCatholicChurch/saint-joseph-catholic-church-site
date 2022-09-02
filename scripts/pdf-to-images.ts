@@ -51,7 +51,7 @@ const publicPath = 'public';
   if (bulletinsProcessed === 0) {
     console.info('No new bulletins to process');
   } else {
-    console.info(`${bulletinsProcessed} new bulletins processed`);
+    console.info(`${bulletinsProcessed} new bulletin${bulletinsProcessed > 1 ? 's' : ''} processed`);
   }
 
   if (bulletinsProcessed > 0 && process.argv.length > 2 && process.argv[2] === '-ci') {

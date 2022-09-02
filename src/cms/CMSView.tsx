@@ -64,7 +64,15 @@ const CMSView = () => {
     }
   ]);
 
-  return <div />;
+  return (
+    <div>
+      <style jsx global>{`
+        #__next {
+          display: none;
+        }
+      `}</style>
+    </div>
+  );
 };
 
 export default CMSView;

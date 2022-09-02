@@ -2,7 +2,9 @@ import type { ScreenSize } from './interface';
 
 export const MAX_APP_WIDTH = 1200;
 
-export const CAROUSEL_MAX_HEIGHT = 640;
+export const CAROUSEL_MAX_HEIGHT_LG = 640;
+export const CAROUSEL_MAX_HEIGHT_MD = 420;
+export const CAROUSEL_MAX_HEIGHT_SM = 210;
 
 export const TIMES_PADDING_HEIGHT = (size: Omit<ScreenSize, 'mobile'>) => {
   if (size === 'small' || size == 'medium') {

@@ -1,5 +1,5 @@
 import carouselStyles from '../../../public/styles/carousel-content.module.css';
-import { CAROUSEL_MAX_HEIGHT, MAX_APP_WIDTH } from '../../constants';
+import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
 import type { Slide } from '../../interface';
 import styled from '../../util/styled.util';
 
@@ -12,7 +12,7 @@ interface StyledImageProps {
 }
 
 const StyledImage = styled('div', ['image'])<StyledImageProps>(
-  ({ image }) => `
+  ({ theme, image }) => `
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +21,14 @@ const StyledImage = styled('div', ['image'])<StyledImageProps>(
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
-    height: ${CAROUSEL_MAX_HEIGHT}px;
+  
+    height: ${CAROUSEL_MAX_HEIGHT_LG}px;
+    ${theme.breakpoints.only('md')} {
+      height: ${CAROUSEL_MAX_HEIGHT_MD}px;
+    }
+    ${theme.breakpoints.down('md')} {
+      height: ${CAROUSEL_MAX_HEIGHT_SM}px;
+    }
   `
 );
 
@@ -36,13 +43,22 @@ const StyledTitleWrapper = styled('div')`
   justify-content: center;
 `;
 
-const StyledTitle = styled('h1')`
-  color: #fff;
-  font-size: 64px;
-  text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 2px;
-`;
+const StyledTitle = styled('h1')(
+  ({ theme }) => `
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 2px;
+    
+    font-size: 64px;
+    ${theme.breakpoints.only('md')} {
+      font-size: 64px;
+    }
+    ${theme.breakpoints.down('md')} {
+      font-size: 32px;
+    }
+  `
+);
 
 interface CarouselSlideProps {
   slide: Slide;

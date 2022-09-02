@@ -13,7 +13,7 @@ import {
   TIMES_SECTION_TITLE_HEIGHT,
   TIMES_TITLE_HEIGHT
 } from '../../constants';
-import { Times } from '../../interface';
+import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 import { useMediaQueryDown } from '../../util/useMediaQuery';

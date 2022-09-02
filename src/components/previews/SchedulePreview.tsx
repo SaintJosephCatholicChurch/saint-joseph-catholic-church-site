@@ -1,7 +1,7 @@
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useCallback, useMemo, useState } from 'react';
 import StyleCopy from '../../cms/StyleCopy';
-import { Times } from '../../interface';
+import type { Times } from '../../interface';
 import ScheduleTabChangeEvent from '../../util/events/ScheduleTabChangeEvent';
 import { useWindowEvent } from '../../util/window.util';
 import Schedule from '../schedule/Schedule';

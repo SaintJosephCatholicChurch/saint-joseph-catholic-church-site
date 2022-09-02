@@ -15,7 +15,7 @@ import parse from 'date-fns/parse';
 import { memo, MouseEvent, useCallback, useState } from 'react';
 import CollapseSection from '../../../components/layout/CollapseSection';
 import TabPanel from '../../../components/TabPanel';
-import { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
+import type { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
 import styled from '../../../util/styled.util';

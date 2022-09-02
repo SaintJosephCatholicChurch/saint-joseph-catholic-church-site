@@ -1,8 +1,8 @@
-import { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
 import PageLayout from '../../../components/PageLayout';
 import TagPostList from '../../../components/TagPostList';
-import { PostContent, TagContent } from '../../../interface';
+import type { PostContent, TagContent } from '../../../interface';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { getTag, listTags } from '../../../lib/tags';

@@ -117,3 +117,7 @@ export interface TagContent {
   readonly slug: string;
   readonly name: string;
 }
+
+export interface BulletinPDFMeta {
+  readonly pages: string[];
+}

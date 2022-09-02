@@ -3,7 +3,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Immutable from 'immutable';
 import { CmsWidgetControlProps } from 'netlify-cms-core';
 import { Component } from 'react';
-import { Times } from '../../../interface';
+import type { Times } from '../../../interface';
 import ScheduleWidget from './TimesWidgetControl';
 
 export default class TimesWidget extends Component<CmsWidgetControlProps<Immutable.List<unknown>>> {

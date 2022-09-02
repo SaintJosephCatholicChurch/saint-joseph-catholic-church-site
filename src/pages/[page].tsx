@@ -1,8 +1,8 @@
-import { parseISO } from 'date-fns';
-import { GetStaticPaths, GetStaticProps } from 'next/types';
+import parseISO from 'date-fns/parseISO';
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';
-import { PageContent } from '../interface';
+import type { PageContent } from '../interface';
 import { fetchPageContent } from '../lib/pages';
 
 interface PageProps {
@@ -37,7 +37,7 @@ const Page = ({ title, dateString, slug, tags, description = '', content }: Page
 export default Page;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPageContent().map((it) => '/' + it.data.slug);
+  const paths = fetchPageContent().map((it) => `/${it.data.slug}`);
   return {
     paths,
     fallback: false

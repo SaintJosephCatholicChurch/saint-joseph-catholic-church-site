@@ -1,9 +1,9 @@
 import parseISO from 'date-fns/parseISO';
-import { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PostView from '../../components/posts/PostView';
-import { PostContent } from '../../interface';
+import type { PostContent } from '../../interface';
 import { fetchPostContent } from '../../lib/posts';
 
 interface PostProps {
@@ -42,7 +42,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content 
 export default Post;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPostContent().map((post) => '/posts/' + post.data.slug);
+  const paths = fetchPostContent().map((post) => `/posts/${post.data.slug}`);
   return {
     paths,
     fallback: false

@@ -1,7 +1,7 @@
-import { GetStaticProps } from 'next/types';
+import type { GetStaticProps } from 'next/types';
 import contentStyles from '../../public/styles/content.module.css';
 import PageLayout from '../components/PageLayout';
-import { FileMatter } from '../interface';
+import type { FileMatter } from '../interface';
 import { fetchPageMatter } from '../lib/pages';
 import { fetchPostMatter } from '../lib/posts';
 import styled from '../util/styled.util';

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Times } from '../../interface';
+import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 import TabPanel from '../TabPanel';

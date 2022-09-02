@@ -1,4 +1,4 @@
-import { TagContent } from '../interface';
+import type { TagContent } from '../interface';
 
 interface TagProps {
   tag?: TagContent;
@@ -11,7 +11,7 @@ const Tag = ({ tag }: TagProps) => {
 
   return (
     <a href={`/posts/tags/${tag.slug}`}>
-      <a>{'#' + tag.name}</a>
+      <a>{`#${tag.name}`}</a>
     </a>
   );
 };

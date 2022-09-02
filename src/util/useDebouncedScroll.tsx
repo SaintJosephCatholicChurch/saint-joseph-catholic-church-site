@@ -18,7 +18,6 @@ export default function useDebouncedScroll(
 
     timer = setTimeout(() => {
       const newScroll = ref.current?.[scrollVariable] ?? 0;
-      console.log('scrolling', scrolling, 'old scroll', currentScroll, '=> new scroll', newScroll);
       if (!scrolling && currentScroll === newScroll) {
         setDebouncedValue(currentScroll);
       } else {
@@ -28,18 +27,15 @@ export default function useDebouncedScroll(
   };
 
   const handleScroll = () => {
-    console.log('handleScroll');
     debounceScroll(ref.current?.[scrollVariable] ?? 0);
   };
 
   const handleScrollEnd = () => {
-    console.log('handleScrollEnd');
     scrolling = false;
     handleScroll();
   };
 
   const handleScrollStart = () => {
-    console.log('handleScrollStart');
     scrolling = true;
   };
 

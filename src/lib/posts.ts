@@ -2,7 +2,7 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'path';
-import { FileMatter, PostContent, PostContentData } from '../interface';
+import type { FileMatter, PostContent, PostContentData } from '../interface';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
 

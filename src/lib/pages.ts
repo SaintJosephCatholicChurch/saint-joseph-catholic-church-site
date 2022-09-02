@@ -2,7 +2,7 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 import yaml from 'js-yaml';
-import { FileMatter, PageContent, PageContentData } from '../interface';
+import type { FileMatter, PageContent, PageContentData } from '../interface';
 
 const pagesDirectory = path.join(process.cwd(), 'content/pages');
 

@@ -1,7 +1,7 @@
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
-import { ChurchDetails } from '../../../interface';
+import type { ChurchDetails } from '../../../interface';
 import styled from '../../../util/styled.util';
 
 const StyledContactDetails = styled('div')`

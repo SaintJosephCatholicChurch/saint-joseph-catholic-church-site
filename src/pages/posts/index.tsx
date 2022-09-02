@@ -1,7 +1,7 @@
-import { GetStaticProps } from 'next/types';
+import type { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import PostList from '../../components/posts/PostList';
-import { PostContent, TagContent } from '../../interface';
+import type { PostContent, TagContent } from '../../interface';
 import config from '../../lib/config';
 import { countPosts, listPostContent } from '../../lib/posts';
 import { listTags } from '../../lib/tags';

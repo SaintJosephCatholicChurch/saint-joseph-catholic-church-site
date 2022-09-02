@@ -1,4 +1,4 @@
-import { ScreenSize } from './interface';
+import type { ScreenSize } from './interface';
 
 export const MAX_APP_WIDTH = 1200;
 

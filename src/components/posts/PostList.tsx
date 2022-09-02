@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { PostContent, TagContent } from '../../interface';
+import type { PostContent, TagContent } from '../../interface';
 import Pagination from '../Pagination';
 import PostSummary from './PostSummary';
 
@@ -23,7 +23,7 @@ const PostList = ({ posts, tags, pagination }: PostListProps) => {
         pages={pagination.pages}
         link={{
           href: (page) => (page === 1 ? '/posts' : '/posts/page/[page]'),
-          as: (page) => (page === 1 ? null : '/posts/page/' + page)
+          as: (page) => (page === 1 ? null : `/posts/page/${page}`)
         }}
       />
     </Box>

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { HomePageData, Times } from '../../interface';
+import type { HomePageData, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
 import styled from '../../util/styled.util';
 import CarouselView from '../carousel/CarouselView';

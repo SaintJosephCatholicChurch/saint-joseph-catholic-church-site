@@ -18,6 +18,9 @@ jobs:
       - run:
           name: NextJS Build
           command: npm run export
+      - run:
+          name: NextJS Build
+          command: npm run export
       - save_cache:
           key: nextjs-cache-{{ checksum "package-lock.json" }}
           when: on_success

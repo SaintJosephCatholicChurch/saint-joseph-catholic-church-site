@@ -1,4 +1,4 @@
-import { TagContent } from '../interface';
+import type { TagContent } from '../interface';
 
 interface TagButtonProps {
   tag: TagContent;

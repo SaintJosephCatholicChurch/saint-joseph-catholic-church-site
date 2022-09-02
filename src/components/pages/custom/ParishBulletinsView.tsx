@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -13,24 +14,28 @@ import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material/styles';
 import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Document, Page } from 'react-pdf';
-import { Bulletin } from '../../../interface';
+import type { Bulletin, BulletinPDFMeta } from '../../../interface';
+import { isNotNullish } from '../../../util/null.util';
 import styled from '../../../util/styled.util';
 import useElementSize from '../../../util/useElementSize';
-import useIsomorphicLayoutEffect from '../../../util/useIsomorphicLayoutEffect';
-import { useMediaQueryDown } from '../../../util/useMediaQuery';
+import useNavigate from '../../../util/useNavigate';
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
     display: grid;
     align-items: flex-start;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 25% 1fr;
     ${theme.breakpoints.down('lg')} {
       grid-template-columns: 1fr;
     }
   `
 );
+
+const StyledListItemWrapper = styled('div')`
+  position: relative;
+`;
 
 const StyledListItemPrimary = styled('div')`
   display: flex;
@@ -71,14 +76,6 @@ const StyledPDFViewer = styled('div')`
   .react-pdf__Page {
     display: flex;
   }
-`;
-
-const StyledLoaderMessage = styled('div')`
-  text-align: center;
-  font-size: 20px;
-  font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  font-weight: 500;
-  margin-top: 24px;
 `;
 
 interface StyledPDFViewerContentProps {
@@ -226,15 +223,20 @@ const StyledNavigationButtonWrapper = styled('div', ['align'])<StyledNavigationB
   `
 );
 
-const StyledSlidableAreaWrapper = styled('div')(
-  ({ theme }) => `
+interface StyledSlidableAreaWrapperProps {
+  height: number;
+}
+
+const StyledSlidableAreaWrapper = styled('div', ['height'])<StyledSlidableAreaWrapperProps>(
+  ({ theme, height }) => `
     display: flex;
     position: relative;
-    height: 100%;
+    height: ${height}px;
     overflow: hidden;
 
     ${theme.breakpoints.down('lg')} {
       overflow: auto;
+      height: auto;
     }
   `
 );
@@ -244,7 +246,7 @@ interface StyledSlidableAreaProps {
   index: number;
 }
 
-const StyledSlidableArea = styled('div')<StyledSlidableAreaProps>(
+const StyledSlidableArea = styled('div', ['width', 'index'])<StyledSlidableAreaProps>(
   ({ theme, width, index }) => `
     display: flex;
     left: 0;
@@ -263,28 +265,31 @@ const StyledSlidableArea = styled('div')<StyledSlidableAreaProps>(
 
 interface ParishBulletinsView {
   bulletins: Bulletin[];
+  bulletin: Bulletin;
+  meta: BulletinPDFMeta;
 }
 
-const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
-  const [bulletinIndex, setBulletinIndex] = useState(0);
+const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsView) => {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [height, setHeight] = useState(0);
 
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const onBulletinChange = useCallback(
-    (index: number) => () => {
-      setBulletinIndex(index);
-      setPage(1);
+    (pdf: string) => {
+      const newBulletin = bulletins.find((aBulletin) => aBulletin.pdf === pdf);
+      if (isNotNullish(newBulletin)) {
+        navigate(`/parish-bulletins/${format(new Date(newBulletin.date), 'yyyy-MM-dd')}`);
+      }
     },
-    []
+    [bulletins, navigate]
   );
 
-  const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
-    setTotalPages(numPages);
-    setPage(1);
-  }, []);
+  useEffect(() => {
+    setTotalPages(pages.length);
+  }, [pages.length]);
 
   const onPageChange = useCallback(
     (newPage: number) => {
@@ -319,83 +324,73 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
     setHeight((width / 8.5) * 11);
   }, [width]);
 
+  const formattedDate = useMemo(() => format(parseISO(bulletin.date), 'MMM dd, yyyy'), [bulletin.date]);
+
   const bulletinListItems = useMemo(
     () =>
-      bulletins?.map((bulletin, index) => (
-        <ListItemButton
-          key={`bulletin-${index}`}
-          selected={index === bulletinIndex}
-          onClick={onBulletinChange(index)}
-          sx={{
-            '&:hover': {
-              backgroundColor: 'rgba(0,0,0,0.1)'
-            },
-            '&.Mui-selected': {
-              backgroundColor: '#bc2f3b',
-              '&:hover': {
-                backgroundColor: '#cd3744'
-              },
-              '.MuiListItemText-primary': {
-                color: '#fde7a5',
+      bulletins?.map((aBulletin, index) => {
+        const selected = aBulletin.pdf === bulletin.pdf;
+        return (
+          <StyledListItemWrapper key={`bulletin-${index}`}>
+            <ListItemButton
+              selected={selected}
+              href={`/parish-bulletins/${format(parseISO(aBulletin.date), 'yyyy-MM-dd')}`}
+              sx={{
                 '&:hover': {
-                  color: '#ffffff'
+                  backgroundColor: 'rgba(0,0,0,0.1)'
+                },
+                '&.Mui-selected': {
+                  backgroundColor: '#bc2f3b',
+                  '&:hover': {
+                    backgroundColor: '#cd3744'
+                  },
+                  '.MuiListItemText-primary': {
+                    color: '#fde7a5',
+                    '&:hover': {
+                      color: '#ffffff'
+                    }
+                  }
+                },
+                '.MuiListItemText-primary': {
+                  color: '#444444'
                 }
-              },
-              '.MuiIconButton-root': {
-                color: '#ffffff'
-              }
-            },
-            '.MuiListItemText-primary': {
-              color: '#444444'
-            }
-          }}
-        >
-          <ListItemText
-            primary={
-              <StyledListItemPrimary>
-                <div>
-                  {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name}
-                </div>
-                <IconButton
-                  href={bulletin.pdf}
-                  target="_blank"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <DownloadIcon />
-                </IconButton>
-              </StyledListItemPrimary>
-            }
-          />
-        </ListItemButton>
-      )),
-    [bulletinIndex, bulletins, onBulletinChange]
+              }}
+            >
+              <ListItemText
+                primary={
+                  <StyledListItemPrimary>
+                    <div>
+                      {format(new Date(aBulletin.date), 'MMM dd, yyyy')} - {aBulletin.name}
+                    </div>
+                  </StyledListItemPrimary>
+                }
+              />
+            </ListItemButton>
+            <IconButton
+              href={aBulletin.pdf}
+              target="_blank"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              sx={{ position: 'absolute', right: '16px', top: '4px', color: selected ? '#ffffff' : undefined }}
+            >
+              <DownloadIcon />
+            </IconButton>
+          </StyledListItemWrapper>
+        );
+      }),
+    [bulletin.pdf, bulletins]
   );
 
   const bulletinMenuItems = useMemo(
     () =>
       bulletins?.map((bulletin, index) => (
-        <MenuItem key={`bulletin-menu-item-${index}`} value={index}>
+        <MenuItem key={`bulletin-menu-item-${index}`} value={bulletin.pdf}>
           {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name}
         </MenuItem>
       )),
     [bulletins]
   );
-
-  const bulletinPDF = useMemo(
-    () => (bulletins.length > bulletinIndex ? bulletins[bulletinIndex].pdf : null),
-    [bulletinIndex, bulletins]
-  );
-
-  const isSmallScreen = useMediaQueryDown('lg');
-
-  const [renderPdf, setRenderPdf] = useState(false);
-  useIsomorphicLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      setRenderPdf(true);
-    }
-  }, []);
 
   return (
     <StyledParishBulletinsView ref={topRef}>
@@ -416,21 +411,15 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
           <Select
             labelId="bulletin-label"
             id="bulletin"
-            value={bulletinIndex}
+            value={bulletin.pdf}
             label="Bulletin"
-            onChange={(event) => {
-              const rawValue = +event.target.value;
-              console.log(rawValue);
-              if (!Number.isNaN(rawValue)) {
-                onBulletinChange(rawValue)();
-              }
-            }}
+            onChange={(event) => onBulletinChange(event.target.value)}
           >
             {bulletinMenuItems}
           </Select>
         </FormControl>
         <IconButton
-          href={bulletinPDF}
+          href={bulletin.pdf}
           target="_blank"
           onClick={(event) => {
             event.stopPropagation();
@@ -442,34 +431,20 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
       <StyledPDFViewerWrapper>
         <StyledPDFViewer ref={pdfRef}>
           <StyledPDFViewerContent width={width} height={height}>
-            {renderPdf && bulletinPDF !== null ? (
-              <Document
-                file={bulletinPDF}
-                onLoadSuccess={onDocumentLoadSuccess}
-                loading={<StyledLoaderMessage>Loading bulletin...</StyledLoaderMessage>}
-                noData={<StyledLoaderMessage>Could not find bulletin.</StyledLoaderMessage>}
-                error={<StyledLoaderMessage>Could not load bulletin.</StyledLoaderMessage>}
-              >
-                <StyledSlidableAreaWrapper>
-                  <StyledSlidableArea width={width} index={page - 1}>
-                    {[...Array(totalPages)].map((_, index) => (
-                      <Page
-                        key={`bulletin-${bulletinIndex}-page-${index}`}
-                        pageNumber={index + 1}
-                        width={width}
-                        height={height}
-                        renderAnnotationLayer={false}
-                        renderTextLayer={!isSmallScreen}
-                        renderMode={isSmallScreen ? 'svg' : 'canvas'}
-                        render
-                        loading={false}
-                        noData={false}
-                        error={false}
-                      />
-                    ))}
-                  </StyledSlidableArea>
-                </StyledSlidableAreaWrapper>
-              </Document>
+            {pages.length > 0 ? (
+              <StyledSlidableAreaWrapper height={height}>
+                <StyledSlidableArea width={width} index={page - 1}>
+                  {pages.map((pageImage, index) => (
+                    <img
+                      key={`${bulletin.pdf}-page-${index + 1}`}
+                      src={pageImage}
+                      alt={`${formattedDate} (${bulletin.name}) - Page ${index + 1}`}
+                      width={width}
+                      height={height}
+                    />
+                  ))}
+                </StyledSlidableArea>
+              </StyledSlidableAreaWrapper>
             ) : null}
             <StyledPaginationContainer className="pdf-pagination">
               <StyledFloatingPagination aria-label="pagination">

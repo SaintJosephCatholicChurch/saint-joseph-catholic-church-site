@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { ChurchDetails, StylesConfig } from '../../../interface';
+import type { ChurchDetails, StylesConfig } from '../../../interface';
 import styled from '../../../util/styled.util';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';

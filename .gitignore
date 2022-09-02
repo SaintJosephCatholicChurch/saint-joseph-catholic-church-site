@@ -37,6 +37,3 @@ workbox-*
 
 # tinymce
 /public/tinymce/
-
-# react-pdf
-/public/pdf.worker.js

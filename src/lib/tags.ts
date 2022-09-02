@@ -1,5 +1,5 @@
 import tags from '../../content/meta/tags.yml';
-import { TagContent } from '../interface';
+import type { TagContent } from '../interface';
 
 const tagMap: { [key: string]: TagContent } = generateTagMap();
 

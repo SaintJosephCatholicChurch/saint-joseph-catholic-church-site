@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import Container from '../../../components/layout/Container';
-import { Times } from '../../../interface';
+import type { Times } from '../../../interface';
 import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
 import styled from '../../../util/styled.util';
 import { useWindowEvent } from '../../../util/window.util';

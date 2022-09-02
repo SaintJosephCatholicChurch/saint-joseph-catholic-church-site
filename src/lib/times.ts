@@ -1,4 +1,4 @@
 import data from '../../content/times.json';
-import { Times } from '../interface';
+import type { Times } from '../interface';
 
 export default data.times as Times[];

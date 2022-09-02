@@ -4,7 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { memo, useCallback, useState } from 'react';
-import { Times } from '../../interface';
+import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 

@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import parseISO from 'date-fns/parseISO';
 import { memo, useMemo } from 'react';
-import { PostContent } from '../../interface';
+import type { PostContent } from '../../interface';
 import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
 import PostDateAuthorLine from './PostDateAuthorLine';

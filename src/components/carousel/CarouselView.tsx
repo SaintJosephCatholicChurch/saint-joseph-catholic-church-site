@@ -1,7 +1,7 @@
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { CAROUSEL_MAX_HEIGHT } from '../../constants';
-import { Slide } from '../../interface';
+import type { Slide } from '../../interface';
 import styled from '../../util/styled.util';
 import CarouselSlide from './CarouselSlide';
 

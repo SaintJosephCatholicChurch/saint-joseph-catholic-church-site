@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { MouseEvent, useCallback, useMemo, useState } from 'react';
-import { MenuItem, MenuLink } from '../../interface';
+import type { MenuItem, MenuLink } from '../../interface';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import MobileNavLink from './MobileNavLink';
 

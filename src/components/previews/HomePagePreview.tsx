@@ -1,7 +1,7 @@
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo, useState } from 'react';
 import StyleCopy from '../../cms/StyleCopy';
-import { HomePageData, Slide } from '../../interface';
+import type { HomePageData, Slide } from '../../interface';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
 

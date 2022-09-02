@@ -1,8 +1,6 @@
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig } from 'netlify-cms-core';
-import Head from 'next/head';
 import { useEffect } from 'react';
-import BulletinsPreview from '../components/previews/BulletinsPreview';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
 import PagePreview from '../components/previews/PagePreview';
@@ -39,7 +37,6 @@ const CMSView = () => {
     cmsApp.registerPreviewTemplate('homepage', HomePagePreview);
     cmsApp.registerPreviewTemplate('times', SchedulePreview);
     cmsApp.registerPreviewTemplate('church_details', ChurchDetailsPreview);
-    cmsApp.registerPreviewTemplate('bulletins', BulletinsPreview);
   }, []);
 
   useCollectionIcons([

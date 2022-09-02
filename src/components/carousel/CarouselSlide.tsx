@@ -1,6 +1,6 @@
 import carouselStyles from '../../../public/styles/carousel-content.module.css';
 import { CAROUSEL_MAX_HEIGHT, MAX_APP_WIDTH } from '../../constants';
-import { Slide } from '../../interface';
+import type { Slide } from '../../interface';
 import styled from '../../util/styled.util';
 
 const StyledCarouselSlide = styled('div')`

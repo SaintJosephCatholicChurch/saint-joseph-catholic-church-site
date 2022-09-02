@@ -8,7 +8,6 @@ interface CollectionIcon {
 function iconify(icons: CollectionIcon[]) {
   icons.forEach(function (item) {
     const loc = document.querySelector(`a[data-testid="${item.name}"] span`);
-    console.log('loc', loc);
     const i = document.createElement('i');
 
     i.style.width = '24px';

@@ -1,4 +1,4 @@
 import config from '../../content/styles.json';
-import { StylesConfig } from '../interface';
+import type { StylesConfig } from '../interface';
 
 export default config as StylesConfig;

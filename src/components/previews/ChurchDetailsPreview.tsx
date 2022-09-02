@@ -1,7 +1,7 @@
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
 import StyleCopy from '../../cms/StyleCopy';
-import { ChurchDetails } from '../../interface';
+import type { ChurchDetails } from '../../interface';
 import Footer from '../layout/footer/Footer';
 
 const ChurchDetailsPreview = ({ entry, document }: PreviewTemplateComponentProps) => {

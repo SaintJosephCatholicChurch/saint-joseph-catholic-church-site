@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { MouseEvent } from 'react';
-import { MenuLink } from '../../interface';
+import type { MenuLink } from '../../interface';
 import useMenuLinkUrl from './hooks/useMenuLinkUrl';
 
 interface NavLinkProps {

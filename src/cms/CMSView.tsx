@@ -1,6 +1,6 @@
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig } from 'netlify-cms-core';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import BulletinsPreview from '../components/previews/BulletinsPreview';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
@@ -14,7 +14,7 @@ import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-const CMSView = () => {
+const CMSView = memo(() => {
   useScript('https://kit.fontawesome.com/0636016ebf.js');
 
   useEffect(() => {
@@ -67,12 +67,19 @@ const CMSView = () => {
   return (
     <div>
       <style jsx global>{`
+        html,
+        body {
+          height: 100%;
+        }
+
         #__next {
           display: none;
         }
       `}</style>
     </div>
   );
-};
+});
+
+CMSView.displayName = 'CMSView';
 
 export default CMSView;

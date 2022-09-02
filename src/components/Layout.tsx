@@ -37,23 +37,31 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <StyledLayout>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="apple-touch-icon" href="/icon.png" />
-        <meta name="theme-color" content="#fff" />
-      </Head>
-      <div id="back-to-top-anchor" />
-      <Navigation />
-      <StyledMain>{children}</StyledMain>
-      <ScrollTop>
-        <Fab size="small" aria-label="scroll back to top">
-          <KeyboardArrowUpIcon />
-        </Fab>
-      </ScrollTop>
-    </StyledLayout>
+    <>
+      <StyledLayout>
+        <Head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="apple-touch-icon" href="/icon.png" />
+          <meta name="theme-color" content="#fff" />
+        </Head>
+        <div id="back-to-top-anchor" />
+        <Navigation />
+        <StyledMain>{children}</StyledMain>
+        <ScrollTop>
+          <Fab size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
+      </StyledLayout>
+      <style jsx global>{`
+        html,
+        body {
+          min-height: 100vh;
+        }
+      `}</style>
+    </>
   );
 };
 

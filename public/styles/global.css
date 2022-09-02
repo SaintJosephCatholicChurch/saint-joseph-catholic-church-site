@@ -50,7 +50,6 @@ body {
   color: #222;
   font-weight: 200;
   font-size: 16px;
-  min-height: 100vh;
 }
 
 div[data-reactroot] {

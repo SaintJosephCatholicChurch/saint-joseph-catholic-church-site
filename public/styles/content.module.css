@@ -35,49 +35,90 @@
   text-decoration: underline;
 }
 
-.content h1 {
-  margin: 2.5rem 0 0 0;
-}
-
+.content h1,
 .content h2,
 .content h3,
 .content h4,
-.content h5 {
-  margin: 2rem 0 0 0;
-  line-height: 1.25em;
-  font-weight: 300;
-  margin: 0 0 16px;
+.content h5,
+.content h6 {
+  font-weight: 500;
+  color: #333;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.content h1 {
+  font-size: 28px;
+  line-height: 28px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 32px;
+    line-height: 32px;
+  }
+}
+
+.content h2 {
+  text-transform: uppercase;
+  color: #bf303c;
+
+  font-size: 24px;
+  line-height: 24px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 28px;
+    line-height: 28px;
+  }
 }
 
 .content h3 {
-  color: rgb(104, 11, 18);
-  font-size: 25px;
-  line-height: 27px;
-  text-transform: uppercase;
-  padding-bottom: 5px;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
+  color: #616169;
+
+  font-size: 20px;
+  line-height: 20px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+
+.content h4,
+.content h5,
+.content h6 {
+  color: #616169;
 }
 
 .content h4 {
-  color: #616169;
-  font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 18px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 20px;
+    line-height: 20px;
+  }
 }
 
 .content h5 {
-  color: #616169;
-  font-weight: 700;
   font-size: 16px;
+  line-height: 16px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 18px;
+    line-height: 18px;
+  }
 }
 
 .content h6 {
-  color: #616169;
-  font-weight: 500;
   font-size: 14px;
+  line-height: 14px;
+
+  @media screen and (min-width: 1200) {
+    font-size: 16px;
+    line-height: 16px;
+  }
 }
 
-.content h2::before {
+/* .content h2::before {
   position: absolute;
   margin-left: -1em;
   font-weight: 300;
@@ -85,7 +126,7 @@
   color: #9b9b9b;
   display: none;
   content: '#';
-}
+} */
 
 .content pre {
   display: block;

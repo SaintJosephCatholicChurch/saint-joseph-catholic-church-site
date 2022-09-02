@@ -2,35 +2,32 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import Head from 'next/head';
 import styled from '../util/styled.util';
-import { useMediaQueryDown } from '../util/useMediaQuery';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 
-interface StyledLayoutProps {
-  isSmallScreen: boolean;
-}
-
-const StyledLayout = styled('div', ['isSmallScreen'])<StyledLayoutProps>(
-  ({ isSmallScreen }) => `
+const StyledLayout = styled('div')(
+  ({ theme }) => `
     display: flex;
     flex-direction: column;
-    ${isSmallScreen ? 'flex: 1 0 auto;' : ''}
     box-sizing: border-box;
-    height: 100%;
+    min-height: 100vh;
+
+    ${theme.breakpoints.down('lg')} {
+      flex: 1 0 auto;
+    }
   `
 );
 
-interface StyledMainProps {
-  isSmallScreen: boolean;
-}
-
-const StyledMain = styled('main', ['isSmallScreen'])<StyledMainProps>(
-  ({ isSmallScreen }) => `
+const StyledMain = styled('main')(
+  ({ theme }) => `
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100%;
-    ${isSmallScreen ? 'flex: 1 0 auto;' : ''}
+    min-height: 100vh;
+
+    ${theme.breakpoints.down('lg')} {
+      flex: 1 0 auto;
+    }
   `
 );
 
@@ -39,10 +36,8 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const isSmallScreen = useMediaQueryDown('lg');
-
   return (
-    <StyledLayout isSmallScreen={isSmallScreen}>
+    <StyledLayout>
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,7 +47,7 @@ const Layout = ({ children }: LayoutProps) => {
       </Head>
       <div id="back-to-top-anchor" />
       <Navigation />
-      <StyledMain isSmallScreen={isSmallScreen}>{children}</StyledMain>
+      <StyledMain>{children}</StyledMain>
       <ScrollTop>
         <Fab size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />

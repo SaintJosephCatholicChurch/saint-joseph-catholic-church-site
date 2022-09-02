@@ -49,10 +49,12 @@
           "title": "Finance"
         },
         {
-          "title": "Knights Of Columbus"
+          "title": "Knights Of Columbus",
+          "page": "knights-of-columbus"
         },
         {
-          "title": "Lay Ministries"
+          "title": "Lay Ministries",
+          "page": "lay-ministries"
         },
         {
           "title": "Parish Council"

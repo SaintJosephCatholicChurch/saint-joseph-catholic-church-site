@@ -7,17 +7,10 @@ import PageTitle from './PageTitle';
 const StyledPageView = styled('article')`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-`;
-
-const StyledPageHeaderWrapper = styled('header')`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 8px;
+  flex-grow: 1;
 `;
 
 const StyledPageContentsWrapper = styled('div')(
@@ -71,11 +64,7 @@ const PageView = ({ title, children, showHeader, showSidebar }: PageViewProps) =
         <StyledPageContentsWrapper>
           <StyledPageContents showSidebar={showSidebar}>
             <StyledPageBody>
-              {showHeader ? (
-                <StyledPageHeaderWrapper>
-                  <PageTitle title={title} />
-                </StyledPageHeaderWrapper>
-              ) : null}
+              {showHeader ? <PageTitle title={title} /> : null}
               {children}
             </StyledPageBody>
             {showSidebar ? <Sidebar /> : null}

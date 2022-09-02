@@ -1,8 +1,8 @@
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import StyleCopy from '../../cms/StyleCopy';
-import PageView from '../pages/PageView';
-import PageContentView from '../pages/PageContentView';
 import styled from '../../util/styled.util';
+import PageContentView from '../pages/PageContentView';
+import PageTitle from '../pages/PageTitle';
 
 const StyledPagePreview = styled('div')`
   display: flex;
@@ -19,6 +19,7 @@ const PagePreview = ({ entry, widgetFor, document }: PreviewTemplateComponentPro
     <StyleCopy document={document}>
       <StyledPagePreview>
         <StyledPagePreviewContent>
+          <PageTitle title={entry.getIn(['data', 'title'])} />
           <PageContentView>{widgetFor('body')}</PageContentView>
         </StyledPagePreviewContent>
       </StyledPagePreview>

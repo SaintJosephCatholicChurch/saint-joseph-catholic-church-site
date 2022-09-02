@@ -1,29 +1,29 @@
 import { memo } from 'react';
 import styled from '../../util/styled.util';
 
-const StyledTitle = styled('h3')(
-  ({ theme }) => `
-    font-weight: 500;
-    color: #333;
-    padding: 0;
-    margin: 0;
-    margin-bottom: 24px;
-    text-transform: uppercase;
+const StyledHeader = styled('header')`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 24px;
+`;
 
-    font-size: 24px;
-    line-height: 24px;
-    ${theme.breakpoints.up('lg')} {
-      font-size: 30px;
-    }
-  `
-);
+const StyledTitle = styled('h1')`
+  padding: 0;
+  margin: 0;
+`;
 
 interface PostTitleProps {
   title: string;
 }
 
 const PostTitle = memo(({ title }: PostTitleProps) => {
-  return <StyledTitle>{title}</StyledTitle>;
+  return (
+    <StyledHeader>
+      <StyledTitle>{title}</StyledTitle>
+    </StyledHeader>
+  );
 });
 
 PostTitle.displayName = 'PostTitle';

@@ -41,7 +41,7 @@ const StyledPopUpMenu = styled('div')`
   flex-direction: column;
   background: #f2f2f2;
   box-shadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
-  top: 54px;
+  top: 52px;
 `;
 
 interface NavItemProps {

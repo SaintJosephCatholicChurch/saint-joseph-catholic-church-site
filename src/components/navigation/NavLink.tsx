@@ -30,7 +30,7 @@ const NavLink = ({ link, onClick }: NavLinkProps) => {
         onClick={onClick}
         sx={{
           width: '100%',
-          fontSize: '14px',
+          fontSize: '15px',
           padding: '10px 20px',
           borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
         }}

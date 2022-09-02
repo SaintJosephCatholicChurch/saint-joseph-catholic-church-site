@@ -8,6 +8,7 @@ import git from '@npmcli/git';
 const publicPath = 'public';
 
 (async function () {
+  let bulletinsProcessed = 0;
   for (const bulletin of bulletins) {
     const pdfFullPath = join(publicPath, bulletin.pdf);
 
@@ -44,9 +45,10 @@ const publicPath = 'public';
     };
 
     writeFileSync(metaFullPath, JSON.stringify(data, null, 2));
+    bulletinsProcessed++;
   }
 
-  if (process.argv.length > 2 && process.argv[2] === '-ci') {
+  if (bulletinsProcessed > 0 && process.argv.length > 2 && process.argv[2] === '-ci') {
     console.log('Commit to git!');
     await git.spawn(['config', 'credential.helper', "'cache --timeout=120'"]);
     await git.spawn(['config', 'user.email', 'lautzd@gmail.com']);

@@ -4,9 +4,9 @@ import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { MouseEvent, useCallback, useState } from 'react';
+import { MouseEvent, useCallback, useMemo, useState } from 'react';
 import { MenuItem, MenuLink } from '../../interface';
-import { CleanLink } from '../common-styled';
+import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import MobileNavLink from './MobileNavLink';
 
 interface MobileNavItemProps {
@@ -33,20 +33,24 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     [open]
   );
 
+  const url = useMemo(() => {
+    if (item.menu_links?.length) {
+      return undefined;
+    }
+
+    return getMenuLinkUrl(item);
+  }, [item]);
+
   return (
     <>
       <ListItemButton
         key={`drawer-nav-item-${item.title}`}
         sx={{ color: '#fde7a5', textTransform: 'uppercase' }}
         onClick={handleOnClick(item)}
+        target={url?.startsWith('http') ? '_blank' : undefined}
+        href={url}
       >
-        {item.menu_links?.length ? (
-          <ListItemText primary={item.title} />
-        ) : (
-          <CleanLink target={item.url?.startsWith('http') ? '_blank' : undefined} href={item.url ?? `/${item.page}`}>
-            <ListItemText primary={item.title} />
-          </CleanLink>
-        )}
+        <ListItemText primary={item.title} />
         {item.menu_links?.length ? open ? <ExpandLess /> : <ExpandMore /> : null}
       </ListItemButton>
       {item.menu_links?.length ? (

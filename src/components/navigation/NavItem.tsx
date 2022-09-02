@@ -6,7 +6,7 @@ import { MenuItem, MenuLink } from '../../interface';
 import styled from '../../util/styled.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
-import { getMenuLinkUrl } from './hooks/useUrl';
+import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import NavLink from './NavLink';
 
 const StyledNavItem = styled('div')`

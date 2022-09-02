@@ -2,23 +2,25 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { MouseEvent } from 'react';
 import { MenuLink } from '../../interface';
-import { CleanLink } from '../common-styled';
+import useMenuLinkUrl from './hooks/useMenuLinkUrl';
 
 interface MobileNavLinkProps {
   link: MenuLink;
   onClick: (event: MouseEvent) => void;
 }
 
-const MobileNavLink = ({ link: { url, page, title }, onClick }: MobileNavLinkProps) => {
+const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
+  const url = useMenuLinkUrl(link);
+  const { title } = link;
+
   return (
-    <ListItemButton sx={{ pl: 4, color: '#ffffff' }} onClick={onClick}>
-      {url || page ? (
-        <CleanLink target={url?.startsWith('http') ? '_blank' : undefined} href={url ?? `/${page}`}>
-          {<ListItemText primary={title} />}
-        </CleanLink>
-      ) : (
-        <ListItemText primary={title} />
-      )}
+    <ListItemButton
+      sx={{ pl: 4, color: '#ffffff' }}
+      onClick={onClick}
+      href={url}
+      target={url?.startsWith('http') ? '_blank' : undefined}
+    >
+      <ListItemText primary={title} />
     </ListItemButton>
   );
 };

@@ -15,13 +15,13 @@ const StyledChurchDetailsLink = styled('a')`
   display: flex;
   align-items: center;
   gap: 4px;
-  color: rgb(104, 11, 18);
+  color: #9d7b2a;
   font-size: 16px;
   line-height: 22px;
   font-weight: bold;
 
   &:hover {
-    color: rgb(104, 11, 18);
+    color: #614b1a;
     text-decoration: underline;
   }
 `;

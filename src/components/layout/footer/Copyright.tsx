@@ -13,7 +13,7 @@ const StyledCopyright = styled('div')(
     text-align: center;
     border-top: 1px solid rgba(255,255,255,.1);
     color: rgb(245, 244, 243);
-    background-color: rgb(104, 11, 18);
+    background-color: #bc2f3b;
     box-sizing: border-box;
     line-height: 18px;
     gap: 8px;
@@ -35,13 +35,14 @@ const StyledCopyright = styled('div')(
 const StyledCopyrightText = styled('div')`
   display: flex;
   gap: 8px;
+  align-items: center;
 `;
 
 const StyledPrivacyPolicyLink = styled('a')`
-  color: #988773;
+  color: #fde7a5;
 
   &:hover {
-    color: rgb(245, 244, 243);
+    color: #ffffff;
     text-decoration: underline;
   }
 `;

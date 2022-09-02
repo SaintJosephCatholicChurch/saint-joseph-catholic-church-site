@@ -18,6 +18,8 @@ import { Document, Page } from 'react-pdf';
 import { Bulletin } from '../../../interface';
 import styled from '../../../util/styled.util';
 import useElementSize from '../../../util/useElementSize';
+import useIsomorphicLayoutEffect from '../../../util/useIsomorphicLayoutEffect';
+import { useMediaQueryDown } from '../../../util/useMediaQuery';
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
@@ -386,6 +388,15 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
     [bulletinIndex, bulletins]
   );
 
+  const isSmallScreen = useMediaQueryDown('lg');
+
+  const [renderPdf, setRenderPdf] = useState(false);
+  useIsomorphicLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setRenderPdf(true);
+    }
+  }, []);
+
   return (
     <StyledParishBulletinsView ref={topRef}>
       <List
@@ -431,7 +442,7 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
       <StyledPDFViewerWrapper>
         <StyledPDFViewer ref={pdfRef}>
           <StyledPDFViewerContent width={width} height={height}>
-            {bulletinPDF !== null ? (
+            {renderPdf && bulletinPDF !== null ? (
               <Document
                 file={bulletinPDF}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -448,6 +459,9 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
                         width={width}
                         height={height}
                         renderAnnotationLayer={false}
+                        renderTextLayer={!isSmallScreen}
+                        renderMode={isSmallScreen ? 'svg' : 'canvas'}
+                        render
                         loading={false}
                         noData={false}
                         error={false}

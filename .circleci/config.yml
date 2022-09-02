@@ -20,14 +20,7 @@ jobs:
           command: npm install --no-save --legacy-peer-deps
       - run:
           name: Process Bulletins
-          command: |
-            npm run bulletins
-            git config credential.helper 'cache --timeout=120'
-            git config user.email "lautzd@gmail.com"
-            git config user.name "Circle CI Update"
-            git add -A
-            git commit -m "Updated bulletins via CircleCI [skip ci]"
-            git push -q
+          command: npm run bulletins-ci
       - run:
           name: NextJS Build
           command: npm run export

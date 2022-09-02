@@ -3,6 +3,7 @@ import { join } from 'path';
 import type { BulletinPDFMeta } from '../src/interface';
 import bulletins from '../src/lib/bulletins';
 import pdf2img from '../src/util/pdf/pdf-img-convert';
+import git from '@npmcli/git';
 
 const publicPath = 'public';
 
@@ -43,5 +44,15 @@ const publicPath = 'public';
     };
 
     writeFileSync(metaFullPath, JSON.stringify(data, null, 2));
+  }
+
+  if (process.argv.length > 2 && process.argv[2] === '-ci') {
+    console.log('Commit to git!');
+    await git.spawn(['config', 'credential.helper', "'cache --timeout=120'"]);
+    await git.spawn(['config', 'user.email', 'lautzd@gmail.com']);
+    await git.spawn(['config', 'user.name', 'Circle CI Bot']);
+    await git.spawn(['add', '-A']);
+    await git.spawn(['commit', '-m', '"Updated bulletins via CircleCI [skip ci]"']);
+    await git.spawn(['push', '-q']);
   }
 })();

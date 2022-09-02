@@ -4,7 +4,7 @@ import bulletins from '../lib/bulletins';
 
 const ParishBulletins = () => {
   return (
-    <PageLayout url="/parish-bulletins" title="Parish Bulletins">
+    <PageLayout url="/parish-bulletins" title="Parish Bulletins" showSidebar={false}>
       <ParishBulletinsView bulletins={bulletins} />
     </PageLayout>
   );

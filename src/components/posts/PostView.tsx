@@ -3,7 +3,7 @@ import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
-import PostTitle from './PostTitle';
+import PostTitle from '../pages/PageTitle';
 
 const StyledPageContentWrapper = styled('div')`
   margin-top: 32px;

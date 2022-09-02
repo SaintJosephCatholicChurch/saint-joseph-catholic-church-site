@@ -9,7 +9,7 @@ import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
 
 const StyledFooter = styled('footer')`
-  margin-top: 32px;
+  margin-top: 16px;
 `;
 
 interface StyledFooterContainerWrapperProps {

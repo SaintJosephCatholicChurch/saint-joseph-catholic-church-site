@@ -21,9 +21,19 @@ interface PageProps {
     image?: string;
   };
   showHeader?: boolean;
+  showSidebar?: boolean;
 }
 
-const PageLayout = ({ children, title, url, description, tags, pageDetails, showHeader = true }: PageProps) => {
+const PageLayout = ({
+  children,
+  title,
+  url,
+  description,
+  tags,
+  pageDetails,
+  showHeader = true,
+  showSidebar = true
+}: PageProps) => {
   const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
   return (
     <Layout>
@@ -40,7 +50,7 @@ const PageLayout = ({ children, title, url, description, tags, pageDetails, show
           description={description}
         />
       ) : null}
-      <PageView title={title} showHeader={showHeader}>
+      <PageView title={title} showHeader={showHeader} showSidebar={showSidebar}>
         {children}
       </PageView>
       <Footer churchDetails={churchDetails} />

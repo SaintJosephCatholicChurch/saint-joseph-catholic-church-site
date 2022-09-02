@@ -4,10 +4,10 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
+import { useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
-import { useTheme } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { MAX_APP_WIDTH } from '../../constants';
 import navItems from '../../lib/menu';
@@ -30,7 +30,7 @@ const StyledDrawerContents = styled('div')`
 const StyledMobileSpacer = styled('div')(
   ({ theme }) => `
     flex-grow: 1;
-    ${theme.breakpoints.up('md')}: {
+    ${theme.breakpoints.up('md')} {
       display: none;
     }
   `
@@ -39,7 +39,7 @@ const StyledMobileSpacer = styled('div')(
 const StyledDesktopSpacer = styled('div')(
   ({ theme }) => `
     flex-grow: 1;
-    ${theme.breakpoints.down('md')}: {
+    ${theme.breakpoints.down('md')} {
       display: none;
     }
   `

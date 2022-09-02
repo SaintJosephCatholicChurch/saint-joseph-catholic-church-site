@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import styled from '../../util/styled.util';
 import Container from '../layout/Container';
-import PageHeader from '../layout/header/PageHeader';
 import Sidebar from '../layout/sidebar/Sidebar';
+import PageTitle from './PageTitle';
 
 const StyledPageView = styled('article')`
   display: flex;
@@ -12,22 +12,18 @@ const StyledPageView = styled('article')`
   width: 100%;
 `;
 
-const StyledPageHeader = styled('header')`
+const StyledPageHeaderWrapper = styled('header')`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   width: 100%;
+  margin-bottom: 8px;
 `;
 
-interface StyledPageContentsWrapperProps {
-  showHeader: boolean;
-}
-
-const StyledPageContentsWrapper = styled('div', ['showHeader'])<StyledPageContentsWrapperProps>(
-  ({ theme, showHeader }) => `
+const StyledPageContentsWrapper = styled('div')(
+  ({ theme }) => `
     width: 100%;
-    ${!showHeader ? 'margin-top: 98px;' : ''}
+    margin-top: 98px;
 
     ${theme.breakpoints.down('md')} {
       padding-top: 0
@@ -39,12 +35,16 @@ const StyledPageContentsWrapper = styled('div', ['showHeader'])<StyledPageConten
   `
 );
 
-const StyledPageContents = styled('div')(
-  ({ theme }) => `
+interface StyledPageContentsProps {
+  showSidebar: boolean;
+}
+
+const StyledPageContents = styled('div', ['showSidebar'])<StyledPageContentsProps>(
+  ({ theme, showSidebar }) => `
     display: grid;
     gap: 64px;
     width: 100%;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: ${showSidebar ? '2fr 1fr' : '1fr'};
 
     ${theme.breakpoints.down('md')} {
       grid-template-columns: 1fr;
@@ -61,21 +61,24 @@ interface PageViewProps {
   title: string;
   children: ReactNode;
   showHeader: boolean;
+  showSidebar: boolean;
 }
 
-const PageView = ({ title, children, showHeader }: PageViewProps) => {
+const PageView = ({ title, children, showHeader, showSidebar }: PageViewProps) => {
   return (
     <StyledPageView>
-      {showHeader ? (
-        <StyledPageHeader>
-          <PageHeader title={title} />
-        </StyledPageHeader>
-      ) : null}
       <Container>
-        <StyledPageContentsWrapper showHeader={showHeader}>
+        <StyledPageContentsWrapper>
           <StyledPageContents>
-            <StyledPageBody>{children}</StyledPageBody>
-            <Sidebar />
+            <StyledPageBody>
+              {showHeader ? (
+                <StyledPageHeaderWrapper>
+                  <PageTitle title={title} />
+                </StyledPageHeaderWrapper>
+              ) : null}
+              {children}
+            </StyledPageBody>
+            {showSidebar ? <Sidebar /> : null}
           </StyledPageContents>
         </StyledPageContentsWrapper>
       </Container>

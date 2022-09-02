@@ -18,7 +18,10 @@ const publicPath = 'public';
 
     mkdirSync(folderFullPath);
 
-    const images = await pdf2img.convert(pdfFullPath);
+    const images = await pdf2img.convert(pdfFullPath, {
+      width: 1224,
+      height: 1584
+    });
 
     const pageImages: string[] = [];
     for (let i = 0; i < images.length; i++) {

@@ -2,8 +2,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { memo } from 'react';
-import useSmallScreen from '../util/smallScreen.util';
 import styled from '../util/styled.util';
+import { useMediaQueryDown } from '../util/useMediaQuery';
 
 const StyledSearchBox = styled('div')`
   display: flex;
@@ -14,7 +14,7 @@ interface SearchBoxProps {
 }
 
 const SearchBox = memo(({ disableMargin = false }: SearchBoxProps) => {
-  const isSmallScreen = useSmallScreen();
+  const isSmallScreen = useMediaQueryDown('lg');
 
   return (
     <StyledSearchBox>

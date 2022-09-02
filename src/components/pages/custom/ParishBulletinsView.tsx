@@ -1,7 +1,9 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import DownloadIcon from '@mui/icons-material/Download';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -24,6 +26,26 @@ const StyledParishBulletinsView = styled('div')(
     grid-template-columns: 1fr 3fr;
     ${theme.breakpoints.down('lg')} {
       grid-template-columns: 1fr;
+    }
+  `
+);
+
+const StyledListItemPrimary = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledSelectWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+
+    ${theme.breakpoints.up('lg')} {
+      display: none;
     }
   `
 );
@@ -316,6 +338,9 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
                 '&:hover': {
                   color: '#ffffff'
                 }
+              },
+              '.MuiIconButton-root': {
+                color: '#ffffff'
               }
             },
             '.MuiListItemText-primary': {
@@ -323,7 +348,24 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
             }
           }}
         >
-          <ListItemText primary={`${format(new Date(bulletin.date), 'MMM dd, yyyy')} - ${bulletin.name}`} />
+          <ListItemText
+            primary={
+              <StyledListItemPrimary>
+                <div>
+                  {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name}
+                </div>
+                <IconButton
+                  href={bulletin.pdf}
+                  target="_blank"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <DownloadIcon />
+                </IconButton>
+              </StyledListItemPrimary>
+            }
+          />
         </ListItemButton>
       )),
     [bulletinIndex, bulletins, onBulletinChange]
@@ -357,32 +399,35 @@ const ParishBulletinsView = ({ bulletins }: ParishBulletinsView) => {
       >
         {bulletinListItems}
       </List>
-      <FormControl
-        sx={{
-          [theme.breakpoints.up('lg')]: {
-            display: 'none'
-          },
-          mb: 3
-        }}
-        fullWidth
-      >
-        <InputLabel id="bulletin-label">Bulletin</InputLabel>
-        <Select
-          labelId="bulletin-label"
-          id="bulletin"
-          value={bulletinIndex}
-          label="Bulletin"
-          onChange={(event) => {
-            const rawValue = +event.target.value;
-            console.log(rawValue);
-            if (!Number.isNaN(rawValue)) {
-              onBulletinChange(rawValue)();
-            }
+      <StyledSelectWrapper>
+        <FormControl fullWidth>
+          <InputLabel id="bulletin-label">Bulletin</InputLabel>
+          <Select
+            labelId="bulletin-label"
+            id="bulletin"
+            value={bulletinIndex}
+            label="Bulletin"
+            onChange={(event) => {
+              const rawValue = +event.target.value;
+              console.log(rawValue);
+              if (!Number.isNaN(rawValue)) {
+                onBulletinChange(rawValue)();
+              }
+            }}
+          >
+            {bulletinMenuItems}
+          </Select>
+        </FormControl>
+        <IconButton
+          href={bulletinPDF}
+          target="_blank"
+          onClick={(event) => {
+            event.stopPropagation();
           }}
         >
-          {bulletinMenuItems}
-        </Select>
-      </FormControl>
+          <DownloadIcon />
+        </IconButton>
+      </StyledSelectWrapper>
       <StyledPDFViewerWrapper>
         <StyledPDFViewer ref={pdfRef}>
           <StyledPDFViewerContent width={width} height={height}>

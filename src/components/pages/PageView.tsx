@@ -69,7 +69,7 @@ const PageView = ({ title, children, showHeader, showSidebar }: PageViewProps) =
     <StyledPageView>
       <Container>
         <StyledPageContentsWrapper>
-          <StyledPageContents>
+          <StyledPageContents showSidebar={showSidebar}>
             <StyledPageBody>
               {showHeader ? (
                 <StyledPageHeaderWrapper>

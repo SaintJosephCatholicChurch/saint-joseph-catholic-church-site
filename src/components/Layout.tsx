@@ -1,8 +1,8 @@
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import Head from 'next/head';
-import useSmallScreen from '../util/smallScreen.util';
 import styled from '../util/styled.util';
+import { useMediaQueryDown } from '../util/useMediaQuery';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 
@@ -39,7 +39,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const isSmallScreen = useSmallScreen();
+  const isSmallScreen = useMediaQueryDown('lg');
 
   return (
     <StyledLayout isSmallScreen={isSmallScreen}>

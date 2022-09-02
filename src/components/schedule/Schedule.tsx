@@ -14,9 +14,9 @@ import {
   TIMES_TITLE_HEIGHT
 } from '../../constants';
 import { Times } from '../../interface';
-import useSmallScreen from '../../util/smallScreen.util';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
+import { useMediaQueryDown } from '../../util/useMediaQuery';
 import Container from '../layout/Container';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
@@ -142,9 +142,9 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
     }
   }, [tab, value]);
 
-  const isMobile = useSmallScreen();
-  const isSmallScreen = useSmallScreen(900);
-  const isMediumScreen = useSmallScreen(1200);
+  const isMobile = useMediaQueryDown('sm');
+  const isSmallScreen = useMediaQueryDown('md');
+  const isMediumScreen = useMediaQueryDown('lg');
 
   const size = useMemo(() => {
     if (isMobile) {

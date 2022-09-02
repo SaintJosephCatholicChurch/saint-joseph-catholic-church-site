@@ -48,8 +48,14 @@ const publicPath = 'public';
     bulletinsProcessed++;
   }
 
+  if (bulletinsProcessed === 0) {
+    console.info('No new bulletins to process');
+  } else {
+    console.info(`${bulletinsProcessed} new bulletins processed`);
+  }
+
   if (bulletinsProcessed > 0 && process.argv.length > 2 && process.argv[2] === '-ci') {
-    console.log('Commit to git!');
+    console.info('Pusing to github...');
     await git.spawn(['config', 'credential.helper', "'cache --timeout=120'"]);
     await git.spawn(['config', 'user.email', 'lautzd@gmail.com']);
     await git.spawn(['config', 'user.name', 'Circle CI Bot']);

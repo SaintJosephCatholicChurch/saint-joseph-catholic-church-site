@@ -7,8 +7,6 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
@@ -21,6 +19,7 @@ import { isNotNullish } from '../../../util/null.util';
 import styled from '../../../util/styled.util';
 import useElementSize from '../../../util/useElementSize';
 import useNavigate from '../../../util/useNavigate';
+import BulletListButton from './BulletListButton';
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
@@ -32,16 +31,6 @@ const StyledParishBulletinsView = styled('div')(
     }
   `
 );
-
-const StyledListItemWrapper = styled('div')`
-  position: relative;
-`;
-
-const StyledListItemPrimary = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
 
 const StyledSelectWrapper = styled('div')(
   ({ theme }) => `
@@ -263,13 +252,13 @@ const StyledSlidableArea = styled('div', ['width', 'index'])<StyledSlidableAreaP
   `
 );
 
-interface ParishBulletinsView {
+interface ParishBulletinsViewProps {
   bulletins: Bulletin[];
   bulletin: Bulletin;
   meta: BulletinPDFMeta;
 }
 
-const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsView) => {
+const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsViewProps) => {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [height, setHeight] = useState(0);
@@ -328,57 +317,13 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
 
   const bulletinListItems = useMemo(
     () =>
-      bulletins?.map((aBulletin, index) => {
-        const selected = aBulletin.pdf === bulletin.pdf;
-        return (
-          <StyledListItemWrapper key={`bulletin-${index}`}>
-            <ListItemButton
-              selected={selected}
-              href={`/parish-bulletins/${format(parseISO(aBulletin.date), 'yyyy-MM-dd')}`}
-              sx={{
-                '&:hover': {
-                  backgroundColor: 'rgba(0,0,0,0.1)'
-                },
-                '&.Mui-selected': {
-                  backgroundColor: '#bc2f3b',
-                  '&:hover': {
-                    backgroundColor: '#cd3744'
-                  },
-                  '.MuiListItemText-primary': {
-                    color: '#fde7a5',
-                    '&:hover': {
-                      color: '#ffffff'
-                    }
-                  }
-                },
-                '.MuiListItemText-primary': {
-                  color: '#444444'
-                }
-              }}
-            >
-              <ListItemText
-                primary={
-                  <StyledListItemPrimary>
-                    <div>
-                      {format(new Date(aBulletin.date), 'MMM dd, yyyy')} - {aBulletin.name}
-                    </div>
-                  </StyledListItemPrimary>
-                }
-              />
-            </ListItemButton>
-            <IconButton
-              href={aBulletin.pdf}
-              target="_blank"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              sx={{ position: 'absolute', right: '16px', top: '4px', color: selected ? '#ffffff' : undefined }}
-            >
-              <DownloadIcon />
-            </IconButton>
-          </StyledListItemWrapper>
-        );
-      }),
+      bulletins?.map((aBulletin, index) => (
+        <BulletListButton
+          key={`bulletin-${index}`}
+          bulletin={aBulletin}
+          selected={aBulletin.pdf === bulletin.pdf}
+        />
+      )),
     [bulletin.pdf, bulletins]
   );
 

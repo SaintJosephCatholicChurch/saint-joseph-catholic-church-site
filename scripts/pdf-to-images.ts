@@ -55,7 +55,7 @@ const publicPath = 'public';
   }
 
   if (bulletinsProcessed > 0 && process.argv.length > 2 && process.argv[2] === '-ci') {
-    console.info('Pusing to github...');
+    console.info('Pushing to github...');
     await git.spawn(['config', 'credential.helper', "'cache --timeout=120'"]);
     await git.spawn(['config', 'user.email', 'lautzd@gmail.com']);
     await git.spawn(['config', 'user.name', 'Circle CI Bot']);

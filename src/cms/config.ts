@@ -14,7 +14,11 @@ export interface CmsFieldHtml {
   widget: 'html';
 }
 
-export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml));
+export interface CmsFieldEvents {
+  widget: 'events';
+}
+
+export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml | CmsFieldEvents));
 
 export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
   fields: CmsField[];
@@ -192,6 +196,19 @@ const config: CmsConfig = {
                   public_folder: '/bulletins'
                 }
               ]
+            }
+          ]
+        },
+        {
+          name: 'events',
+          label: 'Events',
+          file: 'content/events.json',
+          description: 'Events',
+          fields: [
+            {
+              name: 'events',
+              label: 'Events',
+              widget: 'events'
             }
           ]
         }

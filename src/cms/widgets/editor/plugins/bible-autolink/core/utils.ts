@@ -57,9 +57,7 @@ export const findBookAndChapter = (
   range.setStart(newEndSpot.container, newEndSpot.offset);
   const rangeText = Unicode.removeZwsp(range.toString());
   const matches = rangeText.match(autoLinkPattern);
-  console.log('Checking for book and chapter', rangeText);
   if (matches && matches.length === 4) {
-    console.log('Found book and chapter', matches);
     return { book: matches[1], chapter: matches[2] };
   }
 

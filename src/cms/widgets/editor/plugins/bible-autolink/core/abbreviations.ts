@@ -378,14 +378,6 @@ const bibleBooksAbbreviationRegexString = `(${Object.keys(abbreviationsToUJSCCBB
 
 const bibleAbbreviationRegexString = `${bibleBooksAbbreviationRegexString}[ ]*([0-9]+)[ ]*[:]{0,1}[ ]*([0-9]+)?(?:[ ]*[-]{1}[ ]*[0-9]+)?`;
 
-export const bibleAbbreviationRegex = new RegExp(
-  bibleAbbreviationRegexString,
-  'i'
-);
+export const bibleAbbreviationRegex = new RegExp(bibleAbbreviationRegexString, 'i');
 
-export const bibleAbbreviationStrictRegex = new RegExp(
-  `^${bibleAbbreviationRegexString}$`,
-  'i'
-);
-
-console.log('bibleBooksAbbreviationRegexString', `"${bibleBooksAbbreviationRegexString}"`, bibleAbbreviationRegex);
+export const bibleAbbreviationStrictRegex = new RegExp(`^${bibleAbbreviationRegexString}$`, 'i');

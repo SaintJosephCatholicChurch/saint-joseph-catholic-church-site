@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
+import useIsomorphicLayoutEffect from '../util/useIsomorphicLayoutEffect';
 
 interface StyleCopyProps {
   document: Document;
@@ -28,21 +29,21 @@ const StyleCopy = ({ document, children }: StyleCopyProps) => {
     }
   }, [styles.length]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const timer = setTimeout(() => {
       getStyles();
     }, 250);
     return () => clearTimeout(timer);
   }, [getStyles]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
     }, 250);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (parent) {
       const oHead = document.getElementsByTagName('head')[0];
       styles.forEach((style) => oHead.appendChild(style));

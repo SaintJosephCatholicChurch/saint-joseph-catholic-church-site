@@ -1,5 +1,4 @@
 import { Fun, Obj, Type, Unicode } from '@ephox/katamari';
-import { match } from 'assert';
 import tinymce, { Editor } from 'tinymce';
 import { isNotEmpty } from '../../../../../../util/string.util';
 
@@ -25,7 +24,6 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
   }
 
   const previousNode = dom.getPrev(selection.getNode(), () => true);
-  console.log(selection.getNode().textContent);
 
   const rng = selection.getRng();
   const textSeeker = tinymce.dom.TextSeeker(dom, (node) => {
@@ -92,7 +90,6 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
 
   const rngText = Unicode.removeZwsp(newRng.toString());
   const matches = rngText.match(autoLinkPattern);
-  console.log(matches, rngText, autoLinkPattern);
 
   // Book, chapter and maybe verse
   if (matches && matches.length === 4) {
@@ -113,7 +110,6 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
 
   // Verse and maybe chapter
   const additionalMatches = rngText.match(autoLinkAdditonalPattern);
-  console.log(additionalMatches, rngText, autoLinkAdditonalPattern);
   if (additionalMatches && additionalMatches.length === 4) {
     const searchRange = dom.createRng();
     searchRange.setStart(newRng.startContainer, newRng.startOffset);
@@ -122,7 +118,7 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
     if (!bookAndChapter) {
       return null;
     }
-    console.log('bookAndChapter', bookAndChapter);
+
     const book = abbreviationsToUJSCCBBook[bookAndChapter.book.toLowerCase()];
     const chapter = additionalMatches[1] ?? bookAndChapter.chapter;
     const verse = isNotEmpty(additionalMatches[2]) ? `?${additionalMatches[2]}` : '';
@@ -188,14 +184,12 @@ const handleEnter = (editor: Editor): void => {
 
 const setup = (editor: Editor): void => {
   editor.on('keydown', (e) => {
-    console.log('key', `'${e.key}'`);
     if (e.key === 'Enter' && !e.isDefaultPrevented()) {
       handleEnter(editor);
     }
   });
 
   editor.on('keyup', (e) => {
-    console.log('key', `'${e.key}'`, 'isPunctuation', /[.,\/#!$%\^&\*;{}=\_`~()]/g.test(e.key));
     if (e.key === ' ') {
       handleSpacebar(editor);
     } else if (/[.,\/#!$%\^&\*;{}=\_`~()]/g.test(e.key)) {

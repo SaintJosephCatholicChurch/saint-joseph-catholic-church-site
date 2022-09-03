@@ -15,7 +15,7 @@ export default class TimesWidget extends Component<CmsWidgetControlProps<Immutab
   render() {
     const { value } = this.props;
 
-    const plainValue = value.toJS();
+    const plainValue = value.toJS() as Times[];
 
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>

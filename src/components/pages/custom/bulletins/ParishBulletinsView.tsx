@@ -14,12 +14,13 @@ import { useTheme } from '@mui/material/styles';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Bulletin, BulletinPDFMeta } from '../../../interface';
-import { isNotNullish } from '../../../util/null.util';
-import styled from '../../../util/styled.util';
-import useElementSize from '../../../util/useElementSize';
-import useNavigate from '../../../util/useNavigate';
+import type { Bulletin, BulletinPDFMeta } from '../../../../interface';
+import { isNotNullish } from '../../../../util/null.util';
+import styled from '../../../../util/styled.util';
+import useElementSize from '../../../../util/useElementSize';
+import useNavigate from '../../../../util/useNavigate';
 import BulletListButton from './BulletListButton';
+import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
@@ -272,7 +273,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
     (pdf: string) => {
       const newBulletin = bulletins.find((aBulletin) => aBulletin.pdf === pdf);
       if (isNotNullish(newBulletin)) {
-        navigate(`/parish-bulletins/${format(new Date(newBulletin.date), 'yyyy-MM-dd')}`);
+        navigate(`/parish-bulletins/${formatBulletinUrlDate(newBulletin)}`);
       }
     },
     [bulletins, navigate]
@@ -320,24 +321,22 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const bulletinListItems = useMemo(
     () =>
       bulletins?.map((aBulletin, index) => (
-        <BulletListButton
-          key={`bulletin-${index}`}
-          bulletin={aBulletin}
-          selected={aBulletin.pdf === bulletin.pdf}
-        />
+        <BulletListButton key={`bulletin-${index}`} bulletin={aBulletin} selected={aBulletin.pdf === bulletin.pdf} />
       )),
     [bulletin.pdf, bulletins]
   );
 
   const bulletinMenuItems = useMemo(
     () =>
-      bulletins?.map((bulletin, index) => (
-        <MenuItem key={`bulletin-menu-item-${index}`} value={bulletin.pdf}>
-          {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name}
+      bulletins?.map((aBulletin, index) => (
+        <MenuItem key={`bulletin-menu-item-${index}`} value={aBulletin.pdf}>
+          {getFormattedBulletinTitle(aBulletin)}
         </MenuItem>
       )),
     [bulletins]
   );
+
+  const title = useFormattedBulletinTitle(bulletin);
 
   return (
     <StyledParishBulletinsView ref={topRef}>
@@ -385,7 +384,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
                     <img
                       key={`${bulletin.pdf}-page-${index + 1}`}
                       src={pageImage}
-                      alt={`${formattedDate} (${bulletin.name}) - Page ${index + 1}`}
+                      alt={`${title} - Page ${index + 1}`}
                       width={width}
                       height={height}
                     />

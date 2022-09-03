@@ -59,9 +59,9 @@ export interface ChurchDetails {
 }
 
 export interface Bulletin {
-  readonly name: string;
-  readonly date: string;
-  readonly pdf: string;
+  readonly name?: string;
+  readonly date?: string;
+  readonly pdf?: string;
 }
 
 export interface PostContentData {

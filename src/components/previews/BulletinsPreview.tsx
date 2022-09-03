@@ -4,7 +4,7 @@ import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
 import StyleCopy from '../../cms/StyleCopy';
 import { Bulletin } from '../../interface';
-import BulletListButton from '../pages/custom/BulletListButton';
+import BulletListButton from '../pages/custom/bulletins/BulletListButton';
 
 const BulletinsPreview = ({ entry, document }: PreviewTemplateComponentProps) => {
   const theme = useTheme();

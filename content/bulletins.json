@@ -1,6 +1,16 @@
 {
   "bulletins": [
     {
+      "name": "Bulletin",
+      "date": "2022-09-04T12:12:46.108Z",
+      "pdf": "/bulletins/combinepdf-26-twenty-third-sunday-in-ordinary-time-min.pdf"
+    },
+    {
+      "name": "Bulletin",
+      "date": "2022-08-28T12:12:09.134Z",
+      "pdf": "/bulletins/twenty-second-sunday-in-ordinary-time-combined-25-min.pdf"
+    },
+    {
       "date": "2022-08-21T15:24:22.026Z",
       "pdf": "/bulletins/combinepdf-24-august-22-2022-min.pdf",
       "name": "Bulletin"

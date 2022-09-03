@@ -2,7 +2,7 @@ import fs from 'fs';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { join } from 'path';
 import PageLayout from '../../components/PageLayout';
-import ParishBulletinsView from '../../components/pages/custom/ParishBulletinsView';
+import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
 import type { Bulletin, BulletinPDFMeta } from '../../interface';
 import bulletins from '../../lib/bulletins';
 import { isNotNullish } from '../../util/null.util';

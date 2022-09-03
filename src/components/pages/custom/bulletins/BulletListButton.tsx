@@ -5,8 +5,9 @@ import ListItemText from '@mui/material/ListItemText';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { memo } from 'react';
-import type { Bulletin } from '../../../interface';
-import styled from '../../../util/styled.util';
+import type { Bulletin } from '../../../../interface';
+import styled from '../../../../util/styled.util';
+import { useFormattedBulletinTitle, useFormattedBulletinUrlDate } from './util';
 
 const StyledListItemWrapper = styled('div')`
   position: relative;
@@ -25,11 +26,14 @@ interface BulletListButtonProps {
 }
 
 const BulletListButton = memo(({ bulletin, selected, openInNewWindow = false }: BulletListButtonProps) => {
+  const title = useFormattedBulletinTitle(bulletin);
+  const urlDate = useFormattedBulletinUrlDate(bulletin);
+
   return (
     <StyledListItemWrapper>
       <ListItemButton
         selected={selected}
-        href={`/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`}
+        href={`/parish-bulletins/${urlDate}`}
         target={openInNewWindow ? '_blank' : undefined}
         sx={{
           '&:hover': {
@@ -55,9 +59,7 @@ const BulletListButton = memo(({ bulletin, selected, openInNewWindow = false }: 
         <ListItemText
           primary={
             <StyledListItemPrimary>
-              <div>
-                {format(new Date(bulletin.date), 'MMM dd, yyyy')} - {bulletin.name}
-              </div>
+              <div>{title}</div>
             </StyledListItemPrimary>
           }
         />

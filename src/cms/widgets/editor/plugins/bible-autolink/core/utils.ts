@@ -50,6 +50,10 @@ export const findBookAndChapter = (
     root
   );
 
+  if (!newEndSpot) {
+    return null;
+  }
+
   range.setStart(newEndSpot.container, newEndSpot.offset);
   const rangeText = Unicode.removeZwsp(range.toString());
   const matches = rangeText.match(autoLinkPattern);

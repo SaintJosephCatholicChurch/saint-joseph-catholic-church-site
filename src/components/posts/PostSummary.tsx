@@ -9,13 +9,6 @@ import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
 import PostTitle from '../pages/PageTitle';
 
-const StyledPostTitle = styled('div')`
-  h3 {
-    margin-top: 24px;
-    margin-bottom: 16px;
-  }
-`;
-
 const StyledReadMore = styled('div')`
   color: #bf303c;
 `;
@@ -43,9 +36,7 @@ const PostSummary = memo(
         }}
       >
         <PostImage title={title} image={image} />
-        <StyledPostTitle>
-          <PostTitle title={title} />
-        </StyledPostTitle>
+        <PostTitle title={title} />
         <PostDateAuthorLine date={date} />
         <Box>
           <PageContentView>

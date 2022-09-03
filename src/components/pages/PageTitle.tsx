@@ -6,12 +6,16 @@ const StyledHeader = styled('header')`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  margin-bottom: 24px;
+
+  &:first-child h1 {
+    margin-top: 0;
+  }
 `;
 
 const StyledTitle = styled('h1')`
   padding: 0;
-  margin: 0;
+  margin: 16px 0;
+  color: #333;
 `;
 
 interface PostTitleProps {

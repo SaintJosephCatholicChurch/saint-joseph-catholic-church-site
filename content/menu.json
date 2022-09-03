@@ -46,7 +46,8 @@
       "title": "Ministries",
       "menu_links": [
         {
-          "title": "Finance"
+          "title": "Finance",
+          "page": "finance"
         },
         {
           "title": "Knights Of Columbus",
@@ -69,16 +70,20 @@
           "page": "rcia"
         },
         {
-          "title": "Religious Education"
+          "title": "Religious Education",
+          "page": "religious-education"
         },
         {
-          "title": "Social Group"
+          "title": "Social Committee",
+          "page": "social-committee"
         },
         {
-          "title": "Women"
+          "title": "Council of Catholic Women",
+          "page": "council-of-catholic-women"
         },
         {
-          "title": "Youth"
+          "title": "Youth Group",
+          "page": "youth-group"
         }
       ]
     },

@@ -26,6 +26,10 @@
   font-size: 16px;
 }
 
+.content p:not(:first-child) {
+  margin-top: 16px;
+}
+
 .content a {
   color: #bf303c;
   text-decoration: none;
@@ -172,27 +176,60 @@
   width: 100%;
   max-width: 100%;
   border-spacing: 0;
-  margin-top: 1.5rem;
+  margin: 24px 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.content.editor table {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .content table thead {
   background: #f7f7f7;
 }
 
-.content table th {
-  font-weight: 500;
+.content table th,
+.content table thead td {
+  font-weight: 700;
+  height: 56px;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 .content table th,
+.content table thead td,
 .content table td {
   padding: 0.5em 1em;
-  border: 1px double #eee;
+}
+
+.content table tr:not(:first-child) th,
+.content table tr:not(:first-child) thead td,
+.content table tbody tr td {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.content table tr td {
+  background-color: #fcfcfc;
+}
+
+.content table tbody tr td {
+  height: 52px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.content table tbody tr:hover td {
+  background-color: #f9f9f9;
 }
 
 .content ol,
 .content ul {
   padding: 0 0 0 1.5rem;
-  margin: 1.5rem 0 0 0;
+  margin: 8px 0;
 }
 
 .content ol li,

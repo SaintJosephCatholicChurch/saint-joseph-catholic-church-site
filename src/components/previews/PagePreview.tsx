@@ -12,6 +12,7 @@ const StyledPagePreview = styled('div')`
 const StyledPagePreviewContent = styled('div')`
   margin-top: 32px;
   max-width: 800px;
+  width: 100%;
 `;
 
 const PagePreview = ({ entry, widgetFor, document }: PreviewTemplateComponentProps) => {

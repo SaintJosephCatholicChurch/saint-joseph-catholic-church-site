@@ -5,7 +5,7 @@ import { isNotEmpty } from '../../../../../../util/string.util';
 
 import * as Options from '../api/options';
 import { abbreviationsToUJSCCBBook } from './abbreviations';
-import { findChar, freefallRtl, isNonSentenceChar, isPunctuation, isSpace } from './utils';
+import { findBookAndChapter, findChar, freefallRtl, isNonBiblbeVerseCharacter, isPunctuation, isSpace } from './utils';
 
 interface ParseResult {
   readonly rng: Range;
@@ -15,6 +15,7 @@ interface ParseResult {
 const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null => {
   const voidElements = editor.schema.getVoidElements();
   const autoLinkPattern = Options.getAutoLinkPattern(editor);
+  const autoLinkAdditonalPattern = Options.getAutoLinkAdditonalPattern(editor);
   const bibleUrl = Options.getBibleUrl(editor);
   const { dom, selection } = editor;
 
@@ -22,6 +23,9 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
   if (dom.getParent(selection.getNode(), 'a[href]') !== null) {
     return null;
   }
+
+  const previousNode = dom.getPrev(selection.getNode(), () => true);
+  console.log(selection.getNode().textContent);
 
   const rng = selection.getRng();
   const textSeeker = tinymce.dom.TextSeeker(dom, (node) => {
@@ -45,7 +49,7 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
     endOffset + offset,
     (node, offset) => {
       const text = node.data;
-      const idx = findChar(text, offset, Fun.not(isNonSentenceChar));
+      const idx = findChar(text, offset, Fun.not(isNonBiblbeVerseCharacter));
       // Move forward one so the offset is after the found character unless the found char is a punctuation char
       return idx === -1 || isPunctuation(text[idx]) ? idx : idx + 1;
     },
@@ -63,7 +67,7 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
     endSpot.offset,
     (node, offset) => {
       lastTextNode = node;
-      const idx = findChar(node.data, offset, isNonSentenceChar);
+      const idx = findChar(node.data, offset, isNonBiblbeVerseCharacter);
 
       if (idx === -1) {
         return idx;
@@ -89,7 +93,9 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
   const rngText = Unicode.removeZwsp(newRng.toString());
   const matches = rngText.match(autoLinkPattern);
   console.log(matches, rngText, autoLinkPattern);
-  if (matches && matches.length >= 3) {
+
+  // Book, chapter and maybe verse
+  if (matches && matches.length === 4) {
     const index = rngText.indexOf(matches[0]);
     newRng.setStart(newRng.startContainer, newRng.startOffset + index);
     const finalRangeText = Unicode.removeZwsp(newRng.toString());
@@ -103,6 +109,28 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
     }
 
     return null;
+  }
+
+  // Verse and maybe chapter
+  const additionalMatches = rngText.match(autoLinkAdditonalPattern);
+  console.log(additionalMatches, rngText, autoLinkAdditonalPattern);
+  if (additionalMatches && additionalMatches.length === 4) {
+    const searchRange = dom.createRng();
+    searchRange.setStart(newRng.startContainer, newRng.startOffset);
+    searchRange.setEnd(newRng.endContainer, newRng.endOffset);
+    const bookAndChapter = findBookAndChapter(root, textSeeker, searchRange, autoLinkPattern);
+    if (!bookAndChapter) {
+      return null;
+    }
+    console.log('bookAndChapter', bookAndChapter);
+    const book = abbreviationsToUJSCCBBook[bookAndChapter.book.toLowerCase()];
+    const chapter = additionalMatches[1] ?? bookAndChapter.chapter;
+    const verse = isNotEmpty(additionalMatches[2]) ? `?${additionalMatches[2]}` : '';
+
+    return {
+      rng: newRng,
+      url: `${bibleUrl.replace('/$', '')}/${book}/${chapter}${verse}`
+    };
   }
 
   return null;
@@ -149,7 +177,7 @@ const handleSpacebar = (editor: Editor): void => {
   }
 };
 
-const handleBracket = handleSpacebar;
+const handlePunctuation = handleSpacebar;
 
 const handleEnter = (editor: Editor): void => {
   const result = parseCurrentLine(editor, 0);
@@ -160,17 +188,18 @@ const handleEnter = (editor: Editor): void => {
 
 const setup = (editor: Editor): void => {
   editor.on('keydown', (e) => {
-    if (e.keyCode === 13 && !e.isDefaultPrevented()) {
+    console.log('key', `'${e.key}'`);
+    if (e.key === 'Enter' && !e.isDefaultPrevented()) {
       handleEnter(editor);
     }
   });
 
   editor.on('keyup', (e) => {
-    if (e.keyCode === 32) {
+    console.log('key', `'${e.key}'`, 'isPunctuation', /[.,\/#!$%\^&\*;{}=\_`~()]/g.test(e.key));
+    if (e.key === ' ') {
       handleSpacebar(editor);
-      // One of the closing bracket keys: ), ] or }
-    } else if ((e.keyCode === 48 && e.shiftKey) || e.keyCode === 221) {
-      handleBracket(editor);
+    } else if (/[.,\/#!$%\^&\*;{}=\_`~()]/g.test(e.key)) {
+      handlePunctuation(editor);
     }
   });
 };

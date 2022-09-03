@@ -6,13 +6,19 @@ const option: {
   <T>(name: string): (editor: Editor) => T;
 } = (name: string) => (editor: Editor) => editor.options.get(name);
 
-const register = (editor: Editor): void => {
+export const register = (editor: Editor): void => {
   const registerOption = editor.options.register;
 
   registerOption('bible_autolink_pattern', {
     processor: 'regexp',
     // Use the Polaris link detection, however for autolink we need to make it be an exact match
     default: bibleAbbreviationRegex
+  });
+
+  registerOption('bible_autolink_additional_pattern', {
+    processor: 'regexp',
+    // Use the Polaris link detection, however for autolink we need to make it be an exact match
+    default: /(?:([0-9]+)[ ]*[:]{1})?[ ]*([0-9]+)[ ]*(?:[-]{1}[ ]*([0-9]+))?/i
   });
 
   registerOption('bible_url', {
@@ -26,9 +32,8 @@ const register = (editor: Editor): void => {
   });
 };
 
-const getAutoLinkPattern = option<RegExp>('bible_autolink_pattern');
-const getBibleUrl = option<string>('bible_url');
-const getDefaultLinkTarget = option<string>('bible_link_default_target');
-const allowUnsafeLinkTarget = option('allow_unsafe_link_target');
-
-export { register, getAutoLinkPattern, getBibleUrl, getDefaultLinkTarget, allowUnsafeLinkTarget };
+export const getAutoLinkPattern = option<RegExp>('bible_autolink_pattern');
+export const getAutoLinkAdditonalPattern = option<RegExp>('bible_autolink_additional_pattern');
+export const getBibleUrl = option<string>('bible_url');
+export const getDefaultLinkTarget = option<string>('bible_link_default_target');
+export const allowUnsafeLinkTarget = option('allow_unsafe_link_target');

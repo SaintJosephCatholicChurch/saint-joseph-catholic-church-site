@@ -11,27 +11,39 @@ const StyledContactDetails = styled('div')`
   fontsize: 16px;
 `;
 
-const StyledChurchDetailsLink = styled('a')`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #bf303c;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: bold;
+const StyledChurchDetailsLink = styled('a')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #bf303c;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: bold;
 
-  &:hover {
-    color: #822129;
-    text-decoration: underline;
-  }
-`;
+    &:hover {
+      color: #822129;
+      text-decoration: underline;
+    }
 
-const StyledAddress = styled('div')`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-`;
+    ${theme.breakpoints.down('md')} {
+      justify-content: center;
+    }
+  `
+);
+
+const StyledAddress = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+
+    ${theme.breakpoints.down('md')} {
+      text-align: center;
+    }
+  `
+);
 
 interface ContactDetailsProps {
   churchDetails: ChurchDetails;

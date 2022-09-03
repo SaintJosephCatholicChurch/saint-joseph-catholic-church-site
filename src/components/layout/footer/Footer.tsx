@@ -29,6 +29,7 @@ const StyledFooterContainerWrapper = styled('div', ['footerBackground'])<StyledF
 
     ${theme.breakpoints.down('md')} {
       padding-top: 16px;
+      padding-bottom: 24px;
     }
 
     ${theme.breakpoints.up('md')} {

@@ -27,8 +27,9 @@
 }
 
 .content a {
-  color: #806d3c;
+  color: #bf303c;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .content a:hover {

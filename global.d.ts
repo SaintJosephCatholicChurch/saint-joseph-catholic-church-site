@@ -15,3 +15,8 @@ declare module "*.yml" {
   const value: any;
   export default value;
 }
+
+declare module "!!raw-loader!*.css" {
+  const value: string;
+  export default value;
+}

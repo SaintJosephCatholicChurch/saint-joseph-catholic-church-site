@@ -57,13 +57,16 @@
           "page": "lay-ministries"
         },
         {
-          "title": "Parish Council"
+          "title": "Parish Council",
+          "page": "parish-council"
         },
         {
-          "title": "Prayer Chain"
+          "title": "Prayer Chain",
+          "page": "prayer-chain"
         },
         {
-          "title": "RCIA"
+          "title": "RCIA",
+          "page": "rcia"
         },
         {
           "title": "Religious Education"

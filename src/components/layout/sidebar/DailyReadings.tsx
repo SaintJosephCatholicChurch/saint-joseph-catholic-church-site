@@ -26,12 +26,12 @@ const StyledDailyReadingsTitle = styled('h3')`
 const StyledDailyReading = styled('a')(
   ({ theme }) => `
     display: flex;
-    align-items: center;
-    gap: 8px;
+    align-items: baseline;
     color: #333;
 
     &:hover {
-      color: #333;
+      color: #161616;
+      text-decoration: underline;
     }
 
     ${theme.breakpoints.down('lg')} {
@@ -132,7 +132,7 @@ const DailyReadings = memo(() => {
       {readings.readings.map((reading, index) => (
         <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank">
           <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-          <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+          <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
         </StyledDailyReading>
       ))}
     </StyledDailyReadings>

@@ -1,9 +1,15 @@
-import { Editor } from '@tinymce/tinymce-react';
 import { useCallback, useMemo, useRef } from 'react';
+import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import styled from '../../../util/styled.util';
+import BundledEditor from './BundledEditor';
 
 const StyledEditorControl = styled('div')`
   width: 100%;
+
+  & > div {
+    min-height: 400px;
+    border-top-left-radius: 0;
+  }
 `;
 
 interface EditorControlProps {
@@ -12,7 +18,7 @@ interface EditorControlProps {
 }
 
 const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<TinyMCEEditor>(null);
 
   const handleOnChange = useCallback(() => {
     if (editorRef.current) {
@@ -26,8 +32,7 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
   return useMemo(
     () => (
       <StyledEditorControl>
-        <Editor
-          tinymceScriptSrc="/tinymce/tinymce.min.js"
+        <BundledEditor
           onInit={(_event, editor) => (editorRef.current = editor)}
           initialValue={initialValue}
           onChange={handleOnChange}
@@ -59,6 +64,7 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
               'anchor',
               'autolink',
               'autoresize',
+              'bible-autolink',
               'charmap',
               'code',
               'code',
@@ -74,6 +80,7 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
               'quickbars',
               'searchreplace',
               'table',
+              'telephone-autolink',
               'visualblocks',
               'wordcount'
             ],

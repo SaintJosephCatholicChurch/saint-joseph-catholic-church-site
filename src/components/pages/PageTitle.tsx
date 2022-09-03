@@ -25,10 +25,10 @@ const StyledTitle = styled('h1')<StyledTitleProps>(
 
 interface PostTitleProps {
   title: string;
-  disableMargin?: boolean;
+  disableMargin: boolean;
 }
 
-const PostTitle = memo(({ title, disableMargin = false }: PostTitleProps) => {
+const PostTitle = memo(({ title, disableMargin }: PostTitleProps) => {
   return (
     <StyledHeader>
       <StyledTitle disableMargin={disableMargin}>{title}</StyledTitle>

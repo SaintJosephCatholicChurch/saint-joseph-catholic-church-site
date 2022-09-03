@@ -56,16 +56,17 @@ interface PageViewProps {
   children: ReactNode;
   showHeader: boolean;
   showSidebar: boolean;
+  disableMargin?: boolean;
 }
 
-const PageView = ({ title, children, showHeader, showSidebar }: PageViewProps) => {
+const PageView = ({ title, children, showHeader, showSidebar, disableMargin = false }: PageViewProps) => {
   return (
     <StyledPageView>
       <Container>
         <StyledPageContentsWrapper>
           <StyledPageContents showSidebar={showSidebar}>
             <StyledPageBody>
-              {showHeader ? <PageTitle title={title} disableMargin /> : null}
+              {showHeader ? <PageTitle title={title} disableMargin={disableMargin} /> : null}
               {children}
             </StyledPageBody>
             {showSidebar ? <Sidebar /> : null}

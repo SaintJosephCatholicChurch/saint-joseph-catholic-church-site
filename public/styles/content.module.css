@@ -42,7 +42,6 @@
   text-decoration: underline;
 }
 
-.content h1,
 .content h2,
 .content h3,
 .content h4,
@@ -50,15 +49,24 @@
 .content h6 {
   font-weight: 500;
   color: #333;
-  margin-top: 32px;
-  margin-bottom: 16px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 1200) {
+  .content h1 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
 }
 
 .content h1 {
-  font-size: 28px;
-  line-height: 28px;
+  font-size: 26px;
+  line-height: 30px;
+}
 
-  @media screen and (min-width: 1200) {
+@media (min-width: 1200) {
+  .content h1 {
     font-size: 32px;
     line-height: 32px;
   }
@@ -68,22 +76,26 @@
   text-transform: uppercase;
   color: #bf303c;
 
-  font-size: 24px;
+  font-size: 20px;
   line-height: 24px;
+}
 
-  @media screen and (min-width: 1200) {
-    font-size: 28px;
-    line-height: 28px;
+@media (min-width: 1200px) {
+  .content h2 {
+    font-size: 26px;
+    line-height: 26px;
   }
 }
 
 .content h3 {
   color: #616169;
 
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 22px;
+}
 
-  @media screen and (min-width: 1200) {
+@media (min-width: 1200px) {
+  .content h3 {
     font-size: 24px;
     line-height: 24px;
   }
@@ -96,20 +108,24 @@
 }
 
 .content h4 {
-  font-size: 18px;
-  line-height: 18px;
+  font-size: 16px;
+  line-height: 20px;
+}
 
-  @media screen and (min-width: 1200) {
+@media (min-width: 1200px) {
+  .content h4 {
     font-size: 20px;
     line-height: 20px;
   }
 }
 
 .content h5 {
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 15px;
+  line-height: 19px;
+}
 
-  @media screen and (min-width: 1200) {
+@media (min-width: 1200px) {
+  .content h5 {
     font-size: 18px;
     line-height: 18px;
   }
@@ -117,9 +133,11 @@
 
 .content h6 {
   font-size: 14px;
-  line-height: 14px;
+  line-height: 18px;
+}
 
-  @media screen and (min-width: 1200) {
+@media (min-width: 1200px) {
+  .content h6 {
     font-size: 16px;
     line-height: 16px;
   }
@@ -256,7 +274,7 @@
   width: 100%;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
   .content h2,
   .content h3,
   .content h4,

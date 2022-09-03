@@ -25,6 +25,8 @@ const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
     display: grid;
     align-items: flex-start;
+    margin-top: 16px;
+
     grid-template-columns: 25% 1fr;
     ${theme.breakpoints.down('lg')} {
       grid-template-columns: 1fr;

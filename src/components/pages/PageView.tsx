@@ -65,7 +65,7 @@ const PageView = ({ title, children, showHeader, showSidebar }: PageViewProps) =
         <StyledPageContentsWrapper>
           <StyledPageContents showSidebar={showSidebar}>
             <StyledPageBody>
-              {showHeader ? <PageTitle title={title} /> : null}
+              {showHeader ? <PageTitle title={title} disableMargin /> : null}
               {children}
             </StyledPageBody>
             {showSidebar ? <Sidebar /> : null}

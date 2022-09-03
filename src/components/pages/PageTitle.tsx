@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import styled from '../../util/styled.util';
 
-const StyledHeader = styled('header')`
+const StyledHeader = styled('header', ['disableMargin'])`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,21 +11,27 @@ const StyledHeader = styled('header')`
     margin-top: 0;
   }
 `;
+interface StyledTitleProps {
+  disableMargin: boolean;
+}
 
-const StyledTitle = styled('h1')`
-  padding: 0;
-  margin: 16px 0;
-  color: #333;
-`;
+const StyledTitle = styled('h1')<StyledTitleProps>(
+  ({ disableMargin }) => `
+    padding: 0;
+    margin: ${disableMargin ? '0' : '16px 0'};
+    color: #333;
+  `
+);
 
 interface PostTitleProps {
   title: string;
+  disableMargin?: boolean;
 }
 
-const PostTitle = memo(({ title }: PostTitleProps) => {
+const PostTitle = memo(({ title, disableMargin = false }: PostTitleProps) => {
   return (
     <StyledHeader>
-      <StyledTitle>{title}</StyledTitle>
+      <StyledTitle disableMargin={disableMargin}>{title}</StyledTitle>
     </StyledHeader>
   );
 });

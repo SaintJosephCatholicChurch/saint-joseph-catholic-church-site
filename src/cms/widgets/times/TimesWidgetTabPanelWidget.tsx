@@ -25,6 +25,7 @@ const StyledTabPanelContent = styled('div')`
   padding-left: 32px;
   flex-direction: column;
   width: 100%;
+  box-sizing: border-box;
 
   &:not([hidden]) {
     display: flex;

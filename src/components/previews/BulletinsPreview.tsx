@@ -2,11 +2,10 @@ import List from '@mui/material/List';
 import { useTheme } from '@mui/material/styles';
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
-import StyleCopy from '../../cms/StyleCopy';
 import { Bulletin } from '../../interface';
 import BulletListButton from '../pages/custom/bulletins/BulletListButton';
 
-const BulletinsPreview = ({ entry, document }: PreviewTemplateComponentProps) => {
+const BulletinsPreview = ({ entry }: PreviewTemplateComponentProps) => {
   const theme = useTheme();
 
   const bulletins = useMemo(() => entry.toJS().data.bulletins as Bulletin[], [entry]);
@@ -21,23 +20,21 @@ const BulletinsPreview = ({ entry, document }: PreviewTemplateComponentProps) =>
 
   return useMemo(
     () => (
-      <StyleCopy document={document}>
-        <List
-          sx={{
-            maxWidth: 300,
-            margin: '24px auto 0',
-            backgroundColor: '#e8e5e1',
-            [theme.breakpoints.down('lg')]: {
-              display: 'none'
-            }
-          }}
-          disablePadding
-        >
-          {bulletinListItems}
-        </List>
-      </StyleCopy>
+      <List
+        sx={{
+          maxWidth: 300,
+          margin: '24px auto 0',
+          backgroundColor: '#e8e5e1',
+          [theme.breakpoints.down('lg')]: {
+            display: 'none'
+          }
+        }}
+        disablePadding
+      >
+        {bulletinListItems}
+      </List>
     ),
-    [bulletinListItems, document, theme.breakpoints]
+    [bulletinListItems, theme.breakpoints]
   );
 };
 

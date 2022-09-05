@@ -1,5 +1,4 @@
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
-import StyleCopy from '../../cms/StyleCopy';
 import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
 import PageTitle from '../pages/PageTitle';
@@ -15,16 +14,14 @@ const StyledPagePreviewContent = styled('div')`
   width: 100%;
 `;
 
-const PagePreview = ({ entry, widgetFor, document }: PreviewTemplateComponentProps) => {
+const PagePreview = ({ entry, widgetFor }: PreviewTemplateComponentProps) => {
   return (
-    <StyleCopy document={document}>
-      <StyledPagePreview>
-        <StyledPagePreviewContent>
-          <PageTitle title={entry.getIn(['data', 'title'])} />
-          <PageContentView>{widgetFor('body')}</PageContentView>
-        </StyledPagePreviewContent>
-      </StyledPagePreview>
-    </StyleCopy>
+    <StyledPagePreview>
+      <StyledPagePreviewContent>
+        <PageTitle title={entry.getIn(['data', 'title'])} />
+        <PageContentView>{widgetFor('body')}</PageContentView>
+      </StyledPagePreviewContent>
+    </StyledPagePreview>
   );
 };
 export default PagePreview;

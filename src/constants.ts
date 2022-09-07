@@ -12,13 +12,8 @@ export const TIMES_PADDING_HEIGHT = (size: Omit<ScreenSize, 'mobile'>) => {
   }
   return 100;
 };
-export const TIMES_TITLE_HEIGHT = (size: Omit<ScreenSize, 'mobile'>) => {
-  if (size === 'small' || size == 'medium') {
-    return 42;
-  }
-  return 52.5;
-};
-export const TIMES_LINE_MIN_HEIGHT = 32;
+export const TIMES_TITLE_HEIGHT = 42;
+export const TIMES_LINE_MIN_HEIGHT = 34;
 export const TIMES_LINE_TIMES_HEIGHT = (size: Omit<ScreenSize, 'mobile'>) => {
   if (size === 'small' || size == 'medium') {
     return 16;

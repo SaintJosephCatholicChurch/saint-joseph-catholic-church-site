@@ -4,7 +4,7 @@ import churchDetails from '../../lib/church_details';
 import styled from '../../util/styled.util';
 import CarouselView from '../carousel/CarouselView';
 import Footer from '../layout/footer/Footer';
-import Schedule from '../schedule/Schedule';
+import ScheduleWidget from '../schedule/ScheduleWidget';
 
 const StyledHomepageView = styled('div')`
   width: 100%;
@@ -20,7 +20,7 @@ const HomepageView = memo(({ homePageData: { slides, schedule_background }, time
   return (
     <StyledHomepageView>
       <CarouselView slides={slides} />
-      <Schedule times={times} background={schedule_background} />
+      <ScheduleWidget times={times} background={schedule_background} />
       <Footer churchDetails={churchDetails} />
     </StyledHomepageView>
   );

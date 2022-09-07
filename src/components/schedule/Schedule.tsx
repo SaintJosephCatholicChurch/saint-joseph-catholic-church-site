@@ -17,30 +17,8 @@ import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
 import { useMediaQueryDown } from '../../util/useMediaQuery';
-import Container from '../layout/Container';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
-
-interface StyledScheduleProps {
-  background: string;
-}
-
-const StyledSchedule = styled('div', ['background'])<StyledScheduleProps>(
-  ({ theme, background }) => `
-    padding-bottom: 40px;
-    background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${background}), #c7c7c7;
-    background-repeat: repeat;
-    background-position: center top;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding-top: 40px;
-    ${theme.breakpoints.down('md')} {
-      padding-top: 24px;
-    }
-  `
-);
 
 const StyledContainerContents = styled('div')`
   display: flex;
@@ -123,12 +101,11 @@ function a11yProps(index: number) {
 
 interface ScheduleProps {
   times: Times[];
-  background?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
+const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -150,7 +127,7 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
   const isSmallScreen = useMediaQueryDown('md');
   const isMediumScreen = useMediaQueryDown('lg');
 
-  const size = useMemo(() => {
+  const screenSize = useMemo(() => {
     if (isMobile) {
       return 'mobile';
     }
@@ -167,7 +144,7 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
   }, [isMediumScreen, isMobile, isSmallScreen]);
 
   const tabsHeight = useMemo(() => {
-    if (size === 'mobile') {
+    if (screenSize === 'mobile') {
       return 0;
     }
 
@@ -181,7 +158,7 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
                 let lineTimesHeight = 0;
                 if (lines > 0) {
                   lineTimesHeight =
-                    lines * TIMES_LINE_TIMES_HEIGHT(size) +
+                    lines * TIMES_LINE_TIMES_HEIGHT(screenSize) +
                     TIMES_LINE_PADDING_MARGIN_HEIGHT +
                     (lines - 1) * TIMES_LINE_TIMES_GAP;
                 }
@@ -196,8 +173,8 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
         }, 0) ?? 0;
 
       const calculatedHeight =
-        TIMES_TITLE_HEIGHT(size) +
-        TIMES_PADDING_HEIGHT(size) +
+        TIMES_TITLE_HEIGHT +
+        TIMES_PADDING_HEIGHT(screenSize) +
         TIMES_SECTION_MARGIN_HEIGHT * (timesEntry.sections?.length ?? 0) +
         TIMES_SECTION_TITLE_HEIGHT * sectionsWithTitles +
         linesHeight;
@@ -208,88 +185,84 @@ const Schedule = ({ times, background, tab, onTabChange }: ScheduleProps) => {
 
       return height;
     }, 0);
-  }, [size, times]);
+  }, [screenSize, times]);
 
   return (
-    <StyledSchedule background={background}>
-      <Container>
-        <StyledContainerContents>
-          <StyledHeader>
-            <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
-            <StyledHeaderText>Come Worship with Us</StyledHeaderText>
-            <StyledHeaderBorder />
-          </StyledHeader>
-          <List
-            component="div"
-            aria-labelledby="nested-list-subheader"
-            disablePadding
-            sx={{
-              width: '100%',
-              [theme.breakpoints.up('md')]: {
-                display: 'none'
-              }
-            }}
-          >
-            {times.map((timeSchedule, index) => (
-              <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
-            ))}
-          </List>
-          <StyledTabsWrapper>
-            <Tabs
-              orientation="vertical"
-              variant="fullWidth"
-              value={value}
-              onChange={handleChange}
-              aria-label="Vertical tabs example"
-              scrollButtons={false}
+    <StyledContainerContents>
+      <StyledHeader>
+        <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
+        <StyledHeaderText>Come Worship with Us</StyledHeaderText>
+        <StyledHeaderBorder />
+      </StyledHeader>
+      <List
+        component="div"
+        aria-labelledby="nested-list-subheader"
+        disablePadding
+        sx={{
+          width: '100%',
+          [theme.breakpoints.up('md')]: {
+            display: 'none'
+          }
+        }}
+      >
+        {times.map((timeSchedule, index) => (
+          <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
+        ))}
+      </List>
+      <StyledTabsWrapper>
+        <Tabs
+          orientation="vertical"
+          variant="fullWidth"
+          value={value}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          scrollButtons={false}
+          sx={{
+            backgroundColor: 'rgba(241, 241, 241, 0.35)',
+            minHeight: tabsHeight > 0 ? tabsHeight : undefined,
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#b58d30',
+              width: '4px'
+            }
+          }}
+        >
+          {times.map((timeSchedule, index) => (
+            <Tab
+              key={`time-schedule-${index}`}
+              label={timeSchedule.name}
+              {...a11yProps(index)}
               sx={{
-                backgroundColor: 'rgba(241, 241, 241, 0.35)',
-                minHeight: tabsHeight > 0 ? tabsHeight : undefined,
-                '& .MuiTabs-indicator': {
-                  backgroundColor: '#b58d30',
-                  width: '4px'
+                color: '#414141',
+                alignItems: 'flex-start',
+                fontWeight: 400,
+                fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                letterSpacing: 0,
+                '&.Mui-selected': {
+                  color: '#414141',
+                  backgroundColor: '#ffffff'
+                },
+                fontSize: '18px',
+                padding: '16px',
+                minHeight: '100px',
+                [theme.breakpoints.up('lg')]: {
+                  fontSize: '24px',
+                  padding: '32px',
+                  minHeight: '124px'
+                },
+                '&:not(.Mui-selected):hover': {
+                  backgroundColor: 'rgba(241, 241, 241, 0.5)'
                 }
               }}
-            >
-              {times.map((timeSchedule, index) => (
-                <Tab
-                  key={`time-schedule-${index}`}
-                  label={timeSchedule.name}
-                  {...a11yProps(index)}
-                  sx={{
-                    color: '#414141',
-                    alignItems: 'flex-start',
-                    fontWeight: 400,
-                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
-                    letterSpacing: 0,
-                    '&.Mui-selected': {
-                      color: '#414141',
-                      backgroundColor: '#ffffff'
-                    },
-                    fontSize: '18px',
-                    padding: '16px',
-                    minHeight: '100px',
-                    [theme.breakpoints.up('lg')]: {
-                      fontSize: '24px',
-                      padding: '32px',
-                      minHeight: '124px'
-                    },
-                    '&:not(.Mui-selected):hover': {
-                      backgroundColor: 'rgba(241, 241, 241, 0.5)'
-                    }
-                  }}
-                />
-              ))}
-            </Tabs>
-            <StyledTabPanels>
-              {times.map((timeSchedule, index) => (
-                <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
-              ))}
-            </StyledTabPanels>
-          </StyledTabsWrapper>
-        </StyledContainerContents>
-      </Container>
-    </StyledSchedule>
+            />
+          ))}
+        </Tabs>
+        <StyledTabPanels>
+          {times.map((timeSchedule, index) => (
+            <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
+          ))}
+        </StyledTabPanels>
+      </StyledTabsWrapper>
+    </StyledContainerContents>
   );
 };
 

@@ -68,6 +68,12 @@ export interface Bulletin {
   readonly pdf?: string;
 }
 
+export interface Staff {
+  readonly name?: string;
+  readonly title?: string;
+  readonly picture?: string;
+}
+
 export interface PostContentData {
   readonly date: string;
   readonly title: string;

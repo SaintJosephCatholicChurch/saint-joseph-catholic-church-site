@@ -259,51 +259,33 @@ const config: CmsConfig = {
           ]
         },
         {
-          name: 'events',
-          label: 'Events',
-          file: 'content/events.json',
-          description: 'Events',
+          name: 'staff',
+          label: 'Staff',
+          file: 'content/staff.json',
+          description: 'Parish staff',
           fields: [
             {
-              name: 'events',
-              label: 'Events',
-              widget: 'events'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'meta',
-      label: 'Meta',
-      delete: false,
-      editor: {
-        preview: false
-      },
-      files: [
-        {
-          name: 'tags',
-          label: 'Tags',
-          file: 'content/meta/tags.yml',
-          description: 'List of tags',
-          fields: [
-            {
-              name: 'tags',
-              label: 'Tags',
-              label_singular: 'Tag',
+              name: 'staff',
+              label: 'Staff',
               widget: 'list',
+              summary: "{{fields.name}} - {{field.image}}",
               fields: [
                 {
-                  name: 'slug',
-                  label: 'Slug',
-                  widget: 'string',
-                  hint: 'The part of a URL identifies the tag'
+                  name: 'name',
+                  label: 'Name',
+                  widget: 'string'
                 },
                 {
-                  name: 'name',
-                  label: 'Display Name',
-                  widget: 'string',
-                  hint: 'Tag name for displaying on the site'
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'picture',
+                  label: 'Picture',
+                  widget: 'image',
+                  media_folder: '/public/staff',
+                  public_folder: '/staff'
                 }
               ]
             }
@@ -419,6 +401,44 @@ const config: CmsConfig = {
           name: 'body',
           label: 'Body',
           widget: 'html'
+        }
+      ]
+    },
+    {
+      name: 'meta',
+      label: 'Meta',
+      delete: false,
+      editor: {
+        preview: false
+      },
+      files: [
+        {
+          name: 'tags',
+          label: 'Tags',
+          file: 'content/meta/tags.yml',
+          description: 'List of tags',
+          fields: [
+            {
+              name: 'tags',
+              label: 'Tags',
+              label_singular: 'Tag',
+              widget: 'list',
+              fields: [
+                {
+                  name: 'slug',
+                  label: 'Slug',
+                  widget: 'string',
+                  hint: 'The part of a URL identifies the tag'
+                },
+                {
+                  name: 'name',
+                  label: 'Display Name',
+                  widget: 'string',
+                  hint: 'Tag name for displaying on the site'
+                }
+              ]
+            }
+          ]
         }
       ]
     },

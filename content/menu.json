@@ -39,7 +39,8 @@
           "title": "Parish Membership"
         },
         {
-          "title": "Parish Staff"
+          "title": "Parish Staff",
+          "url": "/staff"
         }
       ]
     },

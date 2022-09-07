@@ -11,7 +11,7 @@ export const StyledContactDetails = styled('div')`
   fontsize: 16px;
 `;
 
-export const StyledChurchDetailsLinkWrapper = styled('a')(
+export const StyledChurchDetailsLinkWrapper = styled('div')(
   ({ theme }) => `
     display: flex;
 

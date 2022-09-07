@@ -44,7 +44,7 @@ const StyledPageContents = styled('div', ['hideSidebar'])<StyledPageContentsProp
     display: grid;
     gap: 64px;
     width: 100%;
-    grid-template-columns: ${hideSidebar ? '1fr' : '2fr 1fr'};
+    grid-template-columns: ${hideSidebar ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
 
     ${theme.breakpoints.down('md')} {
       grid-template-columns: 1fr;

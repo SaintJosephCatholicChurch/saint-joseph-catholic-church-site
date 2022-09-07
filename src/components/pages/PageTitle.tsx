@@ -1,21 +1,29 @@
 import { memo } from 'react';
 import styled from '../../util/styled.util';
 
-const StyledHeader = styled('header', ['disableMargin'])`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
+interface StyledHeaderProps {
+  enableMarginTop: boolean;
+}
 
-  &:first-of-type h1 {
-    margin-top: 0;
-  }
-`;
+const StyledHeader = styled('header', ['enableMarginTop'])<StyledHeaderProps>(
+  ({ enableMarginTop }) => `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    ${enableMarginTop ? 'margin-top: 16px' : ''}
+
+    &:first-of-type h1 {
+      margin-top: 0;
+    }
+  `
+);
+
 interface StyledTitleProps {
   disableMargin: boolean;
 }
 
-const StyledTitle = styled('h1')<StyledTitleProps>(
+const StyledTitle = styled('h1', ['disableMargin'])<StyledTitleProps>(
   ({ disableMargin }) => `
     padding: 0;
     margin: ${disableMargin ? '0' : '16px 0'};
@@ -26,11 +34,12 @@ const StyledTitle = styled('h1')<StyledTitleProps>(
 interface PostTitleProps {
   title: string;
   disableMargin?: boolean;
+  enableMarginTop?: boolean;
 }
 
-const PostTitle = memo(({ title, disableMargin = false }: PostTitleProps) => {
+const PostTitle = memo(({ title, enableMarginTop = false, disableMargin = false }: PostTitleProps) => {
   return (
-    <StyledHeader>
+    <StyledHeader enableMarginTop={enableMarginTop}>
       <StyledTitle disableMargin={disableMargin}>{title}</StyledTitle>
     </StyledHeader>
   );

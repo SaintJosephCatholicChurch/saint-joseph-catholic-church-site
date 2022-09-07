@@ -22,7 +22,7 @@ const Page = ({ title, dateString, slug, tags, description = '', content }: Page
       pageDetails={{ date: parseISO(dateString) }}
       tags={tags}
       description={description}
-      disableMargin
+      disableTitleMargin
     >
       <PageContentView tags={tags}>
         <div

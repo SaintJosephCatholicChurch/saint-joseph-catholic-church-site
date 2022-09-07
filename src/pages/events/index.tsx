@@ -7,7 +7,7 @@ const Events = () => {
   });
 
   return (
-    <PageLayout url="/events" title="Events" showHeader={false} showSidebar={false} disablePadding>
+    <PageLayout url="/events" title="Events" hideHeader hideSidebar disablePadding>
       <CalendarViewNoSSR />
     </PageLayout>
   );

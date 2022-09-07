@@ -3,9 +3,30 @@
   "name": "Saint Joseph Catholic Church",
   "zipcode": "46714",
   "phone": "(260) 824-1380",
+  "additional_emails": [
+    {
+      "name": "Youth Group Email",
+      "email": "stjosephchurch@adamswells.com"
+    }
+  ],
   "state": "Indiana",
+  "contacts": [
+    {
+      "name": "Fr. David Violi",
+      "title": "Pastor"
+    },
+    {
+      "title": "Administrative Assistant",
+      "name": "Michelle Paxton"
+    },
+    {
+      "title": "Director for Religious Education",
+      "name": "Michelle Paxton"
+    }
+  ],
   "address": "1300 North Main Street",
   "vision_statement": "To prepare every parishioner to become a responsible, active participating Catholic Christian and a leader who is guided by the commandments of God, and Catholic ethics.",
   "mission_statement": "We are a welcoming community of the people of God, who reflect His glory, love and mercy, and are transformed in His image and likeness, joyfully witness His mystery, under the direction of the Holy Spirit, in Christ Jesus.",
-  "email": "stjosephchurch@adamswells.com"
+  "email": "stjosephchurch@adamswells.com",
+  "google_map_location": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.0053418359817!2d-85.1690089838477!3d40.76190724249647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8815916bd6abae51%3A0x6ff7cdb60faee559!2sSt%20Joseph%20Catholic%20Church!5e0!3m2!1sen!2sus!4v1662522612938!5m2!1sen!2sus"
 }

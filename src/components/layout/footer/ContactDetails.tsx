@@ -4,16 +4,26 @@ import Box from '@mui/material/Box';
 import type { ChurchDetails } from '../../../interface';
 import styled from '../../../util/styled.util';
 
-const StyledContactDetails = styled('div')`
+export const StyledContactDetails = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 4px;
   fontsize: 16px;
 `;
 
-const StyledChurchDetailsLink = styled('a')(
+export const StyledChurchDetailsLinkWrapper = styled('a')(
   ({ theme }) => `
     display: flex;
+
+    ${theme.breakpoints.down('md')} {
+      justify-content: center;
+    }
+  `
+);
+
+export const StyledChurchDetailsLink = styled('a')(
+  ({ theme }) => `
+    display: inline-flex;
     align-items: center;
     gap: 4px;
     color: #bf303c;
@@ -32,7 +42,7 @@ const StyledChurchDetailsLink = styled('a')(
   `
 );
 
-const StyledAddress = styled('div')(
+export const StyledAddress = styled('div')(
   ({ theme }) => `
     display: flex;
     flex-direction: column;
@@ -61,18 +71,18 @@ const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
           {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
         </Box>
       </StyledAddress>
-      <Box>
+      <StyledChurchDetailsLinkWrapper>
         <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
           <PhoneEnabledIcon fontSize="small" />
           {churchDetails.phone}
         </StyledChurchDetailsLink>
-      </Box>
-      <Box>
+      </StyledChurchDetailsLinkWrapper>
+      <StyledChurchDetailsLinkWrapper>
         <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
           <EmailIcon fontSize="small" />
           {churchDetails.email}
         </StyledChurchDetailsLink>
-      </Box>
+      </StyledChurchDetailsLinkWrapper>
     </StyledContactDetails>
   );
 };

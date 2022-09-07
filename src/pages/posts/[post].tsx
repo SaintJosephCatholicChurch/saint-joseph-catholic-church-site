@@ -26,7 +26,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content 
       pageDetails={{ date, image }}
       tags={tags}
       description={description}
-      showHeader={false}
+      hideHeader
     >
       <PostView title={title} date={date} image={image}>
         <div

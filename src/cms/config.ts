@@ -108,6 +108,16 @@ const config: CmsConfig = {
               widget: 'string'
             },
             {
+              name: 'mission_statement',
+              label: 'Mission Statement',
+              widget: 'text'
+            },
+            {
+              name: 'vision_statement',
+              label: 'Vision Statement',
+              widget: 'text'
+            },
+            {
               name: 'address',
               label: 'Address',
               widget: 'string'
@@ -133,19 +143,68 @@ const config: CmsConfig = {
               widget: 'string'
             },
             {
+              name: 'additional_phones',
+              label: 'Additional Phone Numbers',
+              widget: 'list',
+              required: false,
+              fields: [
+                {
+                  name: 'name',
+                  label: 'Name',
+                  widget: 'string'
+                },
+                {
+                  name: 'phone',
+                  label: 'Phone Number',
+                  widget: 'string'
+                }
+              ]
+            },
+            {
               name: 'email',
               label: 'Email',
               widget: 'string'
             },
             {
-              name: 'mission_statement',
-              label: 'Mission Statement',
-              widget: 'text'
+              name: 'additional_emails',
+              label: 'Additional Emails',
+              widget: 'list',
+              required: false,
+              fields: [
+                {
+                  name: 'name',
+                  label: 'Name',
+                  widget: 'string'
+                },
+                {
+                  name: 'email',
+                  label: 'Email',
+                  widget: 'string'
+                }
+              ]
             },
             {
-              name: 'vision_statement',
-              label: 'Vision Statement',
-              widget: 'text'
+              name: 'contacts',
+              label: 'Contacts',
+              widget: 'list',
+              required: false,
+              fields: [
+                {
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'name',
+                  label: 'Name',
+                  widget: 'string'
+                }
+              ]
+            },
+            {
+              name: 'google_map_location',
+              label: 'Google Map Embed URL',
+              widget: 'string'
             }
           ]
         },

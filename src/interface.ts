@@ -48,14 +48,18 @@ export interface StylesConfig {
 
 export interface ChurchDetails {
   readonly name: string;
+  readonly mission_statement: string;
+  readonly vision_statement: string;
   readonly address: string;
   readonly city: string;
   readonly state: string;
   readonly zipcode: string;
   readonly phone: string;
+  readonly additional_phones?: { name: string; phone: string }[];
   readonly email: string;
-  readonly mission_statement: string;
-  readonly vision_statement: string;
+  readonly additional_emails?: { name: string; email: string }[];
+  readonly contacts?: { title: string; name: string }[];
+  readonly google_map_location: string;
 }
 
 export interface Bulletin {

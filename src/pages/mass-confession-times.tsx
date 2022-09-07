@@ -22,7 +22,7 @@ const MassConfessionTimes = () => {
   const theme = useTheme();
 
   return (
-    <PageLayout url="/mass-confession-times" title="Mass &amp; Confession Times" showHeader={false}>
+    <PageLayout url="/mass-confession-times" title="Mass &amp; Confession Times" hideHeader>
       <List
         component="div"
         aria-labelledby="nested-list-subheader"

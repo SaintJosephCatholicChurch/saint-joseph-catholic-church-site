@@ -20,10 +20,12 @@ interface PageProps {
     date: Date;
     image?: string;
   };
-  showHeader?: boolean;
-  showSidebar?: boolean;
+  hideHeader?: boolean;
+  hideSidebar?: boolean;
+  disableTitleMargin?: boolean;
+  disableBottomMargin?: boolean;
   disablePadding?: boolean;
-  disableMargin?: boolean;
+  fullWidth?: boolean;
 }
 
 const PageLayout = ({
@@ -33,10 +35,12 @@ const PageLayout = ({
   description,
   tags,
   pageDetails,
-  showHeader = true,
-  showSidebar = true,
+  hideHeader,
+  hideSidebar,
+  disableTitleMargin,
+  disableBottomMargin,
   disablePadding,
-  disableMargin
+  fullWidth
 }: PageProps) => {
   const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
   return (
@@ -56,10 +60,12 @@ const PageLayout = ({
       ) : null}
       <PageView
         title={title}
-        showHeader={showHeader}
-        showSidebar={showSidebar}
+        hideHeader={hideHeader}
+        hideSidebar={hideSidebar}
         disablePadding={disablePadding}
-        disableMargin={disableMargin}
+        disableTitleMargin={disableTitleMargin}
+        disableBottomMargin={disableBottomMargin}
+        fullWidth={fullWidth}
       >
         {children}
       </PageView>

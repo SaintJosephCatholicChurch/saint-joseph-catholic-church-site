@@ -8,9 +8,7 @@ import Copyright from './Copyright';
 import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
 
-const StyledFooter = styled('footer')`
-  margin-top: 16px;
-`;
+const StyledFooter = styled('footer')``;
 
 interface StyledFooterContainerWrapperProps {
   footerBackground?: string;

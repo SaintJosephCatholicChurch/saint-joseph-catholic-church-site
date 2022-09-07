@@ -36,7 +36,7 @@ const PostSummary = memo(
         }}
       >
         <PostImage title={title} image={image} />
-        <PostTitle title={title} />
+        <PostTitle title={title} enableMarginTop />
         <PostDateAuthorLine date={date} />
         <Box>
           <PageContentView>

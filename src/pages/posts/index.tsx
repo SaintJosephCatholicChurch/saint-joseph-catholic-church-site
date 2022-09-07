@@ -17,7 +17,7 @@ interface PostsIndexProps {
 
 const PostsIndex = ({ posts, tags, pagination }: PostsIndexProps) => {
   return (
-    <PageLayout url="/posts" title="News" showHeader={false}>
+    <PageLayout url="/posts" title="News" hideHeader>
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );

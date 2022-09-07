@@ -1,18 +1,24 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import styled from '../../util/styled.util';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
 import PageTitle from './PageTitle';
 
-const StyledPageView = styled('article')`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  flex-grow: 1;
-  margin-bottom: 16px;
-`;
+interface StyledPageViewProps {
+  disableMargin: boolean;
+}
+
+const StyledPageView = styled('article', ['disableMargin'])<StyledPageViewProps>(
+  ({ disableMargin }) => `
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+    ${!disableMargin ? 'margin-bottom: 48px;' : ''}
+  `
+);
 
 const StyledPageContentsWrapper = styled('div')(
   ({ theme }) => `
@@ -30,15 +36,15 @@ const StyledPageContentsWrapper = styled('div')(
 );
 
 interface StyledPageContentsProps {
-  showSidebar: boolean;
+  hideSidebar: boolean;
 }
 
-const StyledPageContents = styled('div', ['showSidebar'])<StyledPageContentsProps>(
-  ({ theme, showSidebar }) => `
+const StyledPageContents = styled('div', ['hideSidebar'])<StyledPageContentsProps>(
+  ({ theme, hideSidebar }) => `
     display: grid;
     gap: 64px;
     width: 100%;
-    grid-template-columns: ${showSidebar ? '2fr 1fr' : '1fr'};
+    grid-template-columns: ${hideSidebar ? '1fr' : '2fr 1fr'};
 
     ${theme.breakpoints.down('md')} {
       grid-template-columns: 1fr;
@@ -48,39 +54,47 @@ const StyledPageContents = styled('div', ['showSidebar'])<StyledPageContentsProp
 
 const StyledPageBody = styled('div')`
   flex-grow: 1;
-  overflow: hidden;
 `;
 
 interface PageViewProps {
   title: string;
   children: ReactNode;
-  showHeader: boolean;
-  showSidebar: boolean;
-  disableMargin?: boolean;
+  hideHeader: boolean;
+  hideSidebar?: boolean;
+  disableTitleMargin?: boolean;
+  disableBottomMargin?: boolean;
   disablePadding?: boolean;
+  fullWidth?: boolean;
 }
 
 const PageView = ({
   title,
   children,
-  showHeader,
-  showSidebar,
-  disablePadding,
-  disableMargin = false
+  hideHeader = false,
+  hideSidebar = false,
+  disableTitleMargin = false,
+  disableBottomMargin = false,
+  disablePadding = false,
+  fullWidth = false
 }: PageViewProps) => {
+  const contents = useMemo(
+    () => (
+      <StyledPageContentsWrapper>
+        <StyledPageContents hideSidebar={hideSidebar}>
+          <StyledPageBody>
+            {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
+            {children}
+          </StyledPageBody>
+          {!hideSidebar ? <Sidebar /> : null}
+        </StyledPageContents>
+      </StyledPageContentsWrapper>
+    ),
+    [children, disableTitleMargin, hideHeader, hideSidebar, title]
+  );
+
   return (
-    <StyledPageView>
-      <Container disablePadding={disablePadding}>
-        <StyledPageContentsWrapper>
-          <StyledPageContents showSidebar={showSidebar}>
-            <StyledPageBody>
-              {showHeader ? <PageTitle title={title} disableMargin={disableMargin} /> : null}
-              {children}
-            </StyledPageBody>
-            {showSidebar ? <Sidebar /> : null}
-          </StyledPageContents>
-        </StyledPageContentsWrapper>
-      </Container>
+    <StyledPageView disableMargin={disableBottomMargin}>
+      {fullWidth ? contents : <Container disablePadding={disablePadding}>{contents}</Container>}
     </StyledPageView>
   );
 };

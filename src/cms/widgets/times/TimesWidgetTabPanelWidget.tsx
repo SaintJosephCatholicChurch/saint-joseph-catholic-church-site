@@ -112,6 +112,7 @@ const StyledDayTimeLineTimeCommentWrapper = styled('div')`
   gap: 8px;
   padding-left: 40px;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const StyledAddButtonWrapper = styled('div')`

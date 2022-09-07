@@ -237,6 +237,7 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
                 fontWeight: 400,
                 fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
                 letterSpacing: 0,
+                textAlign: 'left',
                 '&.Mui-selected': {
                   color: '#414141',
                   backgroundColor: '#ffffff'

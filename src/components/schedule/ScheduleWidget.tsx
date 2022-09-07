@@ -27,13 +27,15 @@ const StyledSchedule = styled('div', ['background'])<StyledScheduleProps>(
 interface ScheduleProps {
   times: Times[];
   background?: string;
+  tab?: number;
+  onTabChange?: (index: number) => void;
 }
 
-const ScheduleWidget = ({ times, background }: ScheduleProps) => {
+const ScheduleWidget = ({ times, background, tab, onTabChange }: ScheduleProps) => {
   return (
     <StyledSchedule background={background}>
       <Container>
-        <Schedule times={times} />
+        <Schedule times={times} tab={tab} onTabChange={onTabChange} />
       </Container>
     </StyledSchedule>
   );

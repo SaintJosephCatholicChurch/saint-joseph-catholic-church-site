@@ -53,93 +53,105 @@
   margin-bottom: 12px;
 }
 
-@media (min-width: 1200) {
+@media (min-width: 1200px) {
   .content h1 {
     margin-top: 32px;
     margin-bottom: 16px;
   }
 }
 
-.content h1 {
-  font-size: 26px;
-  line-height: 30px;
+.page h1 {
+  font-size: 32px;
+  line-height: 36px;
 }
 
-@media (min-width: 1200) {
-  .content h1 {
-    font-size: 32px;
-    line-height: 32px;
+@media (min-width: 600px) and (max-width: 1200px) {
+  .page h1 {
+    font-size: 26px;
   }
 }
 
-.content h2 {
+@media (max-width: 600px) {
+  .page h1 {
+    font-size: 24px;
+  }
+}
+
+.page h2 {
   text-transform: uppercase;
   color: #bf303c;
+  font-size: 26px;
+  line-height: 26px;
+}
 
-  font-size: 20px;
+@media (min-width: 600px) and (max-width: 1200px) {
+  .page h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page h2 {
+    font-size: 18px;
+  }
+}
+
+.page h3 {
+  color: #616169;
+
+  line-height: 22px;
+  font-size: 24px;
   line-height: 24px;
 }
 
-@media (min-width: 1200px) {
-  .content h2 {
-    font-size: 26px;
-    line-height: 26px;
+@media (min-width: 600px) and (max-width: 1200px) {
+  .page h3 {
+    font-size: 18px;
   }
 }
 
-.content h3 {
-  color: #616169;
-
-  font-size: 18px;
-  line-height: 22px;
-}
-
-@media (min-width: 1200px) {
-  .content h3 {
-    font-size: 24px;
-    line-height: 24px;
+@media (max-width: 600px) {
+  .page h3 {
+    font-size: 17px;
   }
 }
 
-.content h4,
-.content h5,
-.content h6 {
+.page h4,
+.page h5,
+.page h6 {
   color: #616169;
 }
 
-.content h4 {
-  font-size: 16px;
+.page h4 {
+  font-size: 20px;
   line-height: 20px;
 }
 
-@media (min-width: 1200px) {
-  .content h4 {
-    font-size: 20px;
-    line-height: 20px;
+@media (max-width: 1200px) {
+  .page h4 {
+    font-size: 16px;
   }
 }
 
-.content h5 {
-  font-size: 15px;
+.page h5 {
+  font-size: 18px;
   line-height: 19px;
 }
 
-@media (min-width: 1200px) {
-  .content h5 {
-    font-size: 18px;
-    line-height: 18px;
+@media (max-width: 1200px) {
+  .page h5 {
+    font-size: 15px;
   }
 }
 
-.content h6 {
-  font-size: 14px;
+.page h6 {
+  font-size: 16px;
   line-height: 18px;
 }
 
-@media (min-width: 1200px) {
-  .content h6 {
-    font-size: 16px;
-    line-height: 16px;
+@media (max-width: 1200px) {
+  .page h6 {
+    font-size: 14px;
   }
 }
 

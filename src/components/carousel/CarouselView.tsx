@@ -27,7 +27,7 @@ const StyledCarouselView = styled('div')(
         margin-left: 32px;
       }
 
-      &:last-child {
+      &:last-of-type {
         margin-right: 32px;
       }
 

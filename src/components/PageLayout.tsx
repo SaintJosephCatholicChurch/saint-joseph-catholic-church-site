@@ -22,6 +22,7 @@ interface PageProps {
   };
   showHeader?: boolean;
   showSidebar?: boolean;
+  disablePadding?: boolean;
   disableMargin?: boolean;
 }
 
@@ -34,6 +35,7 @@ const PageLayout = ({
   pageDetails,
   showHeader = true,
   showSidebar = true,
+  disablePadding,
   disableMargin
 }: PageProps) => {
   const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
@@ -52,7 +54,13 @@ const PageLayout = ({
           description={description}
         />
       ) : null}
-      <PageView title={title} showHeader={showHeader} showSidebar={showSidebar} disableMargin={disableMargin}>
+      <PageView
+        title={title}
+        showHeader={showHeader}
+        showSidebar={showSidebar}
+        disablePadding={disablePadding}
+        disableMargin={disableMargin}
+      >
         {children}
       </PageView>
       <Footer churchDetails={churchDetails} />

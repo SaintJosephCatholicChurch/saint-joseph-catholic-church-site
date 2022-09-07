@@ -1,3 +1,12 @@
+/** @type {import('next').NextConfig} */
+const withTM = require('next-transpile-modules')([
+  '@fullcalendar/common',
+  '@fullcalendar/daygrid',
+  '@fullcalendar/react',
+  '@fullcalendar/timegrid',
+  '@fullcalendar/list'
+]);
+
 const withPWA = require('next-pwa')({
   dest: 'public'
 });
@@ -6,7 +15,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
 
-let config = {
+let config = withTM({
   pageExtensions: ['tsx'],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
@@ -23,7 +32,7 @@ let config = {
     );
     return config;
   }
-};
+});
 
 if (process.env.NODE_ENV === 'production') {
   config = withPWA(config);

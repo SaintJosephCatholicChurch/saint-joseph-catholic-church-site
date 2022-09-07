@@ -20,7 +20,8 @@
           "url": "/posts"
         },
         {
-          "title": "Event Calendar"
+          "title": "Event Calendar",
+          "url": "/events"
         },
         {
           "page": "mass-confession-times",

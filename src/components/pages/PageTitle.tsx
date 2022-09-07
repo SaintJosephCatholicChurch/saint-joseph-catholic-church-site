@@ -7,7 +7,7 @@ const StyledHeader = styled('header', ['disableMargin'])`
   justify-content: center;
   width: 100%;
 
-  &:first-child h1 {
+  &:first-of-type h1 {
     margin-top: 0;
   }
 `;

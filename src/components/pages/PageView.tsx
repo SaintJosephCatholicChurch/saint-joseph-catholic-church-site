@@ -57,12 +57,20 @@ interface PageViewProps {
   showHeader: boolean;
   showSidebar: boolean;
   disableMargin?: boolean;
+  disablePadding?: boolean;
 }
 
-const PageView = ({ title, children, showHeader, showSidebar, disableMargin = false }: PageViewProps) => {
+const PageView = ({
+  title,
+  children,
+  showHeader,
+  showSidebar,
+  disablePadding,
+  disableMargin = false
+}: PageViewProps) => {
   return (
     <StyledPageView>
-      <Container>
+      <Container disablePadding={disablePadding}>
         <StyledPageContentsWrapper>
           <StyledPageContents showSidebar={showSidebar}>
             <StyledPageBody>

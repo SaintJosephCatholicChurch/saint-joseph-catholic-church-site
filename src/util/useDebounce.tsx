@@ -55,3 +55,7 @@ export function useDebouncedToggleOff(value: boolean, delay: number) {
   return toggleValue || debouncedValue;
 }
 
+export function useDebouncedToggleOn(value: boolean, delay: number) {
+  return !useDebouncedToggleOff(!value, delay);
+}
+

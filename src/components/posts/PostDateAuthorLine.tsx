@@ -17,6 +17,10 @@ interface PostDateAuthorLineProps {
 }
 
 const PostDateAuthorLine = memo(({ date }: PostDateAuthorLineProps) => {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
+
   return <StyledDate dateTime={formatISO(date)}>{format(date, 'LLLL d, yyyy')}</StyledDate>;
 });
 

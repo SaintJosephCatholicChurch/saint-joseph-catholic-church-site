@@ -1,5 +1,10 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { Map } from 'immutable';
+import cmsApp from 'netlify-cms-app';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
+import tinymce from 'tinymce/tinymce';
+import uuid from 'uuid/v4';
+import { isNotEmpty } from '../../../util/string.util';
 import styled from '../../../util/styled.util';
 import BundledEditor from './BundledEditor';
 
@@ -14,17 +19,56 @@ const StyledEditorControl = styled('div')`
 
 interface EditorControlProps {
   value: string;
+  field: Map<string, any>;
   onChange: (value: string) => void;
+  onOpenMediaLibrary: (options: {
+    controlID: string;
+    forImage: boolean;
+    privateUpload: any;
+    allowMultiple: boolean;
+    field: Map<string, any>;
+    value?: any[];
+    config?: any;
+  }) => void;
+  mediaPaths: Map<string, any>;
 }
 
-const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
+const EditorControl = ({ field, value = '', onChange, onOpenMediaLibrary, mediaPaths }: EditorControlProps) => {
+  console.log('EditorControl!');
   const editorRef = useRef<TinyMCEEditor>(null);
+
+  const controlID = useMemo(() => uuid(), []);
 
   const handleOnChange = useCallback(() => {
     if (editorRef.current) {
       onChange(editorRef.current.getContent());
     }
   }, [onChange]);
+
+  const mediaLibraryFieldOptions = useMemo(() => field.get('media_library', Map()), [field]);
+
+  const getMediaById = useCallback((id: string) => {
+    return cmsApp.selectMediaFiles().find((file) => file.id === id);
+  }, []);
+
+  const handleOpenMedialLibrary = useCallback(() => {
+    onOpenMediaLibrary({
+      controlID: controlID,
+      forImage: true,
+      privateUpload: field.get('private'),
+      allowMultiple: false,
+      field
+      // config: mediaLibraryFieldOptions.get('config')
+    });
+  }, [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]);
+
+  const mediaPath = mediaPaths.get(controlID);
+  useEffect(() => {
+    console.log('EditorControl! mediaPath', mediaPath);
+    if (isNotEmpty(mediaPath)) {
+      tinymce.activeEditor.execCommand('mceInsertContent', false, `<img src="${mediaPath}" />`);
+    }
+  }, [mediaPath]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialValue = useMemo(() => value, []);
@@ -71,7 +115,6 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
               'emoticons',
               'fullscreen',
               'help',
-              'image',
               'insertdatetime',
               'link',
               'lists',
@@ -82,7 +125,8 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
               'table',
               'telephone-autolink',
               'visualblocks',
-              'wordcount'
+              'wordcount',
+              'image'
             ],
             toolbar:
               'blocks | ' +
@@ -96,10 +140,11 @@ const EditorControl = ({ value = '', onChange }: EditorControlProps) => {
             branding: false,
             invalid_styles: 'width height'
           }}
+          onOpenMediaLibrary={handleOpenMedialLibrary}
         />
       </StyledEditorControl>
     ),
-    [handleOnChange, initialValue]
+    [handleOnChange, initialValue, handleOpenMedialLibrary]
   );
 };
 

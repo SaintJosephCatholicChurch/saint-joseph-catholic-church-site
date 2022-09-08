@@ -1,0 +1,40 @@
+import { Type } from '@ephox/katamari';
+
+import { Editor } from 'tinymce';
+
+import { isFigure, isImage } from '../core/ImageData';
+import * as ImageSelection from '../core/ImageSelection';
+import * as Utils from '../core/Utils';
+import { CmsFunctions } from '../interface';
+import { Dialog } from './Dialog';
+
+const register = (editor: Editor, { onOpenMediaLibrary }: CmsFunctions): void => {
+  editor.ui.registry.addToggleButton('image', {
+    icon: 'image',
+    tooltip: 'Insert/edit image',
+    onAction: Dialog(editor).open,
+    onSetup: (buttonApi) => {
+      // Set the initial state and then bind to selection changes to update the state when the selection changes
+      buttonApi.setActive(Type.isNonNullable(ImageSelection.getSelectedImage(editor)));
+      return editor.selection.selectorChangedWithUnbind(
+        'img:not([data-mce-object]):not([data-mce-placeholder]),figure.image',
+        buttonApi.setActive
+      ).unbind;
+    }
+  });
+
+  editor.ui.registry.addMenuItem('image', {
+    icon: 'image',
+    text: 'Image...',
+    onAction: () => {
+      onOpenMediaLibrary();
+    }
+  });
+
+  editor.ui.registry.addContextMenu('image', {
+    update: (element): string[] =>
+      isFigure(element) || (isImage(element) && !Utils.isPlaceholderImage(element)) ? ['image'] : []
+  });
+};
+
+export { register };

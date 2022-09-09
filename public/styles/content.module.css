@@ -61,24 +61,24 @@
   }
 }
 
-.page h1 {
+.content h1 {
   font-size: 32px;
   line-height: 36px;
 }
 
 @media (min-width: 600px) and (max-width: 1200px) {
-  .page h1 {
+  .content h1 {
     font-size: 26px;
   }
 }
 
 @media (max-width: 600px) {
-  .page h1 {
+  .content h1 {
     font-size: 24px;
   }
 }
 
-.page h2 {
+.content h2 {
   text-transform: uppercase;
   color: #bf303c;
   font-size: 26px;
@@ -86,18 +86,18 @@
 }
 
 @media (min-width: 600px) and (max-width: 1200px) {
-  .page h2 {
+  .content h2 {
     font-size: 20px;
   }
 }
 
 @media (max-width: 600px) {
-  .page h2 {
+  .content h2 {
     font-size: 18px;
   }
 }
 
-.page h3 {
+.content h3 {
   color: #616169;
 
   line-height: 22px;
@@ -106,52 +106,52 @@
 }
 
 @media (min-width: 600px) and (max-width: 1200px) {
-  .page h3 {
+  .content h3 {
     font-size: 18px;
   }
 }
 
 @media (max-width: 600px) {
-  .page h3 {
+  .content h3 {
     font-size: 17px;
   }
 }
 
-.page h4,
-.page h5,
-.page h6 {
+.content h4,
+.content h5,
+.content h6 {
   color: #616169;
 }
 
-.page h4 {
+.content h4 {
   font-size: 20px;
   line-height: 20px;
 }
 
 @media (max-width: 1200px) {
-  .page h4 {
+  .content h4 {
     font-size: 16px;
   }
 }
 
-.page h5 {
+.content h5 {
   font-size: 18px;
   line-height: 19px;
 }
 
 @media (max-width: 1200px) {
-  .page h5 {
+  .content h5 {
     font-size: 15px;
   }
 }
 
-.page h6 {
+.content h6 {
   font-size: 16px;
   line-height: 18px;
 }
 
 @media (max-width: 1200px) {
-  .page h6 {
+  .content h6 {
     font-size: 14px;
   }
 }

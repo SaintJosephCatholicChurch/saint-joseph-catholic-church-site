@@ -1,12 +1,12 @@
 {
   "slides": [
     {
-      "image": "/images/churchslide1.jpg",
+      "image": "/files/churchslide1.jpg",
       "title": "All Are Welcome"
     },
     {
-      "image": "/images/churchslide2-1.jpg"
+      "image": "/files/churchslide2-1.jpg"
     }
   ],
-  "schedule_background": "/images/pattern.png"
+  "schedule_background": "/files/pattern.png"
 }

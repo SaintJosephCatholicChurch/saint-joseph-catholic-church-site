@@ -36,7 +36,9 @@
           "page": "parish-history"
         },
         {
-          "title": "Parish Membership"
+          "title": "Parish Membership",
+          "url": "",
+          "page": "parish-membership"
         },
         {
           "title": "Parish Staff",

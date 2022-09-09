@@ -1,9 +1,9 @@
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import uuid from 'uuid/v4';
 import { doesUrlFileExist } from '../../../util/fetch.util';
-import { isEmpty } from '../../../util/string.util';
+import { isEmpty, isNotEmpty } from '../../../util/string.util';
 import styled from '../../../util/styled.util';
 import BundledEditor from './BundledEditor';
 
@@ -36,16 +36,27 @@ interface EditorControlProps {
 function fromEditorToStorage(value: string): string {
   let newValue = value;
 
-  const regex = /<img(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?[\/]{0,1}>/g;
-  let match = regex.exec(newValue);
-  while (match && match.length === 2) {
-    const newImage = match[0]
-      .replace(/src="(?:[\w\W]+?)"/g, `src="${match[1]}"`)
+  const imageRegex = /<img(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?[\/]{0,1}>/g;
+  let imageMatch = imageRegex.exec(newValue);
+  while (imageMatch && imageMatch.length === 2) {
+    const newImage = imageMatch[0]
+      .replace(/src="(?:[\w\W]+?)"/g, `src="${imageMatch[1]}"`)
       .replace(/data-asset="(?:[\w\W]+?)"/g, '')
       .replace(/([^\/]{1})>/g, '$1/>')
       .replace('  ', ' ');
-    newValue = newValue.replaceAll(match[0], newImage);
-    match = regex.exec(newValue);
+    newValue = newValue.replaceAll(imageMatch[0], newImage);
+    imageMatch = imageRegex.exec(newValue);
+  }
+
+  const fileRegex = /<a(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?>(?:[\w\W]+?)<\/a>/g;
+  let fileMatch = fileRegex.exec(newValue);
+  while (fileMatch && fileMatch.length === 2) {
+    const newFileLink = fileMatch[0]
+      .replace(/href="(?:[\w\W]+?)"/g, `href="${fileMatch[1]}"`)
+      .replace(/data-asset="(?:[\w\W]+?)"/g, '')
+      .replace('  ', ' ');
+    newValue = newValue.replaceAll(fileMatch[0], newFileLink);
+    fileMatch = fileRegex.exec(newValue);
   }
 
   return newValue;
@@ -72,35 +83,60 @@ const EditorControl = ({
     }
   }, [onChange]);
 
-  const mediaLibraryFieldOptions = field.get('media_library', Map());
-  const handleOpenMedialLibrary = useCallback(() => {
-    onOpenMediaLibrary({
-      controlID: controlID,
-      forImage: true,
-      privateUpload: field.get('private'),
-      allowMultiple: false,
-      field,
-      config: mediaLibraryFieldOptions.get('config')
-    });
-  }, [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]);
+  const fileField: Map<string, any> = useMemo(() => {
+    const temp = field.toJS();
+    temp['media_folder'] = temp['file_media_folder'];
+    temp['public_folder'] = temp['file_public_folder'];
+    return fromJS(temp);
+  }, [field]);
 
-  const mediaPath = mediaPaths.get(controlID);
+  const mediaLibraryFieldOptions = field.get('media_library', Map());
+  const handleOpenMedialLibrary = useCallback(
+    (forImage: boolean) => {
+      console.log(fileField, forImage ? field : fileField);
+      onOpenMediaLibrary({
+        controlID: controlID,
+        forImage,
+        privateUpload: field.get('private'),
+        allowMultiple: false,
+        field: forImage ? field : fileField,
+        config: mediaLibraryFieldOptions.get('config')
+      });
+    },
+    [controlID, field, fileField, mediaLibraryFieldOptions, onOpenMediaLibrary]
+  );
+
+  const mediaPath: string = mediaPaths.get(controlID);
   useEffect(() => {
     if (isEmpty(mediaPath)) {
       return;
     }
 
     const addMedia = async () => {
-      let image: string;
-      if (await doesUrlFileExist(mediaPath)) {
-        image = `<img src="${mediaPath}" />`;
+      const { type, exists } = await doesUrlFileExist(mediaPath);
+      console.log(type);
+
+      let content: string | undefined;
+      if (type.startsWith('image')) {
+        if (exists) {
+          content = `<img src="${mediaPath}" />`;
+        } else {
+          content = `<img data-asset="${mediaPath}" src="${getAsset(mediaPath, field)}" />`;
+        }
       } else {
-        image = `<img data-asset="${mediaPath}" src="${getAsset(mediaPath, field)}" />`;
+        const name = mediaPath.split('/').pop();
+        if (exists) {
+          content = `<a target="_blank" href="${mediaPath}">${name}</a>`;
+        } else {
+          content = `<a data-asset="${mediaPath}" target="_blank" href="${getAsset(mediaPath, field)}">${name}</a>`;
+        }
       }
 
-      editorRef.current.focus();
-      editorRef.current.selection.setContent(image);
-      onChange(editorRef.current.getContent());
+      if (isNotEmpty(content)) {
+        editorRef.current.focus();
+        editorRef.current.selection.setContent(content);
+        onChange(editorRef.current.getContent());
+      }
     };
 
     addMedia();
@@ -160,7 +196,8 @@ const EditorControl = ({
               'telephone-autolink',
               'visualblocks',
               'wordcount',
-              'image'
+              'image',
+              'file'
             ],
             toolbar:
               'blocks | ' +
@@ -172,7 +209,104 @@ const EditorControl = ({
             resize: false,
             elementpath: false,
             branding: false,
-            invalid_styles: 'width height'
+            invalid_styles: 'width height',
+            quickbars_insert_toolbar: 'quick-cms-image quick-cms-file quicktable',
+            quickbars_image_toolbar: 'alignnone alignleft aligncenter alignright',
+            formats: {
+              alignleft: [
+                {
+                  selector: 'figure.image',
+                  collapsed: false,
+                  classes: 'align-left',
+                  ceFalseOverride: true,
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'figure,p,h1,h2,h3,h4,h5,h6,td,th,tr,div,ul,ol,li,pre',
+                  styles: {
+                    textAlign: 'left'
+                  },
+                  inherit: false,
+                  preview: false
+                },
+                {
+                  selector: 'img,audio,video',
+                  collapsed: false,
+                  styles: {
+                    float: 'left',
+                    marginRight: '16px'
+                  },
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'table',
+                  collapsed: false,
+                  styles: {
+                    marginLeft: '0px',
+                    marginRight: 'auto'
+                  },
+                  onformat: (table: Node) => {
+                    // Remove conflicting float style
+                    editorRef.current.dom.setStyle(table as HTMLTableElement, 'float', null);
+                  },
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: '.mce-preview-object,[data-ephox-embed-iri]',
+                  ceFalseOverride: true,
+                  styles: {
+                    float: 'left'
+                  }
+                }
+              ],
+              alignright: [
+                {
+                  selector: 'figure.image',
+                  collapsed: false,
+                  classes: 'align-right',
+                  ceFalseOverride: true,
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'figure,p,h1,h2,h3,h4,h5,h6,td,th,tr,div,ul,ol,li,pre',
+                  styles: {
+                    textAlign: 'right'
+                  },
+                  inherit: false,
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'img,audio,video',
+                  collapsed: false,
+                  styles: {
+                    float: 'right',
+                    marginLeft: '16px'
+                  },
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'table',
+                  collapsed: false,
+                  styles: {
+                    marginRight: '0px',
+                    marginLeft: 'auto'
+                  },
+                  onformat: (table: Node) => {
+                    // Remove conflicting float style
+                    editorRef.current.dom.setStyle(table as HTMLTableElement, 'float', null);
+                  },
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: '.mce-preview-object,[data-ephox-embed-iri]',
+                  ceFalseOverride: true,
+                  styles: {
+                    float: 'right'
+                  },
+                  preview: false
+                }
+              ]
+            }
           }}
           onOpenMediaLibrary={handleOpenMedialLibrary}
         />

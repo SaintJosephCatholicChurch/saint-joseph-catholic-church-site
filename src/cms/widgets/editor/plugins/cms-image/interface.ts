@@ -1,3 +1,3 @@
 export interface CmsFunctions {
-  onOpenMediaLibrary: () => void;
+  onOpenMediaLibrary: (forImages: boolean) => void;
 }

@@ -19,20 +19,36 @@ function getFieldAsset(field: Map<string, any>, getAsset: (path: string, field: 
 async function fromStorageToEditor(value: string, getAsset: (path: string) => string): Promise<string> {
   let newValue = value;
 
-  const regex = /<img(?:[\w\W]+?)src="([\w\W]+?)"(?:[\w\W]+?)[\/]{0,1}>/g;
-  let match = regex.exec(newValue);
-  while (match && match.length === 2) {
-    if (await doesUrlFileExist(match[1])) {
-      match = regex.exec(newValue);
+  const imageRegex = /<img(?:[\w\W]+?)src="([\w\W]+?)"(?:[\w\W]+?)[\/]{0,1}>/g;
+  let imageMatch = imageRegex.exec(newValue);
+  while (imageMatch && imageMatch.length === 2) {
+    if (await doesUrlFileExist(imageMatch[1])) {
+      imageMatch = imageRegex.exec(newValue);
       continue;
     }
 
-    const asset = getAsset(match[1]);
+    const asset = getAsset(imageMatch[1]);
     if (isNotNullish(asset)) {
-      const newImage = match[0].replace(match[1], asset).replace(/^<img/g, `<img data-asset="${match[1]}"`);
-      newValue = newValue.replaceAll(match[0], newImage);
+      const newImage = imageMatch[0].replace(imageMatch[1], asset).replace(/^<img/g, `<img data-asset="${imageMatch[1]}"`);
+      newValue = newValue.replaceAll(imageMatch[0], newImage);
     }
-    match = regex.exec(newValue);
+    imageMatch = imageRegex.exec(newValue);
+  }
+
+  const fileRegex = /<a(?:[\w\W]+?)href="([\w\W]+?)"(?:[\w\W]+?)>(?:[\w\W]+?)<\/a>/g;
+  let fileMatch = fileRegex.exec(newValue);
+  while (fileMatch && fileMatch.length === 2) {
+    if (await doesUrlFileExist(fileMatch[1])) {
+      fileMatch = fileRegex.exec(newValue);
+      continue;
+    }
+
+    const asset = getAsset(fileMatch[1]);
+    if (isNotNullish(asset)) {
+      const newImage = fileMatch[0].replace(fileMatch[1], asset).replace(/^<a/g, `<a data-asset="${fileMatch[1]}"`);
+      newValue = newValue.replaceAll(fileMatch[0], newImage);
+    }
+    fileMatch = fileRegex.exec(newValue);
   }
 
   return newValue;
@@ -52,7 +68,7 @@ const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
 
     const getPreviewHtml = async () => {
       const processedHtml = await fromStorageToEditor(sanitizedHtml, getFieldAsset(field, getAsset));
-      if (alive) {
+      if (alive && html !== processedHtml) {
         setHtml(processedHtml);
       }
     };
@@ -62,7 +78,7 @@ const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
     return () => {
       alive = false;
     };
-  }, [field, getAsset, sanitizedHtml]);
+  }, [field, getAsset, html, sanitizedHtml]);
 
   return useMemo(
     () => (

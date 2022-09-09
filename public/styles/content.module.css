@@ -25,6 +25,7 @@
   line-height: 1.5rem;
   margin: 0 0 16px;
   font-size: 16px;
+  word-break: break-word;
 }
 
 .content div,
@@ -283,7 +284,7 @@
 }
 
 .content img {
-  width: 100%;
+  max-width: 100%;
 }
 
 @media (min-width: 800px) {

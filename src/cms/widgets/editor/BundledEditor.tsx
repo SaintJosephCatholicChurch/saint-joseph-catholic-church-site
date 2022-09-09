@@ -50,6 +50,7 @@ import 'tinymce/plugins/emoticons/js/emojis';
 import './plugins/telephone-autolink';
 import './plugins/bible-autolink';
 import createCmsImagePlugin from './plugins/cms-image';
+import createCmsFilePlugin from './plugins/cms-file';
 
 // Content styles, including inline UI like fake cursors
 /* eslint import/no-webpack-loader-syntax: off */
@@ -62,6 +63,7 @@ export default function BundledEditor(props) {
 
   useEffect(() => {
     createCmsImagePlugin({ onOpenMediaLibrary });
+    createCmsFilePlugin({ onOpenMediaLibrary });
   }, [onOpenMediaLibrary]);
 
   // note that skin and content_css is disabled to avoid the normal

@@ -1,10 +1,9 @@
 import { Map } from 'immutable';
-import cmsApp from 'netlify-cms-app';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
-import tinymce from 'tinymce/tinymce';
 import uuid from 'uuid/v4';
-import { isNotEmpty } from '../../../util/string.util';
+import { doesUrlFileExist } from '../../../util/fetch.util';
+import { isEmpty } from '../../../util/string.util';
 import styled from '../../../util/styled.util';
 import BundledEditor from './BundledEditor';
 
@@ -30,48 +29,83 @@ interface EditorControlProps {
     value?: any[];
     config?: any;
   }) => void;
+  getAsset: (path: string, field: Map<string, any>) => string;
   mediaPaths: Map<string, any>;
 }
 
-const EditorControl = ({ field, value = '', onChange, onOpenMediaLibrary, mediaPaths }: EditorControlProps) => {
-  console.log('EditorControl!');
+function fromEditorToStorage(value: string): string {
+  let newValue = value;
+
+  const regex = /<img(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?[\/]{0,1}>/g;
+  let match = regex.exec(newValue);
+  while (match && match.length === 2) {
+    const newImage = match[0]
+      .replace(/src="(?:[\w\W]+?)"/g, `src="${match[1]}"`)
+      .replace(/data-asset="(?:[\w\W]+?)"/g, '')
+      .replace(/([^\/]{1})>/g, '$1/>')
+      .replace('  ', ' ');
+    newValue = newValue.replaceAll(match[0], newImage);
+    match = regex.exec(newValue);
+  }
+
+  return newValue;
+}
+
+const EditorControl = ({
+  field,
+  value = '',
+  onChange,
+  onOpenMediaLibrary,
+  getAsset,
+  mediaPaths
+}: EditorControlProps) => {
   const editorRef = useRef<TinyMCEEditor>(null);
 
-  const controlID = useMemo(() => uuid(), []);
+  const controlID: string = useMemo(() => uuid(), []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialValue = useMemo(() => value, []);
 
   const handleOnChange = useCallback(() => {
     if (editorRef.current) {
-      onChange(editorRef.current.getContent());
+      onChange(fromEditorToStorage(editorRef.current.getContent()));
     }
   }, [onChange]);
 
-  const mediaLibraryFieldOptions = useMemo(() => field.get('media_library', Map()), [field]);
-
-  const getMediaById = useCallback((id: string) => {
-    return cmsApp.selectMediaFiles().find((file) => file.id === id);
-  }, []);
-
+  const mediaLibraryFieldOptions = field.get('media_library', Map());
   const handleOpenMedialLibrary = useCallback(() => {
     onOpenMediaLibrary({
       controlID: controlID,
       forImage: true,
       privateUpload: field.get('private'),
       allowMultiple: false,
-      field
-      // config: mediaLibraryFieldOptions.get('config')
+      field,
+      config: mediaLibraryFieldOptions.get('config')
     });
   }, [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]);
 
   const mediaPath = mediaPaths.get(controlID);
   useEffect(() => {
-    console.log('EditorControl! mediaPath', mediaPath);
-    if (isNotEmpty(mediaPath)) {
-      tinymce.activeEditor.execCommand('mceInsertContent', false, `<img src="${mediaPath}" />`);
+    if (isEmpty(mediaPath)) {
+      return;
     }
-  }, [mediaPath]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const initialValue = useMemo(() => value, []);
+    const addMedia = async () => {
+      let image: string;
+      if (await doesUrlFileExist(mediaPath)) {
+        image = `<img src="${mediaPath}" />`;
+      } else {
+        image = `<img data-asset="${mediaPath}" src="${getAsset(mediaPath, field)}" />`;
+      }
+
+      editorRef.current.focus();
+      editorRef.current.selection.setContent(image);
+      onChange(editorRef.current.getContent());
+    };
+
+    addMedia();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field, mediaPath]);
 
   return useMemo(
     () => (

@@ -11,6 +11,7 @@ const StyledBlogPostPreview = styled('div')`
 
 const StyledBlogPostPreviewContent = styled('div')`
   max-width: 800px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-top: 32px;

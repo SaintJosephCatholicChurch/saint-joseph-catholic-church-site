@@ -8,19 +8,13 @@ export default class EditorWidget extends Component<CmsWidgetControlProps<string
     onChange(newValue);
   }
 
-  shouldComponentUpdate(
-    nextProps: Readonly<CmsWidgetControlProps<string>>,
-    nextState: Readonly<{}>,
-    nextContext: any
-  ): boolean {
-    console.log('EditorWidget! nextProps', nextProps);
+  shouldComponentUpdate(_nextProps: Readonly<CmsWidgetControlProps<string>>): boolean {
     return true;
   }
 
   render() {
     const { field, value } = this.props;
-    const { onOpenMediaLibrary, mediaPaths } = this.props as any;
-    console.log('EditorWidget!');
+    const { onOpenMediaLibrary, getAsset, mediaPaths } = this.props as any;
 
     return (
       <EditorControl
@@ -28,6 +22,7 @@ export default class EditorWidget extends Component<CmsWidgetControlProps<string
         value={value}
         onChange={(newValue) => this.handleOnChange(newValue)}
         onOpenMediaLibrary={onOpenMediaLibrary}
+        getAsset={getAsset}
         mediaPaths={mediaPaths}
       />
     );

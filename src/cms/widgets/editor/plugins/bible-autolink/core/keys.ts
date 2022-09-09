@@ -90,18 +90,19 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
 
   const rngText = Unicode.removeZwsp(newRng.toString());
   const matches = rngText.match(autoLinkPattern);
+  console.log('[BIBLE VERSE] matches', matches);
 
   // Book, chapter and maybe verse
-  if (matches && matches.length === 4) {
-    const index = rngText.indexOf(matches[0]);
+  if (matches && matches.length === 5) {
+    const index = rngText.indexOf(matches[1]);
     newRng.setStart(newRng.startContainer, newRng.startOffset + index);
     const finalRangeText = Unicode.removeZwsp(newRng.toString());
-    if (finalRangeText === matches[0]) {
-      const book = abbreviationsToUJSCCBBook[matches[1].toLowerCase()];
-      const verse = matches.length > 3 && isNotEmpty(matches[3]) ? `?${matches[3]}` : '';
+    if (finalRangeText === matches[1]) {
+      const book = abbreviationsToUJSCCBBook[matches[2].toLowerCase()];
+      const verse = matches.length > 3 && isNotEmpty(matches[4]) ? `?${matches[4]}` : '';
       return {
         rng: newRng,
-        url: `${bibleUrl.replace('/$', '')}/${book}/${matches[2]}${verse}`
+        url: `${bibleUrl.replace('/$', '')}/${book}/${matches[3]}${verse}`
       };
     }
 

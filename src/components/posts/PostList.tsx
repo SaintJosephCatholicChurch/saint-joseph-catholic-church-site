@@ -1,7 +1,14 @@
-import Box from '@mui/material/Box';
 import type { PostContent, TagContent } from '../../interface';
+import styled from '../../util/styled.util';
 import Pagination from '../Pagination';
 import PostSummary from './PostSummary';
+
+const StyledPostList = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+`;
 
 interface PostListProps {
   posts: PostContent[];
@@ -14,19 +21,17 @@ interface PostListProps {
 
 const PostList = ({ posts, tags, pagination }: PostListProps) => {
   return (
-    <Box>
+    <StyledPostList>
       {posts.map((post) => (
         <PostSummary key={`post-${post.data.slug}`} post={post} />
       ))}
       <Pagination
         current={pagination.current}
         pages={pagination.pages}
-        link={{
-          href: (page) => (page === 1 ? '/posts' : '/posts/page/[page]'),
-          as: (page) => (page === 1 ? null : `/posts/page/${page}`)
-        }}
+        firstPageLink="/posts"
+        pageLink="/posts/page/[page]"
       />
-    </Box>
+    </StyledPostList>
   );
 };
 

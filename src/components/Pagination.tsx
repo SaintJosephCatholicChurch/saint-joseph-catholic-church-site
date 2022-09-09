@@ -1,5 +1,7 @@
 import MuiPagination from '@mui/material/Pagination';
+import { ChangeEvent, useCallback } from 'react';
 import styled from '../util/styled.util';
+import useNavigate from '../util/useNavigate';
 
 const StyledPagination = styled('div')`
   width: 100%;
@@ -12,16 +14,28 @@ const StyledPagination = styled('div')`
 interface PaginationProps {
   current: number;
   pages: number;
-  link: {
-    href: (page: number) => string;
-    as: (page: number) => string;
-  };
+  firstPageLink: string;
+  pageLink: string;
 }
 
-const Pagination = ({ current, pages, link }: PaginationProps) => {
+const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps) => {
+  const navigate = useNavigate();
+
+  const onChange = useCallback(
+    (_event: ChangeEvent, newPage: number) => {
+      if (newPage === 1) {
+        navigate(firstPageLink);
+        return;
+      }
+
+      navigate(pageLink.replace('[page]', `${newPage}`));
+    },
+    [firstPageLink, navigate, pageLink]
+  );
+
   return (
     <StyledPagination>
-      <MuiPagination count={pages} defaultPage={current} showFirstButton showLastButton />
+      <MuiPagination count={pages} defaultPage={current} showFirstButton showLastButton onChange={onChange} />
     </StyledPagination>
   );
 };

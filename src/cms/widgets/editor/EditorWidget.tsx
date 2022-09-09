@@ -2,15 +2,29 @@ import { CmsWidgetControlProps } from 'netlify-cms-core';
 import { Component } from 'react';
 import EditorControl from './EditorControl';
 
-export default class TimesWidget extends Component<CmsWidgetControlProps<string>> {
+export default class EditorWidget extends Component<CmsWidgetControlProps<string>> {
   handleOnChange(newValue: string) {
-    const { onChange } = this.props;
+    const { onChange } = this.props as any;
     onChange(newValue);
   }
 
-  render() {
-    const { value } = this.props;
+  shouldComponentUpdate(_nextProps: Readonly<CmsWidgetControlProps<string>>): boolean {
+    return true;
+  }
 
-    return <EditorControl value={value} onChange={(newValue) => this.handleOnChange(newValue)} />;
+  render() {
+    const { field, value } = this.props;
+    const { onOpenMediaLibrary, getAsset, mediaPaths } = this.props as any;
+
+    return (
+      <EditorControl
+        field={field}
+        value={value}
+        onChange={(newValue) => this.handleOnChange(newValue)}
+        onOpenMediaLibrary={onOpenMediaLibrary}
+        getAsset={getAsset}
+        mediaPaths={mediaPaths}
+      />
+    );
   }
 }

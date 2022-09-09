@@ -38,8 +38,8 @@ const config: CmsConfig = {
     name: 'git-gateway',
     branch: 'main'
   },
-  media_folder: 'public/images',
-  public_folder: '/images',
+  media_folder: '/public/files',
+  public_folder: '/files',
   slug: {
     encoding: 'ascii',
     clean_accents: true,
@@ -268,7 +268,7 @@ const config: CmsConfig = {
               name: 'staff',
               label: 'Staff',
               widget: 'list',
-              summary: "{{fields.name}} - {{field.image}}",
+              summary: '{{fields.name}} - {{field.image}}',
               fields: [
                 {
                   name: 'name',

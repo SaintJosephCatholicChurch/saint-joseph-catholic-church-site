@@ -26,7 +26,6 @@ import 'tinymce/plugins/directionality';
 import 'tinymce/plugins/emoticons';
 import 'tinymce/plugins/fullscreen';
 import 'tinymce/plugins/help';
-import 'tinymce/plugins/image';
 import 'tinymce/plugins/importcss';
 import 'tinymce/plugins/insertdatetime';
 import 'tinymce/plugins/link';
@@ -48,16 +47,25 @@ import 'tinymce/plugins/wordcount';
 import 'tinymce/plugins/emoticons/js/emojis';
 
 // importing custom plugins
-import './plugins/telephone-autolink';
 import './plugins/bible-autolink';
+import createCmsFilePlugin from './plugins/cms-file';
+import createCmsImagePlugin from './plugins/cms-image';
+import './plugins/telephone-autolink';
 
 // Content styles, including inline UI like fake cursors
 /* eslint import/no-webpack-loader-syntax: off */
 import contentCss from '!!raw-loader!tinymce/skins/content/default/content.min.css';
 import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
+import { useEffect } from 'react';
 
 export default function BundledEditor(props) {
-  const { init, ...rest } = props;
+  const { init, onOpenMediaLibrary, ...rest } = props;
+
+  useEffect(() => {
+    createCmsImagePlugin({ onOpenMediaLibrary });
+    createCmsFilePlugin({ onOpenMediaLibrary });
+  }, [onOpenMediaLibrary]);
+
   // note that skin and content_css is disabled to avoid the normal
   // loading process and is instead loaded as a string via content_style
   return (

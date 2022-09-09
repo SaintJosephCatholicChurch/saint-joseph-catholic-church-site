@@ -23,10 +23,8 @@ const TagPostList = ({ posts, tag, pagination }: TagPostListProps) => {
       <Pagination
         current={pagination.current}
         pages={pagination.pages}
-        link={{
-          href: () => '/posts/tags/[[...slug]]',
-          as: (page) => (page === 1 ? `/posts/tags/${tag.slug}` : `/posts/tags/${tag.slug}/${page}`)
-        }}
+        firstPageLink={`/posts/tags/${tag.slug}`}
+        pageLink={`/posts/tags/${tag.slug}/[page]`}
       />
     </div>
   );

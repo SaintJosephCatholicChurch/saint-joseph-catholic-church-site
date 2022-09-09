@@ -16,20 +16,28 @@ function getFieldAsset(field: Map<string, any>, getAsset: (path: string, field: 
   };
 }
 
-async function fromStorageToEditor(value: string, getAsset: (path: string) => string): Promise<string> {
+async function fromStorageToEditor(
+  value: string,
+  getAsset: (path: string) => string,
+  cache: Record<string, boolean>
+): Promise<{ result: string; cache: Record<string, boolean> }> {
   let newValue = value;
 
   const imageRegex = /<img(?:[\w\W]+?)src="([\w\W]+?)"(?:[\w\W]+?)[\/]{0,1}>/g;
   let imageMatch = imageRegex.exec(newValue);
   while (imageMatch && imageMatch.length === 2) {
-    if (await doesUrlFileExist(imageMatch[1])) {
+    if (imageMatch[1] in cache ? cache[imageMatch[1]] : (await doesUrlFileExist(imageMatch[1])).exists) {
+      cache[imageMatch[1]] = true;
       imageMatch = imageRegex.exec(newValue);
       continue;
     }
 
+    cache[imageMatch[1]] = false;
     const asset = getAsset(imageMatch[1]);
     if (isNotNullish(asset)) {
-      const newImage = imageMatch[0].replace(imageMatch[1], asset).replace(/^<img/g, `<img data-asset="${imageMatch[1]}"`);
+      const newImage = imageMatch[0]
+        .replace(imageMatch[1], asset)
+        .replace(/^<img/g, `<img data-asset="${imageMatch[1]}"`);
       newValue = newValue.replaceAll(imageMatch[0], newImage);
     }
     imageMatch = imageRegex.exec(newValue);
@@ -38,11 +46,13 @@ async function fromStorageToEditor(value: string, getAsset: (path: string) => st
   const fileRegex = /<a(?:[\w\W]+?)href="([\w\W]+?)"(?:[\w\W]+?)>(?:[\w\W]+?)<\/a>/g;
   let fileMatch = fileRegex.exec(newValue);
   while (fileMatch && fileMatch.length === 2) {
-    if (await doesUrlFileExist(fileMatch[1])) {
+    if (fileMatch[1] in cache ? cache[fileMatch[1]] : (await doesUrlFileExist(fileMatch[1])).exists) {
+      cache[fileMatch[1]] = true;
       fileMatch = fileRegex.exec(newValue);
       continue;
     }
 
+    cache[fileMatch[1]] = false;
     const asset = getAsset(fileMatch[1]);
     if (isNotNullish(asset)) {
       const newImage = fileMatch[0].replace(fileMatch[1], asset).replace(/^<a/g, `<a data-asset="${fileMatch[1]}"`);
@@ -51,25 +61,29 @@ async function fromStorageToEditor(value: string, getAsset: (path: string) => st
     fileMatch = fileRegex.exec(newValue);
   }
 
-  return newValue;
+  return { result: newValue, cache };
 }
 
-type EditorPreviewProps = Omit<CmsWidgetPreviewProps<string>, 'getAsset'> & {
-  getAsset: (path: string, field: Map<string, any>) => string;
-};
-
-const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
-  const sanitizedHtml = field?.get('sanitize_preview', false) ? DOMPurify.sanitize(value) : value;
-
+function useStorageToEditor(
+  input: string,
+  field: Map<string, any>,
+  getAsset: (path: string, field: Map<string, any>) => string
+) {
   const [html, setHtml] = useState<string>('');
+  const [fileCheckCache, setFileCheckCache] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     let alive = true;
 
     const getPreviewHtml = async () => {
-      const processedHtml = await fromStorageToEditor(sanitizedHtml, getFieldAsset(field, getAsset));
+      const { result: processedHtml, cache } = await fromStorageToEditor(
+        input,
+        getFieldAsset(field, getAsset),
+        fileCheckCache
+      );
       if (alive && html !== processedHtml) {
         setHtml(processedHtml);
+        setFileCheckCache(cache);
       }
     };
 
@@ -78,7 +92,18 @@ const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
     return () => {
       alive = false;
     };
-  }, [field, getAsset, html, sanitizedHtml]);
+  }, [field, fileCheckCache, getAsset, html, input]);
+
+  return html;
+}
+
+type EditorPreviewProps = Omit<CmsWidgetPreviewProps<string>, 'getAsset'> & {
+  getAsset: (path: string, field: Map<string, any>) => string;
+};
+
+const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
+  const sanitizedHtml = field?.get('sanitize_preview', false) ? DOMPurify.sanitize(value) : value;
+  const html = useStorageToEditor(sanitizedHtml, field, getAsset);
 
   return useMemo(
     () => (

@@ -1,5 +1,5 @@
-import { fromJS, Map } from 'immutable';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Map } from 'immutable';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import uuid from 'uuid/v4';
 import { doesUrlFileExist } from '../../../util/fetch.util';
@@ -83,27 +83,19 @@ const EditorControl = ({
     }
   }, [onChange]);
 
-  const fileField: Map<string, any> = useMemo(() => {
-    const temp = field.toJS();
-    temp['media_folder'] = temp['file_media_folder'];
-    temp['public_folder'] = temp['file_public_folder'];
-    return fromJS(temp);
-  }, [field]);
-
   const mediaLibraryFieldOptions = field.get('media_library', Map());
   const handleOpenMedialLibrary = useCallback(
     (forImage: boolean) => {
-      console.log(fileField, forImage ? field : fileField);
       onOpenMediaLibrary({
         controlID: controlID,
         forImage,
         privateUpload: field.get('private'),
         allowMultiple: false,
-        field: forImage ? field : fileField,
+        field,
         config: mediaLibraryFieldOptions.get('config')
       });
     },
-    [controlID, field, fileField, mediaLibraryFieldOptions, onOpenMediaLibrary]
+    [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]
   );
 
   const mediaPath: string = mediaPaths.get(controlID);
@@ -114,7 +106,6 @@ const EditorControl = ({
 
     const addMedia = async () => {
       const { type, exists } = await doesUrlFileExist(mediaPath);
-      console.log(type);
 
       let content: string | undefined;
       if (type.startsWith('image')) {
@@ -167,7 +158,7 @@ const EditorControl = ({
               format: {
                 title: 'Format',
                 items:
-                  'bold italic underline strikethrough superscript subscript | forecolor | formats blockformats fontformats fontsizes align | removeformat'
+                  'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
               },
               tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
               table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
@@ -211,7 +202,7 @@ const EditorControl = ({
             branding: false,
             invalid_styles: 'width height',
             quickbars_insert_toolbar: 'quick-cms-image quick-cms-file quicktable',
-            quickbars_image_toolbar: 'alignnone alignleft aligncenter alignright',
+            quickbars_image_toolbar: 'alignnone alignleft aligncenter alignright alignjustify',
             formats: {
               alignleft: [
                 {
@@ -304,6 +295,26 @@ const EditorControl = ({
                     float: 'right'
                   },
                   preview: false
+                }
+              ],
+              alignjustify: [
+                {
+                  selector: 'figure,p,h1,h2,h3,h4,h5,h6,td,th,tr,div,ul,ol,li,pre',
+                  styles: {
+                    textAlign: 'justify'
+                  },
+                  inherit: false,
+                  preview: 'font-family font-size'
+                },
+                {
+                  selector: 'img,audio,video',
+                  collapsed: false,
+                  styles: {
+                    width: '100%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto'
+                  },
+                  preview: 'font-family font-size'
                 }
               ]
             }

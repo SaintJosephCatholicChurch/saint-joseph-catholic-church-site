@@ -47,10 +47,10 @@ import 'tinymce/plugins/wordcount';
 import 'tinymce/plugins/emoticons/js/emojis';
 
 // importing custom plugins
-import './plugins/telephone-autolink';
 import './plugins/bible-autolink';
-import createCmsImagePlugin from './plugins/cms-image';
 import createCmsFilePlugin from './plugins/cms-file';
+import createCmsImagePlugin from './plugins/cms-image';
+import './plugins/telephone-autolink';
 
 // Content styles, including inline UI like fake cursors
 /* eslint import/no-webpack-loader-syntax: off */

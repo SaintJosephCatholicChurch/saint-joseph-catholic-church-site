@@ -12,8 +12,6 @@ export interface CmsFieldTimes {
 
 export interface CmsFieldHtml {
   widget: 'html';
-  file_media_folder: string;
-  file_public_folder: string;
 }
 
 export interface CmsFieldEvents {
@@ -40,8 +38,8 @@ const config: CmsConfig = {
     name: 'git-gateway',
     branch: 'main'
   },
-  media_folder: '/public/images',
-  public_folder: '/images',
+  media_folder: '/public/files',
+  public_folder: '/files',
   slug: {
     encoding: 'ascii',
     clean_accents: true,
@@ -349,9 +347,7 @@ const config: CmsConfig = {
         {
           name: 'body',
           label: 'Body',
-          widget: 'html',
-          file_media_folder: '/public/files',
-          file_public_folder: '/files'
+          widget: 'html'
         }
       ]
     },
@@ -404,9 +400,7 @@ const config: CmsConfig = {
         {
           name: 'body',
           label: 'Body',
-          widget: 'html',
-          file_media_folder: '/public/files',
-          file_public_folder: '/files'
+          widget: 'html'
         }
       ]
     },

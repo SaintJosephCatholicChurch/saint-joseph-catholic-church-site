@@ -90,7 +90,6 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
 
   const rngText = Unicode.removeZwsp(newRng.toString());
   const matches = rngText.match(autoLinkPattern);
-  console.log('[BIBLE VERSE] matches', matches);
 
   // Book, chapter and maybe verse
   if (matches && matches.length === 5) {

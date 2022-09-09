@@ -382,5 +382,3 @@ const bibleAbbreviationRegexString = `(?:^|[  \\t]{1})(${baseBibleAbbreviationR
 export const bibleAbbreviationRegex = new RegExp(bibleAbbreviationRegexString, 'i');
 
 export const bibleAbbreviationStrictRegex = new RegExp(`^${baseBibleAbbreviationRegexString}$`, 'i');
-
-console.log(bibleAbbreviationRegex);

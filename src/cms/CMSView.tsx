@@ -1,6 +1,6 @@
 import cmsApp from 'netlify-cms-app';
-import { CmsConfig } from 'netlify-cms-core';
-import { memo, useEffect } from 'react';
+import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
+import { ComponentType, memo, useEffect } from 'react';
 import BulletinsPreview from '../components/previews/BulletinsPreview';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
@@ -29,7 +29,7 @@ const CMSView = memo(() => {
     cmsApp.init({ config } as { config: CmsConfig });
 
     cmsApp.registerWidget('times', ScheduleWidget);
-    cmsApp.registerWidget('html', EditorWidget, EditorPreview);
+    cmsApp.registerWidget('html', EditorWidget, EditorPreview as unknown as ComponentType<CmsWidgetPreviewProps<string>>);
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
     cmsApp.registerPreviewStyle('/styles/content.module.css');

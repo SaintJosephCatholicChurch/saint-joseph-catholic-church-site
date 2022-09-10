@@ -131,6 +131,7 @@ export interface TagContent {
 
 export interface BulletinPDFMeta {
   readonly pages: string[];
+  readonly text: string;
 }
 
 export interface SearchableEntry {

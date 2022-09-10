@@ -4,10 +4,15 @@ import type { BulletinPDFMeta } from '../src/interface';
 import bulletins from '../src/lib/bulletins';
 import pdf2img from '../src/util/pdf/pdf-img-convert';
 import git from '@npmcli/git';
+import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
 
 const publicPath = 'public';
 
 (async function () {
+  const pdfExtract = new PDFExtract();
+  const options: PDFExtractOptions = {
+    normalizeWhitespace: true
+  };
   let bulletinsProcessed = 0;
   for (const bulletin of bulletins) {
     const pdfFullPath = join(publicPath, bulletin.pdf);
@@ -35,13 +40,30 @@ const publicPath = 'public';
       } catch (error) {
         if (error) {
           console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error}`);
+        } else {
+          console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
         }
       }
     }
 
+    let textContent: string;
+
+    try {
+      const pdfData = await pdfExtract.extract(pdfFullPath, options);
+      textContent = pdfData.pages.map((page) => page.content.map((content) => content.str).join(' ')).join(' ');
+    } catch (error) {
+      if (error) {
+        console.error(`Error generating text content for ${pdfFullPath}: ${error}`);
+      } else {
+        console.error(`Unknown error generating text content for ${pdfFullPath}`);
+      }
+      textContent = '';
+    }
+
     const metaFullPath = join(folderFullPath, 'meta.json');
     const data: BulletinPDFMeta = {
-      pages: pageImages
+      pages: pageImages,
+      text: textContent
     };
 
     writeFileSync(metaFullPath, JSON.stringify(data, null, 2));

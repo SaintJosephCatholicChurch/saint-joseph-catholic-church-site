@@ -4,6 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import PageLayout from '../components/PageLayout';
+import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
 import staff from '../lib/staff';
 import styled from '../util/styled.util';
 
@@ -18,13 +19,15 @@ const StyledStaffWrapper = styled('div')`
   width: 100%;
 `;
 
-const Staff = () => {
+type StaffProps = RecentPostsProps;
+
+const Staff = ({ recentPosts }: StaffProps) => {
   const theme = useTheme();
 
   const customBreakpoint = DEFAULT_CARD_SIZE * 2 + CARD_GAP_SIZE + GLOBAL_PADDING;
 
   return (
-    <PageLayout url="/staff" title="Parish Staff">
+    <PageLayout url="/staff" title="Parish Staff" recentPosts={recentPosts}>
       <StyledStaffWrapper>
         {staff.map((staffMember, index) => (
           <Card
@@ -63,3 +66,5 @@ const Staff = () => {
 };
 
 export default Staff;
+
+export const getStaticProps = getRecentPostsStaticProps;

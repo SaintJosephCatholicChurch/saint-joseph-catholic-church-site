@@ -4,9 +4,9 @@ import { useMemo } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PostView from '../../components/posts/PostView';
 import type { PostContent } from '../../interface';
-import { fetchPostContent } from '../../lib/posts';
+import { fetchPostContent, getRecentPosts, RecentPostsProps } from '../../lib/posts';
 
-interface PostProps {
+interface PostProps extends RecentPostsProps {
   title: string;
   image: string;
   dateString: string;
@@ -16,7 +16,7 @@ interface PostProps {
   content: string;
 }
 
-const Post = ({ title, image, dateString, slug, tags, description = '', content }: PostProps) => {
+const Post = ({ title, image, dateString, slug, tags, description = '', content, recentPosts }: PostProps) => {
   const date = useMemo(() => parseISO(dateString), [dateString]);
 
   return (
@@ -27,6 +27,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content 
       tags={tags}
       description={description}
       hideHeader
+      recentPosts={recentPosts}
     >
       <PostView title={title} date={date} image={image}>
         <div
@@ -74,7 +75,8 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       slug: data.slug,
       description: '',
       tags: data.tags ?? [],
-      content
+      content,
+      recentPosts: getRecentPosts()
     }
   };
 };

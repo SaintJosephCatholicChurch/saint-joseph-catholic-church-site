@@ -40,7 +40,7 @@ function fromEditorToStorage(value: string): string {
   let imageMatch = imageRegex.exec(newValue);
   while (imageMatch && imageMatch.length === 2) {
     const newImage = imageMatch[0]
-      .replace(/src="(?:[\w\W]+?)"/g, `src="${imageMatch[1]}"`)
+      .replace(/src="(?:[\w\W]+?)"/g, `src="/${imageMatch[1].replace(/^\//, '')}"`)
       .replace(/data-asset="(?:[\w\W]+?)"/g, '')
       .replace(/([^\/]{1})>/g, '$1/>')
       .replace('  ', ' ');
@@ -48,16 +48,20 @@ function fromEditorToStorage(value: string): string {
     imageMatch = imageRegex.exec(newValue);
   }
 
+  newValue = newValue.replace(/src="(?!http|\/)([\w\W]+?)"/g, 'href="/$1"');
+
   const fileRegex = /<a(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?>(?:[\w\W]+?)<\/a>/g;
   let fileMatch = fileRegex.exec(newValue);
   while (fileMatch && fileMatch.length === 2) {
     const newFileLink = fileMatch[0]
-      .replace(/href="(?:[\w\W]+?)"/g, `href="${fileMatch[1]}"`)
+      .replace(/href="(?:[\w\W]+?)"/g, `href="/${fileMatch[1].replace(/^\//, '')}"`)
       .replace(/data-asset="(?:[\w\W]+?)"/g, '')
       .replace('  ', ' ');
     newValue = newValue.replaceAll(fileMatch[0], newFileLink);
     fileMatch = fileRegex.exec(newValue);
   }
+
+  newValue = newValue.replace(/href="(?!http|mailto|tel|\/)([\w\W]+?)"/g, 'href="/$1"');
 
   return newValue;
 }
@@ -153,12 +157,11 @@ const EditorControl = ({
               insert: {
                 title: 'Insert',
                 items:
-                  'image link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime'
+                  'image file link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime'
               },
               format: {
                 title: 'Format',
-                items:
-                  'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
+                items: 'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
               },
               tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
               table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },

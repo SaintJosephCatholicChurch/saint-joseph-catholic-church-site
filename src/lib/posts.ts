@@ -96,12 +96,14 @@ export interface RecentPostsProps {
   recentPosts: PostContent[];
 }
 
-export const getRecentPostsStaticProps: GetStaticProps = (): { props: RecentPostsProps } => {
-  const recentPosts = listPostContent(1, RECENT_NEWS_TO_SHOW);
+export const getRecentPosts = (): RecentPostsProps['recentPosts'] => {
+  return listPostContent(1, RECENT_NEWS_TO_SHOW);
+};
 
+export const getRecentPostsStaticProps: GetStaticProps = (): { props: RecentPostsProps } => {
   return {
     props: {
-      recentPosts
+      recentPosts: getRecentPosts()
     }
   };
 };

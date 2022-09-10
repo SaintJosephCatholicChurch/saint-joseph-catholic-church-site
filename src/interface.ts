@@ -100,6 +100,7 @@ export interface PageContentData {
 export interface PageContent {
   readonly fullPath: string;
   readonly content: string;
+  readonly summary: string;
   readonly data: PageContentData;
 }
 
@@ -130,4 +131,11 @@ export interface TagContent {
 
 export interface BulletinPDFMeta {
   readonly pages: string[];
+}
+
+export interface SearchableEntry {
+  readonly title: string;
+  readonly content: string;
+  readonly summary: string;
+  readonly url: string;
 }

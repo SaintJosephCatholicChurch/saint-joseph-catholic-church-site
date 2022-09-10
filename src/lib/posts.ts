@@ -58,7 +58,7 @@ export function fetchPostContent(): PostContent[] {
       //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
       // }
 
-      const summaryRegex = /^([^\n]+)/g;
+      const summaryRegex = /<p>([\w\W]+?)<\/p>/i;
       const summaryMatch = summaryRegex.exec(content);
 
       return {

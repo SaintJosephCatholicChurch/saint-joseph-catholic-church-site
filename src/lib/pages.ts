@@ -56,9 +56,13 @@ export function fetchPageContent(): PageContent[] {
     //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
     // }
 
+    const summaryRegex = /<p>([\w\W]+?)<\/p>/i;
+    const summaryMatch = summaryRegex.exec(content);
+
     return {
       fullPath,
       data: data as PageContentData,
+      summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
       content
     };
   });

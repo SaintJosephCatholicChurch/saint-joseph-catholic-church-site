@@ -1,6 +1,9 @@
+import dynamic from 'next/dynamic';
+import type { PostContent } from '../../../interface';
 import styled from '../../../util/styled.util';
 import SearchBox from '../../SearchBox';
-import DailyReadings from './DailyReadings';
+import DailyReadings from '../../widgets/DailyReadings';
+import RecentNews from '../../widgets/recent-news/RecentNews';
 
 const StyledSidebar = styled('div')(
   ({ theme }) => `
@@ -19,7 +22,15 @@ const StyledSection = styled('div')`
   padding-bottom: 32px;
 `;
 
-const Sidebar = () => {
+interface SidebarProps {
+  recentPosts?: PostContent[];
+}
+
+const Sidebar = ({ recentPosts }: SidebarProps) => {
+  const UpcomingEventsNoSSR = dynamic(() => import('../../widgets/UpcomingEvents'), {
+    ssr: false
+  });
+
   return (
     <StyledSidebar>
       <StyledSection>
@@ -27,6 +38,14 @@ const Sidebar = () => {
       </StyledSection>
       <StyledSection>
         <DailyReadings />
+      </StyledSection>
+      {recentPosts?.length > 0 ? (
+        <StyledSection>
+          <RecentNews posts={recentPosts} />
+        </StyledSection>
+      ) : null}
+      <StyledSection>
+        <UpcomingEventsNoSSR />
       </StyledSection>
     </StyledSidebar>
   );

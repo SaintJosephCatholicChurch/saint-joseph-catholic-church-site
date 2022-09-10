@@ -9,20 +9,20 @@ import FullCalendar, {
   ViewProps
 } from '@fullcalendar/react';
 import { MouseEvent, MutableRefObject, useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { UPCOMING_EVENTS_TO_SHOW } from '../../../constants';
 import styled from '../../../util/styled.util';
-import MobileListEvent from './MobileListEvent';
+import UpcomingListEvent from './UpcomingListEvent';
 
-const StyledMobileListView = styled('div')`
-  padding: 0 24px;
+const StyledUpcomingListView = styled('div')`
+  width: 100%;
 `;
 
 const StyledEvents = styled('div')`
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
 `;
 
-const MobileListView =
+const UpcomingListView =
   (calendarRef: MutableRefObject<FullCalendar>) =>
   (
     props: ViewProps & {
@@ -60,41 +60,31 @@ const MobileListView =
     );
 
     const sortedSegs = useMemo(() => {
-      const newSegs = [...segs];
-      newSegs.sort((a, b) => {
-        if (a.def.allDay && b.def.allDay) {
-          return 0;
-        }
-
-        if (a.def.allDay) {
-          return -1;
-        }
-
-        if (b.def.allDay) {
-          return 1;
-        }
-
-        return a.range.start.getTime() - b.range.start.getTime();
-      });
-      return newSegs;
+      const newSegs = [...segs].filter((seg) => seg.isStart);
+      newSegs.sort((a, b) => a.range.start.getTime() - b.range.start.getTime());
+      return newSegs.slice(0, UPCOMING_EVENTS_TO_SHOW);
     }, [segs]);
 
     return (
-      <StyledMobileListView>
+      <StyledUpcomingListView>
         <StyledEvents>
           {sortedSegs.map((seg) => (
-            <MobileListEvent key={`event-${seg.def.defId}`} segment={seg} onClick={handleOnClick(seg.def.defId)} />
+            <UpcomingListEvent
+              key={`upcoming-event-${seg.def.defId}`}
+              segment={seg}
+              onClick={handleOnClick(seg.def.defId)}
+            />
           ))}
         </StyledEvents>
-      </StyledMobileListView>
+      </StyledUpcomingListView>
     );
   };
 
-const createMobileViewPlugin = (calendarRef: MutableRefObject<FullCalendar>) =>
+const createUpcomingEventsPlugin = (calendarRef: MutableRefObject<FullCalendar>) =>
   createPlugin({
     views: {
-      mobileList: MobileListView(calendarRef)
+      upcomingList: UpcomingListView(calendarRef)
     }
   });
 
-export default createMobileViewPlugin;
+export default createUpcomingEventsPlugin;

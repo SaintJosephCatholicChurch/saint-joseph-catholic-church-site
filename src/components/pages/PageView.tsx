@@ -1,4 +1,5 @@
 import { ReactNode, useMemo } from 'react';
+import { PostContent } from '../../interface';
 import styled from '../../util/styled.util';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
@@ -46,6 +47,10 @@ const StyledPageContents = styled('div', ['hideSidebar'])<StyledPageContentsProp
     width: 100%;
     grid-template-columns: ${hideSidebar ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
 
+    ${theme.breakpoints.down('lg')} {
+      gap: 24px;
+    }
+
     ${theme.breakpoints.down('md')} {
       grid-template-columns: 1fr;
     }
@@ -60,6 +65,7 @@ interface PageViewProps {
   title: string;
   children: ReactNode;
   hideHeader: boolean;
+  recentPosts?: PostContent[];
   hideSidebar?: boolean;
   disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
@@ -70,6 +76,7 @@ interface PageViewProps {
 const PageView = ({
   title,
   children,
+  recentPosts,
   hideHeader = false,
   hideSidebar = false,
   disableTitleMargin = false,
@@ -85,11 +92,11 @@ const PageView = ({
             {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
             {children}
           </StyledPageBody>
-          {!hideSidebar ? <Sidebar /> : null}
+          {!hideSidebar ? <Sidebar recentPosts={recentPosts} /> : null}
         </StyledPageContents>
       </StyledPageContentsWrapper>
     ),
-    [children, disableTitleMargin, hideHeader, hideSidebar, title]
+    [children, disableTitleMargin, hideHeader, hideSidebar, recentPosts, title]
   );
 
   return (

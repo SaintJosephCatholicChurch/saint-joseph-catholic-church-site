@@ -6,6 +6,7 @@ import type { MenuItem, MenuLink } from '../../interface';
 import styled from '../../util/styled.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
+import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import NavLink from './NavLink';
 
@@ -53,6 +54,7 @@ function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
 }
 
 interface HoverState {
+  buttonClick: boolean;
   button: boolean;
   menu: boolean;
   icon: boolean;
@@ -63,6 +65,7 @@ const NavItem = ({ item }: NavItemProps) => {
   const { pathname } = useLocation();
 
   const [open, setOpen] = useState<HoverState>({
+    buttonClick: false,
     button: false,
     menu: false,
     icon: false,
@@ -91,6 +94,7 @@ const NavItem = ({ item }: NavItemProps) => {
 
   const handleClose = useCallback(() => {
     setOpen({
+      buttonClick: false,
       button: false,
       menu: false,
       icon: false,
@@ -98,7 +102,12 @@ const NavItem = ({ item }: NavItemProps) => {
     });
   }, []);
 
-  const isOpen = useMemo(() => open.button || open.menu || open.icon || open.text, [open]);
+  const isLargeScreen = useMediaQueryUp('lg');
+
+  const isOpen = useMemo(
+    () => (!isLargeScreen && open.buttonClick) || open.button || open.menu || open.icon || open.text,
+    [isLargeScreen, open.button, open.buttonClick, open.icon, open.menu, open.text]
+  );
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
 
   useEffect(() => {
@@ -110,22 +119,18 @@ const NavItem = ({ item }: NavItemProps) => {
   }, [debouncedIsOpen, handleClose]);
 
   const handleOnClick = useCallback(
-    (link: MenuItem | MenuLink, type: keyof HoverState) => (event: MouseEvent) => {
-      if (isMenuItem(link)) {
+    (link: MenuItem | MenuLink, type: keyof HoverState) => (_event: MouseEvent) => {
+      if (isMenuItem(link) && (isLargeScreen || !open[type])) {
         handleOnMouseOver(type)();
         return;
       }
 
-      handleOnMouseOut(type)();
+      handleClose();
     },
-    [handleOnMouseOut, handleOnMouseOver]
+    [handleClose, handleOnMouseOver, isLargeScreen, open]
   );
 
   const url = useMemo(() => {
-    if (item.menu_links?.length) {
-      return getMenuLinkUrl(item.menu_links[0]);
-    }
-
     return getMenuLinkUrl(item);
   }, [item]);
 
@@ -148,9 +153,10 @@ const NavItem = ({ item }: NavItemProps) => {
   return (
     <StyledNavItem>
       <Button
-        onClick={handleOnClick(item, 'button')}
+        onClick={handleOnClick(item, 'buttonClick')}
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
+        onBlur={handleClose}
         size="large"
         target={url?.startsWith('http') ? '_blank' : undefined}
         href={url}

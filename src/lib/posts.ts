@@ -1,7 +1,9 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
+import type { GetStaticProps } from 'next';
 import path from 'path';
+import { RECENT_NEWS_TO_SHOW } from '../constants';
 import type { FileMatter, PostContent, PostContentData } from '../interface';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
@@ -48,23 +50,25 @@ export function fetchPostContent(): PostContent[] {
     return postCache;
   }
 
-  const allPostsData: PostContent[] = fetchPostMatter().map(({ fileName, fullPath, matterResult: { data, content } }) => {
-    // TODO Auto generate slugs
-    // const slug = fileName.replace(/\.mdx$/, '');
-    // if (matterData.slug !== slug) {
-    //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
-    // }
+  const allPostsData: PostContent[] = fetchPostMatter().map(
+    ({ fileName, fullPath, matterResult: { data, content } }) => {
+      // TODO Auto generate slugs
+      // const slug = fileName.replace(/\.mdx$/, '');
+      // if (matterData.slug !== slug) {
+      //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
+      // }
 
-    const summaryRegex = /^([^\n]+)/g
-    const summaryMatch = summaryRegex.exec(content);
+      const summaryRegex = /^([^\n]+)/g;
+      const summaryMatch = summaryRegex.exec(content);
 
-    return {
-      fullPath,
-      data: data as PostContentData,
-      summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
-      content
-    };
-  });
+      return {
+        fullPath,
+        data: data as PostContentData,
+        summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
+        content
+      };
+    }
+  );
 
   // Sort posts by date
   postCache = allPostsData.sort((a, b) => {
@@ -87,3 +91,17 @@ export function listPostContent(page: number, limit: number, tag?: string): Post
     .filter((post) => !tag || (post.data.tags && post.data.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }
+
+export interface RecentPostsProps {
+  recentPosts: PostContent[];
+}
+
+export const getRecentPostsStaticProps: GetStaticProps = (): { props: RecentPostsProps } => {
+  const recentPosts = listPostContent(1, RECENT_NEWS_TO_SHOW);
+
+  return {
+    props: {
+      recentPosts
+    }
+  };
+};

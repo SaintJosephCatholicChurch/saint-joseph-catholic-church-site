@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { DAILY_READINGS_RSS, getFeed } from '../../../lib/rss';
-import styled from '../../../util/styled.util';
+import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
+import styled from '../../util/styled.util';
 
 const StyledDailyReadings = styled('div')(
   ({ theme }) => `

@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import parseISO from 'date-fns/parseISO';
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import type { PostContent } from '../../interface';
 import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
+import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
-import PostTitle from '../pages/PageTitle';
 
 const StyledReadMore = styled('div')`
   color: #bf303c;
@@ -24,6 +24,11 @@ const PostSummary = memo(
       summary
     }
   }: PostSummaryProps) => {
+    const [html, setHtml] = useState<string>('');
+    useEffect(() => {
+      setHtml(summary);
+    }, [summary]);
+
     const date = useMemo(() => parseISO(dateString), [dateString]);
     return (
       <Link
@@ -42,7 +47,7 @@ const PostSummary = memo(
           <PageContentView>
             <div
               dangerouslySetInnerHTML={{
-                __html: summary
+                __html: html
               }}
             />
           </PageContentView>

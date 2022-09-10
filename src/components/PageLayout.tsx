@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import type { PostContent } from '../interface';
 import churchDetails from '../lib/church_details';
 import { getTag } from '../lib/tags';
 import { isNotEmpty } from '../util/string.util';
@@ -26,6 +27,7 @@ interface PageProps {
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
   fullWidth?: boolean;
+  recentPosts?: PostContent[];
 }
 
 const PageLayout = ({
@@ -40,7 +42,8 @@ const PageLayout = ({
   disableTitleMargin,
   disableBottomMargin,
   disablePadding,
-  fullWidth
+  fullWidth,
+  recentPosts
 }: PageProps) => {
   const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
   return (
@@ -66,6 +69,7 @@ const PageLayout = ({
         disableTitleMargin={disableTitleMargin}
         disableBottomMargin={disableBottomMargin}
         fullWidth={fullWidth}
+        recentPosts={recentPosts}
       >
         {children}
       </PageView>

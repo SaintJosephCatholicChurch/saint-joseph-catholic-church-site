@@ -26,3 +26,6 @@ export const TIMES_SECTION_TITLE_HEIGHT = 31;
 export const TIMES_SECTION_MARGIN_HEIGHT = 32;
 
 export const MENU_DELAY = 75;
+
+export const RECENT_NEWS_TO_SHOW = 4;
+export const UPCOMING_EVENTS_TO_SHOW = 4;

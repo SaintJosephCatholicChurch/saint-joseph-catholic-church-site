@@ -1,10 +1,15 @@
-import Button from '@mui/material/Button';
+import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
 import type { GetStaticProps } from 'next/types';
 import { useEffect, useState } from 'react';
 import PageLayout from '../components/PageLayout';
-import type { SearchableEntry } from '../interface';
+import SearchResult from '../components/search/SearchResult';
+import { BULLETIN, NEWS, PAGE, SearchableEntry } from '../interface';
+import { fetchBulletinsMetaData } from '../lib/bulletins';
+import churchDetails from '../lib/church_details';
 import { fetchPageContent } from '../lib/pages';
 import { fetchPostContent } from '../lib/posts';
+import staff from '../lib/staff';
 import { useSearchScores } from '../util/search.util';
 import styled from '../util/styled.util';
 import useLocation from '../util/useLocation';
@@ -12,27 +17,13 @@ import useLocation from '../util/useLocation';
 const StyledSearch = styled('div')`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 `;
 
 const StyledSearchQueryTitle = styled('h2')`
   color: #bf303c;
   margin-top: 0;
-`;
-
-const StyledSearchResultTitle = styled('h3')`
-  margin: 0;
-`;
-
-const StyledSearchResultContent = styled('div')`
-  overflow: hidden;
-
-  p {
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
+  margin-bottom: 32px;
 `;
 
 interface SearchProps {
@@ -56,34 +47,8 @@ const Search = ({ searchableEntries }: SearchProps) => {
         Results for <i>&quot;{query}&quot;</i>
       </StyledSearchQueryTitle>
       <StyledSearch>
-        {searchResults.map(({ url, title, summary }) => (
-          <Button
-            key={`result-${url}`}
-            href={url}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              width: '100%',
-              color: '#333',
-              lineHeight: 'inherit',
-              letterSpacing: 'inherit',
-              textTransform: 'unset',
-              gap: '8px',
-              margin: '-8px',
-              padding: '8px',
-              '&:hover': {
-                color: '#000'
-              }
-            }}
-          >
-            <StyledSearchResultTitle>{title}</StyledSearchResultTitle>
-            <StyledSearchResultContent
-              dangerouslySetInnerHTML={{
-                __html: summary
-              }}
-            />
-          </Button>
+        {searchResults.map((entry) => (
+          <SearchResult key={`result-${entry.url}`} entry={entry} />
         ))}
       </StyledSearch>
     </PageLayout>
@@ -100,14 +65,68 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
           title,
           content,
           summary,
-          url: `/${slug}`
+          url: `/${slug}`,
+          type: PAGE
         })),
-        ...fetchPostContent().map(({ data: { title, slug }, content, summary }) => ({
+        ...fetchPostContent().map(({ data: { title, slug, date }, content, summary }) => ({
           title,
+          subtitle: format(parseISO(date), 'LLLL d, yyyy'),
           content,
           summary,
-          url: `/posts/${slug}`
-        }))
+          url: `/posts/${slug}`,
+          type: NEWS,
+          date
+        })),
+        ...fetchBulletinsMetaData().map(({ title, text, slug, date }) => ({
+          title,
+          content: text,
+          url: `/parish-bulletins/${slug}`,
+          type: BULLETIN,
+          date
+        })),
+        {
+          title: 'Live Stream',
+          content: 'live stream facebook',
+          url: '/live-stream',
+          type: PAGE,
+          priority: true
+        },
+        {
+          title: 'Mass & Confession Times',
+          content: 'mass times confession times adoration times stations of the cross parish office hours schedule',
+          url: '/mass-confession-times',
+          type: PAGE,
+          priority: true
+        },
+        {
+          title: 'Contact',
+          content: `contact church phone number church email church address where to find us ${(
+            churchDetails.additional_emails ?? []
+          )
+            .map(({ name }) => name)
+            .join(' ')} ${(churchDetails.additional_phones ?? []).map(({ name }) => name).join(' ')} ${(
+            churchDetails.contacts ?? []
+          )
+            .map(({ title, name }) => `${title} ${name}`)
+            .join(' ')}`,
+          url: '/contact',
+          type: PAGE,
+          priority: true
+        },
+        {
+          title: 'Events Calendar',
+          content: 'events calendar event schedule upcoming events',
+          url: '/events',
+          type: PAGE,
+          priority: true
+        },
+        {
+          title: 'Parish Staff',
+          content: `parish staff ${(staff ?? []).map(({ title, name }) => `${title} ${name}`)}`,
+          url: '/staff',
+          type: PAGE,
+          priority: true
+        }
       ]
     }
   };

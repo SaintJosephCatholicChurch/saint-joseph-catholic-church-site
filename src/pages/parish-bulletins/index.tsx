@@ -1,18 +1,17 @@
-import fs from 'fs';
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
-import { join } from 'path';
+import type { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
-import type { Bulletin, BulletinPDFMeta } from '../../interface';
-import bulletins from '../../lib/bulletins';
+import type { Bulletin, BulletinPDFData } from '../../interface';
+import bulletins, { fetchBulletinMetaData } from '../../lib/bulletins';
 import { isNotNullish } from '../../util/null.util';
 
 interface ParishBulletinsProps {
   bulletin?: Bulletin;
-  meta?: BulletinPDFMeta;
+  bulletins: Bulletin[];
+  meta?: BulletinPDFData;
 }
 
-const ParishBulletin = ({ bulletin, meta }: ParishBulletinsProps) => {
+const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => {
   return (
     <PageLayout url="/parish-bulletins" title="Parish Bulletins" hideSidebar>
       {isNotNullish(bulletin) && isNotNullish(meta) ? (
@@ -28,20 +27,16 @@ export default ParishBulletin;
 
 export const getStaticProps: GetStaticProps = async (): Promise<{ props: ParishBulletinsProps }> => {
   let bulletin: Bulletin | undefined;
-  let meta: BulletinPDFMeta | undefined;
 
   if (bulletins.length > 0) {
     bulletin = bulletins[0];
-    if (isNotNullish(bulletin)) {
-      const metaFullPath = join('public', bulletin.pdf.replace(/\.pdf$/g, ''), 'meta.json');
-      meta = JSON.parse(fs.readFileSync(metaFullPath, 'utf8'));
-    }
   }
 
   return {
     props: {
       bulletin,
-      meta
+      bulletins,
+      meta: fetchBulletinMetaData(bulletin)
     }
   };
 };

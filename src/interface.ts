@@ -68,6 +68,19 @@ export interface Bulletin {
   readonly pdf?: string;
 }
 
+export interface BulletinPDFMeta {
+  readonly pages: string[];
+  readonly text: string;
+}
+
+export interface BulletinPDFData {
+  readonly title: string;
+  readonly slug: string;
+  readonly date: string;
+  readonly pages: string[];
+  readonly text: string;
+}
+
 export interface Staff {
   readonly name?: string;
   readonly title?: string;
@@ -129,14 +142,18 @@ export interface TagContent {
   readonly name: string;
 }
 
-export interface BulletinPDFMeta {
-  readonly pages: string[];
-  readonly text: string;
-}
+export type ContentType = 'News' | 'Page' | 'Bulletin';
+export const NEWS: ContentType = 'News';
+export const PAGE: ContentType = 'Page';
+export const BULLETIN: ContentType = 'Bulletin';
 
 export interface SearchableEntry {
   readonly title: string;
+  readonly subtitle?: string;
   readonly content: string;
-  readonly summary: string;
+  readonly summary?: string;
   readonly url: string;
+  readonly type: ContentType;
+  readonly priority?: boolean;
+  readonly date?: string;
 }

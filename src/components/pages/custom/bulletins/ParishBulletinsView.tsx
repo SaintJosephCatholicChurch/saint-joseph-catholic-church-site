@@ -11,10 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material/styles';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Bulletin, BulletinPDFMeta } from '../../../../interface';
+import type { Bulletin, BulletinPDFData } from '../../../../interface';
 import { isNotNullish } from '../../../../util/null.util';
 import styled from '../../../../util/styled.util';
 import useElementSize from '../../../../util/useElementSize';
@@ -258,7 +256,7 @@ const StyledSlidableArea = styled('div', ['width', 'index'])<StyledSlidableAreaP
 interface ParishBulletinsViewProps {
   bulletins: Bulletin[];
   bulletin: Bulletin;
-  meta: BulletinPDFMeta;
+  meta: BulletinPDFData;
 }
 
 const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsViewProps) => {
@@ -315,8 +313,6 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   useEffect(() => {
     setHeight((width / 8.5) * 11);
   }, [width]);
-
-  const formattedDate = useMemo(() => format(parseISO(bulletin.date), 'MMM dd, yyyy'), [bulletin.date]);
 
   const bulletinListItems = useMemo(
     () =>

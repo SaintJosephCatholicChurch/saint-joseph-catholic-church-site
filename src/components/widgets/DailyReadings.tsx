@@ -2,13 +2,17 @@ import { memo, useEffect, useState } from 'react';
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
 import styled from '../../util/styled.util';
 
-const StyledDailyReadings = styled('div')(
-  ({ theme }) => `
+interface StyledDailyReadingsProps {
+  isFullWidth: boolean;
+}
+
+const StyledDailyReadings = styled('div', ['isFullWidth'])<StyledDailyReadingsProps>(
+  ({ theme, isFullWidth }) => `
     display: flex;
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')} {
       gap: 12px;
     }
   `
@@ -23,8 +27,12 @@ const StyledDailyReadingsTitle = styled('h3')`
   font-weight: 500;
 `;
 
-const StyledDailyReading = styled('a')(
-  ({ theme }) => `
+interface StyledDailyReadingProps {
+  isFullWidth: boolean;
+}
+
+const StyledDailyReading = styled('a', ['isFullWidth'])<StyledDailyReadingProps>(
+  ({ theme, isFullWidth }) => `
     display: flex;
     align-items: baseline;
     color: #333;
@@ -34,7 +42,7 @@ const StyledDailyReading = styled('a')(
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')} {
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
@@ -42,18 +50,30 @@ const StyledDailyReading = styled('a')(
   `
 );
 
-const StyledDailyReadingTitle = styled('h5')`
-  display: flex;
-  font-weight: 500;
-  margin: 0;
-  font-size: 16px;
-  color: #bf303c;
-`;
+const StyledDailyReadingTitle = styled('h5')(
+  ({ theme }) => `
+    display: flex;
+    font-weight: 500;
+    margin: 0;
+    font-size: 16px;
+    color: #bf303c;
 
-const StyledDailyReadingDescription = styled('div')`
-  display: flex;
-  font-size: 16px;
-`;
+    ${theme.breakpoints.down('lg')} {
+      font-size: 18px;
+    }
+  `
+);
+
+const StyledDailyReadingDescription = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    font-size: 16px;
+
+    ${theme.breakpoints.down('lg')} {
+      font-size: 18px;
+    }
+  `
+);
 
 interface Reading {
   title: string;
@@ -83,7 +103,11 @@ interface FeedReading {
 
 const ENTRY_REGEX = /<h4>[ ]*([^\n]+)[ ]*<a[ ]*href="([^\n]+)[ ]*"[ \\]*>[ ]*([^\n]+)[ ]*<\/a>[ ]*<\/h4>/g;
 
-const DailyReadings = memo(() => {
+interface DailyReadingsProps {
+  isFullWidth?: boolean;
+}
+
+const DailyReadings = memo(({ isFullWidth = false }: DailyReadingsProps) => {
   const [readings, setReadings] = useState<ReadingsData | null>(null);
 
   useEffect(() => {
@@ -127,10 +151,10 @@ const DailyReadings = memo(() => {
   }
 
   return (
-    <StyledDailyReadings>
+    <StyledDailyReadings isFullWidth={isFullWidth}>
       <StyledDailyReadingsTitle>Today&apos;s Readings</StyledDailyReadingsTitle>
       {readings.readings.map((reading, index) => (
-        <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank">
+        <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" isFullWidth={isFullWidth}>
           <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
           <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
         </StyledDailyReading>

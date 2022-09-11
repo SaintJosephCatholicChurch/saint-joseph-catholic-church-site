@@ -7,13 +7,17 @@ interface StyledContainerProps {
 }
 
 const StyledContainer = styled('div', ['disablePadding'])<StyledContainerProps>(
-  ({ disablePadding }) => `
+  ({ theme, disablePadding }) => `
     max-width: ${MAX_APP_WIDTH}px;
     width: 100%;
     display: flex;
     justify-content: center;
     box-sizing: border-box;
     ${!disablePadding ? 'padding: 0 24px;' : ''}
+
+    ${theme.breakpoints.only('md')} {
+      ${!disablePadding ? 'padding: 0 32px;' : ''}
+    }
   `
 );
 

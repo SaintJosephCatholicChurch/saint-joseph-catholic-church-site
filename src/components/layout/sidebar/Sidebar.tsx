@@ -24,18 +24,21 @@ const StyledSection = styled('div')`
 
 interface SidebarProps {
   recentPosts?: PostContent[];
+  hideSearch?: boolean;
 }
 
-const Sidebar = ({ recentPosts }: SidebarProps) => {
+const Sidebar = ({ recentPosts, hideSearch = false }: SidebarProps) => {
   const UpcomingEventsNoSSR = dynamic(() => import('../../widgets/UpcomingEvents'), {
     ssr: false
   });
 
   return (
     <StyledSidebar>
-      <StyledSection>
-        <SearchBox disableMargin />
-      </StyledSection>
+      {!hideSearch ? (
+        <StyledSection>
+          <SearchBox disableMargin />
+        </StyledSection>
+      ) : null}
       <StyledSection>
         <DailyReadings />
       </StyledSection>

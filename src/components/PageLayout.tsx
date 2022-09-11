@@ -23,6 +23,7 @@ interface PageProps {
   };
   hideHeader?: boolean;
   hideSidebar?: boolean;
+  hideSearch?: boolean;
   disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
@@ -39,6 +40,7 @@ const PageLayout = ({
   pageDetails,
   hideHeader,
   hideSidebar,
+  hideSearch,
   disableTitleMargin,
   disableBottomMargin,
   disablePadding,
@@ -65,6 +67,7 @@ const PageLayout = ({
         title={title}
         hideHeader={hideHeader}
         hideSidebar={hideSidebar}
+        hideSearch={hideSearch}
         disablePadding={disablePadding}
         disableTitleMargin={disableTitleMargin}
         disableBottomMargin={disableBottomMargin}

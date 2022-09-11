@@ -67,6 +67,7 @@ interface PageViewProps {
   hideHeader: boolean;
   recentPosts?: PostContent[];
   hideSidebar?: boolean;
+  hideSearch?: boolean;
   disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
@@ -79,6 +80,7 @@ const PageView = ({
   recentPosts,
   hideHeader = false,
   hideSidebar = false,
+  hideSearch,
   disableTitleMargin = false,
   disableBottomMargin = false,
   disablePadding = false,
@@ -92,11 +94,11 @@ const PageView = ({
             {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
             {children}
           </StyledPageBody>
-          {!hideSidebar ? <Sidebar recentPosts={recentPosts} /> : null}
+          {!hideSidebar ? <Sidebar hideSearch={hideSearch} recentPosts={recentPosts} /> : null}
         </StyledPageContents>
       </StyledPageContentsWrapper>
     ),
-    [children, disableTitleMargin, hideHeader, hideSidebar, recentPosts, title]
+    [children, disableTitleMargin, hideHeader, hideSearch, hideSidebar, recentPosts, title]
   );
 
   return (

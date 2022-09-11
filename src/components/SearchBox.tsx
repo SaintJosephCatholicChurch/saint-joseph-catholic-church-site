@@ -13,9 +13,10 @@ const StyledSearchBox = styled('div')`
 
 interface SearchBoxProps {
   disableMargin?: boolean;
+  defaultValue?: string;
 }
 
-const SearchBox = memo(({ disableMargin = false }: SearchBoxProps) => {
+const SearchBox = memo(({ disableMargin = false, defaultValue }: SearchBoxProps) => {
   const isSmallScreen = useMediaQueryDown('lg');
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const SearchBox = memo(({ disableMargin = false }: SearchBoxProps) => {
         variant="outlined"
         size={isSmallScreen ? 'medium' : 'small'}
         placeholder="Search..."
+        defaultValue={defaultValue}
         sx={{ background: 'white', mb: !disableMargin ? 4 : undefined }}
         fullWidth
         onChange={(event) => {

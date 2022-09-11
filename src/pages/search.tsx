@@ -4,6 +4,7 @@ import type { GetStaticProps } from 'next/types';
 import { useEffect, useState } from 'react';
 import PageLayout from '../components/PageLayout';
 import SearchResult from '../components/search/SearchResult';
+import SearchBox from '../components/SearchBox';
 import { BULLETIN, NEWS, PAGE, SearchableEntry } from '../interface';
 import { fetchBulletinsMetaData } from '../lib/bulletins';
 import churchDetails from '../lib/church_details';
@@ -11,6 +12,7 @@ import { fetchPageContent } from '../lib/pages';
 import { fetchPostContent } from '../lib/posts';
 import staff from '../lib/staff';
 import { useSearchScores } from '../util/search.util';
+import { isNotEmpty } from '../util/string.util';
 import styled from '../util/styled.util';
 import useLocation from '../util/useLocation';
 
@@ -42,9 +44,9 @@ const Search = ({ searchableEntries }: SearchProps) => {
   const searchResults = useSearchScores(query, searchableEntries);
 
   return (
-    <PageLayout url="/search" title="Search">
+    <PageLayout url="/search" title="Search" hideSearch>
       <StyledSearchQueryTitle>
-        Results for <i>&quot;{query}&quot;</i>
+        {isNotEmpty(query) ? <SearchBox defaultValue={query} disableMargin /> : null}
       </StyledSearchQueryTitle>
       <StyledSearch>
         {searchResults.map((entry) => (

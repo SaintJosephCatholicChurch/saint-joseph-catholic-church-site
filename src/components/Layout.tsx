@@ -41,10 +41,17 @@ const Layout = ({ children }: LayoutProps) => {
       <StyledLayout>
         <Head>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="manifest" href="/site.webmanifest" />
-          <link rel="apple-touch-icon" href="/icon.png" />
-          <meta name="theme-color" content="#fff" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          />
+          <meta name="theme-color" content="#bc2f3b" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+          <meta name="description" content="Saint Joseph Catholic Church" />
         </Head>
         <div id="back-to-top-anchor" />
         <Navigation />

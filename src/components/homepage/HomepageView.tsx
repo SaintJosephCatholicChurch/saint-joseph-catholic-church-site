@@ -56,6 +56,7 @@ const StyledDailyReadingsSectionBackground = styled('div')`
   width: 100%;
   height: 140%;
   background: linear-gradient(rgba(241,241,241,0) 25%,#f1f1f1 80%),url(/files/scripture-background.png),#f1f1f1;
+  background-position: top center;
   opacity: 0.25;
   pointer-events: none;
 `;

@@ -68,6 +68,8 @@ const StyledDailyReadingDescription = styled('div')(
   ({ theme }) => `
     display: flex;
     font-size: 16px;
+    color: #343434;
+    font-weight: 500;
 
     ${theme.breakpoints.down('lg')} {
       font-size: 18px;

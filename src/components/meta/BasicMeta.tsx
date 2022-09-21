@@ -17,7 +17,7 @@ const BasicMeta = ({ title, description, keywords, url }: BasicMetaProps) => {
         name="keywords"
         content={keywords ? keywords.join(',') : config.site_keywords.map((it) => it.keyword).join(',')}
       />
-      <link rel="canonical" href={config.base_url + url} />
+      <link rel="canonical" href={config.base_url.replace(/\/$/g, '') + url} />
     </Head>
   );
 };

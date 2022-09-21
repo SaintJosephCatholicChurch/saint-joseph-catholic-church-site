@@ -20,7 +20,7 @@ const JsonLdMeta = ({ url, title, keywords, date, image, description }: JsonLdMe
         {...jsonLdScriptProps<BlogPosting>({
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
-          mainEntityOfPage: config.base_url + url,
+          mainEntityOfPage: config.base_url.replace(/\/$/g, '') + url,
           headline: title,
           keywords: keywords ? keywords.join(',') : undefined,
           datePublished: date ? formatISO(date) : undefined,

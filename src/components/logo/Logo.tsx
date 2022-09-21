@@ -35,6 +35,7 @@ interface LogoProps {
 }
 
 const Logo = ({ trigger = false, responsive = true }: LogoProps) => {
+  // TODO: Make configurable
   return (
     <StyledHeaderLink href="/">
       <StyledLogoWrapper trigger={trigger} responsive={responsive}>

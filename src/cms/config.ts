@@ -527,16 +527,6 @@ const config: CmsConfig = {
                 label: 'Keyword',
                 widget: 'string'
               }
-            },
-            {
-              name: 'twitter_account',
-              label: 'Twitter account',
-              widget: 'string'
-            },
-            {
-              name: 'github_account',
-              label: 'GitHub account',
-              widget: 'string'
             }
           ]
         },

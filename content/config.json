@@ -1,5 +1,5 @@
 {
-  "base_url": "https://stjosephchurchbluffton.org/",
+  "base_url": "https://stjosephchurchbluffton.org",
   "site_title": "Saint Joseph Catholic Church",
   "site_description": "We are a community of saints and sinners, men, women and children who have joyfully come together to live out our belief in the Most Holy Trinity, in whose life, love and mercy we were created, sustained and immersed, with the purpose of our serving one another in the example of Our Lord Jesus Christ, as a beacon of faith, hope and charity guiding one and all to the Heavenly Jerusalem to behold God face-to-face.",
   "site_keywords": [
@@ -13,7 +13,5 @@
       "keyword": "React"
     }
   ],
-  "posts_per_page": 5,
-  "twitter_account": "@my-account",
-  "github_account": "wutali"
+  "posts_per_page": 5
 }

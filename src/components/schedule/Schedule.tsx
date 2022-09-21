@@ -37,7 +37,7 @@ const StyledHeader = styled('div')(
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    margin-bottom: 32px;
+    margin-bottom: 8px;
 
     ${theme.breakpoints.down('md')} {
       font-size: 24px;
@@ -49,10 +49,11 @@ const StyledHeaderPreText = styled('h1')(
   ({ theme }) => `
     font-weight: 500;
     color: #9d7b2a;
+    margin-top: 40px;
 
-    font-size: 18px;
+    font-size: 28px;
     ${theme.breakpoints.up('lg')} {
-      font-size: 16px;
+      font-size: 28px;
     }
   `
 );
@@ -202,7 +203,6 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
   return (
     <StyledContainerContents>
       <StyledHeader>
-        <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
         <StyledHeaderText>Come Worship with Us</StyledHeaderText>
         <StyledHeaderBorder />
         <Link href="/live-stream">
@@ -225,6 +225,7 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
             Live Stream Mass
           </Button>
         </Link>
+        <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
       </StyledHeader>
       <List
         component="div"

@@ -42,9 +42,6 @@ const StyledMobileSpacer = styled('div')(
 const StyledDesktopSpacer = styled('div')(
   ({ theme }) => `
     flex-grow: 1;
-    ${theme.breakpoints.down('md')} {
-      display: none;
-    }
   `
 );
 
@@ -55,18 +52,6 @@ const StyledDesktopNavItems = styled('div')(
 
     ${theme.breakpoints.down('lg')} {
       gap: 4px;
-    }
-
-    ${theme.breakpoints.between(1330, 1370)} {
-      margin-right: 48px;
-    }
-
-    ${theme.breakpoints.between(1370, 1410)} {
-      margin-right: 32px;
-    }
-
-    ${theme.breakpoints.between(1410, 1450)} {
-      margin-right: 16px;
     }
 
     ${theme.breakpoints.down('md')} {
@@ -116,6 +101,7 @@ const Navigation = () => {
           width: '100%'
         }}
       >
+        <StyledDesktopSpacer />
         <Toolbar
           sx={{
             width: '100%',
@@ -168,6 +154,7 @@ const Navigation = () => {
             ))}
           </StyledDesktopNavItems>
         </Toolbar>
+        <StyledDesktopSpacer />
         <Button
           href="https://www.osvhub.com/stjosephchurchbluffton/giving/funds"
           target="_blank"
@@ -176,7 +163,7 @@ const Navigation = () => {
             color: '#bf303c',
             backgroundColor: '#ffffff',
             borderRadius: 0,
-            position: 'fixed',
+            position: 'relative',
             right: 0,
             top: 0,
             bottom: 0,
@@ -196,8 +183,7 @@ const Navigation = () => {
               transition: 'height 250ms ease',
               height: trigger ? 64 : 92
             },
-            [theme.breakpoints.down(1330)]: {
-              position: 'relative',
+            [theme.breakpoints.down('lg')]: {
               padding: '1px 24px 0'
             },
             [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {

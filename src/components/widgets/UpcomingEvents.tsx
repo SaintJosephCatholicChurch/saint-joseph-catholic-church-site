@@ -2,11 +2,11 @@ import FullCalendar from '@fullcalendar/react';
 
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
+import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { addMonths } from 'date-fns';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import styled from '../../util/styled.util';
 import useIsomorphicLayoutEffect from '../../util/useIsomorphicLayoutEffect';
 import { useMediaQueryDown, useMediaQueryUp } from '../../util/useMediaQuery';
 import CalendarEventDialog from '../events/CalendarEventDialog';

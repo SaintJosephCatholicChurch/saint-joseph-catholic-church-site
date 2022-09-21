@@ -1,3 +1,4 @@
+import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import type { GetStaticProps } from 'next/types';
@@ -13,7 +14,6 @@ import { fetchPostContent } from '../lib/posts';
 import staff from '../lib/staff';
 import { useSearchScores } from '../util/search.util';
 import { isNotEmpty } from '../util/string.util';
-import styled from '../util/styled.util';
 import useLocation from '../util/useLocation';
 
 const StyledSearch = styled('div')`

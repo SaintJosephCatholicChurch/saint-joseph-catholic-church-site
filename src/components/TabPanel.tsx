@@ -1,15 +1,19 @@
+import { styled } from '@mui/material/styles';
 import { memo, ReactNode, useEffect, useState } from 'react';
-import styled from '../util/styled.util';
+import transientOptions from '../util/transientOptions';
 
 interface StyledTabPanelProps {
-  inactive: boolean;
+  $inactive: boolean;
 }
 
-const StyledTabPanel = styled('div', ['inactive'])<StyledTabPanelProps>(
-  ({ inactive }) => `
+const StyledTabPanel = styled(
+  'div',
+  transientOptions
+)<StyledTabPanelProps>(
+  ({ $inactive }) => `
     width: 100%;
     box-sizing: border-box;
-    ${inactive ? 'visibility: hidden;' : ''}
+    ${$inactive ? 'visibility: hidden;' : ''}
   `
 );
 
@@ -32,7 +36,7 @@ const TabPanel = memo(({ children, value, index, ...other }: TabPanelProps) => {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      inactive={inactive}
+      $inactive={inactive}
       {...other}
     >
       {value === index ? children : null}

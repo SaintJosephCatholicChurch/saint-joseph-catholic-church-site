@@ -1,9 +1,9 @@
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import { useMemo } from 'react';
 import churchDetails from '../../../lib/church_details';
-import styled from '../../../util/styled.util';
 
 const StyledCopyright = styled('div')(
   ({ theme }) => `

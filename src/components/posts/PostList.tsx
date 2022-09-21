@@ -1,5 +1,5 @@
+import { styled } from '@mui/material/styles';
 import type { PostContent, TagContent } from '../../interface';
-import styled from '../../util/styled.util';
 import Pagination from '../Pagination';
 import PostSummary from './PostSummary';
 

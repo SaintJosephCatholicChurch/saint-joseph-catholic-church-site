@@ -8,9 +8,9 @@ import FullCalendar, {
   sliceEvents,
   ViewProps
 } from '@fullcalendar/react';
+import { styled } from '@mui/material/styles';
 import { MouseEvent, MutableRefObject, useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { UPCOMING_EVENTS_TO_SHOW } from '../../../constants';
-import styled from '../../../util/styled.util';
 import UpcomingListEvent from './UpcomingListEvent';
 
 const StyledUpcomingListView = styled('div')`

@@ -1,11 +1,10 @@
 import List from '@mui/material/List';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import PageLayout from '../components/PageLayout';
 import MobileScheduleTabPanel from '../components/schedule/MobileSchedulePanel';
 import ScheduleTabPanel from '../components/schedule/ScheduleTabPanel';
 import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
 import times from '../lib/times';
-import styled from '../util/styled.util';
 
 const StyledTimes = styled('div')(
   ({ theme }) => `

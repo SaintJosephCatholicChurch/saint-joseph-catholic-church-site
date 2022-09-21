@@ -1,18 +1,22 @@
+import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 interface StyledDailyReadingsProps {
-  isFullWidth: boolean;
+  $isFullWidth: boolean;
 }
 
-const StyledDailyReadings = styled('div', ['isFullWidth'])<StyledDailyReadingsProps>(
-  ({ theme, isFullWidth }) => `
+const StyledDailyReadings = styled(
+  'div',
+  transientOptions
+)<StyledDailyReadingsProps>(
+  ({ theme, $isFullWidth }) => `
     display: flex;
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')} {
+    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
       gap: 12px;
     }
   `
@@ -35,11 +39,14 @@ const StyledDailyReadingsSubtitle = styled('h4')`
 `;
 
 interface StyledDailyReadingProps {
-  isFullWidth: boolean;
+  $isFullWidth: boolean;
 }
 
-const StyledDailyReading = styled('a', ['isFullWidth'])<StyledDailyReadingProps>(
-  ({ theme, isFullWidth }) => `
+const StyledDailyReading = styled(
+  'a',
+  transientOptions
+)<StyledDailyReadingProps>(
+  ({ theme, $isFullWidth }) => `
     display: flex;
     align-items: baseline;
     color: #333;
@@ -49,7 +56,7 @@ const StyledDailyReading = styled('a', ['isFullWidth'])<StyledDailyReadingProps>
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')} {
+    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
@@ -161,7 +168,7 @@ const DailyReadings = memo(({ isFullWidth = false, showSubtitle = false }: Daily
   }
 
   return (
-    <StyledDailyReadings isFullWidth={isFullWidth}>
+    <StyledDailyReadings $isFullWidth={isFullWidth}>
       <StyledDailyReadingsTitle>Today&apos;s Readings</StyledDailyReadingsTitle>
       {showSubtitle ? (
         <StyledDailyReadingsSubtitle key="subtitle">
@@ -169,7 +176,7 @@ const DailyReadings = memo(({ isFullWidth = false, showSubtitle = false }: Daily
         </StyledDailyReadingsSubtitle>
       ) : null}
       {readings.readings.map((reading, index) => (
-        <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" isFullWidth={isFullWidth}>
+        <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
           <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
           <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
         </StyledDailyReading>

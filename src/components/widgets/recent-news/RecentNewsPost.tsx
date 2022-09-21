@@ -1,22 +1,25 @@
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 import { PostContent } from '../../../interface';
-import styled from '../../../util/styled.util';
+import transientOptions from '../../../util/transientOptions';
 
 interface StyledPostImageProps {
-  image: string;
-  size: 'small' | 'large';
+  $image: string;
+  $size: 'small' | 'large';
 }
 
-const StyledPostImage = styled('div', ['image', 'size'])<StyledPostImageProps>(
-  ({ theme, image, size }) => `
-    background-image: url(${image});
+const StyledPostImage = styled(
+  'div',
+  transientOptions
+)<StyledPostImageProps>(
+  ({ theme, $image, $size }) => `
+    background-image: url(${$image});
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
-    height: ${size === 'large' ? '90' : '72'}px;
+    height: ${$size === 'large' ? '90' : '72'}px;
 
     ${theme.breakpoints.down('sm')} {
       height: 72px;
@@ -39,13 +42,16 @@ const StyledPostDetails = styled('div')`
 `;
 
 interface StyledPostTitleProps {
-  size: 'small' | 'large';
+  $size: 'small' | 'large';
 }
 
-const StyledPostTitle = styled('h4', ['size'])<StyledPostTitleProps>(
-  ({ theme, size }) => `
+const StyledPostTitle = styled(
+  'h4',
+  transientOptions
+)<StyledPostTitleProps>(
+  ({ theme, $size }) => `
     margin: 0;
-    font-size: ${size === 'large' ? '18' : '16'}px;
+    font-size: ${$size === 'large' ? '18' : '16'}px;
 
     ${theme.breakpoints.down('sm')} {
       font-size: 16px;
@@ -63,15 +69,18 @@ const StyledPostTitle = styled('h4', ['size'])<StyledPostTitleProps>(
 );
 
 interface StyledPostSummaryProps {
-  size: 'small' | 'large';
+  $size: 'small' | 'large';
 }
 
-const StyledPostSummary = styled('div', ['size'])<StyledPostSummaryProps>(
-  ({ theme, size }) => `
+const StyledPostSummary = styled(
+  'div',
+  transientOptions
+)<StyledPostSummaryProps>(
+  ({ theme, $size }) => `
     margin: 0;
     overflow: hidden;
     height: 52px;
-    font-size: ${size === 'large' ? '16' : '15'}px;
+    font-size: ${$size === 'large' ? '16' : '15'}px;
 
     ${theme.breakpoints.down('sm')} {
       font-size: 15px;
@@ -135,11 +144,11 @@ const RecentNewsPost = memo(
           }
         }}
       >
-        <StyledPostImage image={image} size={size} />
+        <StyledPostImage $image={image} $size={size} />
         <StyledPostDetails>
-          <StyledPostTitle size={size}>{title}</StyledPostTitle>
+          <StyledPostTitle $size={size}>{title}</StyledPostTitle>
           <StyledPostSummary
-            size={size}
+            $size={size}
             dangerouslySetInnerHTML={{
               __html: html
             }}

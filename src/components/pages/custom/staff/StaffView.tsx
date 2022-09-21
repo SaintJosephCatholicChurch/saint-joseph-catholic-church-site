@@ -1,6 +1,6 @@
+import { styled } from '@mui/material/styles';
 import { STAFF_CARD_GAP_SIZE } from '../../../../constants';
 import { Staff } from '../../../../interface';
-import styled from '../../../../util/styled.util';
 import StaffCard from './StaffCard';
 
 const StyledStaffWrapper = styled('div')`

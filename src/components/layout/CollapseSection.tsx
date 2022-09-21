@@ -1,16 +1,20 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Collapse from '@mui/material/Collapse';
+import { styled } from '@mui/material/styles';
 import { memo, useCallback, useMemo, useState } from 'react';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 interface StyledArrowIconWrapperProps {
-  collapsed: boolean;
+  $collapsed: boolean;
 }
 
-const StyledArrowIconWrapper = styled('div', ['collapsed'])<StyledArrowIconWrapperProps>(
-  ({ collapsed }) => `
+const StyledArrowIconWrapper = styled(
+  'div',
+  transientOptions
+)<StyledArrowIconWrapperProps>(
+  ({ $collapsed }) => `
     transition: transform 333ms ease-out;
-    transform: rotate(${collapsed ? '-90deg' : '0deg'});
+    transform: rotate(${$collapsed ? '-90deg' : '0deg'});
     width: 24px;
     height: 24px;
   `
@@ -44,7 +48,7 @@ const CollapseSection = memo(
 
     const collapseButton = useMemo(
       () => (
-        <StyledArrowIconWrapper collapsed={collapsed}>
+        <StyledArrowIconWrapper $collapsed={collapsed}>
           <KeyboardArrowDownIcon />
         </StyledArrowIconWrapper>
       ),

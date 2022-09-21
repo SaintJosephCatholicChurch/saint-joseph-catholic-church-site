@@ -1,7 +1,7 @@
+import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
-import styled from '../../util/styled.util';
 import PostView from '../posts/PostView';
 
 const StyledBlogPostPreview = styled('div')`

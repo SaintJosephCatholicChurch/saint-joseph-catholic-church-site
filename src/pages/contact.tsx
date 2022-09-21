@@ -7,6 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 import Container from '../components/layout/Container';
@@ -16,7 +17,6 @@ import PageTitle from '../components/pages/PageTitle';
 import churchDetails from '../lib/church_details';
 import homePageData from '../lib/homepage';
 import { isNotEmpty } from '../util/string.util';
-import styled from '../util/styled.util';
 
 const StyledContactSection = styled('div')`
   display: flex;

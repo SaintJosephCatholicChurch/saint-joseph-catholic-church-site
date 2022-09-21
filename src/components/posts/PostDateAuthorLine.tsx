@@ -1,7 +1,7 @@
+import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import { memo } from 'react';
-import styled from '../../util/styled.util';
 
 const StyledDate = styled('time')`
   display: flex;

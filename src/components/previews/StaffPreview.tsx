@@ -1,8 +1,7 @@
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
 import { Staff } from '../../interface';
-import styled from '../../util/styled.util';
 import StaffView from '../pages/custom/staff/StaffView';
 
 const StyledStaffWrapper = styled('div')`

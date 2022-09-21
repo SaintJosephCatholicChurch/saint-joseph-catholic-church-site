@@ -8,8 +8,8 @@ import FullCalendar, {
   sliceEvents,
   ViewProps
 } from '@fullcalendar/react';
+import { styled } from '@mui/material/styles';
 import { MouseEvent, MutableRefObject, useCallback, useLayoutEffect, useMemo, useState } from 'react';
-import styled from '../../../util/styled.util';
 import MobileListEvent from './MobileListEvent';
 
 const StyledMobileListView = styled('div')`

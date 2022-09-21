@@ -1,13 +1,13 @@
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import Container from '../../../components/layout/Container';
 import type { Times } from '../../../interface';
 import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
-import styled from '../../../util/styled.util';
 import { useWindowEvent } from '../../../util/window.util';
 import ScheduleTabPanel from './TimesWidgetTabPanelWidget';
 

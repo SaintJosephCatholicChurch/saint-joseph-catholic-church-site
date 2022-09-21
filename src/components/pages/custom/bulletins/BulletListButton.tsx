@@ -2,11 +2,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import IconButton from '@mui/material/IconButton';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 import type { Bulletin } from '../../../../interface';
-import styled from '../../../../util/styled.util';
 import { useFormattedBulletinTitle, useFormattedBulletinUrlDate } from './util';
 
 const StyledListItemWrapper = styled('div')`

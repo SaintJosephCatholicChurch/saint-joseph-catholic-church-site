@@ -1,10 +1,9 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import type { MenuItem, MenuLink } from '../../interface';
-import styled from '../../util/styled.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
 import { useMediaQueryUp } from '../../util/useMediaQuery';

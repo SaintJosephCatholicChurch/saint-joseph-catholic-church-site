@@ -1,8 +1,8 @@
+import { styled } from '@mui/material/styles';
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
 import type { Slide } from '../../interface';
-import styled from '../../util/styled.util';
 import CarouselSlide from './CarouselSlide';
 
 const StyledCarouselView = styled('div')(

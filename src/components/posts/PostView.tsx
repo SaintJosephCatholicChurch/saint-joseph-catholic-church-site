@@ -1,9 +1,9 @@
+import { styled } from '@mui/material/styles';
 import { ReactNode } from 'react';
-import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
+import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
-import PostTitle from '../pages/PageTitle';
 
 const StyledPageContentWrapper = styled('div')`
   margin-top: 32px;

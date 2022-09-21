@@ -1,16 +1,17 @@
+import { styled } from '@mui/material/styles';
 import type { Times } from '../../interface';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
 
 interface StyledScheduleProps {
-  background: string;
+  $background: string;
 }
 
-const StyledSchedule = styled('div', ['background'])<StyledScheduleProps>(
-  ({ theme, background }) => `
+const StyledSchedule = styled('div', transientOptions)<StyledScheduleProps>(
+  ({ theme, $background }) => `
     padding-bottom: 40px;
-    background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${background}), #c7c7c7;
+    background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${$background}), #c7c7c7;
     background-repeat: repeat;
     background-position: center top;
     display: flex;
@@ -33,7 +34,7 @@ interface ScheduleProps {
 
 const ScheduleWidget = ({ times, background, tab, onTabChange }: ScheduleProps) => {
   return (
-    <StyledSchedule background={background}>
+    <StyledSchedule $background={background}>
       <Container>
         <Schedule times={times} tab={tab} onTabChange={onTabChange} />
       </Container>

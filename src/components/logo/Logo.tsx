@@ -1,4 +1,4 @@
-import styled from '../../util/styled.util';
+import { styled } from '@mui/material/styles';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
 

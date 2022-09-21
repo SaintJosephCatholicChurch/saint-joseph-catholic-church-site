@@ -1,22 +1,26 @@
+import { styled } from '@mui/material/styles';
 import carouselStyles from '../../../public/styles/carousel-content.module.css';
 import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
 import type { Slide } from '../../interface';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 const StyledCarouselSlide = styled('div')`
   position: relative;
 `;
 
 interface StyledImageProps {
-  image: string;
+  $image: string;
 }
 
-const StyledImage = styled('div', ['image'])<StyledImageProps>(
-  ({ theme, image }) => `
+const StyledImage = styled(
+  'div',
+  transientOptions
+)<StyledImageProps>(
+  ({ theme, $image }) => `
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url(${image});
+    background-image: url(${$image});
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -67,7 +71,7 @@ interface CarouselSlideProps {
 const CarouselSlide = ({ slide: { image, title } }: CarouselSlideProps) => {
   return (
     <StyledCarouselSlide className="each-fade">
-      <StyledImage className="image-container" image={image} />
+      <StyledImage className="image-container" $image={image} />
       <StyledTitleWrapper>
         <StyledTitle className={`${carouselStyles.carouselContent}`}>{title}</StyledTitle>
       </StyledTitleWrapper>

@@ -86,6 +86,11 @@ const config: CmsConfig = {
               widget: 'image'
             },
             {
+              name: 'daily_readings_background',
+              label: 'Daily Readings Background',
+              widget: 'image'
+            },
+            {
               name: 'featured_page',
               label: 'Featured Page',
               widget: 'object',

@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { SxProps, Theme, useTheme } from '@mui/material/styles';
+import { styled, SxProps, Theme, useTheme } from '@mui/material/styles';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
@@ -17,7 +17,6 @@ import parse from 'date-fns/parse';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatAsUtc } from '../../util/date.util';
 import { isEmpty } from '../../util/string.util';
-import styled from '../../util/styled.util';
 import PageTitle from '../pages/PageTitle';
 
 const StyledCalendarHeader = styled('div')(

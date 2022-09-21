@@ -1,9 +1,9 @@
 import type { EventRenderRange } from '@fullcalendar/react';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
 import { MouseEvent, useMemo } from 'react';
 import { formatAsUtc } from '../../../util/date.util';
-import styled from '../../../util/styled.util';
 import useEventTitle from '../hooks/useEventTitle';
 
 const StyledMobileEvent = styled('div')`

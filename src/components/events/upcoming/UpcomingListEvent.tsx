@@ -1,9 +1,9 @@
 import type { EventRenderRange } from '@fullcalendar/react';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import { MouseEvent, useMemo } from 'react';
 import { formatAsUtc } from '../../../util/date.util';
-import styled from '../../../util/styled.util';
 import useEventTitle from '../hooks/useEventTitle';
 
 const StyledUpcomingEvent = styled('div')`

@@ -3,19 +3,23 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 interface StyledMobileScheduleTabPanelProps {
-  open: boolean;
+  $open: boolean;
 }
 
-const StyledMobileScheduleTabPanel = styled('div', ['open'])<StyledMobileScheduleTabPanelProps>(
-  ({ open }) => `
-    background-color: ${open ? '#ffffff' : '#f1f1f1'};
+const StyledMobileScheduleTabPanel = styled(
+  'div',
+  transientOptions
+)<StyledMobileScheduleTabPanelProps>(
+  ({ $open }) => `
+    background-color: ${$open ? '#ffffff' : '#f1f1f1'};
     border-bottom: 1px solid #ccc;
     width: 100%;
   `
@@ -110,14 +114,12 @@ const StyledDayTimeLineTimeWrapper = styled('div')(
   `
 );
 
-const StyledDayTimeLineTime = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    gap: 4px;
-  `
-);
+const StyledDayTimeLineTime = styled('div')`
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+`;
 
 const StyledDayTimeLineTimeTimes = styled('div')(
   ({ theme }) => `
@@ -169,7 +171,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
   }, [open]);
 
   return (
-    <StyledMobileScheduleTabPanel open={open}>
+    <StyledMobileScheduleTabPanel $open={open}>
       <ListItemButton onClick={handleClick}>
         <ListItemText
           primary={times.name}

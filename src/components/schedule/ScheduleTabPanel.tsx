@@ -1,18 +1,22 @@
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 import TabPanel from '../TabPanel';
 
 interface StyledTabPanelContentProps {
-  disablePadding: boolean;
+  $disablePadding: boolean;
 }
 
-const StyledTabPanelContent = styled('div', ['disablePadding'])<StyledTabPanelContentProps>(
-  ({ theme, disablePadding }) => `
+const StyledTabPanelContent = styled(
+  'div',
+  transientOptions
+)<StyledTabPanelContentProps>(
+  ({ theme, $disablePadding }) => `
     flex-direction: column;
     width: 100%;
-    ${!disablePadding ? 'padding: 50px;' : ''}
+    ${!$disablePadding ? 'padding: 50px;' : ''}
     box-sizing: border-box;
 
     ${theme.breakpoints.down('md')} {
@@ -30,11 +34,14 @@ const StyledTabPanelTitleWrapper = styled('div')`
 `;
 
 interface StyledTabPanelTitleProps {
-  variant: 'normal' | 'compact';
+  $variant: 'normal' | 'compact';
 }
 
-const StyledTabPanelTitle = styled('h2')<StyledTabPanelTitleProps>(
-  ({ theme, variant }) => `
+const StyledTabPanelTitle = styled(
+  'h2',
+  transientOptions
+)<StyledTabPanelTitleProps>(
+  ({ theme, $variant }) => `
     font-weight: 500;
     color: #555;
     padding: 0;
@@ -42,7 +49,7 @@ const StyledTabPanelTitle = styled('h2')<StyledTabPanelTitleProps>(
     text-transform: uppercase;
 
     ${
-      variant === 'normal'
+      $variant === 'normal'
         ? `
           padding-bottom: 16px;
           border-bottom: 2px solid #ddd;
@@ -68,11 +75,14 @@ const StyledSectionTitle = styled('h3')`
 `;
 
 interface StyledSectionsProps {
-  variant: 'normal' | 'compact';
+  $variant: 'normal' | 'compact';
 }
 
-const StyledSections = styled('div')<StyledSectionsProps>(
-  ({ variant }) => `
+const StyledSections = styled(
+  'div',
+  transientOptions
+)<StyledSectionsProps>(
+  ({ $variant }) => `
     margin-top: 32px;
     display: flex;
     flex-direction: column;
@@ -80,7 +90,7 @@ const StyledSections = styled('div')<StyledSectionsProps>(
     gap: 0;
 
     ${
-      variant === 'compact'
+      $variant === 'compact'
         ? `
           &:nth-of-type(2) {
             margin-top: 24px;
@@ -174,12 +184,12 @@ const ScheduleTabPanel = memo(
   ({ times, value, index, disablePadding = false, variant = 'normal' }: ScheduleTabPanelProps) => {
     return (
       <TabPanel value={value} index={index}>
-        <StyledTabPanelContent disablePadding={disablePadding}>
+        <StyledTabPanelContent $disablePadding={disablePadding}>
           <StyledTabPanelTitleWrapper>
-            <StyledTabPanelTitle variant={variant}>{times.name}</StyledTabPanelTitle>
+            <StyledTabPanelTitle $variant={variant}>{times.name}</StyledTabPanelTitle>
           </StyledTabPanelTitleWrapper>
           {times.sections?.map((section, sectionIndex) => (
-            <StyledSections key={`section-${sectionIndex}`} variant={variant}>
+            <StyledSections key={`section-${sectionIndex}`} $variant={variant}>
               {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
               {section.days?.map((day, dayIndex) => (
                 <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>

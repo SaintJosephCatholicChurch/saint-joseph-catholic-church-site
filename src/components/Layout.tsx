@@ -1,7 +1,7 @@
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
+import { styled } from '@mui/material/styles';
 import Head from 'next/head';
-import styled from '../util/styled.util';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 

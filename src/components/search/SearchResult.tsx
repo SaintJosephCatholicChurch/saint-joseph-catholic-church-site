@@ -2,10 +2,10 @@ import ArticleIcon from '@mui/icons-material/Article';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import WebIcon from '@mui/icons-material/Web';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 import contentStyles from '../../../public/styles/content.module.css';
 import { BULLETIN, NEWS, SearchableEntry } from '../../interface';
-import styled from '../../util/styled.util';
 
 const StyledSearchResultBody = styled('div')`
   display: flex;

@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
@@ -18,7 +19,6 @@ import TabPanel from '../../../components/TabPanel';
 import type { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
-import styled from '../../../util/styled.util';
 
 const StyledTabPanelContent = styled('div')`
   padding: 16px;

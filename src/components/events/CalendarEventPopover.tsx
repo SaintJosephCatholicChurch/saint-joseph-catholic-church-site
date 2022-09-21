@@ -1,6 +1,5 @@
 import type { EventClickArg } from '@fullcalendar/react';
 import Popover from '@mui/material/Popover';
-import styled from '../../util/styled.util';
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';

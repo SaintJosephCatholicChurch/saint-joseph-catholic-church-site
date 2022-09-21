@@ -1,26 +1,30 @@
+import { styled } from '@mui/material/styles';
 import { ReactNode } from 'react';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 interface StyledContainerProps {
-  disablePadding: boolean;
+  $disablePadding: boolean;
 }
 
-const StyledContainer = styled('div', ['disablePadding'])<StyledContainerProps>(
-  ({ theme, disablePadding }) => `
+const StyledContainer = styled(
+  'div',
+  transientOptions
+)<StyledContainerProps>(
+  ({ theme, $disablePadding }) => `
     max-width: ${MAX_APP_WIDTH}px;
     width: 100%;
     display: flex;
     justify-content: center;
     box-sizing: border-box;
-    ${!disablePadding ? 'padding: 0 24px;' : ''}
+    ${!$disablePadding ? 'padding: 0 24px;' : ''}
 
     ${theme.breakpoints.only('md')} {
-      ${!disablePadding ? 'padding: 0 32px;' : ''}
+      ${!$disablePadding ? 'padding: 0 32px;' : ''}
     }
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
-      ${!disablePadding ? 'padding: 0 12px;' : ''}
+      ${!$disablePadding ? 'padding: 0 12px;' : ''}
     }
   `
 );
@@ -31,7 +35,7 @@ interface ContainerProps {
 }
 
 const Container = ({ children, disablePadding = false }: ContainerProps) => {
-  return <StyledContainer disablePadding={disablePadding}>{children}</StyledContainer>;
+  return <StyledContainer $disablePadding={disablePadding}>{children}</StyledContainer>;
 };
 
 export default Container;

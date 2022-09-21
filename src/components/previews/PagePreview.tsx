@@ -1,5 +1,5 @@
+import { styled } from '@mui/material/styles';
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
-import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
 import PageTitle from '../pages/PageTitle';
 

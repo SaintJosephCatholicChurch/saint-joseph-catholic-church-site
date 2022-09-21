@@ -1,17 +1,21 @@
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
-import styled from '../../util/styled.util';
+import transientOptions from '../../util/transientOptions';
 
 interface StyledHeaderProps {
-  enableMarginTop: boolean;
+  $enableMarginTop: boolean;
 }
 
-const StyledHeader = styled('header', ['enableMarginTop'])<StyledHeaderProps>(
-  ({ enableMarginTop }) => `
+const StyledHeader = styled(
+  'header',
+  transientOptions
+)<StyledHeaderProps>(
+  ({ $enableMarginTop }) => `
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    ${enableMarginTop ? 'margin-top: 16px' : ''}
+    ${$enableMarginTop ? 'margin-top: 16px' : ''}
 
     &:first-of-type h1 {
       margin-top: 0;
@@ -39,7 +43,7 @@ interface PostTitleProps {
 
 const PostTitle = memo(({ title, enableMarginTop = false, disableMargin = false }: PostTitleProps) => {
   return (
-    <StyledHeader enableMarginTop={enableMarginTop}>
+    <StyledHeader $enableMarginTop={enableMarginTop}>
       <StyledTitle disableMargin={disableMargin}>{title}</StyledTitle>
     </StyledHeader>
   );

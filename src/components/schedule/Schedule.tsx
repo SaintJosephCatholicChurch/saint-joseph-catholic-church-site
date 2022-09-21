@@ -1,7 +1,7 @@
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Link from 'next/link';
@@ -19,7 +19,6 @@ import {
 } from '../../constants';
 import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
-import styled from '../../util/styled.util';
 import { useMediaQueryDown } from '../../util/useMediaQuery';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';

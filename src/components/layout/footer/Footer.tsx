@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import type { ChurchDetails, StylesConfig } from '../../../interface';
-import styled from '../../../util/styled.util';
+import transientOptions from '../../../util/transientOptions';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';
 import ContactDetails from './ContactDetails';
@@ -8,16 +9,17 @@ import Copyright from './Copyright';
 import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
 
-const StyledFooter = styled('footer')``;
-
 interface StyledFooterContainerWrapperProps {
-  footerBackground?: string;
+  $footerBackground?: string;
 }
 
-const StyledFooterContainerWrapper = styled('div', ['footerBackground'])<StyledFooterContainerWrapperProps>(
-  ({ theme, footerBackground }) => `
+const StyledFooterContainerWrapper = styled(
+  'div',
+  transientOptions
+)<StyledFooterContainerWrapperProps>(
+  ({ theme, $footerBackground }) => `
     background-color: #e8e5e1;
-    ${footerBackground ? `background-image: url(${footerBackground});` : ''}
+    ${$footerBackground ? `background-image: url(${$footerBackground});` : ''}
     background-repeat: repeat;
     background-position: center top;
     display: flex;
@@ -60,8 +62,8 @@ interface FooterProps {
 
 const Footer = ({ styles, churchDetails }: FooterProps) => {
   return (
-    <StyledFooter>
-      <StyledFooterContainerWrapper footerBackground={styles?.footer_background}>
+    <footer>
+      <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
         <Container>
           <StyledFooterContents>
             <Box>
@@ -77,7 +79,7 @@ const Footer = ({ styles, churchDetails }: FooterProps) => {
         </Container>
       </StyledFooterContainerWrapper>
       <Copyright />
-    </StyledFooter>
+    </footer>
   );
 };
 

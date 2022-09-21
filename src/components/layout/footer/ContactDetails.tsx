@@ -2,9 +2,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../constants';
 import type { ChurchDetails } from '../../../interface';
-import styled from '../../../util/styled.util';
 
 export const StyledContactDetails = styled('div')`
   display: flex;

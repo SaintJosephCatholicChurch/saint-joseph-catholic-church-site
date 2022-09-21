@@ -1,6 +1,6 @@
+import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import type { PostContent } from '../../../interface';
-import styled from '../../../util/styled.util';
 import SearchBox from '../../SearchBox';
 import DailyReadings from '../../widgets/DailyReadings';
 import RecentNews from '../../widgets/recent-news/RecentNews';

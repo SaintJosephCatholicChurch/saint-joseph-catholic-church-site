@@ -1,18 +1,8 @@
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { memo, useMemo } from 'react';
 import { FeaturedPage } from '../../interface';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
-import styled from '../../util/styled.util';
-
-interface StyledDailyReadingsProps {
-  isFullWidth: boolean;
-}
-
-const StyledFeaturePage = styled('div', ['isFullWidth'])<StyledDailyReadingsProps>(
-  ({ theme, isFullWidth }) => `
-  `
-);
 
 const StyledTitle = styled('h3')`
   margin: 0;

@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { memo } from 'react';
 import type { HomePageData, PostContent, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
+import transientOptions from '../../util/transientOptions';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
@@ -48,25 +49,32 @@ const StyledWidgetSectionContent = styled('div')(
   `
 );
 
-const StyledReadingsWidgetSectionContent = styled(StyledWidgetSectionContent)(
-  ({ theme }) => `
-    margin: 16px 0;
+const StyledReadingsWidgetSectionContent = styled(StyledWidgetSectionContent)`
+  margin: 16px 0;
+`;
+
+interface StyledDailyReadingsSectionBackgroundProps {
+  $background: string;
+}
+
+const StyledDailyReadingsSectionBackground = styled(
+  'div',
+  transientOptions
+)<StyledDailyReadingsSectionBackgroundProps>(
+  ({ $background }) => `
+    opacity: 0.6;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 140%;
+    background: linear-gradient(rgba(241, 241, 241, 0) 25%, #f1f1f1 75%), url(${$background}), #f1f1f1;
+    background-position: top center;
+    background-size: cover;
+    opacity: 0.25;
+    pointer-events: none;
   `
 );
-
-const StyledDailyReadingsSectionBackground = styled('div')`
-  opacity: 0.6;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 140%;
-  background: linear-gradient(rgba(241, 241, 241, 0) 25%, #f1f1f1 75%), url(/files/scripture-background.avif), #f1f1f1;
-  background-position: top center;
-  background-size: cover;
-  opacity: 0.25;
-  pointer-events: none;
-`;
 
 interface HomepageViewProps {
   homePageData: HomePageData;
@@ -75,7 +83,7 @@ interface HomepageViewProps {
 }
 
 const HomepageView = memo(
-  ({ homePageData: { slides, schedule_background, featured_page }, times, recentPosts }: HomepageViewProps) => {
+  ({ homePageData: { slides, schedule_background, daily_readings_background, featured_page }, times, recentPosts }: HomepageViewProps) => {
     const UpcomingEventsNoSSR = dynamic(() => import('../widgets/UpcomingEvents'), {
       ssr: false
     });
@@ -85,7 +93,7 @@ const HomepageView = memo(
         <CarouselView slides={slides} />
         <ScheduleWidget times={times} background={schedule_background} />
         <StyledSectionWrapper>
-          <StyledDailyReadingsSectionBackground />
+          <StyledDailyReadingsSectionBackground $background={daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
               <DailyReadings isFullWidth showSubtitle />

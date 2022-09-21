@@ -1,9 +1,9 @@
+import styled from '@emotion/styled';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import parseISO from 'date-fns/parseISO';
 import { memo, useEffect, useMemo, useState } from 'react';
 import type { PostContent } from '../../interface';
-import styled from '../../util/styled.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';

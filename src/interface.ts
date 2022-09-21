@@ -17,6 +17,7 @@ export interface FeaturedPage {
 export interface HomePageData {
   slides: Slide[];
   schedule_background: string;
+  daily_readings_background: string;
   featured_page: FeaturedPage;
 }
 

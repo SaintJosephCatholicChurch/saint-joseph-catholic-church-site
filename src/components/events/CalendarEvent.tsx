@@ -1,5 +1,5 @@
 import type { EventContentArg } from '@fullcalendar/react';
-import styled from '../../util/styled.util';
+import { styled } from '@mui/material/styles';
 import useEventTitle from './hooks/useEventTitle';
 
 const StyleEvent = styled('div')`

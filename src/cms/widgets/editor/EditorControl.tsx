@@ -1,3 +1,4 @@
+import { styled } from '@mui/material/styles';
 import { Map } from 'immutable';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
@@ -6,7 +7,6 @@ import { IMAGE_EXTENSION_REGEX } from '../../../constants';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
 import { isEmpty, isNotEmpty } from '../../../util/string.util';
-import styled from '../../../util/styled.util';
 import { getFieldAsset } from '../../util/asset.util';
 import BundledEditor from './BundledEditor';
 
@@ -105,21 +105,24 @@ const EditorControl = ({
     [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]
   );
 
-  const getMedia = useCallback(async (path: string) => {
-    const { type, exists } = await doesUrlFileExist(path);
-    if (!exists) {
-      const asset = getFieldAsset(field, getAsset)(path);
-      if (isNotNullish(asset)) {
-        return {
-          type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
-          exists: false,
-          url: asset.toString()
-        };
+  const getMedia = useCallback(
+    async (path: string) => {
+      const { type, exists } = await doesUrlFileExist(path);
+      if (!exists) {
+        const asset = getFieldAsset(field, getAsset)(path);
+        if (isNotNullish(asset)) {
+          return {
+            type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
+            exists: false,
+            url: asset.toString()
+          };
+        }
       }
-    }
 
-    return { url: path, type, exists };
-  }, [field, getAsset]);
+      return { url: path, type, exists };
+    },
+    [field, getAsset]
+  );
 
   const mediaPath: string = mediaPaths.get(controlID);
   useEffect(() => {

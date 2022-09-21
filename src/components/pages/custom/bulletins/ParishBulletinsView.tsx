@@ -10,11 +10,11 @@ import List from '@mui/material/List';
 import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Bulletin, BulletinPDFData } from '../../../../interface';
 import { isNotNullish } from '../../../../util/null.util';
-import styled from '../../../../util/styled.util';
+import transientOptions from '../../../../util/transientOptions';
 import useElementSize from '../../../../util/useElementSize';
 import useNavigate from '../../../../util/useNavigate';
 import BulletListButton from './BulletListButton';
@@ -69,15 +69,18 @@ const StyledPDFViewer = styled('div')`
 `;
 
 interface StyledPDFViewerContentProps {
-  height: number;
-  width: number;
+  $height: number;
+  $width: number;
 }
 
-const StyledPDFViewerContent = styled('div', ['width', 'height'])<StyledPDFViewerContentProps>(
-  ({ theme, height, width }) => `
-    min-height: ${height}px;
+const StyledPDFViewerContent = styled(
+  'div',
+  transientOptions
+)<StyledPDFViewerContentProps>(
+  ({ theme, $height, $width }) => `
+    min-height: ${$height}px;
     height: auto;
-    width: ${width}px;
+    width: ${$width}px;
 
     ${theme.breakpoints.up('lg')} {
       &:hover .pdf-pagination {
@@ -87,7 +90,7 @@ const StyledPDFViewerContent = styled('div', ['width', 'height'])<StyledPDFViewe
       }
 
       .react-pdf__Document {
-        height: ${height}px;
+        height: ${$height}px;
       }
     }
   `
@@ -162,17 +165,20 @@ const StyledFloatingPagination = styled('div')`
 `;
 
 interface StyledNavigationButtonWrapperProps {
-  align: 'left' | 'right';
+  $align: 'left' | 'right';
 }
 
-const StyledNavigationButtonWrapper = styled('div', ['align'])<StyledNavigationButtonWrapperProps>(
-  ({ theme, align }) => `
+const StyledNavigationButtonWrapper = styled(
+  'div',
+  transientOptions
+)<StyledNavigationButtonWrapperProps>(
+  ({ theme, $align }) => `
     display: none;
 
     ${theme.breakpoints.up('lg')} {
       position: absolute;
       top: 0;
-      ${align}: 0;
+      ${$align}: 0;
       bottom: 0;
       min-width: 40px;
       width: 40px;
@@ -214,14 +220,17 @@ const StyledNavigationButtonWrapper = styled('div', ['align'])<StyledNavigationB
 );
 
 interface StyledSlidableAreaWrapperProps {
-  height: number;
+  $height: number;
 }
 
-const StyledSlidableAreaWrapper = styled('div', ['height'])<StyledSlidableAreaWrapperProps>(
-  ({ theme, height }) => `
+const StyledSlidableAreaWrapper = styled(
+  'div',
+  transientOptions
+)<StyledSlidableAreaWrapperProps>(
+  ({ theme, $height }) => `
     display: flex;
     position: relative;
-    height: ${height}px;
+    height: ${$height}px;
     overflow: hidden;
 
     ${theme.breakpoints.down('lg')} {
@@ -232,19 +241,22 @@ const StyledSlidableAreaWrapper = styled('div', ['height'])<StyledSlidableAreaWr
 );
 
 interface StyledSlidableAreaProps {
-  width: number;
-  index: number;
+  $width: number;
+  $index: number;
 }
 
-const StyledSlidableArea = styled('div', ['width', 'index'])<StyledSlidableAreaProps>(
-  ({ theme, width, index }) => `
+const StyledSlidableArea = styled(
+  'div',
+  transientOptions
+)<StyledSlidableAreaProps>(
+  ({ theme, $width, $index }) => `
     display: flex;
     left: 0;
     transition: left 333ms ease-out;
 
     ${theme.breakpoints.up('lg')} {
       position: absolute;
-      left: -${width * index}px;
+      left: -${$width * $index}px;
     }
     
     ${theme.breakpoints.down('lg')} {
@@ -372,10 +384,10 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
       </StyledSelectWrapper>
       <StyledPDFViewerWrapper>
         <StyledPDFViewer ref={pdfRef}>
-          <StyledPDFViewerContent width={width} height={height}>
+          <StyledPDFViewerContent $width={width} $height={height}>
             {pages.length > 0 ? (
-              <StyledSlidableAreaWrapper height={height}>
-                <StyledSlidableArea width={width} index={page - 1}>
+              <StyledSlidableAreaWrapper $height={height}>
+                <StyledSlidableArea $width={width} $index={page - 1}>
                   {pages.map((pageImage, index) => (
                     <img
                       key={`${bulletin.pdf}-page-${index + 1}`}
@@ -400,14 +412,14 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
               </StyledFloatingPagination>
             </StyledPaginationContainer>
             {page !== 1 ? (
-              <StyledNavigationButtonWrapper align="left">
+              <StyledNavigationButtonWrapper $align="left">
                 <Button onClick={onPreviousClick}>
                   <ChevronLeftIcon fontSize="large" />
                 </Button>
               </StyledNavigationButtonWrapper>
             ) : null}
             {page !== totalPages ? (
-              <StyledNavigationButtonWrapper align="right">
+              <StyledNavigationButtonWrapper $align="right">
                 <Button onClick={onNextClick}>
                   <ChevronRightIcon fontSize="large" />
                 </Button>

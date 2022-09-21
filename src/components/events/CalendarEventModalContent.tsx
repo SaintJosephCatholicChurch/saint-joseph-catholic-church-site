@@ -1,8 +1,7 @@
 import EventIcon from '@mui/icons-material/Event';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import NotesIcon from '@mui/icons-material/Notes';
-import { useTheme } from '@mui/material/styles';
-import styled from '../../util/styled.util';
+import { styled, useTheme } from '@mui/material/styles';
 
 const StyledContentWrapper = styled('div')`
   padding: 16px 28px 24px 16px;

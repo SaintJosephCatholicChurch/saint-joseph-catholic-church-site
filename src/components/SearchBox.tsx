@@ -1,9 +1,9 @@
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { memo, useCallback, useState } from 'react';
 import { isEmpty } from '../util/string.util';
-import styled from '../util/styled.util';
 import { useMediaQueryDown } from '../util/useMediaQuery';
 import useNavigate from '../util/useNavigate';
 

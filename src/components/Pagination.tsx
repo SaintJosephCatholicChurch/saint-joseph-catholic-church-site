@@ -1,6 +1,6 @@
 import MuiPagination from '@mui/material/Pagination';
+import { styled } from '@mui/material/styles';
 import { ChangeEvent, useCallback } from 'react';
-import styled from '../util/styled.util';
 import useNavigate from '../util/useNavigate';
 
 const StyledPagination = styled('div')`

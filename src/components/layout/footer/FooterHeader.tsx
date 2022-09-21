@@ -1,4 +1,4 @@
-import styled from '../../../util/styled.util';
+import { styled } from '@mui/material/styles';
 
 const StyledFooterHeader = styled('h4')`
   color: #616169;

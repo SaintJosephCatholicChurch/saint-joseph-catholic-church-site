@@ -1,5 +1,5 @@
-import { ReactEventHandler, useCallback, useEffect, useState } from 'react';
-import styled from '../../../../util/styled.util';
+import { styled } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
 import useElementSize from '../../../../util/useElementSize';
 
 const StyledLiveStreamWrapper = styled('div')`

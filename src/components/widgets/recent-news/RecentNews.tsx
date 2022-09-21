@@ -1,6 +1,6 @@
+import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 import { PostContent } from '../../../interface';
-import styled from '../../../util/styled.util';
 import RecentNewsPost from './RecentNewsPost';
 
 const StyledRecentNews = styled('div')(

@@ -8,9 +8,16 @@ export interface FileMatter {
   readonly matterResult: matter.GrayMatterFile<string>;
 }
 
+export interface FeaturedPage {
+  image?: string;
+  summary?: string;
+  page?: string;
+}
+
 export interface HomePageData {
   slides: Slide[];
   schedule_background: string;
+  featured_page: FeaturedPage;
 }
 
 export interface Slide {
@@ -59,6 +66,7 @@ export interface ChurchDetails {
   readonly email: string;
   readonly additional_emails?: { name: string; email: string }[];
   readonly contacts?: { title: string; name: string }[];
+  readonly facebook_page: string;
   readonly google_map_location: string;
 }
 

@@ -1,5 +1,6 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Link from 'next/link';
 import { MouseEvent } from 'react';
 import type { MenuLink } from '../../interface';
 import useMenuLinkUrl from './hooks/useMenuLinkUrl';
@@ -14,14 +15,11 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
   const { title } = link;
 
   return (
-    <ListItemButton
-      sx={{ pl: 4, color: '#ffffff' }}
-      onClick={onClick}
-      href={url}
-      target={url?.startsWith('http') ? '_blank' : undefined}
-    >
-      <ListItemText primary={title} />
-    </ListItemButton>
+    <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
+      <ListItemButton sx={{ pl: 4, color: '#ffffff', '&:hover': { color: '#ffffff' } }} onClick={onClick}>
+        <ListItemText primary={title} />
+      </ListItemButton>
+    </Link>
   );
 };
 

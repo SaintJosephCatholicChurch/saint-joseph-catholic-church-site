@@ -1,9 +1,13 @@
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import { useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Link from 'next/link';
 import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  EXTRA_EXTRA_SMALL_BREAKPOINT,
   TIMES_LINE_MIN_HEIGHT,
   TIMES_LINE_PADDING_MARGIN_HEIGHT,
   TIMES_LINE_TIMES_GAP,
@@ -33,7 +37,7 @@ const StyledHeader = styled('div')(
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 
     ${theme.breakpoints.down('md')} {
       font-size: 24px;
@@ -64,8 +68,14 @@ const StyledHeaderText = styled('h1')(
 
     font-size: 24px;
     line-height: 24px;
+    
     ${theme.breakpoints.up('lg')} {
       font-size: 30px;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      font-size: 20px;
+      line-height: 20px;
     }
   `
 );
@@ -81,7 +91,9 @@ const StyledTabsWrapper = styled('div')(
     grid-template-columns: 2fr 5fr;
     width: 100%;
     ${theme.breakpoints.down('md')} {
-      display: none;
+      visibility: hidden;
+      width: 0;
+      height: 0;
     }
   `
 );
@@ -108,6 +120,8 @@ interface ScheduleProps {
 const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
+
+  console.log('times', times);
 
   const handleChange = useCallback(
     (_event: SyntheticEvent, newValue: number) => {
@@ -193,6 +207,26 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
         <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
         <StyledHeaderText>Come Worship with Us</StyledHeaderText>
         <StyledHeaderBorder />
+        <Link href="/live-stream">
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<LiveTvIcon />}
+            sx={{
+              marginTop: '16px',
+              fontSize: '20px',
+              backgroundColor: '#bc2f3b',
+              '&:hover': {
+                backgroundColor: '#d24c57'
+              },
+              '.MuiButton-startIcon > *:nth-of-type(1)': {
+                fontSize: '24px'
+              }
+            }}
+          >
+            Live Stream Mass
+          </Button>
+        </Link>
       </StyledHeader>
       <List
         component="div"

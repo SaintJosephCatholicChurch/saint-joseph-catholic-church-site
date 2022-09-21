@@ -45,7 +45,7 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     <>
       <ListItemButton
         key={`drawer-nav-item-${item.title}`}
-        sx={{ color: '#fde7a5', textTransform: 'uppercase' }}
+        sx={{ color: '#fde7a5', textTransform: 'uppercase', '&:hover': { color: '#fde7a5' } }}
         onClick={handleOnClick(item)}
         target={url?.startsWith('http') ? '_blank' : undefined}
         href={url}

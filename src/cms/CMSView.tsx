@@ -1,3 +1,12 @@
+import {
+  faArrowUpRightFromSquare,
+  faChurch,
+  faFileLines,
+  faGear,
+  faHouse,
+  faTag
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
 import { ComponentType, memo, useEffect } from 'react';
@@ -7,16 +16,13 @@ import HomePagePreview from '../components/previews/HomePagePreview';
 import PagePreview from '../components/previews/PagePreview';
 import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
-import { useScript } from '../util/useScript';
+import StaffPreview from '../components/previews/StaffPreview';
 import config from './config';
-import useCollectionIcons from './hooks/useCollectionIcons';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
 const CMSView = memo(() => {
-  useScript('https://kit.fontawesome.com/0636016ebf.js');
-
   useEffect(() => {
     if (!cmsApp) {
       return;
@@ -29,7 +35,11 @@ const CMSView = memo(() => {
     cmsApp.init({ config } as { config: CmsConfig });
 
     cmsApp.registerWidget('times', ScheduleWidget);
-    cmsApp.registerWidget('html', EditorWidget, EditorPreview as unknown as ComponentType<CmsWidgetPreviewProps<string>>);
+    cmsApp.registerWidget(
+      'html',
+      EditorWidget,
+      EditorPreview as unknown as ComponentType<CmsWidgetPreviewProps<string>>
+    );
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
     cmsApp.registerPreviewStyle('/styles/content.module.css');
@@ -39,33 +49,21 @@ const CMSView = memo(() => {
     cmsApp.registerPreviewTemplate('times', SchedulePreview);
     cmsApp.registerPreviewTemplate('church_details', ChurchDetailsPreview);
     cmsApp.registerPreviewTemplate('bulletins', BulletinsPreview);
-  }, []);
+    cmsApp.registerPreviewTemplate('staff', StaffPreview);
 
-  useCollectionIcons([
-    {
-      name: 'homepage',
-      icon: 'fa-solid fa-house'
-    },
-    {
-      name: 'church',
-      icon: 'fa-solid fa-church'
-    },
-    {
-      name: 'meta',
-      icon: 'fa-solid fa-tag'
-    },
-    {
-      name: 'pages',
-      icon: 'fa-solid fa-file-lines'
-    },
-    {
-      name: 'config',
-      icon: 'fa-solid fa-gear'
-    }
-  ]);
+    cmsApp.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
+    cmsApp.registerIcon('church', <FontAwesomeIcon icon={faChurch} size="lg" />);
+    cmsApp.registerIcon('tag', <FontAwesomeIcon icon={faTag} size="lg" />);
+    cmsApp.registerIcon('file-lines', <FontAwesomeIcon icon={faFileLines} size="lg" />);
+    cmsApp.registerIcon('gear', <FontAwesomeIcon icon={faGear} size="lg" />);
+    cmsApp.registerIcon('external-link', <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" />);
+
+    cmsApp.registerAdditionalLink('events', 'Events Calendar', 'https://calendar.google.com/', 'external-link');
+  }, []);
 
   return (
     <div>
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <style jsx global>{`
         html,
         body {

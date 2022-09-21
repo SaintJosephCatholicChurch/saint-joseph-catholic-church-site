@@ -89,7 +89,7 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
         <StyledScheduleWidgetContent>
           <Tabs
             orientation="vertical"
-            variant="scrollable"
+            variant="standard"
             value={value}
             onChange={handleTabChange}
             aria-label="Vertical tabs example"

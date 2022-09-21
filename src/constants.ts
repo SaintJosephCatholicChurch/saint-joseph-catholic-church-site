@@ -29,3 +29,12 @@ export const MENU_DELAY = 75;
 
 export const RECENT_NEWS_TO_SHOW = 4;
 export const UPCOMING_EVENTS_TO_SHOW = 4;
+
+export const STAFF_DEFAULT_CARD_SIZE = 225;
+export const STAFF_CARD_GAP_SIZE = 24;
+export const STAFF_GLOBAL_PADDING = 48;
+
+export const IMAGE_EXTENSION_REGEX = /(\.apng|\.avif|\.gif|\.jpg|\.jpeg|\.jfif|\.pjpeg|\.pjp|\.png|\.svg|\.webp)$/g;
+
+export const EXTRA_EXTRA_SMALL_BREAKPOINT = 320;
+export const EXTRA_SMALL_BREAKPOINT = 370;

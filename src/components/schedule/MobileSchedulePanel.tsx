@@ -4,6 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { memo, useCallback, useState } from 'react';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import styled from '../../util/styled.util';
@@ -28,14 +29,20 @@ const StyledSectionTitle = styled('h3')`
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
 `;
 
-const StyledSections = styled('div')`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 0;
-  padding: 16px 24px;
-  box-sizing: border-box;
-`;
+const StyledSections = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    padding: 16px 24px;
+    box-sizing: border-box;
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      padding: 12px 16px;
+    }
+  `
+);
 
 const StyledDayTimeLine = styled('div')(
   ({ theme }) => `
@@ -66,6 +73,11 @@ const StyledDayTimeLineTitle = styled('div')(
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      font-size: 12px;
+      line-height: 14px;
     }
   `
 );
@@ -107,11 +119,18 @@ const StyledDayTimeLineTime = styled('div')(
   `
 );
 
-const StyledDayTimeLineTimeTimes = styled('div')`
-  text-transform: uppercase;
-  font-size: 14px;
-  line-height: 16px;
-`;
+const StyledDayTimeLineTimeTimes = styled('div')(
+  ({ theme }) => `
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 16px;
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  `
+);
 
 const StyledDivider = styled('div')`
   color: #aaa;
@@ -128,6 +147,11 @@ const StyledDayTimeLineTimeComment = styled('div')(
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      font-size: 12px;
+      line-height: 12px;
     }
   `
 );
@@ -163,16 +187,16 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        {times.sections?.map((section) => (
-          <StyledSections key={`mobile-section-${section.name}`}>
+        {times.sections?.map((section, sectionIndex) => (
+          <StyledSections key={`mobile-section-${sectionIndex}`}>
             {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
             {section.days?.map((day) => (
-              <StyledDayTimeLine key={`mobile-section-${section.name}-day-${day.day}`}>
+              <StyledDayTimeLine key={`mobile-section-${sectionIndex}-day-${day.day}`}>
                 <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                 <StyledDayTimeLineTimes>
                   {day.times?.map((time, timeIndex) => (
                     <StyledDayTimeLineTimeWrapper
-                      key={`mobile-section-${section.name}-day-${day.day}-times-${timeIndex}`}
+                      key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
                     >
                       <StyledDayTimeLineTime>
                         <StyledDayTimeLineTimeTimes>
@@ -181,12 +205,12 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                         {isNotEmpty(time.end_time) ? (
                           <>
                             <StyledDivider
-                              key={`mobile-section-${section.name}-day-${day.day}-divider-end-time-${timeIndex}`}
+                              key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-${timeIndex}`}
                             >
                               -
                             </StyledDivider>
                             <StyledDayTimeLineTimeTimes
-                              key={`mobile-section-${section.name}-day-${day.day}-end-time-${timeIndex}`}
+                              key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-${timeIndex}`}
                             >
                               {time.end_time}
                             </StyledDayTimeLineTimeTimes>
@@ -195,7 +219,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                       </StyledDayTimeLineTime>
                       {isNotEmpty(time.note) ? (
                         <StyledDayTimeLineTimeComment
-                          key={`mobile-section-${section.name}-day-${day.day}-note-${timeIndex}`}
+                          key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
                         >
                           {time.note}
                         </StyledDayTimeLineTimeComment>

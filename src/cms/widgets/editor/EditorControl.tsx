@@ -2,9 +2,12 @@ import { Map } from 'immutable';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import uuid from 'uuid/v4';
+import { IMAGE_EXTENSION_REGEX } from '../../../constants';
 import { doesUrlFileExist } from '../../../util/fetch.util';
+import { isNotNullish } from '../../../util/null.util';
 import { isEmpty, isNotEmpty } from '../../../util/string.util';
 import styled from '../../../util/styled.util';
+import { getFieldAsset } from '../../util/asset.util';
 import BundledEditor from './BundledEditor';
 
 const StyledEditorControl = styled('div')`
@@ -102,6 +105,22 @@ const EditorControl = ({
     [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]
   );
 
+  const getMedia = useCallback(async (path: string) => {
+    const { type, exists } = await doesUrlFileExist(path);
+    if (!exists) {
+      const asset = getFieldAsset(field, getAsset)(path);
+      if (isNotNullish(asset)) {
+        return {
+          type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
+          exists: false,
+          url: asset.toString()
+        };
+      }
+    }
+
+    return { url: path, type, exists };
+  }, [field, getAsset]);
+
   const mediaPath: string = mediaPaths.get(controlID);
   useEffect(() => {
     if (isEmpty(mediaPath)) {
@@ -109,21 +128,20 @@ const EditorControl = ({
     }
 
     const addMedia = async () => {
-      const { type, exists } = await doesUrlFileExist(mediaPath);
-
+      const { type, exists, url } = await getMedia(mediaPath);
       let content: string | undefined;
       if (type.startsWith('image')) {
         if (exists) {
           content = `<img src="${mediaPath}" />`;
         } else {
-          content = `<img data-asset="${mediaPath}" src="${getAsset(mediaPath, field)}" />`;
+          content = `<img data-asset="${mediaPath}" src="${url}" />`;
         }
       } else {
         const name = mediaPath.split('/').pop();
         if (exists) {
           content = `<a target="_blank" href="${mediaPath}">${name}</a>`;
         } else {
-          content = `<a data-asset="${mediaPath}" target="_blank" href="${getAsset(mediaPath, field)}">${name}</a>`;
+          content = `<a data-asset="${mediaPath}" target="_blank" href="${url}">${name}</a>`;
         }
       }
 
@@ -204,6 +222,7 @@ const EditorControl = ({
             elementpath: false,
             branding: false,
             invalid_styles: 'width height',
+            quickbars_selection_toolbar: 'bold italic | blocks | quicklink blockquote | bullist numlist',
             quickbars_insert_toolbar: 'quick-cms-image quick-cms-file quicktable',
             quickbars_image_toolbar: 'alignnone alignleft aligncenter alignright alignjustify',
             formats: {

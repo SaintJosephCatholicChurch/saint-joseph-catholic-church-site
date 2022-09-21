@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
 import { MouseEvent } from 'react';
 import type { MenuLink } from '../../interface';
 import useMenuLinkUrl from './hooks/useMenuLinkUrl';
@@ -14,30 +15,30 @@ const NavLink = ({ link, onClick }: NavLinkProps) => {
   const { title } = link;
 
   return (
-    <Button
-      sx={{
-        color: '#680b12',
-        padding: 0,
-        textTransform: 'none',
-        '&:hover': {
-          color: '#2e2e2e'
-        }
-      }}
-      href={url}
-      target={url?.startsWith('http') ? '_blank' : undefined}
-    >
-      <MenuItem
-        onClick={onClick}
+    <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
+      <Button
         sx={{
-          width: '100%',
-          fontSize: '15px',
-          padding: '10px 20px',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
+          color: '#680b12',
+          padding: 0,
+          textTransform: 'none',
+          '&:hover': {
+            color: '#2e2e2e'
+          }
         }}
       >
-        {title}
-      </MenuItem>
-    </Button>
+        <MenuItem
+          onClick={onClick}
+          sx={{
+            width: '100%',
+            fontSize: '15px',
+            padding: '10px 20px',
+            borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
+          }}
+        >
+          {title}
+        </MenuItem>
+      </Button>
+    </Link>
   );
 };
 

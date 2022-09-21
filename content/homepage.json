@@ -8,5 +8,10 @@
       "image": "/files/churchslide2-1.jpg"
     }
   ],
-  "schedule_background": "/files/pattern.png"
+  "schedule_background": "/files/pattern.png",
+  "featured_page": {
+    "image": "/files/did-you-know-banner.jpg",
+    "page": "did-you-know|Did You Know?",
+    "summary": "A description goes here, a brief explanation of the page and what awaits the user when they click here!"
+  }
 }

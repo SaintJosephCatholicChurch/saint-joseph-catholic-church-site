@@ -5,22 +5,8 @@ import bulletins from '../src/lib/bulletins';
 import pdf2img from '../src/util/pdf/pdf-img-convert';
 import git from '@npmcli/git';
 import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
-import { getDocument } from 'pdfjs-dist';
-import { PDFDataRangeTransport, DocumentInitParameters, TypedArray } from 'pdfjs-dist/types/src/display/api';
 
 const publicPath = 'public';
-
-export const getPdfText = async (
-  src: string | TypedArray | DocumentInitParameters | PDFDataRangeTransport
-): Promise<string> => {
-  const pdf = await getDocument(src).promise;
-
-  const pageList = await Promise.all(Array.from({ length: pdf.numPages }, (_, i) => pdf.getPage(i + 1)));
-
-  const textList = await Promise.all(pageList.map((p) => p.getTextContent()));
-
-  return textList.map(({ items }) => items.map(({ str = '' }: any) => str).join('')).join('');
-};
 
 (async function () {
   const pdfExtract = new PDFExtract();
@@ -61,7 +47,6 @@ export const getPdfText = async (
     }
 
     let textContent: string;
-    getPdfText;
 
     try {
       const pdfData = await pdfExtract.extract(pdfFullPath, options);

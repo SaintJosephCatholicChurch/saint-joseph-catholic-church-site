@@ -1,6 +1,9 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -9,7 +12,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { useCallback, useMemo, useState } from 'react';
-import { MAX_APP_WIDTH } from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
 import navItems from '../../lib/menu';
 import styled from '../../util/styled.util';
 import Logo from '../logo/Logo';
@@ -49,6 +52,22 @@ const StyledDesktopNavItems = styled('div')(
   ({ theme }) => `
     display: flex;
     gap: 8px;
+
+    ${theme.breakpoints.down('lg')} {
+      gap: 4px;
+    }
+
+    ${theme.breakpoints.between(1330, 1370)} {
+      margin-right: 48px;
+    }
+
+    ${theme.breakpoints.between(1370, 1410)} {
+      margin-right: 32px;
+    }
+
+    ${theme.breakpoints.between(1410, 1450)} {
+      margin-right: 16px;
+    }
 
     ${theme.breakpoints.down('md')} {
       display: none;
@@ -91,18 +110,26 @@ const Navigation = () => {
         component="nav"
         sx={{
           backgroundColor: '#bc2f3b',
-          alignItems: 'center'
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%'
         }}
       >
         <Toolbar
           sx={{
             width: '100%',
             boxSizing: 'border-box',
+            height: 70,
+            [theme.breakpoints.down('lg')]: {
+              pl: 1,
+              pr: 1.5
+            },
             [theme.breakpoints.down('md')]: {
               pl: 3,
               pr: 0
             },
-            [theme.breakpoints.up('md')]: {
+            [theme.breakpoints.up('lg')]: {
               transition: 'height 250ms ease',
               height: trigger ? 64 : 92,
               maxWidth: MAX_APP_WIDTH
@@ -118,6 +145,15 @@ const Navigation = () => {
               display: 'none',
               [theme.breakpoints.down('md')]: {
                 display: 'block'
+              },
+              [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+                width: '32px',
+                height: '32px',
+                padding: '0',
+                '.MuiSvgIcon-root': {
+                  width: '32px',
+                  height: '32px'
+                }
               }
             }}
           >
@@ -132,6 +168,46 @@ const Navigation = () => {
             ))}
           </StyledDesktopNavItems>
         </Toolbar>
+        <Button
+          href="https://www.osvhub.com/stjosephchurchbluffton/giving/funds"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            color: '#bf303c',
+            backgroundColor: '#ffffff',
+            borderRadius: 0,
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+            fontSize: '17px',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '1px 36px 0',
+            gap: '8px',
+            height: 70,
+            width: 162,
+            '&:hover': {
+              color: '#822129',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)'
+            },
+            [theme.breakpoints.up('lg')]: {
+              transition: 'height 250ms ease',
+              height: trigger ? 64 : 92
+            },
+            [theme.breakpoints.down(1330)]: {
+              position: 'relative',
+              padding: '1px 24px 0'
+            },
+            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+              padding: '1px 16px 0'
+            }
+          }}
+        >
+          <FontAwesomeIcon icon={faHandHoldingDollar} style={{ width: '24px' }} />
+          Give
+        </Button>
       </AppBar>
       <Box component="nav">
         <SwipeableDrawer
@@ -150,10 +226,16 @@ const Navigation = () => {
             [theme.breakpoints.down('md')]: {
               display: 'block'
             },
+            width: '80%',
+            maxWidth: DRAWER_WIDTH,
+            '& .MuiBackdrop-root': {
+              width: '100%'
+            },
             '& .MuiDrawer-paper': {
               backgroundColor: '#bc2f3b',
               boxSizing: 'border-box',
-              width: DRAWER_WIDTH
+              width: '80%',
+              maxWidth: DRAWER_WIDTH
             }
           }}
         >

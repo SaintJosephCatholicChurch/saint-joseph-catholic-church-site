@@ -23,7 +23,7 @@ const StyledLogoWrapper = styled('div', ['trigger', 'responsive'])<LogoWrapperPr
     transition: all 250ms ease;
 
     transform: ${trigger ? 'scale(0.75)' : 'scale(1)'};
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('lg')} {
       transform: ${responsive ? 'scale(0.75)' : 'scale(1)'};
     }
   `

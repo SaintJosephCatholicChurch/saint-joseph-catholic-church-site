@@ -1,4 +1,5 @@
 import EmailIcon from '@mui/icons-material/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -99,7 +100,7 @@ const StyledMap = styled('iframe')(
   `
 );
 
-export const StyledChurchDetailSection = styled('div')(
+const StyledChurchDetailSection = styled('div')(
   ({ theme }) => `
     display: flex;
     flex-direction: column;
@@ -114,7 +115,7 @@ export const StyledChurchDetailSection = styled('div')(
 `
 );
 
-export const StyledChurchDetail = styled('div')(
+const StyledChurchDetail = styled('div')(
   ({ theme }) => `
     display: flex;
     align-items: center;
@@ -128,17 +129,23 @@ export const StyledChurchDetail = styled('div')(
   `
 );
 
-export const StyledChurchDetailTitle = styled('div')`
+const StyledChurchDetailTitle = styled('div')`
   font-weight: 700;
 `;
 
-export const StyledChurchDetailContent = styled('div')``;
+const StyledChurchDetailContent = styled('div')``;
 
-export const StyledAddress = styled('div')`
+const StyledAddress = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-bottom: 8px;
+`;
+
+const StyledSocialLinks = styled('div')`
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
 `;
 
 interface ContactBody {
@@ -228,6 +235,16 @@ Comments / Questions: ${contactFormData.comment}`,
                     </StyledChurchDetail>
                   ))}
                 </StyledChurchDetailSection>
+                <StyledSocialLinks>
+                  <StyledChurchDetailsLink
+                    href={`https://www.facebook.com/${churchDetails.facebook_page}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={`Facebook - ${churchDetails.facebook_page}`}
+                  >
+                    <FacebookIcon fontSize="small" />
+                  </StyledChurchDetailsLink>
+                </StyledSocialLinks>
               </StyledContactDetails>
               <StyledContactForm>
                 <TextField

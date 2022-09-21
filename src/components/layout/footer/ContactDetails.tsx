@@ -1,6 +1,8 @@
 import EmailIcon from '@mui/icons-material/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../constants';
 import type { ChurchDetails } from '../../../interface';
 import styled from '../../../util/styled.util';
 
@@ -9,6 +11,7 @@ export const StyledContactDetails = styled('div')`
   flex-direction: column;
   gap: 4px;
   fontsize: 16px;
+  margin-bottom: 16px;
 `;
 
 export const StyledChurchDetailsLinkWrapper = styled('div')(
@@ -17,6 +20,10 @@ export const StyledChurchDetailsLinkWrapper = styled('div')(
 
     ${theme.breakpoints.down('md')} {
       justify-content: center;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      justify-content: left;
     }
   `
 );
@@ -30,6 +37,7 @@ export const StyledChurchDetailsLink = styled('a')(
     font-size: 16px;
     line-height: 22px;
     font-weight: bold;
+    word-break: break-word;
 
     &:hover {
       color: #822129;
@@ -38,6 +46,10 @@ export const StyledChurchDetailsLink = styled('a')(
 
     ${theme.breakpoints.down('md')} {
       justify-content: center;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      justify-content: left;
     }
   `
 );
@@ -51,6 +63,11 @@ export const StyledAddress = styled('div')(
 
     ${theme.breakpoints.down('md')} {
       text-align: center;
+      margin-bottom: 16px;
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      margin-bottom: 24px;
     }
   `
 );
@@ -81,6 +98,17 @@ const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
         <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
           <EmailIcon fontSize="small" />
           {churchDetails.email}
+        </StyledChurchDetailsLink>
+      </StyledChurchDetailsLinkWrapper>
+      <StyledChurchDetailsLinkWrapper>
+        <StyledChurchDetailsLink
+          href={`https://www.facebook.com/${churchDetails.facebook_page}`}
+          target="_blank"
+          rel="noreferrer"
+          title={`Facebook - ${churchDetails.facebook_page}`}
+        >
+          <FacebookIcon fontSize="small" />
+          {churchDetails.facebook_page}
         </StyledChurchDetailsLink>
       </StyledChurchDetailsLinkWrapper>
     </StyledContactDetails>

@@ -1,5 +1,6 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import type { MenuItem, MenuLink } from '../../interface';
@@ -62,6 +63,7 @@ interface HoverState {
 }
 
 const NavItem = ({ item }: NavItemProps) => {
+  const theme = useTheme();
   const { pathname } = useLocation();
 
   const [open, setOpen] = useState<HoverState>({
@@ -176,6 +178,9 @@ const NavItem = ({ item }: NavItemProps) => {
             '.menu-item-underline': {
               width: '90%'
             }
+          },
+          [theme.breakpoints.down('lg')]: {
+            padding: '12px 12px 14px'
           }
         }}
       >

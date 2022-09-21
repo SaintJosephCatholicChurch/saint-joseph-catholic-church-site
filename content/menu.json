@@ -95,6 +95,10 @@
       "title": "Resources",
       "menu_links": [
         {
+          "title": "Formed",
+          "page": "formed"
+        },
+        {
           "title": "Diocese of Fort Wayne - South Bend",
           "url": "http://www.diocesefwsb.org/"
         },

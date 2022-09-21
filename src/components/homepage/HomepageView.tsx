@@ -1,13 +1,14 @@
+import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { memo } from 'react';
 import type { HomePageData, PostContent, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
-import styled from '../../util/styled.util';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
 import ScheduleWidget from '../schedule/ScheduleWidget';
 import DailyReadings from '../widgets/DailyReadings';
+import FeaturedPage from '../widgets/FeaturedPage';
 import RecentNews from '../widgets/recent-news/RecentNews';
 
 const StyledHomepageView = styled('div')`
@@ -15,14 +16,20 @@ const StyledHomepageView = styled('div')`
   margin-top: 64px;
 `;
 
-const StyledSectionWrapper = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 24px 0;
-  position: relative;
-`;
+const StyledSectionWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 24px 0;
+    position: relative;
+
+    ${theme.breakpoints.down('md')} {
+      padding: 16px 0;
+    }
+  `
+);
 
 const StyledWidgetSectionContent = styled('div')(
   ({ theme }) => `
@@ -32,21 +39,20 @@ const StyledWidgetSectionContent = styled('div')(
     width: 100%;
 
     ${theme.breakpoints.down('lg')} {
-      gap: 40px;
+      gap: 48px;
     }
 
     ${theme.breakpoints.down('md')} {
       grid-template-columns: minmax(0, 1fr);
-      gap: 32px;
     }
   `
 );
 
-const StyledDailyReadingsSectionContent = styled('div')`
-  display: flex;
-  gap: 64px;
-  width: 100%;
-`;
+const StyledReadingsWidgetSectionContent = styled(StyledWidgetSectionContent)(
+  ({ theme }) => `
+    margin: 16px 0;
+  `
+);
 
 const StyledDailyReadingsSectionBackground = styled('div')`
   opacity: 0.6;
@@ -55,34 +61,10 @@ const StyledDailyReadingsSectionBackground = styled('div')`
   top: 0;
   width: 100%;
   height: 140%;
-  background: linear-gradient(rgba(241,241,241,0) 25%,#f1f1f1 75%),url(/files/scripture-background.png),#f1f1f1;
+  background: linear-gradient(rgba(241, 241, 241, 0) 25%, #f1f1f1 75%), url(/files/scripture-background.png), #f1f1f1;
   background-position: top center;
   opacity: 0.25;
   pointer-events: none;
-`;
-
-const StyledDailyReadings = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 16px 0;
-
-    ${theme.breakpoints.down('lg')} {
-      gap: 0;
-    }
-
-    ${theme.breakpoints.down('md')} {
-      margin: 8px 0;
-    }
-  `
-);
-
-const StyledDailyReadingsSubtitle = styled('h4')`
-  color: #666;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-top: 0;
 `;
 
 interface HomepageViewProps {
@@ -92,7 +74,7 @@ interface HomepageViewProps {
 }
 
 const HomepageView = memo(
-  ({ homePageData: { slides, schedule_background }, times, recentPosts }: HomepageViewProps) => {
+  ({ homePageData: { slides, schedule_background, featured_page }, times, recentPosts }: HomepageViewProps) => {
     const UpcomingEventsNoSSR = dynamic(() => import('../widgets/UpcomingEvents'), {
       ssr: false
     });
@@ -104,14 +86,10 @@ const HomepageView = memo(
         <StyledSectionWrapper>
           <StyledDailyReadingsSectionBackground />
           <Container>
-            <StyledDailyReadingsSectionContent>
-              <StyledDailyReadings>
-                <StyledDailyReadingsSubtitle>
-                  FROM THE UNITED STATES CONFERENCE OF CATHOLIC BISHOPS (USCCB)
-                </StyledDailyReadingsSubtitle>
-                <DailyReadings isFullWidth />
-              </StyledDailyReadings>
-            </StyledDailyReadingsSectionContent>
+            <StyledReadingsWidgetSectionContent>
+              <DailyReadings isFullWidth showSubtitle />
+              <FeaturedPage featuredPage={featured_page} isFullWidth />
+            </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledSectionWrapper>
         <StyledSectionWrapper>

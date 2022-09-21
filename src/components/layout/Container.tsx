@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { MAX_APP_WIDTH } from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
 import styled from '../../util/styled.util';
 
 interface StyledContainerProps {
@@ -17,6 +17,10 @@ const StyledContainer = styled('div', ['disablePadding'])<StyledContainerProps>(
 
     ${theme.breakpoints.only('md')} {
       ${!disablePadding ? 'padding: 0 32px;' : ''}
+    }
+
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+      ${!disablePadding ? 'padding: 0 12px;' : ''}
     }
   `
 );

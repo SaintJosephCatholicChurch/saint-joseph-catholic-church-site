@@ -49,6 +49,7 @@ const config: CmsConfig = {
     {
       name: 'homepage',
       label: 'Homepage',
+      icon: 'house',
       delete: false,
       editor: {
         preview: true
@@ -83,6 +84,36 @@ const config: CmsConfig = {
               name: 'schedule_background',
               label: 'Schedule Background',
               widget: 'image'
+            },
+            {
+              name: 'featured_page',
+              label: 'Featured Page',
+              widget: 'object',
+              summary: '{{fields.page}}',
+              fields: [
+                {
+                  name: 'image',
+                  label: 'Image',
+                  widget: 'image',
+                  required: false
+                },
+                {
+                  name: 'page',
+                  label: 'Page',
+                  widget: 'relation',
+                  collection: 'pages',
+                  search_fields: ['title'],
+                  display_fields: ['title'],
+                  value_field: '{{slug}}|{{title}}',
+                  required: false
+                },
+                {
+                  name: 'summary',
+                  label: 'Summary',
+                  widget: 'text',
+                  required: false
+                }
+              ]
             }
           ]
         }
@@ -91,6 +122,7 @@ const config: CmsConfig = {
     {
       name: 'church',
       label: 'Church Details',
+      icon: 'church',
       delete: false,
       editor: {
         preview: true
@@ -202,8 +234,18 @@ const config: CmsConfig = {
               ]
             },
             {
+              name: 'facebook_page',
+              label: 'Facebook Page',
+              widget: 'string'
+            },
+            {
               name: 'google_map_location',
               label: 'Google Map Embed URL',
+              widget: 'string'
+            },
+            {
+              name: 'online_giving_url',
+              label: 'Online Giving URL',
               widget: 'string'
             }
           ]
@@ -354,6 +396,7 @@ const config: CmsConfig = {
     {
       name: 'pages',
       label: 'Pages',
+      icon: 'file-lines',
       folder: 'content/pages/',
       extension: 'mdx',
       format: 'frontmatter',
@@ -407,6 +450,7 @@ const config: CmsConfig = {
     {
       name: 'meta',
       label: 'Meta',
+      icon: 'tag',
       delete: false,
       editor: {
         preview: false
@@ -445,6 +489,7 @@ const config: CmsConfig = {
     {
       name: 'config',
       label: 'Site Config',
+      icon: 'gear',
       delete: false,
       editor: {
         preview: false

@@ -27,6 +27,13 @@ const StyledDailyReadingsTitle = styled('h3')`
   font-weight: 500;
 `;
 
+const StyledDailyReadingsSubtitle = styled('h4')`
+  color: #666;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-top: 0;
+`;
+
 interface StyledDailyReadingProps {
   isFullWidth: boolean;
 }
@@ -107,9 +114,10 @@ const ENTRY_REGEX = /<h4>[ ]*([^\n]+)[ ]*<a[ ]*href="([^\n]+)[ ]*"[ \\]*>[ ]*([^
 
 interface DailyReadingsProps {
   isFullWidth?: boolean;
+  showSubtitle?: boolean;
 }
 
-const DailyReadings = memo(({ isFullWidth = false }: DailyReadingsProps) => {
+const DailyReadings = memo(({ isFullWidth = false, showSubtitle = false }: DailyReadingsProps) => {
   const [readings, setReadings] = useState<ReadingsData | null>(null);
 
   useEffect(() => {
@@ -155,6 +163,11 @@ const DailyReadings = memo(({ isFullWidth = false }: DailyReadingsProps) => {
   return (
     <StyledDailyReadings isFullWidth={isFullWidth}>
       <StyledDailyReadingsTitle>Today&apos;s Readings</StyledDailyReadingsTitle>
+      {showSubtitle ? (
+        <StyledDailyReadingsSubtitle key="subtitle">
+          FROM THE UNITED STATES CONFERENCE OF CATHOLIC BISHOPS (USCCB)
+        </StyledDailyReadingsSubtitle>
+      ) : null}
       {readings.readings.map((reading, index) => (
         <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" isFullWidth={isFullWidth}>
           <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>

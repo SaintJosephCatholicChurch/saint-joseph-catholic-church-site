@@ -129,7 +129,10 @@ const RecentNewsPost = memo(
           letterSpacing: 'inherit',
           textTransform: 'unset',
           padding: '6px 8px',
-          margin: '-6px -8px'
+          margin: '-6px -8px',
+          '&:hover': {
+            backgroundColor: 'rgba(100,100,100,0.12)'
+          }
         }}
       >
         <StyledPostImage image={image} size={size} />

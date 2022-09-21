@@ -1,6 +1,5 @@
 import type { EventRenderRange } from '@fullcalendar/react';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import format from 'date-fns/format';
 import { MouseEvent, useMemo } from 'react';
 import { formatAsUtc } from '../../../util/date.util';
@@ -93,7 +92,16 @@ const UpcomingListEvent = ({ segment, onClick }: UpcomingListEventProps) => {
   const title = useEventTitle(segment.def.title);
 
   return (
-    <Button onClick={onClick} sx={{ p: '8px', m: '0 -8px' }}>
+    <Button
+      onClick={onClick}
+      sx={{
+        p: '8px',
+        m: '0 -8px',
+        '&:hover': {
+          backgroundColor: 'rgba(100,100,100,0.12)'
+        }
+      }}
+    >
       <StyledUpcomingEvent>
         <StyledUpcomingEventDateTime>
           <StyledUpcomingEventDate>{monthAndDay}</StyledUpcomingEventDate>

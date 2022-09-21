@@ -4,17 +4,7 @@ import { CmsWidgetPreviewProps } from 'netlify-cms-core';
 import { useEffect, useMemo, useState } from 'react';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
-
-function getFieldAsset(field: Map<string, any>, getAsset: (path: string, field: Map<string, any>) => string) {
-  return (url: string) => {
-    const asset = getAsset(url, field);
-    if (isNotNullish(asset)) {
-      return asset;
-    }
-
-    return getAsset(url.replace(/^\//g, ''), field);
-  };
-}
+import { getFieldAsset } from '../../util/asset.util';
 
 async function fromStorageToEditor(
   value: string,

@@ -110,6 +110,7 @@ const StyledDayTimeLineTitle = styled('div')(
 
     font-size: 17px;
     line-height: 21px;
+
     ${theme.breakpoints.down('md')} {
       font-size: 15px;
       line-height: 18px;

@@ -11,6 +11,8 @@ const StyledLayout = styled('div')(
     flex-direction: column;
     box-sizing: border-box;
     min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 
     ${theme.breakpoints.down('lg')} {
       flex: 1 0 auto;
@@ -62,6 +64,7 @@ const Layout = ({ children }: LayoutProps) => {
           </Fab>
         </ScrollTop>
       </StyledLayout>
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <style jsx global>{`
         html,
         body {

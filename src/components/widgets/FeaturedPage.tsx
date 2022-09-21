@@ -68,7 +68,7 @@ const FeaturedPage = memo(({ featuredPage, isFullWidth = false }: FeaturedPagePr
       }}
     >
       <StyledTitle>{title}</StyledTitle>
-      <StyledImage src={featuredPage.image} />
+      <StyledImage src={featuredPage.image} alt={title} />
       {isNotEmpty(featuredPage.summary) ? <StyledSummary>{featuredPage.summary}</StyledSummary> : null}
     </Button>
   );

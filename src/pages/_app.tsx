@@ -5,9 +5,10 @@ import '@fullcalendar/timegrid/main.css';
 import { AppProps } from 'next/app';
 import 'normalize.css';
 import '../../public/styles/global.css';
+import { disableReactDevTools } from '../util/devtools.util';
 
-if (process.env.NODE_ENV == 'production') {
-  (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {};
+if (process.env.NODE_ENV === 'production') {
+  disableReactDevTools();
 }
 
 const App = ({ Component, pageProps }: AppProps) => {

@@ -15,43 +15,43 @@ interface TextError {
 
 const COMMON_BULLETIN_ERRORS: TextError[] = [
   {
-    regex: /(?:^|\s)(P)ar ish(?:\s|$)/gi,
+    regex: /(?:^|\s)(P)ar[\s]{1,}ish(?:\s|$)/gi,
     replacement: ' $1arish '
   },
   {
-    regex: /(?:^|\s)(S)un day(?:\s|$)/gi,
+    regex: /(?:^|\s)(S)un[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1unday '
   },
   {
-    regex: /(?:^|\s)(S)atur day(?:\s|$)/gi,
+    regex: /(?:^|\s)(S)atur[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1aturday '
   },
   {
-    regex: /(?:^|\s)(M)on day(?:\s|$)/gi,
+    regex: /(?:^|\s)(M)on[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1onday '
   },
   {
-    regex: /(?:^|\s)(T)ues day(?:\s|$)/gi,
+    regex: /(?:^|\s)(T)ues[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1uesday '
   },
   {
-    regex: /(?:^|\s)(W)ed nes day(?:\s|$)/gi,
+    regex: /(?:^|\s)(W)ed[\s]{1,}nes[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1ednesday '
   },
   {
-    regex: /(?:^|\s)(W)ednes day(?:\s|$)/gi,
+    regex: /(?:^|\s)(W)ednes[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1ednesday '
   },
   {
-    regex: /(?:^|\s)(T)hurs day(?:\s|$)/gi,
+    regex: /(?:^|\s)(T)hurs[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1hursday '
   },
   {
-    regex: /(?:^|\s)(F)ri day(?:\s|$)/gi,
+    regex: /(?:^|\s)(F)ri[\s]{1,}day(?:\s|$)/gi,
     replacement: ' $1riday '
   },
   {
-    regex: /(?:^|\s)(T)h e(?:\s|$)/gi,
+    regex: /(?:^|\s)(T)h[\s]{1,}e(?:\s|$)/gi,
     replacement: ' $1he '
   },
   {
@@ -59,12 +59,24 @@ const COMMON_BULLETIN_ERRORS: TextError[] = [
     replacement: ' '
   },
   {
-    regex: /(?:^|\s)([0-9]{1,}) (th|rd|st|nd)(?=\s|$)/gi,
+    regex: /(?:^|\s)([0-9]{1,})[\s]{1,}(th|rd|st|nd)(?=\s|$)/gi,
     replacement: ' $1$2 '
   },
   {
-    regex: /(?:^|\s)([1]*[0-9])([0-5][0-9]) (am|pm)(?=\s|$)/gi,
+    regex: /(?:^|\s)([1]*[0-9])([0-5][0-9])[\s]{1,}(am|pm)(?=\s|$)/gi,
     replacement: ' $1:$2$3 '
+  },
+  {
+    regex: /(?:^|\s)(\w+)[\s]{1,}(s)(?=\s|$)/gi,
+    replacement: " $1'$2 "
+  },
+  {
+    regex: /(?:^|\s)([0-9]{3})[\s]{1,}([0-9]{3})[\s]{1,}([0-9]{4})(?=\s|$)/gi,
+    replacement: ' ($1)$2-$3 '
+  },
+  {
+    regex: /(?:^|\s)([0-9]{3})([0-9]{3})([0-9]{4})(?=\s|$)/gi,
+    replacement: ' ($1)$2-$3 '
   },
   {
     regex: /[\s]{2,}/g,
@@ -75,9 +87,10 @@ const COMMON_BULLETIN_ERRORS: TextError[] = [
 function fixCommonBulletinErrors(textContent: string) {
   let fixedTextContent = textContent;
 
-  COMMON_BULLETIN_ERRORS.forEach(({ regex, replacement }) => {
+  for (const { regex, replacement } of COMMON_BULLETIN_ERRORS) {
+    regex.lastIndex = 0;
     fixedTextContent = fixedTextContent.replace(regex, replacement);
-  });
+  }
 
   return fixedTextContent.trim();
 }

@@ -43,6 +43,7 @@ const StyledSearchResultContent = styled('div')`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  color: #666;
 
   &.${contentStyles.content} h1,
   h2,
@@ -56,9 +57,10 @@ const StyledSearchResultContent = styled('div')`
 
 interface SearchResultProps {
   entry: SearchableEntry;
+  summary?: string;
 }
 
-const SearchResult = ({ entry: { url, title, subtitle, summary, type } }: SearchResultProps) => {
+const SearchResult = ({ entry: { url, title, subtitle, type }, summary }: SearchResultProps) => {
   const Icon = useMemo(() => {
     switch (type) {
       case NEWS:

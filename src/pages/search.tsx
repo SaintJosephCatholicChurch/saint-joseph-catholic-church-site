@@ -49,9 +49,36 @@ const Search = ({ searchableEntries }: SearchProps) => {
         {isNotEmpty(query) ? <SearchBox defaultValue={query} disableMargin /> : null}
       </StyledSearchQueryTitle>
       <StyledSearch>
-        {searchResults.map((entry) => (
-          <SearchResult key={`result-${entry.url}`} entry={entry} />
-        ))}
+        {searchResults?.length > 0 ? (
+          searchResults.map((entry) => {
+            let summary = entry.summary;
+            if (!summary) {
+              const match = new RegExp(`(?:[^\\s]+\\s){10}[\\s]*${query}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){25}`, 'ig').exec(
+                entry.content
+              );
+              if (match && match.length >= 1) {
+                summary = `...${match[0].trim()}...`;
+              } else {
+                const match = new RegExp(
+                  `(?:[^\\s]+\\s){10}[\\s]*${query.split(' ').join('|')}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){25}`,
+                  'ig'
+                ).exec(entry.content);
+                if (match && match.length >= 1) {
+                  summary = `...${match[0].trim()}...`;
+                }
+              }
+            }
+
+            summary = summary?.replace(
+              new RegExp(`(${query.split(' ').join('|')})(?![^<>]*(([\/\"']|]]|\b)>))`, 'ig'),
+              `<strong style="color: #000">$1</strong>`
+            );
+
+            return <SearchResult key={`result-${entry.url}`} entry={entry} summary={summary} />;
+          })
+        ) : (
+          <h3>No results found</h3>
+        )}
       </StyledSearch>
     </PageLayout>
   );

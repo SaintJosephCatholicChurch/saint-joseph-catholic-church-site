@@ -8,6 +8,80 @@ import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
 
 const publicPath = 'public';
 
+interface TextError {
+  regex: RegExp;
+  replacement: string;
+}
+
+const COMMON_BULLETIN_ERRORS: TextError[] = [
+  {
+    regex: /(?:^|\s)(P)ar ish(?:\s|$)/gi,
+    replacement: ' $1arish '
+  },
+  {
+    regex: /(?:^|\s)(S)un day(?:\s|$)/gi,
+    replacement: ' $1unday '
+  },
+  {
+    regex: /(?:^|\s)(S)atur day(?:\s|$)/gi,
+    replacement: ' $1aturday '
+  },
+  {
+    regex: /(?:^|\s)(M)on day(?:\s|$)/gi,
+    replacement: ' $1onday '
+  },
+  {
+    regex: /(?:^|\s)(T)ues day(?:\s|$)/gi,
+    replacement: ' $1uesday '
+  },
+  {
+    regex: /(?:^|\s)(W)ed nes day(?:\s|$)/gi,
+    replacement: ' $1ednesday '
+  },
+  {
+    regex: /(?:^|\s)(W)ednes day(?:\s|$)/gi,
+    replacement: ' $1ednesday '
+  },
+  {
+    regex: /(?:^|\s)(T)hurs day(?:\s|$)/gi,
+    replacement: ' $1hursday '
+  },
+  {
+    regex: /(?:^|\s)(F)ri day(?:\s|$)/gi,
+    replacement: ' $1riday '
+  },
+  {
+    regex: /(?:^|\s)(T)h e(?:\s|$)/gi,
+    replacement: ' $1he '
+  },
+  {
+    regex: /(?:^|\s)((?!I)[A-Z](?:\s|$)){1,}/g,
+    replacement: ' '
+  },
+  {
+    regex: /(?:^|\s)([0-9]{1,}) (th|rd|st|nd)(?=\s|$)/gi,
+    replacement: ' $1$2 '
+  },
+  {
+    regex: /(?:^|\s)([1]*[0-9])([0-5][0-9]) (am|pm)(?=\s|$)/gi,
+    replacement: ' $1:$2$3 '
+  },
+  {
+    regex: /[\s]{2,}/g,
+    replacement: ' '
+  }
+];
+
+function fixCommonBulletinErrors(textContent: string) {
+  let fixedTextContent = textContent;
+
+  COMMON_BULLETIN_ERRORS.forEach(({ regex, replacement }) => {
+    fixedTextContent = fixedTextContent.replace(regex, replacement);
+  });
+
+  return fixedTextContent.trim();
+}
+
 (async function () {
   const pdfExtract = new PDFExtract();
   const options: PDFExtractOptions = {
@@ -67,7 +141,7 @@ const publicPath = 'public';
     const metaFullPath = join(folderFullPath, 'meta.json');
     const data: BulletinPDFMeta = {
       pages: pageImages,
-      text: textContent
+      text: fixCommonBulletinErrors(textContent)
     };
 
     writeFileSync(metaFullPath, JSON.stringify(data, null, 2));

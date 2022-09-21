@@ -54,14 +54,14 @@ const Search = ({ searchableEntries }: SearchProps) => {
             let summary = entry.summary;
             if (!summary) {
               const match = new RegExp(
-                `(?:[^\\s]+\\s){0,10}[\\s]*${query}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+                `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                 'ig'
               ).exec(entry.content);
               if (match && match.length >= 1) {
                 summary = `...${match[0].trim()}...`;
               } else {
                 const match = new RegExp(
-                  `(?:[^\\s]+\\s){0,10}[\\s]*${query
+                  `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query
                     .split(' ')
                     .join('|')}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                   'ig'

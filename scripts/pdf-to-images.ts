@@ -8,12 +8,12 @@ import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
 
 const publicPath = 'public';
 
-interface TextError {
+interface RegExpReplacement {
   regex: RegExp;
   replacement: string;
 }
 
-const COMMON_BULLETIN_ERRORS: TextError[] = [
+const COMMON_BULLETIN_ERRORS: RegExpReplacement[] = [
   {
     regex: /(?:^|\s)(P)ar[\s]{1,}ish(?:\s|$)/gi,
     replacement: ' $1arish '
@@ -67,16 +67,32 @@ const COMMON_BULLETIN_ERRORS: TextError[] = [
     replacement: ' $1:$2$3 '
   },
   {
-    regex: /(?:^|\s)(\w+)[\s]{1,}(s)(?=\s|$)/gi,
+    regex: /(?:^|\s)([1]*[0-9])[\s]{1,}(am|pm)(?=\s|$)/g,
+    replacement: ' $1$2 '
+  },
+  {
+    regex: /(?:^|\s)(\w+)[\s]{1,}(s)(?=\s|$)/g,
     replacement: " $1'$2 "
   },
   {
     regex: /(?:^|\s)([0-9]{3})[\s]{1,}([0-9]{3})[\s]{1,}([0-9]{4})(?=\s|$)/gi,
-    replacement: ' ($1)$2-$3 '
+    replacement: ' <a href="tel:($1)$2-$3">($1)$2-$3</a> '
   },
   {
     regex: /(?:^|\s)([0-9]{3})([0-9]{3})([0-9]{4})(?=\s|$)/gi,
-    replacement: ' ($1)$2-$3 '
+    replacement: ' <a href="tel:($1)$2-$3">($1)$2-$3</a> '
+  },
+  {
+    regex: /(?:^|\s)(?:www)(?:daniels[\s]+jewelers)(?:net)(?=\s|$)/gi,
+    replacement: ' <a href="www.daniels-jewelers.net">www.daniels-jewelers.net</a> '
+  },
+  {
+    regex: /(?:^|\s)(www)(\w+)(com|org|edu|net)(?=\s|$)/gi,
+    replacement: ' <a href="$1.$2.$3">$1.$2.$3</a> '
+  },
+  {
+    regex: /(?:^|\s)(\w+)(com|org|edu|net)(?=\s|$)/gi,
+    replacement: ' <a href="$1.$2">$1.$2</a> '
   },
   {
     regex: /[\s]{2,}/g,
@@ -84,8 +100,60 @@ const COMMON_BULLETIN_ERRORS: TextError[] = [
   }
 ];
 
+const COMMON_CONTRACTIONS: [string, string][] = [
+  ['[Aa]ren', 't'],
+  ['[Cc]an', 't'],
+  ['[Cc]ouldn', 't'],
+  ['[Dd]idn', 't'],
+  ['[Dd]oesn', 't'],
+  ['[Dd]on', 't'],
+  ['[Hh]adn', 't'],
+  ['[Hh]asn', 't'],
+  ['[Hh]aven', 't'],
+  ['[Hh]e', 'd'],
+  ['[Hh]e', 'll'],
+  ['[Ii]', 'd'],
+  ['[Ii]', 'll'],
+  ['[Ii]', 'm'],
+  ['[Ii]', 've'],
+  ['[Ii]sn', 't'],
+  ['[Mm]ightn', 't'],
+  ['[Ss]han', 't'],
+  ['[Ss]he', 'd'],
+  ['[Ss]he', 'll'],
+  ['[Ss]houldn', 't'],
+  ['[Tt]hey', 'd'],
+  ['[Tt]hey', 'll'],
+  ['[Tt]hey', 're'],
+  ['[Tt]hey', 've'],
+  ['[Ww]e', 'd'],
+  ['[Ww]e', 're'],
+  ['[Ww]e', 've'],
+  ['[Ww]eren', 't'],
+  ['[Ww]hat', 'll'],
+  ['[Ww]hat', 've'],
+  ['[Ww]hat', 're'],
+  ['[Ww]ho', 'd'],
+  ['[Ww]ho', 'll'],
+  ['[Ww]ho', 're'],
+  ['[Ww]ho', 've'],
+  ['[Ww]on', 't'],
+  ['[Ww]ouldn', 't'],
+  ['[Yy]ou', 'd'],
+  ['[Yy]ou', 'll'],
+  ['[Yy]ou', 're'],
+  ['[Yy]ou', 've']
+];
+
 function fixCommonBulletinErrors(textContent: string) {
   let fixedTextContent = textContent;
+
+  for (const [start, end] of COMMON_CONTRACTIONS) {
+    fixedTextContent = fixedTextContent.replace(
+      new RegExp(`(?:^|\\s)(${start})[\\s]{1,}(${end})(?=\\s|$)`, 'g'),
+      " $1'$2 "
+    );
+  }
 
   for (const { regex, replacement } of COMMON_BULLETIN_ERRORS) {
     regex.lastIndex = 0;

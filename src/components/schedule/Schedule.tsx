@@ -121,8 +121,6 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
-  console.log('times', times);
-
   const handleChange = useCallback(
     (_event: SyntheticEvent, newValue: number) => {
       setValue(newValue);

@@ -69,7 +69,7 @@ const StyledDayTimeLine = styled('div')(
 const StyledDayTimeLineTitle = styled('div')(
   ({ theme }) => `
     text-transform: uppercase;
-    color: #d2ac54;
+    color: #8D6D26;
     font-weight: 500;
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -175,6 +175,9 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
       <ListItemButton onClick={handleClick}>
         <ListItemText
           primary={times.name}
+          primaryTypographyProps={{
+            component: 'h2'
+          }}
           sx={{
             '.MuiListItemText-primary': {
               fontWeight: 500,

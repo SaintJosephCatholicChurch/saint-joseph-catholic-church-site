@@ -79,9 +79,9 @@ const Search = ({ searchableEntries }: SearchProps) => {
 
             return <SearchResult key={`result-${entry.url}`} entry={entry} summary={summary} />;
           })
-        ) : (
-          <h3>No results found</h3>
-        )}
+        ) : isNotEmpty(query) ? (
+          <h3 key="no-results">No results found</h3>
+        ) : null}
       </StyledSearch>
     </PageLayout>
   );

@@ -48,16 +48,18 @@ function getSearchScore(words: string[], entry: SearchableEntry): SearchScore {
     exactMatchFavorWeight *
     WHOLE_WORD_MATCH_FAVOR_WEIGHT;
 
-  if (isNotNullish(entry.date)) {
-    score += isWithinInterval(parseISO(entry.date), { start: addMonths(new Date(), -1), end: new Date() })
-      ? IN_LAST_MONTH_AMOUNT
-      : 0;
-  }
+  if (score > 0) {
+    if (isNotNullish(entry.date)) {
+      score += isWithinInterval(parseISO(entry.date), { start: addMonths(new Date(), -1), end: new Date() })
+        ? IN_LAST_MONTH_AMOUNT
+        : 0;
+    }
 
-  if (isNotNullish(entry.date)) {
-    score += isWithinInterval(parseISO(entry.date), { start: addWeeks(new Date(), -1), end: new Date() })
-      ? IN_LAST_WEEK_AMOUNT
-      : 0;
+    if (isNotNullish(entry.date)) {
+      score += isWithinInterval(parseISO(entry.date), { start: addWeeks(new Date(), -1), end: new Date() })
+        ? IN_LAST_WEEK_AMOUNT
+        : 0;
+    }
   }
 
   return {

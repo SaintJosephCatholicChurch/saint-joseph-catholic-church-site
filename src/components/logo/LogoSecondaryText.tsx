@@ -7,7 +7,7 @@ const StyledHeaderSecondaryTextWrapper = styled('div')`
   gap: 8px;
 `;
 
-const StyledHeaderSecondaryText = styled('h3')(
+const StyledHeaderSecondaryText = styled('h2')(
   ({ theme }) => `
     color: #ffffff;
     margin: 0;

@@ -357,7 +357,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                               fullWidth
                               sx={{
                                 input: {
-                                  color: '#b58d30',
+                                  color: '#8D6D26',
                                   fontWeight: 500,
                                   fontSize: '14px',
                                   fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
@@ -450,7 +450,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                                         sx={{
                                           input: {
                                             fontSize: '13px',
-                                            color: '#777'
+                                            color: '#757575'
                                           }
                                         }}
                                       />

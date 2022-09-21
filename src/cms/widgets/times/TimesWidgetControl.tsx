@@ -97,7 +97,7 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
             sx={{
               backgroundColor: 'rgba(241, 241, 241, 0.75)',
               '& .MuiTabs-indicator': {
-                backgroundColor: '#b58d30',
+                backgroundColor: '#8D6D26',
                 width: '4px'
               }
             }}

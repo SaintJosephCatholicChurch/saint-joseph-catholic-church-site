@@ -48,7 +48,7 @@ const Layout = ({ children }: LayoutProps) => {
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
           <meta
             name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
           />
           <meta name="theme-color" content="#bc2f3b" />
           <meta name="apple-mobile-web-app-capable" content="yes" />

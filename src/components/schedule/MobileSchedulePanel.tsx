@@ -145,7 +145,7 @@ const StyledDayTimeLineTimeComment = styled('div')(
     align-items: center;
     font-size: 13px;
     line-height: 13px;
-    color: #777;
+    color: #757575;
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;

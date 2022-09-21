@@ -253,7 +253,7 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
             backgroundColor: 'rgba(241, 241, 241, 0.35)',
             minHeight: tabsHeight > 0 ? tabsHeight : undefined,
             '& .MuiTabs-indicator': {
-              backgroundColor: '#b58d30',
+              backgroundColor: '#8D6D26',
               width: '4px'
             }
           }}

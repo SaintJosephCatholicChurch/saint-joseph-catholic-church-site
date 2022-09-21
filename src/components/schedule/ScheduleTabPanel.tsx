@@ -114,7 +114,7 @@ const StyledDayTimeLine = styled('div')`
 const StyledDayTimeLineTitle = styled('div')(
   ({ theme }) => `
     text-transform: uppercase;
-    color: #b58d30;
+    color: #8D6D26;
     font-weight: 500;
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
@@ -169,7 +169,7 @@ const StyledDayTimeLineTimeComment = styled('div')`
   align-items: center;
   font-size: 13px;
   line-height: 13px;
-  color: #777;
+  color: #757575;
 `;
 
 interface ScheduleTabPanelProps {

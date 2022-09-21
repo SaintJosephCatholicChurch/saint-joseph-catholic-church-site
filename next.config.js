@@ -16,6 +16,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 let config = withTM({
+  i18n: {
+    locales: ["en"],
+    defaultLocale: "en",
+  },
   pageExtensions: ['tsx'],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

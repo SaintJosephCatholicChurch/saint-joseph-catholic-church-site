@@ -1,16 +1,16 @@
 {
   "slides": [
     {
-      "image": "/files/churchslide1.jpg",
+      "image": "/files/churchslide1.avif",
       "title": "All Are Welcome"
     },
     {
-      "image": "/files/churchslide2-1.jpg"
+      "image": "/files/churchslide2-1.avif"
     }
   ],
   "schedule_background": "/files/pattern.png",
   "featured_page": {
-    "image": "/files/did-you-know-banner.jpg",
+    "image": "/files/did-you-know-banner.avif",
     "page": "did-you-know|Did You Know?",
     "summary": "A description goes here, a brief explanation of the page and what awaits the user when they click here!"
   }

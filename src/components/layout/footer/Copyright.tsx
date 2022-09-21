@@ -29,14 +29,25 @@ const StyledCopyright = styled('div')(
       font-size: 14px;
       height: 44px;
     }
+
+    ${theme.breakpoints.down('sm')} {
+      gap: 4px;
+    }
   `
 );
 
-const StyledCopyrightText = styled('div')`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
+const StyledCopyrightText = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    ${theme.breakpoints.down('sm')} {
+      flex-direction: column;
+      gap: 0;
+    }
+  `
+);
 
 const StyledPrivacyPolicyLink = styled('a')`
   color: #fde7a5;
@@ -47,16 +58,27 @@ const StyledPrivacyPolicyLink = styled('a')`
   }
 `;
 
+const StyledCopyrightSection = styled('div')`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
 const Copyright = () => {
   const year = useMemo(() => format(new Date(), 'yyyy'), []);
 
   return (
     <StyledCopyright>
       <StyledCopyrightText>
-        <CopyrightIcon fontSize="small" />
-        <Box>
-          {year} {churchDetails.name}. All Rights Reserved.
-        </Box>
+        <StyledCopyrightSection>
+          <CopyrightIcon fontSize="small" />
+          <Box>
+            {year} {churchDetails.name}.
+          </Box>
+        </StyledCopyrightSection>
+        <StyledCopyrightSection>
+          <Box>All Rights Reserved.</Box>
+        </StyledCopyrightSection>
       </StyledCopyrightText>
       <StyledPrivacyPolicyLink href="#">Privacy Policy.</StyledPrivacyPolicyLink>
     </StyledCopyright>

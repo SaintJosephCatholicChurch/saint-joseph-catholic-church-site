@@ -47,84 +47,6 @@ const config: CmsConfig = {
   },
   collections: [
     {
-      name: 'homepage',
-      label: 'Homepage',
-      icon: 'house',
-      delete: false,
-      editor: {
-        preview: true
-      },
-      files: [
-        {
-          name: 'homepage',
-          label: 'Homepage',
-          file: 'content/homepage.json',
-          description: 'Homepage configuration',
-          fields: [
-            {
-              name: 'slides',
-              label: 'Slides',
-              label_singular: 'Slide',
-              widget: 'list',
-              fields: [
-                {
-                  name: 'image',
-                  label: 'Image',
-                  widget: 'image'
-                },
-                {
-                  name: 'title',
-                  label: 'Title',
-                  widget: 'string',
-                  required: false
-                }
-              ]
-            },
-            {
-              name: 'schedule_background',
-              label: 'Schedule Background',
-              widget: 'image'
-            },
-            {
-              name: 'daily_readings_background',
-              label: 'Daily Readings Background',
-              widget: 'image'
-            },
-            {
-              name: 'featured_page',
-              label: 'Featured Page',
-              widget: 'object',
-              summary: '{{fields.page}}',
-              fields: [
-                {
-                  name: 'image',
-                  label: 'Image',
-                  widget: 'image',
-                  required: false
-                },
-                {
-                  name: 'page',
-                  label: 'Page',
-                  widget: 'relation',
-                  collection: 'pages',
-                  search_fields: ['title'],
-                  display_fields: ['title'],
-                  value_field: '{{slug}}|{{title}}',
-                  required: false
-                },
-                {
-                  name: 'summary',
-                  label: 'Summary',
-                  widget: 'text',
-                  required: false
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       name: 'church',
       label: 'Church Details',
       icon: 'church',
@@ -333,6 +255,84 @@ const config: CmsConfig = {
                   widget: 'image',
                   media_folder: '/public/staff',
                   public_folder: '/staff'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'homepage',
+      label: 'Homepage',
+      icon: 'house',
+      delete: false,
+      editor: {
+        preview: true
+      },
+      files: [
+        {
+          name: 'homepage',
+          label: 'Homepage',
+          file: 'content/homepage.json',
+          description: 'Homepage configuration',
+          fields: [
+            {
+              name: 'slides',
+              label: 'Slides',
+              label_singular: 'Slide',
+              widget: 'list',
+              fields: [
+                {
+                  name: 'image',
+                  label: 'Image',
+                  widget: 'image'
+                },
+                {
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string',
+                  required: false
+                }
+              ]
+            },
+            {
+              name: 'schedule_background',
+              label: 'Schedule Background',
+              widget: 'image'
+            },
+            {
+              name: 'daily_readings_background',
+              label: 'Daily Readings Background',
+              widget: 'image'
+            },
+            {
+              name: 'featured_page',
+              label: 'Featured Page',
+              widget: 'object',
+              summary: '{{fields.page}}',
+              fields: [
+                {
+                  name: 'image',
+                  label: 'Image',
+                  widget: 'image',
+                  required: false
+                },
+                {
+                  name: 'page',
+                  label: 'Page',
+                  widget: 'relation',
+                  collection: 'pages',
+                  search_fields: ['title'],
+                  display_fields: ['title'],
+                  value_field: '{{slug}}|{{title}}',
+                  required: false
+                },
+                {
+                  name: 'summary',
+                  label: 'Summary',
+                  widget: 'text',
+                  required: false
                 }
               ]
             }

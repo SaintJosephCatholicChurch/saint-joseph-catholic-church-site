@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
+import Link from 'next/link';
 import { memo, useMemo } from 'react';
 import { FeaturedPage } from '../../interface';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
@@ -52,25 +53,27 @@ const FeaturedPage = memo(({ featuredPage, isFullWidth = false }: FeaturedPagePr
   }
 
   return (
-    <Button
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        textTransform: 'none',
-        textAlign: 'left',
-        margin: '-8px -8px',
-        padding: '0 8px',
-        alignItems: 'flex-start',
-        [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
-          gap: '12px'
-        }
-      }}
-    >
-      <StyledTitle>{title}</StyledTitle>
-      <StyledImage src={featuredPage.image} alt={title} />
-      {isNotEmpty(featuredPage.summary) ? <StyledSummary>{featuredPage.summary}</StyledSummary> : null}
-    </Button>
+    <Link href={slug}>
+      <Button
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          textTransform: 'none',
+          textAlign: 'left',
+          margin: '-8px -8px',
+          padding: '0 8px',
+          alignItems: 'flex-start',
+          [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
+            gap: '12px'
+          }
+        }}
+      >
+        <StyledTitle>{title}</StyledTitle>
+        <StyledImage src={featuredPage.image} alt={title} />
+        {isNotEmpty(featuredPage.summary) ? <StyledSummary>{featuredPage.summary}</StyledSummary> : null}
+      </Button>
+    </Link>
   );
 });
 

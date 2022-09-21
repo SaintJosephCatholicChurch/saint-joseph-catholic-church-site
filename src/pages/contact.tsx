@@ -2,17 +2,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 import Container from '../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../components/layout/footer/ContactDetails';
 import PageLayout from '../components/PageLayout';
+import ContactForm from '../components/pages/custom/contact/ContactForm';
 import PageTitle from '../components/pages/PageTitle';
 import churchDetails from '../lib/church_details';
 import homePageData from '../lib/homepage';
@@ -154,7 +149,7 @@ interface ContactBody {
   comment: string;
 }
 
-const MassConfessionTimes = () => {
+const Contact = () => {
   const [contactFormData, setContactFormData] = useState<Partial<ContactBody>>({ subject: 'Comment / Question' });
   const [body, valid] = useMemo(() => {
     if (isNotEmpty(contactFormData.name) && isNotEmpty(contactFormData.comment)) {
@@ -246,62 +241,7 @@ Comments / Questions: ${contactFormData.comment}`,
                   </StyledChurchDetailsLink>
                 </StyledSocialLinks>
               </StyledContactDetails>
-              <StyledContactForm>
-                <TextField
-                  name="name"
-                  label="Full Name"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  size="small"
-                  onChange={(event) => onChange({ name: event.target.value })}
-                />
-                <FormControl fullWidth required size="small">
-                  <InputLabel id="subject-select-label">Subject</InputLabel>
-                  <Select
-                    name="Subject"
-                    labelId="subject-select-label"
-                    id="subject-select"
-                    label="Subject"
-                    defaultValue="Comment / Question"
-                    onChange={(event) => onChange({ subject: event.target.value })}
-                  >
-                    <MenuItem value="Comment / Question">Comment / Question</MenuItem>
-                    <MenuItem value="Prayer Request">Prayer Request</MenuItem>
-                    <MenuItem value="Prayer Chain">Prayer Chain</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField
-                  name="comment"
-                  label="Comments / Questions"
-                  variant="outlined"
-                  fullWidth
-                  multiline
-                  rows={4}
-                  required
-                  size="small"
-                  onChange={(event) => onChange({ comment: event.target.value })}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={!valid}
-                  href={`mailto:${churchDetails.email}?subject=${encodeURIComponent(
-                    contactFormData.subject
-                  )}&body=${encodeURIComponent(body)}`}
-                  target="_blank"
-                  sx={{
-                    width: '150px',
-                    backgroundColor: '#bf303c',
-                    '&:hover': {
-                      backgroundColor: '#822129',
-                      color: '#ccc'
-                    }
-                  }}
-                >
-                  Send Message
-                </Button>
-              </StyledContactForm>
+              <ContactForm />
             </StyledContactContent>
           </StyledContactContentWrapper>
         </Container>
@@ -324,4 +264,4 @@ Comments / Questions: ${contactFormData.comment}`,
   );
 };
 
-export default MassConfessionTimes;
+export default Contact;

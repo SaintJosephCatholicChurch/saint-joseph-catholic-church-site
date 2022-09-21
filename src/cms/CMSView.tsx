@@ -1,6 +1,7 @@
 import {
-  faArrowUpRightFromSquare,
+  faCalendarDays,
   faChurch,
+  faClipboardQuestion,
   faFileLines,
   faGear,
   faHouse,
@@ -56,9 +57,21 @@ const CMSView = memo(() => {
     cmsApp.registerIcon('tag', <FontAwesomeIcon icon={faTag} size="lg" />);
     cmsApp.registerIcon('file-lines', <FontAwesomeIcon icon={faFileLines} size="lg" />);
     cmsApp.registerIcon('gear', <FontAwesomeIcon icon={faGear} size="lg" />);
-    cmsApp.registerIcon('external-link', <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="lg" />);
+    cmsApp.registerIcon('calendar-days', <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
+    cmsApp.registerIcon('clipboard-question', <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
 
-    cmsApp.registerAdditionalLink('events', 'Events Calendar', 'https://calendar.google.com/', 'external-link');
+    cmsApp.registerAdditionalLink(
+      'events',
+      'Events (Google Calendar)',
+      'https://calendar.google.com/',
+      'calendar-days'
+    );
+    cmsApp.registerAdditionalLink(
+      'google-drive',
+      'Forms (Google Drive)',
+      'https://drive.google.com/',
+      'clipboard-question'
+    );
   }, []);
 
   return (

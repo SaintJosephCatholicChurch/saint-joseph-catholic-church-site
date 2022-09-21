@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0-alpha16",
+  "version": "1.0.0-alpha17",
   "private": true,
   "scripts": {
     "build-analyze": "cross-env ANALYZE=true next build",
@@ -42,9 +42,9 @@
     "immutable": "3.7.6",
     "is-hotkey": "0.2.0",
     "js-yaml": "4.1.0",
-    "netlify-cms-app": "file:src/cms/overrides/netlify-cms-app-2.15.102.tgz",
+    "netlify-cms-app": "file:src/cms/overrides/netlify-cms-app-2.15.105.tgz",
     "netlify-cms-backend-git-gateway": "file:src/cms/overrides/netlify-cms-backend-git-gateway-2.13.2.tgz",
-    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.30.tgz",
+    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.33.tgz",
     "netlify-cms-ui-default": "file:src/cms/overrides/netlify-cms-ui-default-2.15.18.tgz",
     "netlify-cms-widget-file": "file:src/cms/overrides/netlify-cms-widget-file-2.12.3.tgz",
     "next": "12.2.5",

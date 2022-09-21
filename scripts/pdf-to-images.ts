@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { BulletinPDFMeta } from '../src/interface';
 import bulletins from '../src/lib/bulletins';
 import pdf2img from '../src/util/pdf/pdf-img-convert';
 import git from '@npmcli/git';
 import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
+import webp from 'webp-converter';
 
 const publicPath = 'public';
 
@@ -187,11 +188,14 @@ function fixCommonBulletinErrors(textContent: string) {
 
     const pageImages: string[] = [];
     for (let i = 0; i < images.length; i++) {
-      const imageFullPath = join(folderFullPath, `${i + 1}.png`);
+      const imageFullPathJpg = join(folderFullPath, `${i + 1}.jpg`);
+      const imageFullPathWebp = join(folderFullPath, `${i + 1}.webp`);
 
       try {
-        writeFileSync(imageFullPath, images[i]);
-        pageImages.push(join(folderPath, `${i + 1}.png`).replace(/\\/g, '/'));
+        writeFileSync(imageFullPathJpg, images[i]);
+        await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
+        rmSync(imageFullPathJpg);
+        pageImages.push(join(folderPath, `${i + 1}.webp`).replace(/\\/g, '/'));
       } catch (error) {
         if (error) {
           console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error}`);

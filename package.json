@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0-alpha15",
+  "version": "1.0.0-alpha16",
   "private": true,
   "scripts": {
     "build-analyze": "cross-env ANALYZE=true next build",
@@ -60,7 +60,8 @@
     "react-slideshow-image": "4.0.4",
     "schema-dts": "1.1.0",
     "tinymce": "6.1.2",
-    "uuid": "3.4.0"
+    "uuid": "3.4.0",
+    "webp-converter": "2.3.3"
   },
   "devDependencies": {
     "@npmcli/git": "3.0.2",

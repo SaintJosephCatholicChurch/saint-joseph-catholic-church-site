@@ -2,6 +2,16 @@
   "bulletins": [
     {
       "name": "Bulletin",
+      "date": "2022-09-18T16:32:07.219Z",
+      "pdf": "/bulletins/twenty-fifth-sunday-in-ordinary-time-2022.pdf"
+    },
+    {
+      "name": "Bulletin",
+      "date": "2022-09-11T16:32:06.543Z",
+      "pdf": "/bulletins/twenty-fourth-sunday-in-ordinary-time-2022.pdf"
+    },
+    {
+      "name": "Bulletin",
       "date": "2022-09-04T12:12:46.108Z",
       "pdf": "/bulletins/combinepdf-26-twenty-third-sunday-in-ordinary-time-min.pdf"
     },

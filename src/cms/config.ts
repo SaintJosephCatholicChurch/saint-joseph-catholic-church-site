@@ -518,6 +518,11 @@ const config: CmsConfig = {
               widget: 'string'
             },
             {
+              name: 'site_image',
+              label: 'Site Image',
+              widget: 'image'
+            },
+            {
               name: 'site_keywords',
               label: 'Site keywords',
               widget: 'list',

@@ -52,7 +52,7 @@ const PageLayout = ({
     <Layout>
       <BasicMeta url={url} title={title} keywords={keywords} description={description} />
       <OpenGraphMeta url={url} title={title} image={pageDetails?.image} description={description} />
-      <TwitterCardMeta url={url} title={title} description={description} />
+      <TwitterCardMeta url={url} title={title} image={pageDetails?.image} description={description} />
       {pageDetails ? (
         <JsonLdMeta
           url={url}

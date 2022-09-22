@@ -17,17 +17,33 @@ const StyledHomepageView = styled('div')`
   margin-top: 64px;
 `;
 
-const StyledSectionWrapper = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 24px 0;
-    position: relative;
+const StyledSectionWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 0;
+  position: relative;
+`;
 
+const StyledReadingsAndPageSectionWrapper = styled(StyledSectionWrapper)(
+  ({ theme }) => `
     ${theme.breakpoints.down('md')} {
       padding: 16px 0;
+    }
+  `
+);
+
+const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
+  ({ theme }) => `
+    padding-bottom: 32px;
+
+    ${theme.breakpoints.down('sm')} {
+      padding-bottom: 40px;
+    }
+
+    ${theme.breakpoints.up('lg')} {
+      padding-bottom: 48px;
     }
   `
 );
@@ -105,7 +121,7 @@ const HomepageView = memo(
           liveStreamButton={live_stream_button}
           invitationText={invitation_text}
         />
-        <StyledSectionWrapper>
+        <StyledReadingsAndPageSectionWrapper>
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
@@ -113,15 +129,15 @@ const HomepageView = memo(
               <FeaturedPage featuredPage={featured_page} isFullWidth />
             </StyledReadingsWidgetSectionContent>
           </Container>
-        </StyledSectionWrapper>
-        <StyledSectionWrapper>
+        </StyledReadingsAndPageSectionWrapper>
+        <StyledNewsAndEventsWrapper>
           <Container>
             <StyledWidgetSectionContent>
               <RecentNews posts={recentPosts} size="large" />
               <UpcomingEventsNoSSR />
             </StyledWidgetSectionContent>
           </Container>
-        </StyledSectionWrapper>
+        </StyledNewsAndEventsWrapper>
         <Footer churchDetails={churchDetails} />
       </StyledHomepageView>
     );

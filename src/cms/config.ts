@@ -582,7 +582,7 @@ const config: CmsConfig = {
               name: 'site_keywords',
               label: 'Site keywords',
               widget: 'list',
-              summary: '{{fields.keyword.keyword}}',
+              summary: '{{fields.keyword}}',
               field: {
                 name: 'keyword',
                 label: 'Keyword',

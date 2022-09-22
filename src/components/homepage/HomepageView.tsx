@@ -83,7 +83,18 @@ interface HomepageViewProps {
 }
 
 const HomepageView = memo(
-  ({ homePageData: { slides, schedule_background, daily_readings_background, featured_page }, times, recentPosts }: HomepageViewProps) => {
+  ({
+    homePageData: {
+      slides,
+      schedule_section,
+      live_stream_button,
+      invitation_text,
+      daily_readings,
+      featured_page
+    },
+    times,
+    recentPosts
+  }: HomepageViewProps) => {
     const UpcomingEventsNoSSR = dynamic(() => import('../widgets/UpcomingEvents'), {
       ssr: false
     });
@@ -91,12 +102,17 @@ const HomepageView = memo(
     return (
       <StyledHomepageView>
         <CarouselView slides={slides} />
-        <ScheduleWidget times={times} background={schedule_background} />
+        <ScheduleWidget
+          times={times}
+          details={schedule_section}
+          liveStreamButton={live_stream_button}
+          invitationText={invitation_text}
+        />
         <StyledSectionWrapper>
-          <StyledDailyReadingsSectionBackground $background={daily_readings_background} />
+          <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
-              <DailyReadings isFullWidth showSubtitle />
+              <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
               <FeaturedPage featuredPage={featured_page} isFullWidth />
             </StyledReadingsWidgetSectionContent>
           </Container>

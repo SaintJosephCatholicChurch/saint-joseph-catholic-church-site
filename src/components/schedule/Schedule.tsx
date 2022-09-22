@@ -17,7 +17,7 @@ import {
   TIMES_SECTION_TITLE_HEIGHT,
   TIMES_TITLE_HEIGHT
 } from '../../constants';
-import type { Times } from '../../interface';
+import type { LiveStreamButton, Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import { useMediaQueryDown } from '../../util/useMediaQuery';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
@@ -113,11 +113,21 @@ function a11yProps(index: number) {
 
 interface ScheduleProps {
   times: Times[];
+  title?: string;
+  liveStreamButton?: LiveStreamButton;
+  invitationText?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
+const Schedule = ({
+  times,
+  title,
+  liveStreamButton,
+  invitationText,
+  tab,
+  onTabChange
+}: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -202,29 +212,35 @@ const Schedule = ({ times, tab, onTabChange }: ScheduleProps) => {
   return (
     <StyledContainerContents>
       <StyledHeader>
-        <StyledHeaderText>Come Worship with Us</StyledHeaderText>
-        <StyledHeaderBorder />
-        <Link href="/live-stream">
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<LiveTvIcon />}
-            sx={{
-              marginTop: '16px',
-              fontSize: '20px',
-              backgroundColor: '#bc2f3b',
-              '&:hover': {
-                backgroundColor: '#d24c57'
-              },
-              '.MuiButton-startIcon > *:nth-of-type(1)': {
-                fontSize: '24px'
-              }
-            }}
-          >
-            Live Stream Mass
-          </Button>
-        </Link>
-        <StyledHeaderPreText>Weekly Schedule</StyledHeaderPreText>
+        {isNotEmpty(invitationText) ? (
+          <>
+            <StyledHeaderText key="invitation-text">{invitationText}</StyledHeaderText>
+            <StyledHeaderBorder key="invitation-text-divider" />
+          </>
+        ) : null}
+        {isNotEmpty(liveStreamButton?.url) && isNotEmpty(liveStreamButton?.title) ? (
+          <Link key="live-stream-button" href={liveStreamButton.url}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<LiveTvIcon />}
+              sx={{
+                marginTop: '16px',
+                fontSize: '20px',
+                backgroundColor: '#bc2f3b',
+                '&:hover': {
+                  backgroundColor: '#d24c57'
+                },
+                '.MuiButton-startIcon > *:nth-of-type(1)': {
+                  fontSize: '24px'
+                }
+              }}
+            >
+              {liveStreamButton.title}
+            </Button>
+          </Link>
+        ) : null}
+        {isNotEmpty(title) ? <StyledHeaderPreText key="title">{title}</StyledHeaderPreText> : null}
       </StyledHeader>
       <List
         component="div"

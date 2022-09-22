@@ -297,14 +297,65 @@ const config: CmsConfig = {
               ]
             },
             {
-              name: 'schedule_background',
-              label: 'Schedule Background',
-              widget: 'image'
+              name: 'invitation_text',
+              label: 'Invitation Text',
+              widget: 'string'
             },
             {
-              name: 'daily_readings_background',
-              label: 'Daily Readings Background',
-              widget: 'image'
+              name: 'live_stream_button',
+              label: 'Live Stream Button',
+              widget: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'url',
+                  label: 'URL',
+                  widget: 'string'
+                }
+              ]
+            },
+            {
+              name: 'schedule_section',
+              label: 'Scehdule Section',
+              widget: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'schedule_background',
+                  label: 'Schedule Background',
+                  widget: 'image'
+                }
+              ]
+            },
+            {
+              name: 'daily_readings',
+              label: 'Daily Readings',
+              widget: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  label: 'Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'subtitle',
+                  label: 'Subtitle',
+                  widget: 'string'
+                },
+                {
+                  name: 'daily_readings_background',
+                  label: 'Background',
+                  widget: 'image'
+                }
+              ]
             },
             {
               name: 'featured_page',
@@ -613,25 +664,6 @@ const config: CmsConfig = {
           file: 'content/styles.json',
           description: 'General site styles',
           fields: [
-            {
-              name: 'header_background',
-              label: 'Header background',
-              widget: 'image'
-            },
-            {
-              name: 'header_color',
-              label: 'Header color',
-              widget: 'color'
-            },
-            {
-              name: 'header_font_style',
-              label: 'Header font style',
-              widget: 'select',
-              options: [
-                { label: 'Normal', value: 'normal' },
-                { label: 'Italic', value: 'italic' }
-              ]
-            },
             {
               name: 'footer_background',
               label: 'Footer background',

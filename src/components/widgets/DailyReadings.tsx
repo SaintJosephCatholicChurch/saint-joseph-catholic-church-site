@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
+import { DailyReadings } from '../../interface';
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
 import transientOptions from '../../util/transientOptions';
 
@@ -120,70 +121,73 @@ interface FeedReading {
 const ENTRY_REGEX = /<h4>[ ]*([^\n]+)[ ]*<a[ ]*href="([^\n]+)[ ]*"[ \\]*>[ ]*([^\n]+)[ ]*<\/a>[ ]*<\/h4>/g;
 
 interface DailyReadingsProps {
+  dailyReadings: DailyReadings;
   isFullWidth?: boolean;
   showSubtitle?: boolean;
 }
 
-const DailyReadings = memo(({ isFullWidth = false, showSubtitle = false }: DailyReadingsProps) => {
-  const [readings, setReadings] = useState<ReadingsData | null>(null);
+const DailyReadings = memo(
+  ({ dailyReadings: { title, subtitle }, isFullWidth = false, showSubtitle = false }: DailyReadingsProps) => {
+    const [readings, setReadings] = useState<ReadingsData | null>(null);
 
-  useEffect(() => {
-    const getReadings = async () => {
-      const feed = await getFeed<FeedReading>(DAILY_READINGS_RSS);
-      if (feed === null) {
-        return;
-      }
+    useEffect(() => {
+      const getReadings = async () => {
+        const feed = await getFeed<FeedReading>(DAILY_READINGS_RSS);
+        if (feed === null) {
+          return;
+        }
 
-      const { item: entries = [] } = feed?.rss?.channel ?? {};
-      if (entries.length > 0) {
-        const { link = '', title = '', description = '' } = entries[0];
+        const { item: entries = [] } = feed?.rss?.channel ?? {};
+        if (entries.length > 0) {
+          const { link = '', title = '', description = '' } = entries[0];
 
-        const readings: Reading[] = [];
+          const readings: Reading[] = [];
 
-        let match: RegExpExecArray;
-        do {
-          match = ENTRY_REGEX.exec(description);
-          if (match && match.length === 4) {
-            readings.push({
-              title: match[1].trim(),
-              link: match[2].trim(),
-              description: match[3].trim()
-            });
-          }
-        } while (match && match.length === 4);
+          let match: RegExpExecArray;
+          do {
+            match = ENTRY_REGEX.exec(description);
+            if (match && match.length === 4) {
+              readings.push({
+                title: match[1].trim(),
+                link: match[2].trim(),
+                description: match[3].trim()
+              });
+            }
+          } while (match && match.length === 4);
 
-        setReadings({
-          link,
-          title,
-          readings
-        });
-      }
-    };
+          setReadings({
+            link,
+            title,
+            readings
+          });
+        }
+      };
 
-    getReadings();
-  }, []);
+      getReadings();
+    }, []);
 
-  if ((readings?.readings.length ?? 0) === 0) {
-    return null;
+    if ((readings?.readings.length ?? 0) === 0) {
+      return null;
+    }
+
+    return (
+      <StyledDailyReadings $isFullWidth={isFullWidth}>
+        <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
+        {showSubtitle ? (
+          <StyledDailyReadingsSubtitle key="subtitle">
+            {subtitle}
+          </StyledDailyReadingsSubtitle>
+        ) : null}
+        {readings.readings.map((reading, index) => (
+          <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
+            <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+            <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
+          </StyledDailyReading>
+        ))}
+      </StyledDailyReadings>
+    );
   }
-
-  return (
-    <StyledDailyReadings $isFullWidth={isFullWidth}>
-      <StyledDailyReadingsTitle>Today&apos;s Readings</StyledDailyReadingsTitle>
-      {showSubtitle ? (
-        <StyledDailyReadingsSubtitle key="subtitle">
-          FROM THE UNITED STATES CONFERENCE OF CATHOLIC BISHOPS (USCCB)
-        </StyledDailyReadingsSubtitle>
-      ) : null}
-      {readings.readings.map((reading, index) => (
-        <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
-          <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-          <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
-        </StyledDailyReading>
-      ))}
-    </StyledDailyReadings>
-  );
-});
+);
 
 DailyReadings.displayName = 'DailyReadings';
 

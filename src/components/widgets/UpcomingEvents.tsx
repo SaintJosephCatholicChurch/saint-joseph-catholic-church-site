@@ -1,14 +1,13 @@
 import FullCalendar from '@fullcalendar/react';
 
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
+import type { EventClickArg } from '@fullcalendar/react';
 import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { addMonths } from 'date-fns';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import useIsomorphicLayoutEffect from '../../util/useIsomorphicLayoutEffect';
-import { useMediaQueryDown, useMediaQueryUp } from '../../util/useMediaQuery';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { useMediaQueryUp } from '../../util/useMediaQuery';
 import CalendarEventDialog from '../events/CalendarEventDialog';
 import CalendarEventPopover from '../events/CalendarEventPopover';
 import CalendarEventRenderer from '../events/CalendarEventRenderer';
@@ -28,37 +27,23 @@ const StyledUpcomingEventsTitle = styled('h3')`
   font-weight: 500;
 `;
 
-const StyledCalendarWrapper = styled('div')(
-  ({ theme }) => `
-    & .fc .fc-daygrid-day-frame {
-      height: auto;
-      min-height: 140px;
-    }
+const StyledCalendarWrapper = styled('div')`
+  & .fc .fc-daygrid-day-frame {
+    height: auto;
+    min-height: 140px;
+  }
 
-    & .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
-      margin-bottom: 0;
-    }
-  `
-);
+  & .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+    margin-bottom: 0;
+  }
+`;
 
-interface UpcomingEventsProps {
-  size?: 'small' | 'large';
-}
-
-const UpcomingEvents = ({ size = 'small' }: UpcomingEventsProps) => {
+const UpcomingEvents = memo(() => {
   const calendarRef = useRef<FullCalendar>();
 
-  const [api, setApi] = useState<CalendarApi | undefined>();
-  const [title, setTitle] = useState<string | undefined>();
+  console.log('rendering!');
 
-  const isSmallScreen = useMediaQueryDown('sm');
   const isMediumOrBiggerScreen = useMediaQueryUp('md');
-
-  useIsomorphicLayoutEffect(() => {
-    const newApi = calendarRef.current?.getApi();
-    setApi(newApi);
-    setTitle(newApi?.view.title);
-  }, []);
 
   const [clickedEventModalOpen, setClickedEventModalOpen] = useState(false);
   const [clickedEvent, setClickedEvent] = useState<EventClickArg | null>(null);
@@ -101,9 +86,6 @@ const UpcomingEvents = ({ size = 'small' }: UpcomingEventsProps) => {
         eventClick={(eventData) => {
           handleEventClick(eventData);
         }}
-        datesSet={() => {
-          setTitle(calendarRef.current?.getApi().view.title);
-        }}
         visibleRange={{
           start: new Date(),
           end: addMonths(new Date(), 1)
@@ -114,7 +96,7 @@ const UpcomingEvents = ({ size = 'small' }: UpcomingEventsProps) => {
   );
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider key="upcoming-events" dateAdapter={AdapterDateFns}>
       <StyledUpcomingEvents>
         <StyledUpcomingEventsTitle>Upcoming Events</StyledUpcomingEventsTitle>
         <StyledCalendarWrapper>{calendar}</StyledCalendarWrapper>
@@ -126,6 +108,8 @@ const UpcomingEvents = ({ size = 'small' }: UpcomingEventsProps) => {
       )}
     </LocalizationProvider>
   );
-};
+});
+
+UpcomingEvents.displayName = 'UpcomingEvents';
 
 export default UpcomingEvents;

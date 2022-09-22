@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import type { Times } from '../../interface';
+import type { LiveStreamButton, ScheduleSection, Times } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
@@ -8,7 +8,10 @@ interface StyledScheduleProps {
   $background: string;
 }
 
-const StyledSchedule = styled('div', transientOptions)<StyledScheduleProps>(
+const StyledSchedule = styled(
+  'div',
+  transientOptions
+)<StyledScheduleProps>(
   ({ theme, $background }) => `
     padding-bottom: 40px;
     background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${$background}), #c7c7c7;
@@ -27,16 +30,32 @@ const StyledSchedule = styled('div', transientOptions)<StyledScheduleProps>(
 
 interface ScheduleProps {
   times: Times[];
-  background?: string;
+  details?: ScheduleSection;
+  liveStreamButton?: LiveStreamButton;
+  invitationText?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const ScheduleWidget = ({ times, background, tab, onTabChange }: ScheduleProps) => {
+const ScheduleWidget = ({
+  times,
+  details,
+  liveStreamButton,
+  invitationText,
+  tab,
+  onTabChange
+}: ScheduleProps) => {
   return (
-    <StyledSchedule $background={background}>
+    <StyledSchedule $background={details?.schedule_background}>
       <Container>
-        <Schedule times={times} tab={tab} onTabChange={onTabChange} />
+        <Schedule
+          times={times}
+          title={details?.title}
+          liveStreamButton={liveStreamButton}
+          invitationText={invitationText}
+          tab={tab}
+          onTabChange={onTabChange}
+        />
       </Container>
     </StyledSchedule>
   );

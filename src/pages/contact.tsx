@@ -45,12 +45,6 @@ const StyledContactContent = styled('div')(
   `
 );
 
-const StyledContactForm = styled('form')`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
 const StyledWhereToFindUsSection = styled('div')`
   display: flex;
   flex-direction: column;
@@ -58,7 +52,7 @@ const StyledWhereToFindUsSection = styled('div')`
   align-items: center;
   width: 100%;
   background: linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%),
-    url(${homePageData.schedule_background}), #c7c7c7;
+    url(${homePageData.schedule_section.schedule_background}), #c7c7c7;
   margin-top: 48px;
 `;
 

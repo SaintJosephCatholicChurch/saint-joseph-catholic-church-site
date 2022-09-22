@@ -14,10 +14,28 @@ export interface FeaturedPage {
   page?: string;
 }
 
+export interface LiveStreamButton {
+  title: string;
+  url: string;
+}
+
+export interface ScheduleSection {
+  title: string;
+  schedule_background: string;
+}
+
+export interface DailyReadings {
+  title: string;
+  subtitle: string;
+  daily_readings_background: string;
+}
+
 export interface HomePageData {
   slides: Slide[];
-  schedule_background: string;
-  daily_readings_background: string;
+  live_stream_button: LiveStreamButton;
+  invitation_text: string;
+  schedule_section: ScheduleSection;
+  daily_readings: DailyReadings;
   featured_page: FeaturedPage;
 }
 
@@ -48,9 +66,6 @@ export interface Times {
 }
 
 export interface StylesConfig {
-  readonly header_background: string;
-  readonly header_color: string;
-  readonly header_font_style: 'normal' | 'italic';
   readonly footer_background: string;
 }
 

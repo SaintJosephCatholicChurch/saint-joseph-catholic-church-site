@@ -41,8 +41,6 @@ const StyledCalendarWrapper = styled('div')`
 const UpcomingEvents = memo(() => {
   const calendarRef = useRef<FullCalendar>();
 
-  console.log('rendering!');
-
   const isMediumOrBiggerScreen = useMediaQueryUp('md');
 
   const [clickedEventModalOpen, setClickedEventModalOpen] = useState(false);

@@ -1,9 +1,14 @@
 import dynamic from 'next/dynamic';
+import { useMemo } from 'react';
 
 const Admin = () => {
-  const DynamicComponentWithNoSSR = dynamic(() => import('../cms/CMSView'), {
-    ssr: false
-  });
+  const DynamicComponentWithNoSSR = useMemo(
+    () =>
+      dynamic(() => import('../cms/CMSView'), {
+        ssr: false
+      }),
+    []
+  );
 
   return <DynamicComponentWithNoSSR />;
 };

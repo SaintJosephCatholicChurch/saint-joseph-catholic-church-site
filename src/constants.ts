@@ -38,3 +38,4 @@ export const IMAGE_EXTENSION_REGEX = /(\.apng|\.avif|\.gif|\.jpg|\.jpeg|\.jfif|\
 
 export const EXTRA_EXTRA_SMALL_BREAKPOINT = 320;
 export const EXTRA_SMALL_BREAKPOINT = 370;
+export const SMALL_BREAKPOINT = 600;

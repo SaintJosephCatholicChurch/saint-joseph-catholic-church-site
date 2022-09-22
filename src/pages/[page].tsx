@@ -4,9 +4,9 @@ import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';
 import type { PageContent } from '../interface';
 import { fetchPageContent } from '../lib/pages';
-import { getRecentPosts, RecentPostsProps } from '../lib/posts';
+import { getSidebarProps, SidebarProps } from '../lib/sidebar';
 
-interface PageProps extends RecentPostsProps {
+interface PageProps extends SidebarProps {
   title: string;
   dateString: string;
   slug: string;
@@ -15,7 +15,7 @@ interface PageProps extends RecentPostsProps {
   content: string;
 }
 
-const Page = ({ title, dateString, slug, tags, description = '', content, recentPosts }: PageProps) => {
+const Page = ({ title, dateString, slug, tags, description = '', content, ...sidebarProps }: PageProps) => {
   return (
     <PageLayout
       url={`/pages/${slug}`}
@@ -24,7 +24,7 @@ const Page = ({ title, dateString, slug, tags, description = '', content, recent
       tags={tags}
       description={description}
       disableTitleMargin
-      recentPosts={recentPosts}
+      {...sidebarProps}
     >
       <PageContentView tags={tags}>
         <div
@@ -72,7 +72,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       description: '',
       tags: data.tags ?? [],
       content,
-      recentPosts: getRecentPosts()
+      ...getSidebarProps()
     }
   };
 };

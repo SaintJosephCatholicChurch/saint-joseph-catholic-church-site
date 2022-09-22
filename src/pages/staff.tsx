@@ -1,13 +1,13 @@
 import PageLayout from '../components/PageLayout';
 import StaffView from '../components/pages/custom/staff/StaffView';
-import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
+import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 import staff from '../lib/staff';
 
-type StaffProps = RecentPostsProps;
+type StaffProps = SidebarProps;
 
-const Staff = ({ recentPosts }: StaffProps) => {
+const Staff = ({ ...sidebarProps }: StaffProps) => {
   return (
-    <PageLayout url="/staff" title="Parish Staff" recentPosts={recentPosts}>
+    <PageLayout url="/staff" title="Parish Staff" {...sidebarProps}>
       <StaffView staff={staff} />
     </PageLayout>
   );
@@ -15,4 +15,4 @@ const Staff = ({ recentPosts }: StaffProps) => {
 
 export default Staff;
 
-export const getStaticProps = getRecentPostsStaticProps;
+export const getStaticProps = getSidebarStaticProps;

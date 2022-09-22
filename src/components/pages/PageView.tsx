@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { ReactNode, useMemo } from 'react';
-import { PostContent } from '../../interface';
+import { DailyReadings, PostContent } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
@@ -73,6 +73,7 @@ interface PageViewProps {
   children: ReactNode;
   hideHeader: boolean;
   recentPosts?: PostContent[];
+  dailyReadings?: DailyReadings;
   hideSidebar?: boolean;
   hideSearch?: boolean;
   disableTitleMargin?: boolean;
@@ -85,6 +86,7 @@ const PageView = ({
   title,
   children,
   recentPosts,
+  dailyReadings,
   hideHeader = false,
   hideSidebar = false,
   hideSearch,
@@ -101,11 +103,13 @@ const PageView = ({
             {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
             {children}
           </StyledPageBody>
-          {!hideSidebar ? <Sidebar hideSearch={hideSearch} recentPosts={recentPosts} /> : null}
+          {!hideSidebar ? (
+            <Sidebar hideSearch={hideSearch} dailyReadings={dailyReadings} recentPosts={recentPosts} />
+          ) : null}
         </StyledPageContents>
       </StyledPageContentsWrapper>
     ),
-    [children, disableTitleMargin, hideHeader, hideSearch, hideSidebar, recentPosts, title]
+    [children, dailyReadings, disableTitleMargin, hideHeader, hideSearch, hideSidebar, recentPosts, title]
   );
 
   return (

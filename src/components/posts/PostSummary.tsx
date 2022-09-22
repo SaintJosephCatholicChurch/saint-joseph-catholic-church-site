@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 import parseISO from 'date-fns/parseISO';
+import Link from 'next/link';
 import { memo, useEffect, useMemo, useState } from 'react';
 import type { PostContent } from '../../interface';
 import PageContentView from '../pages/PageContentView';
@@ -31,28 +32,36 @@ const PostSummary = memo(
 
     const date = useMemo(() => parseISO(dateString), [dateString]);
     return (
-      <Link
-        href={`/posts/${slug}`}
-        underline="none"
-        sx={{
-          '&:hover .read-more': {
-            color: '#333'
-          }
-        }}
-      >
-        <PostImage title={title} image={image} />
-        <PostTitle title={title} enableMarginTop />
-        <PostDateAuthorLine date={date} />
-        <Box>
-          <PageContentView>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: html
-              }}
-            />
-          </PageContentView>
-        </Box>
-        <StyledReadMore className="read-more">Read More</StyledReadMore>
+      <Link href={`/posts/${slug}`}>
+        <Button
+          sx={{
+            textDecoration: 'none',
+            textTransform: 'none',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            textAlign: 'left',
+            '&:hover': {
+              backgroundColor: 'rgba(100,100,100,0.12)',
+              '.read-more': {
+                color: '#333'
+              }
+            }
+          }}
+        >
+          <PostImage title={title} image={image} />
+          <PostTitle title={title} enableMarginTop />
+          <PostDateAuthorLine date={date} />
+          <Box>
+            <PageContentView>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: html
+                }}
+              />
+            </PageContentView>
+          </Box>
+          <StyledReadMore className="read-more">Read More</StyledReadMore>
+        </Button>
       </Link>
     );
   }

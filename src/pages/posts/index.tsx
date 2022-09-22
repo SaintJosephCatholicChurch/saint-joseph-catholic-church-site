@@ -3,6 +3,7 @@ import PageLayout from '../../components/PageLayout';
 import PostList from '../../components/posts/PostList';
 import type { PostContent, TagContent } from '../../interface';
 import config from '../../lib/config';
+import homepageData from '../../lib/homepage';
 import { countPosts, listPostContent } from '../../lib/posts';
 import { listTags } from '../../lib/tags';
 
@@ -17,7 +18,7 @@ interface PostsIndexProps {
 
 const PostsIndex = ({ posts, tags, pagination }: PostsIndexProps) => {
   return (
-    <PageLayout url="/posts" title="News" hideHeader>
+    <PageLayout url="/posts" title="News" dailyReadings={homepageData.daily_readings} hideHeader>
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );

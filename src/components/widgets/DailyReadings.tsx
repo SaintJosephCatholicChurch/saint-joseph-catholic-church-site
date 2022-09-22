@@ -51,6 +51,8 @@ const StyledDailyReading = styled(
     display: flex;
     align-items: baseline;
     color: #333;
+    flex-wrap: wrap;
+    line-height: 1.5;
 
     &:hover {
       color: #161616;
@@ -72,6 +74,8 @@ const StyledDailyReadingTitle = styled('h5')(
     margin: 0;
     font-size: 16px;
     color: #bf303c;
+    margin-right: -8px;
+    white-space: nowrap;
 
     ${theme.breakpoints.down('lg')} {
       font-size: 18px;
@@ -85,6 +89,8 @@ const StyledDailyReadingDescription = styled('div')(
     font-size: 16px;
     color: #343434;
     font-weight: 500;
+    margin-left: 16px;
+    white-space: nowrap;
 
     ${theme.breakpoints.down('lg')} {
       font-size: 18px;
@@ -131,8 +137,14 @@ const DailyReadings = memo(
     const [readings, setReadings] = useState<ReadingsData | null>(null);
 
     useEffect(() => {
+      let alive = true;
+
       const getReadings = async () => {
         const feed = await getFeed<FeedReading>(DAILY_READINGS_RSS);
+        if (!alive) {
+          return;
+        }
+
         if (feed === null) {
           return;
         }
@@ -164,6 +176,10 @@ const DailyReadings = memo(
       };
 
       getReadings();
+
+      return () => {
+        alive = false;
+      };
     }, []);
 
     if ((readings?.readings.length ?? 0) === 0) {
@@ -173,15 +189,11 @@ const DailyReadings = memo(
     return (
       <StyledDailyReadings $isFullWidth={isFullWidth}>
         <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
-        {showSubtitle ? (
-          <StyledDailyReadingsSubtitle key="subtitle">
-            {subtitle}
-          </StyledDailyReadingsSubtitle>
-        ) : null}
+        {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
         {readings.readings.map((reading, index) => (
           <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
             <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-            <StyledDailyReadingDescription>&nbsp;&nbsp;{reading.description}</StyledDailyReadingDescription>
+            <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
           </StyledDailyReading>
         ))}
       </StyledDailyReadings>

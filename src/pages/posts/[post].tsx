@@ -4,9 +4,10 @@ import { useMemo } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PostView from '../../components/posts/PostView';
 import type { PostContent } from '../../interface';
-import { fetchPostContent, getRecentPosts, RecentPostsProps } from '../../lib/posts';
+import { fetchPostContent } from '../../lib/posts';
+import { getSidebarProps, SidebarProps } from '../../lib/sidebar';
 
-interface PostProps extends RecentPostsProps {
+interface PostProps extends SidebarProps {
   title: string;
   image: string;
   dateString: string;
@@ -16,7 +17,7 @@ interface PostProps extends RecentPostsProps {
   content: string;
 }
 
-const Post = ({ title, image, dateString, slug, tags, description = '', content, recentPosts }: PostProps) => {
+const Post = ({ title, image, dateString, slug, tags, description = '', content, ...sidebarProps }: PostProps) => {
   const date = useMemo(() => parseISO(dateString), [dateString]);
 
   return (
@@ -27,7 +28,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content,
       tags={tags}
       description={description}
       hideHeader
-      recentPosts={recentPosts}
+      {...sidebarProps}
     >
       <PostView title={title} date={date} image={image}>
         <div
@@ -76,7 +77,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       description: '',
       tags: data.tags ?? [],
       content,
-      recentPosts: getRecentPosts()
+      ...getSidebarProps()
     }
   };
 };

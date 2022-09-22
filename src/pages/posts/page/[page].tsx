@@ -3,6 +3,7 @@ import PageLayout from '../../../components/PageLayout';
 import PostList from '../../../components/posts/PostList';
 import type { PostContent, TagContent } from '../../../interface';
 import config from '../../../lib/config';
+import homepageData from '../../../lib/homepage';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { listTags } from '../../../lib/tags';
 
@@ -18,7 +19,7 @@ interface PostPageProps {
 
 const PostPage = ({ posts, tags, pagination, page }: PostPageProps) => {
   return (
-    <PageLayout url={`/posts/page/${page}`} title="News">
+    <PageLayout url={`/posts/page/${page}`} title="News" dailyReadings={homepageData.daily_readings}>
       <PostList posts={posts} tags={tags} pagination={pagination} />
     </PageLayout>
   );

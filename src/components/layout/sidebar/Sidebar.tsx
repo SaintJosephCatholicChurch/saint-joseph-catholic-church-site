@@ -1,57 +1,23 @@
-import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
-import type { PostContent } from '../../../interface';
-import SearchBox from '../../SearchBox';
-import DailyReadings from '../../widgets/DailyReadings';
-import RecentNews from '../../widgets/recent-news/RecentNews';
-
-const StyledSidebar = styled('div')(
-  ({ theme }) => `
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    ${theme.breakpoints.down('md')} {
-      display: none;
-    }
-  `
-);
-
-const StyledSection = styled('div')`
-  border-bottom: 1px solid #adadad;
-  padding-bottom: 32px;
-`;
+import { useMemo } from 'react';
+import type { DailyReadings as DailyReadingsDetails, PostContent } from '../../../interface';
 
 interface SidebarProps {
   recentPosts?: PostContent[];
+  dailyReadings?: DailyReadingsDetails;
   hideSearch?: boolean;
 }
 
-const Sidebar = ({ recentPosts, hideSearch = false }: SidebarProps) => {
-  const UpcomingEventsNoSSR = dynamic(() => import('../../widgets/UpcomingEvents'), {
-    ssr: false
-  });
-
-  return (
-    <StyledSidebar>
-      {!hideSearch ? (
-        <StyledSection>
-          <SearchBox disableMargin />
-        </StyledSection>
-      ) : null}
-      <StyledSection>
-        <DailyReadings />
-      </StyledSection>
-      {recentPosts?.length > 0 ? (
-        <StyledSection>
-          <RecentNews posts={recentPosts} />
-        </StyledSection>
-      ) : null}
-      <StyledSection>
-        <UpcomingEventsNoSSR />
-      </StyledSection>
-    </StyledSidebar>
+const Sidebar = ({ recentPosts, dailyReadings, hideSearch }: SidebarProps) => {
+  const SidebarNoSSR = useMemo(
+    () =>
+      dynamic(() => import('./SidebarContent'), {
+        ssr: false
+      }),
+    []
   );
+
+  return <SidebarNoSSR recentPosts={recentPosts} dailyReadings={dailyReadings} hideSearch={hideSearch} />;
 };
 
 export default Sidebar;

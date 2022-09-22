@@ -5,12 +5,12 @@ import BasicMeta from '../components/meta/BasicMeta';
 import OpenGraphMeta from '../components/meta/OpenGraphMeta';
 import TwitterCardMeta from '../components/meta/TwitterCardMeta';
 import homePageData from '../lib/homepage';
-import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
+import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 import times from '../lib/times';
 
-type HomepageProps = RecentPostsProps;
+type HomepageProps = SidebarProps;
 
-const Homepage = ({ recentPosts }: HomepageProps) => {
+const Homepage = ({ ...sidebarProps }: HomepageProps) => {
   return (
     <>
       <Head>
@@ -21,7 +21,7 @@ const Homepage = ({ recentPosts }: HomepageProps) => {
         <OpenGraphMeta url={'/'} />
         <TwitterCardMeta url={'/'} />
         <div>
-          <HomepageView homePageData={homePageData} times={times} recentPosts={recentPosts} />
+          <HomepageView homePageData={homePageData} times={times} {...sidebarProps} />
         </div>
       </Layout>
     </>
@@ -30,4 +30,4 @@ const Homepage = ({ recentPosts }: HomepageProps) => {
 
 export default Homepage;
 
-export const getStaticProps = getRecentPostsStaticProps;
+export const getStaticProps = getSidebarStaticProps;

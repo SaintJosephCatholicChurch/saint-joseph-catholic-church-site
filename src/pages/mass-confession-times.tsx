@@ -3,7 +3,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import PageLayout from '../components/PageLayout';
 import MobileScheduleTabPanel from '../components/schedule/MobileSchedulePanel';
 import ScheduleTabPanel from '../components/schedule/ScheduleTabPanel';
-import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
+import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 import times from '../lib/times';
 
 const StyledTimes = styled('div')(
@@ -18,13 +18,13 @@ const StyledTimes = styled('div')(
   `
 );
 
-type MassConfessionTimesProps = RecentPostsProps;
+type MassConfessionTimesProps = SidebarProps;
 
-const MassConfessionTimes = ({ recentPosts }: MassConfessionTimesProps) => {
+const MassConfessionTimes = ({ ...sidebarProps }: MassConfessionTimesProps) => {
   const theme = useTheme();
 
   return (
-    <PageLayout url="/mass-confession-times" title="Mass &amp; Confession Times" recentPosts={recentPosts} hideHeader>
+    <PageLayout url="/mass-confession-times" title="Mass &amp; Confession Times" {...sidebarProps} hideHeader>
       <List
         component="div"
         aria-labelledby="nested-list-subheader"
@@ -58,4 +58,4 @@ const MassConfessionTimes = ({ recentPosts }: MassConfessionTimesProps) => {
 
 export default MassConfessionTimes;
 
-export const getStaticProps = getRecentPostsStaticProps;
+export const getStaticProps = getSidebarStaticProps;

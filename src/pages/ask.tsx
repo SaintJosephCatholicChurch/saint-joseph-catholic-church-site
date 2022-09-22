@@ -2,17 +2,17 @@ import { styled } from '@mui/material/styles';
 import contentStyles from '../../public/styles/content.module.css';
 import PageLayout from '../components/PageLayout';
 import AskForm from '../components/pages/custom/ask/AskForm';
-import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
+import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 
 const StyledDetails = styled('div')`
   margin-bottom: 32px;
 `;
 
-type AskProps = RecentPostsProps;
+type AskProps = SidebarProps;
 
-const Ask = ({ recentPosts }: AskProps) => {
+const Ask = ({ ...sidebarProps }: AskProps) => {
   return (
-    <PageLayout url="/ask" title="Did You Know? Question Submission" recentPosts={recentPosts}>
+    <PageLayout url="/ask" title="Did You Know? Question Submission" {...sidebarProps}>
       <StyledDetails className={contentStyles.content}>
         <p>
           Do you have a question regarding the Catholic Faith that you would like answered as a part of our Did You
@@ -27,4 +27,4 @@ const Ask = ({ recentPosts }: AskProps) => {
 
 export default Ask;
 
-export const getStaticProps = getRecentPostsStaticProps;
+export const getStaticProps = getSidebarStaticProps;

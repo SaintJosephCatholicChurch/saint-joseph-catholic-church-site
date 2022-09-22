@@ -1,9 +1,7 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
-import type { GetStaticProps } from 'next';
 import path from 'path';
-import { RECENT_NEWS_TO_SHOW } from '../constants';
 import type { FileMatter, PostContent, PostContentData } from '../interface';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
@@ -91,19 +89,3 @@ export function listPostContent(page: number, limit: number, tag?: string): Post
     .filter((post) => !tag || (post.data.tags && post.data.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }
-
-export interface RecentPostsProps {
-  recentPosts: PostContent[];
-}
-
-export const getRecentPosts = (): RecentPostsProps['recentPosts'] => {
-  return listPostContent(1, RECENT_NEWS_TO_SHOW);
-};
-
-export const getRecentPostsStaticProps: GetStaticProps = (): { props: RecentPostsProps } => {
-  return {
-    props: {
-      recentPosts: getRecentPosts()
-    }
-  };
-};

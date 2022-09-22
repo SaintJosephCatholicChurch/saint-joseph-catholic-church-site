@@ -1,16 +1,21 @@
 import dynamic from 'next/dynamic';
+import { useMemo } from 'react';
 import PageLayout from '../components/PageLayout';
-import { getRecentPostsStaticProps, RecentPostsProps } from '../lib/posts';
+import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 
-type LiveStreamProps = RecentPostsProps;
+type LiveStreamProps = SidebarProps;
 
-const LiveStream = ({ recentPosts }: LiveStreamProps) => {
-  const LiveStreamViewNoSSR = dynamic(() => import('../components/pages/custom/live-stream/LiveStreamView'), {
-    ssr: false
-  });
+const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
+  const LiveStreamViewNoSSR = useMemo(
+    () =>
+      dynamic(() => import('../components/pages/custom/live-stream/LiveStreamView'), {
+        ssr: false
+      }),
+    []
+  );
 
   return (
-    <PageLayout url="/live-stream" title="Live Stream" recentPosts={recentPosts}>
+    <PageLayout url="/live-stream" title="Live Stream" {...sidebarProps}>
       <LiveStreamViewNoSSR />
     </PageLayout>
   );
@@ -18,4 +23,4 @@ const LiveStream = ({ recentPosts }: LiveStreamProps) => {
 
 export default LiveStream;
 
-export const getStaticProps = getRecentPostsStaticProps;
+export const getStaticProps = getSidebarStaticProps;

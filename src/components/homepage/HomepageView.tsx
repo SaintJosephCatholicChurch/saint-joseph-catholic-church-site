@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import type { HomePageData, PostContent, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
 import transientOptions from '../../util/transientOptions';
@@ -84,20 +84,17 @@ interface HomepageViewProps {
 
 const HomepageView = memo(
   ({
-    homePageData: {
-      slides,
-      schedule_section,
-      live_stream_button,
-      invitation_text,
-      daily_readings,
-      featured_page
-    },
+    homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured_page },
     times,
     recentPosts
   }: HomepageViewProps) => {
-    const UpcomingEventsNoSSR = dynamic(() => import('../widgets/UpcomingEvents'), {
-      ssr: false
-    });
+    const UpcomingEventsNoSSR = useMemo(
+      () =>
+        dynamic(() => import('../widgets/UpcomingEvents'), {
+          ssr: false
+        }),
+      []
+    );
 
     return (
       <StyledHomepageView>

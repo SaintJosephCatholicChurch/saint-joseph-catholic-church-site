@@ -6,6 +6,8 @@ import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect';
 interface Size {
   width: number;
   height: number;
+  x: number;
+  y: number;
 }
 
 function useElementSize<T extends HTMLElement = HTMLDivElement>(): [(node: T | null) => void, Size] {
@@ -15,14 +17,18 @@ function useElementSize<T extends HTMLElement = HTMLDivElement>(): [(node: T | n
   const [ref, setRef] = useState<T | null>(null);
   const [size, setSize] = useState<Size>({
     width: 0,
-    height: 0
+    height: 0,
+    x: 0,
+    y: 0
   });
 
   // Prevent too many rendering using useCallback
   const handleSize = useCallback(() => {
     setSize({
       width: ref?.offsetWidth || 0,
-      height: ref?.offsetHeight || 0
+      height: ref?.offsetHeight || 0,
+      x: ref?.getBoundingClientRect().left || 0,
+      y: ref?.getBoundingClientRect().top || 0
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

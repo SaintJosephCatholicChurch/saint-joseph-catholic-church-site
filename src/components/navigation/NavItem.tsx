@@ -8,7 +8,7 @@ import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
 import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
-import NavLink from './NavLink';
+import NavItemPopup from './NavItemPopup';
 
 const StyledNavItem = styled('div')`
   position: relative;
@@ -36,25 +36,11 @@ const StyledUnderline = styled('div')`
   background: #ffffff;
 `;
 
-interface StyledPopUpMenuProps {
-  $open: boolean;
-}
-
-const StyledPopUpMenu = styled('div')`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  background: #f2f2f2;
-  box-shadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
-  top: 52px;
-  zindex: 900;
-`;
-
 function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
   return Boolean('menu_links' in link && (link as MenuItem).menu_links?.length);
 }
 
-interface HoverState {
+export interface HoverState {
   keyboardPress: boolean;
   buttonClick: boolean;
   button: boolean;
@@ -328,17 +314,15 @@ const NavItem = ({ item, size }: NavItemProps) => {
         </StyledUnderlineWrapper>
       </Button>
       {item.menu_links?.length && debouncedIsOpen ? (
-        <StyledPopUpMenu onMouseOver={handleOnMouseOver('menu')} onMouseOut={handleOnMouseOut('menu')}>
-          {item.menu_links.map((link, index) => (
-            <NavLink
-              ref={index === keyboardSelectedIndex ? activeMenuItemRef : undefined}
-              key={`menu-${item.title}-link-${link.title}`}
-              link={link}
-              onClick={handleOnClick(link, 'menu')}
-              onKeyDown={handleMenuLinkKeyDown}
-            />
-          ))}
-        </StyledPopUpMenu>
+        <NavItemPopup
+          item={item}
+          onClick={handleOnClick}
+          onMouseOver={handleOnMouseOver}
+          onMouseOut={handleOnMouseOut}
+          onKeyDown={handleMenuLinkKeyDown}
+          activeMenuItemRef={activeMenuItemRef}
+          keyboardSelectedIndex={keyboardSelectedIndex}
+        />
       ) : null}
     </StyledNavItem>
   );

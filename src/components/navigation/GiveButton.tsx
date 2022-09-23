@@ -44,7 +44,7 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
         ...(size === 'small'
           ? {
               padding: '1px 24px 0',
-              width: '130px'
+              width: 130
             }
           : {}),
         [theme.breakpoints.up('lg')]: {
@@ -52,7 +52,11 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
           height: trigger ? 64 : 92
         },
         [theme.breakpoints.down('lg')]: {
-          padding: '1px 24px 0'
+          padding: '1px 24px 0',
+          width: 120
+        },
+        [theme.breakpoints.down('sm')]: {
+          width: 100
         },
         [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
           padding: '1px 16px 0'

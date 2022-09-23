@@ -23,6 +23,16 @@ const StyledDesktopSpacer = styled('div')`
   flex-grow: 1;
 `;
 
+const StyledGiveButtonOffset = styled('div')(
+  ({ theme }) => `
+    width: 0;
+
+    ${theme.breakpoints.up(1524)} {
+      width: 162px;
+    }
+  `
+);
+
 interface NavigationBarProps {
   menuDetails: MenuData;
   onlineGivingTitle: string;
@@ -45,6 +55,7 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
         width: '100%'
       }}
     >
+      <StyledGiveButtonOffset />
       <StyledDesktopSpacer />
       <Toolbar
         sx={{

@@ -2,29 +2,26 @@ import { styled } from '@mui/material/styles';
 import { ReactNode } from 'react';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
+import Tags from '../Tags';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
-
-const StyledPageContentWrapper = styled('div')`
-  margin-top: 32px;
-`;
 
 interface PostViewProps {
   title: string;
   date: Date;
   image: string;
+  tags: string[];
   children: ReactNode;
 }
 
-const PostView = ({ title, date, image, children }: PostViewProps) => {
+const PostView = ({ title, date, image, children, tags }: PostViewProps) => {
   return (
     <>
       <PostTitle title={title} />
       <PostDateAuthorLine date={date} />
       <PostImage title={title} image={image} />
-      <StyledPageContentWrapper>
-        <PageContentView>{children}</PageContentView>
-      </StyledPageContentWrapper>
+      <Tags tags={tags} />
+      <PageContentView>{children}</PageContentView>
     </>
   );
 };

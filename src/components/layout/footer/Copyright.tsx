@@ -64,7 +64,11 @@ const StyledCopyrightSection = styled('div')`
   align-items: center;
 `;
 
-const Copyright = () => {
+interface CopyrightProps {
+  privacyPolicyLink: string;
+}
+
+const Copyright = ({ privacyPolicyLink }: CopyrightProps) => {
   const year = useMemo(() => format(new Date(), 'yyyy'), []);
 
   return (
@@ -80,7 +84,7 @@ const Copyright = () => {
           <Box>All Rights Reserved.</Box>
         </StyledCopyrightSection>
       </StyledCopyrightText>
-      <StyledPrivacyPolicyLink href="#">Privacy Policy.</StyledPrivacyPolicyLink>
+      <StyledPrivacyPolicyLink href={privacyPolicyLink}>Privacy Policy.</StyledPrivacyPolicyLink>
     </StyledCopyright>
   );
 };

@@ -1,4 +1,8 @@
 {
+  "logo": {
+    "primary": "St. Joseph",
+    "secondary": "Catholic Church"
+  },
   "menu_items": [
     {
       "title": "Home",
@@ -112,5 +116,6 @@
         }
       ]
     }
-  ]
+  ],
+  "online_giving_button_text": "Give"
 }

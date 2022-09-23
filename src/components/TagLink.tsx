@@ -1,19 +1,31 @@
-import type { TagContent } from '../interface';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Link from 'next/link';
 
-interface TagProps {
-  tag?: TagContent;
+interface TagLinkProps {
+  tag?: string;
 }
 
-const Tag = ({ tag }: TagProps) => {
+const StyledLink = styled('div')`
+  color: #bf303c;
+  font-size: 15px;
+  &:hover {
+    color: #822129;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
+const TagLink = ({ tag }: TagLinkProps) => {
   if (!tag) {
     return null;
   }
 
   return (
-    <a href={`/posts/tags/${tag.slug}`}>
-      <a>{`#${tag.name}`}</a>
-    </a>
+    <Link href={`/posts/tags/${tag}`}>
+      <StyledLink>{`#${tag}`}</StyledLink>
+    </Link>
   );
 };
 
-export default Tag;
+export default TagLink;

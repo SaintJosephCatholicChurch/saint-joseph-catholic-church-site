@@ -1,22 +1,24 @@
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
-import { MouseEvent } from 'react';
+import { forwardRef, KeyboardEvent, MouseEvent } from 'react';
 import type { MenuLink } from '../../interface';
 import useMenuLinkUrl from './hooks/useMenuLinkUrl';
 
 interface NavLinkProps {
   link: MenuLink;
   onClick: (event: MouseEvent) => void;
+  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
 }
 
-const NavLink = ({ link, onClick }: NavLinkProps) => {
+const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, onKeyDown }, ref) => {
   const url = useMenuLinkUrl(link);
   const { title } = link;
 
   return (
     <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
       <Button
+        ref={ref}
         sx={{
           color: '#680b12',
           padding: 0,
@@ -25,9 +27,10 @@ const NavLink = ({ link, onClick }: NavLinkProps) => {
             color: '#2e2e2e'
           }
         }}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
       >
         <MenuItem
-          onClick={onClick}
           sx={{
             width: '100%',
             fontSize: '15px',
@@ -40,6 +43,8 @@ const NavLink = ({ link, onClick }: NavLinkProps) => {
       </Button>
     </Link>
   );
-};
+});
+
+NavLink.displayName = 'NavLink';
 
 export default NavLink;

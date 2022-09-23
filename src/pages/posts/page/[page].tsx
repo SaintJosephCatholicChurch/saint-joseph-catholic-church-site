@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../../../components/PageLayout';
 import PostList from '../../../components/posts/PostList';
-import type { PostContent, TagContent } from '../../../interface';
+import type { PostContent } from '../../../interface';
 import config from '../../../lib/config';
 import homepageData from '../../../lib/homepage';
 import { countPosts, listPostContent } from '../../../lib/posts';
@@ -9,7 +9,7 @@ import { listTags } from '../../../lib/tags';
 
 interface PostPageProps {
   posts: PostContent[];
-  tags: TagContent[];
+  tags: string[];
   page: number;
   pagination: {
     current: number;

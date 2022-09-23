@@ -40,17 +40,19 @@ const PostSummary = memo(
             flexDirection: 'column',
             alignItems: 'flex-start',
             textAlign: 'left',
+            margin: '-6px -8px',
             '&:hover': {
-              backgroundColor: 'rgba(100,100,100,0.12)',
+              backgroundColor: 'transparent',
               '.read-more': {
-                color: '#333'
+                color: '#822129',
+                textDecoration: 'underline'
               }
             }
           }}
         >
           <PostImage title={title} image={image} />
           <PostTitle title={title} enableMarginTop />
-          <PostDateAuthorLine date={date} />
+          <PostDateAuthorLine date={date} disableMargin />
           <Box>
             <PageContentView>
               <div

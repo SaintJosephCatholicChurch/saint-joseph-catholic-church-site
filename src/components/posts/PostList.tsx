@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import type { PostContent, TagContent } from '../../interface';
+import type { PostContent } from '../../interface';
 import Pagination from '../Pagination';
 import PostSummary from './PostSummary';
 
@@ -12,7 +12,7 @@ const StyledPostList = styled('div')`
 
 interface PostListProps {
   posts: PostContent[];
-  tags: TagContent[];
+  tags: string[];
   pagination: {
     current: number;
     pages: number;

@@ -1,4 +1,4 @@
 import data from '../../content/menu.json';
-import type { MenuItem } from '../interface';
+import type { MenuData } from '../interface';
 
-export default data.menu_items as MenuItem[];
+export default data as MenuData;

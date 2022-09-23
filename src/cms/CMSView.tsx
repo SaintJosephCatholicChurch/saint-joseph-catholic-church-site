@@ -11,9 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cmsApp from 'netlify-cms-app';
 import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
 import { ComponentType, memo, useEffect } from 'react';
-import BulletinsPreview from '../components/previews/BulletinsPreview';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
+import NavigationPreview from '../components/previews/NavigationPreview';
 import PagePreview from '../components/previews/PagePreview';
 import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
@@ -49,8 +49,8 @@ const CMSView = memo(() => {
     cmsApp.registerPreviewTemplate('homepage', HomePagePreview);
     cmsApp.registerPreviewTemplate('times', SchedulePreview);
     cmsApp.registerPreviewTemplate('church_details', ChurchDetailsPreview);
-    cmsApp.registerPreviewTemplate('bulletins', BulletinsPreview);
     cmsApp.registerPreviewTemplate('staff', StaffPreview);
+    cmsApp.registerPreviewTemplate('menu', NavigationPreview);
 
     cmsApp.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
     cmsApp.registerIcon('church', <FontAwesomeIcon icon={faChurch} size="lg" />);

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import type { DailyReadings, PostContent } from '../interface';
 import churchDetails from '../lib/church_details';
-import { getTag } from '../lib/tags';
+import config from '../lib/config';
 import { isNotEmpty } from '../util/string.util';
 import Layout from './Layout';
 import Footer from './layout/footer/Footer';
@@ -49,7 +49,7 @@ const PageLayout = ({
   recentPosts,
   dailyReadings
 }: PageProps) => {
-  const keywords = tags?.map((tag) => getTag(tag)?.name).filter((keyword) => isNotEmpty(keyword));
+  const keywords = tags?.filter((keyword) => isNotEmpty(keyword));
   return (
     <Layout>
       <BasicMeta url={url} title={title} keywords={keywords} description={description} />
@@ -79,7 +79,7 @@ const PageLayout = ({
       >
         {children}
       </PageView>
-      <Footer churchDetails={churchDetails} />
+      <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} />
     </Layout>
   );
 };

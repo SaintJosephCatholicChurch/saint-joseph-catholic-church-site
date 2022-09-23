@@ -67,16 +67,6 @@ const config: CmsConfig = {
               widget: 'string'
             },
             {
-              name: 'mission_statement',
-              label: 'Mission Statement',
-              widget: 'text'
-            },
-            {
-              name: 'vision_statement',
-              label: 'Vision Statement',
-              widget: 'text'
-            },
-            {
               name: 'address',
               label: 'Address',
               widget: 'string'
@@ -174,6 +164,16 @@ const config: CmsConfig = {
               name: 'online_giving_url',
               label: 'Online Giving URL',
               widget: 'string'
+            },
+            {
+              name: 'mission_statement',
+              label: 'Mission Statement',
+              widget: 'text'
+            },
+            {
+              name: 'vision_statement',
+              label: 'Vision Statement',
+              widget: 'text'
             }
           ]
         },
@@ -195,6 +195,9 @@ const config: CmsConfig = {
           label: 'Parish Bulletins',
           file: 'content/bulletins.json',
           description: 'Parish bulletins',
+          editor: {
+            preview: false
+          },
           fields: [
             {
               name: 'bulletins',
@@ -435,11 +438,11 @@ const config: CmsConfig = {
             label: 'Tag',
             name: 'tag',
             widget: 'relation',
-            collection: 'meta',
+            collection: 'tags',
             file: 'tags',
-            search_fields: ['tags.*.name'],
-            display_fields: ['tags.*.name'],
-            value_field: 'tags.*.slug'
+            search_fields: ['tags.*.tag'],
+            display_fields: ['tags.*.tag'],
+            value_field: 'tags.*.tag'
           }
         },
         {
@@ -480,23 +483,6 @@ const config: CmsConfig = {
           time_format: false
         },
         {
-          name: 'tags',
-          label: 'Tags',
-          label_singular: 'Tag',
-          widget: 'list',
-          summary: '{{fields.tag}}',
-          field: {
-            name: 'tag',
-            label: 'Tag',
-            widget: 'relation',
-            collection: 'meta',
-            file: 'tags',
-            search_fields: ['tags.*.name'],
-            display_fields: ['tags.*.name'],
-            value_field: 'tags.*.slug'
-          }
-        },
-        {
           name: 'body',
           label: 'Body',
           widget: 'html'
@@ -504,8 +490,8 @@ const config: CmsConfig = {
       ]
     },
     {
-      name: 'meta',
-      label: 'Meta',
+      name: 'tags',
+      label: 'Tags',
       icon: 'tag',
       delete: false,
       editor: {
@@ -515,7 +501,7 @@ const config: CmsConfig = {
         {
           name: 'tags',
           label: 'Tags',
-          file: 'content/meta/tags.yml',
+          file: 'content/meta/tags.json',
           description: 'List of tags',
           fields: [
             {
@@ -523,18 +509,12 @@ const config: CmsConfig = {
               label: 'Tags',
               label_singular: 'Tag',
               widget: 'list',
+              summary: '{{tag}}',
               fields: [
                 {
-                  name: 'slug',
-                  label: 'Slug',
-                  widget: 'string',
-                  hint: 'The part of a URL identifies the tag'
-                },
-                {
-                  name: 'name',
-                  label: 'Display Name',
-                  widget: 'string',
-                  hint: 'Tag name for displaying on the site'
+                  name: 'tag',
+                  label: 'Tag',
+                  widget: 'string'
                 }
               ]
             }
@@ -588,15 +568,51 @@ const config: CmsConfig = {
                 label: 'Keyword',
                 widget: 'string'
               }
+            },
+            {
+              name: 'posts_per_page',
+              label: 'News Posts Per Page',
+              widget: 'number'
+            },
+            {
+              name: 'privacy_policy_url',
+              label: 'Privacy Policy URL',
+              widget: 'string'
             }
           ]
         },
         {
           name: 'menu',
-          label: 'Menu',
+          label: 'Menu & Logo',
           file: 'content/menu.json',
           description: 'Parish bulletins',
+          editor: {
+            preview: true
+          },
           fields: [
+            {
+              name: 'logo',
+              label: 'Logo',
+              widget: 'object',
+              fields: [
+                {
+                  name: 'primary',
+                  label: 'Primary',
+                  widget: 'string'
+                },
+                {
+                  name: 'secondary',
+                  label: 'Secondary',
+                  widget: 'string'
+                }
+              ]
+            },
+            {
+              name: 'online_giving_button_text',
+              label: 'Online Giving Button Text',
+              widget: 'string',
+              hint: 'Online giving link is set in Church > Church Details'
+            },
             {
               name: 'menu_items',
               label: 'Menu Items',

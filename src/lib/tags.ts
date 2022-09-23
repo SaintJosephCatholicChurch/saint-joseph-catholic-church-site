@@ -1,20 +1,5 @@
-import tags from '../../content/meta/tags.yml';
-import type { TagContent } from '../interface';
+import tags from '../../content/meta/tags.json';
 
-const tagMap: { [key: string]: TagContent } = generateTagMap();
-
-function generateTagMap(): { [key: string]: TagContent } {
-  let result: { [key: string]: TagContent } = {};
-  for (const tag of tags.tags) {
-    result[tag.slug] = tag;
-  }
-  return result;
-}
-
-export function getTag(slug: string) {
-  return tagMap[slug];
-}
-
-export function listTags(): TagContent[] {
-  return tags.tags;
+export function listTags(): string[] {
+  return tags.tags.map(({ tag }) => tag);
 }

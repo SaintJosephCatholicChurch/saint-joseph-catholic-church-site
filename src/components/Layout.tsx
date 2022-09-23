@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import Head from 'next/head';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
+import churchDetails from '../lib/church_details';
 
 const StyledLayout = styled('div')(
   ({ theme }) => `
@@ -53,7 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
           <meta name="theme-color" content="#bc2f3b" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          <meta name="description" content="Saint Joseph Catholic Church" />
+          <meta name="description" content={churchDetails.name} />
         </Head>
         <div id="back-to-top-anchor" />
         <Navigation />

@@ -30,7 +30,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content,
       hideHeader
       {...sidebarProps}
     >
-      <PostView title={title} date={date} image={image}>
+      <PostView title={title} date={date} image={image} tags={tags}>
         <div
           dangerouslySetInnerHTML={{
             __html: content

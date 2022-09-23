@@ -84,6 +84,7 @@ export interface ChurchDetails {
   readonly contacts?: { title: string; name: string }[];
   readonly facebook_page: string;
   readonly google_map_location: string;
+  readonly online_giving_url: string;
 }
 
 export interface Bulletin {
@@ -148,6 +149,7 @@ export interface SiteConfig {
   readonly site_image: string;
   readonly site_keywords: string[];
   readonly posts_per_page: number;
+  readonly privacy_policy_url: string;
 }
 
 export interface MenuItem extends MenuLink {
@@ -160,9 +162,10 @@ export interface MenuLink {
   readonly page?: string;
 }
 
-export interface TagContent {
-  readonly slug: string;
-  readonly name: string;
+export interface MenuData {
+  logo: LogoDetails;
+  online_giving_button_text: string;
+  menu_items: MenuItem[];
 }
 
 export type ContentType = 'News' | 'Page' | 'Bulletin';
@@ -179,4 +182,9 @@ export interface SearchableEntry {
   readonly type: ContentType;
   readonly priority?: boolean;
   readonly date?: string;
+}
+
+export interface LogoDetails {
+  readonly primary: string;
+  readonly secondary: string;
 }

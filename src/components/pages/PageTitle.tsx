@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 import transientOptions from '../../util/transientOptions';
 
 interface StyledHeaderProps {
@@ -39,7 +39,7 @@ const StyledTitle = styled(
 );
 
 interface PostTitleProps {
-  title: string;
+  title: ReactNode;
   disableMargin?: boolean;
   enableMarginTop?: boolean;
 }

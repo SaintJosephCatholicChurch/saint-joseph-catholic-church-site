@@ -58,9 +58,10 @@ const StyledFooterContents = styled('div')(
 interface FooterProps {
   styles?: StylesConfig;
   churchDetails: ChurchDetails;
+  privacyPolicyLink: string;
 }
 
-const Footer = ({ styles, churchDetails }: FooterProps) => {
+const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
   return (
     <footer>
       <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
@@ -78,7 +79,7 @@ const Footer = ({ styles, churchDetails }: FooterProps) => {
           </StyledFooterContents>
         </Container>
       </StyledFooterContainerWrapper>
-      <Copyright />
+      <Copyright privacyPolicyLink={privacyPolicyLink} />
     </footer>
   );
 };

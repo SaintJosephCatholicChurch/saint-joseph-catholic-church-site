@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { memo, useMemo } from 'react';
 import type { HomePageData, PostContent, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
+import config from '../../lib/config';
 import transientOptions from '../../util/transientOptions';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
@@ -138,7 +139,7 @@ const HomepageView = memo(
             </StyledWidgetSectionContent>
           </Container>
         </StyledNewsAndEventsWrapper>
-        <Footer churchDetails={churchDetails} />
+        <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} />
       </StyledHomepageView>
     );
   }

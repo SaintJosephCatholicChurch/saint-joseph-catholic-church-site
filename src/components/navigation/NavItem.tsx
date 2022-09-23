@@ -1,7 +1,7 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import type { MenuItem, MenuLink } from '../../interface';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
@@ -36,6 +36,10 @@ const StyledUnderline = styled('div')`
   background: #ffffff;
 `;
 
+interface StyledPopUpMenuProps {
+  $open: boolean;
+}
+
 const StyledPopUpMenu = styled('div')`
   position: absolute;
   display: flex;
@@ -43,17 +47,15 @@ const StyledPopUpMenu = styled('div')`
   background: #f2f2f2;
   box-shadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
   top: 52px;
+  zindex: 900;
 `;
-
-interface NavItemProps {
-  item: MenuItem;
-}
 
 function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
   return Boolean('menu_links' in link && (link as MenuItem).menu_links?.length);
 }
 
 interface HoverState {
+  keyboardPress: boolean;
   buttonClick: boolean;
   button: boolean;
   menu: boolean;
@@ -61,11 +63,19 @@ interface HoverState {
   text: boolean;
 }
 
-const NavItem = ({ item }: NavItemProps) => {
+interface NavItemProps {
+  item: MenuItem;
+  size?: 'small' | 'normal';
+}
+
+const NavItem = ({ item, size }: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
-
+  const buttonRef = useRef<HTMLAnchorElement>();
+  const activeMenuItemRef = useRef<HTMLButtonElement>();
+  const [keyboardSelectedIndex, setKeyboardSelectedIndex] = useState(-1);
   const [open, setOpen] = useState<HoverState>({
+    keyboardPress: false,
     buttonClick: false,
     button: false,
     menu: false,
@@ -95,21 +105,120 @@ const NavItem = ({ item }: NavItemProps) => {
 
   const handleClose = useCallback(() => {
     setOpen({
+      keyboardPress: false,
       buttonClick: false,
       button: false,
       menu: false,
       icon: false,
       text: false
     });
+    setKeyboardSelectedIndex(-1);
   }, []);
 
   const isLargeScreen = useMediaQueryUp('lg');
 
   const isOpen = useMemo(
-    () => (!isLargeScreen && open.buttonClick) || open.button || open.menu || open.icon || open.text,
-    [isLargeScreen, open.button, open.buttonClick, open.icon, open.menu, open.text]
+    () =>
+      open.keyboardPress || (!isLargeScreen && open.buttonClick) || open.button || open.menu || open.icon || open.text,
+    [isLargeScreen, open.button, open.buttonClick, open.icon, open.keyboardPress, open.menu, open.text]
   );
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
+
+  const handleOnKeyDown = useCallback(
+    (type: keyof HoverState) => (event: KeyboardEvent<HTMLAnchorElement>) => {
+      if (event.key === 'Enter') {
+        setOpen({
+          ...open,
+          [type]: !open[type]
+        });
+        return;
+      }
+
+      if (event.key === 'ArrowDown') {
+        if (!isOpen) {
+          setOpen({
+            ...open,
+            [type]: true
+          });
+          return;
+        }
+
+        setKeyboardSelectedIndex(0);
+        setTimeout(() => {
+          activeMenuItemRef.current?.focus();
+        }, 10);
+        return;
+      }
+
+      if (event.key === 'Tab' && !event.shiftKey && isOpen) {
+        setKeyboardSelectedIndex(0);
+      }
+    },
+    [isOpen, open]
+  );
+
+  const handleMenuLinkKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (event.key === 'ArrowDown') {
+        if (!isOpen) {
+          return;
+        }
+
+        if (keyboardSelectedIndex + 1 >= (item.menu_links?.length ?? 0)) {
+          return;
+        }
+
+        setKeyboardSelectedIndex(keyboardSelectedIndex + 1);
+        setTimeout(() => {
+          activeMenuItemRef.current?.focus();
+        }, 10);
+        return;
+      }
+
+      if (event.key === 'ArrowUp') {
+        if (!isOpen) {
+          return;
+        }
+
+        if (keyboardSelectedIndex <= 0) {
+          handleClose();
+          buttonRef.current?.focus();
+          return;
+        }
+
+        setKeyboardSelectedIndex(keyboardSelectedIndex - 1);
+        setTimeout(() => {
+          activeMenuItemRef.current?.focus();
+        }, 10);
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        if (!isOpen) {
+          return;
+        }
+
+        if (event.shiftKey) {
+          if (keyboardSelectedIndex <= 0) {
+            handleClose();
+            return;
+          }
+
+          setKeyboardSelectedIndex(keyboardSelectedIndex - 1);
+          return;
+        }
+
+        if (keyboardSelectedIndex + 1 >= (item.menu_links?.length ?? 0)) {
+          handleClose();
+          return;
+        }
+
+        setKeyboardSelectedIndex(keyboardSelectedIndex + 1);
+        return;
+      }
+    },
+    [handleClose, isOpen, item.menu_links?.length, keyboardSelectedIndex]
+  );
 
   useEffect(() => {
     if (debouncedIsOpen) {
@@ -154,10 +263,11 @@ const NavItem = ({ item }: NavItemProps) => {
   return (
     <StyledNavItem>
       <Button
+        ref={buttonRef}
         onClick={handleOnClick(item, 'buttonClick')}
+        onKeyDown={handleOnKeyDown('keyboardPress')}
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
-        onBlur={handleClose}
         size="large"
         target={url?.startsWith('http') ? '_blank' : undefined}
         href={url}
@@ -171,6 +281,15 @@ const NavItem = ({ item }: NavItemProps) => {
           justifyContent: 'center',
           gap: '2px',
           color: selected ? '#ffffff' : '#fde7a5',
+          ...(debouncedIsOpen
+            ? {
+                color: '#ffffff',
+                backgroundColor: '#d34f5a',
+                '.menu-item-underline': {
+                  width: '90%'
+                }
+              }
+            : {}),
           '&:hover': {
             color: '#ffffff',
             backgroundColor: '#d34f5a',
@@ -178,6 +297,11 @@ const NavItem = ({ item }: NavItemProps) => {
               width: '90%'
             }
           },
+          ...(size
+            ? {
+                padding: '12px 12px 14px'
+              }
+            : {}),
           [theme.breakpoints.down('lg')]: {
             padding: '12px 12px 14px'
           }
@@ -205,8 +329,14 @@ const NavItem = ({ item }: NavItemProps) => {
       </Button>
       {item.menu_links?.length && debouncedIsOpen ? (
         <StyledPopUpMenu onMouseOver={handleOnMouseOver('menu')} onMouseOut={handleOnMouseOut('menu')}>
-          {item.menu_links.map((link) => (
-            <NavLink key={`menu-${item.title}-link-${link.title}`} link={link} onClick={handleOnClick(link, 'menu')} />
+          {item.menu_links.map((link, index) => (
+            <NavLink
+              ref={index === keyboardSelectedIndex ? activeMenuItemRef : undefined}
+              key={`menu-${item.title}-link-${link.title}`}
+              link={link}
+              onClick={handleOnClick(link, 'menu')}
+              onKeyDown={handleMenuLinkKeyDown}
+            />
           ))}
         </StyledPopUpMenu>
       ) : null}

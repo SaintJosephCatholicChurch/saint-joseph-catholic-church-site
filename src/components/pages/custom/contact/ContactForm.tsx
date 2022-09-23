@@ -82,7 +82,11 @@ interface ContactBody {
   comment: string;
 }
 
-const ContactForm = () => {
+interface ContactFormProps {
+  disableForm?: boolean;
+}
+
+const ContactForm = ({ disableForm = false }: ContactFormProps) => {
   const [contactFormData, setContactFormData] = useState<Partial<ContactBody>>({ subject: 'Comment / Question' });
   const [submitted, setSubmitted] = useState<boolean>(false);
   const valid = useMemo(() => {
@@ -162,6 +166,7 @@ const ContactForm = () => {
           required
           size="small"
           onChange={(event) => onChange({ name: event.target.value })}
+          disabled={disableForm}
         />
         <TextField
           name="email"
@@ -172,8 +177,9 @@ const ContactForm = () => {
           required
           size="small"
           onChange={(event) => onChange({ email: event.target.value })}
+          disabled={disableForm}
         />
-        <FormControl fullWidth required size="small">
+        <FormControl fullWidth required size="small" disabled={disableForm}>
           <InputLabel id="subject-select-label">Subject</InputLabel>
           <Select
             name="subject"
@@ -198,11 +204,12 @@ const ContactForm = () => {
           required
           size="small"
           onChange={(event) => onChange({ comment: event.target.value })}
+          disabled={disableForm}
         />
         <Button
           type="submit"
           variant="contained"
-          disabled={!valid}
+          disabled={disableForm || !valid}
           sx={{
             width: '150px',
             backgroundColor: '#bf303c',

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { LogoDetails } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
@@ -14,19 +15,20 @@ const StyledHeaderLink = styled('a')`
 interface LogoWrapperProps {
   $trigger: boolean;
   $responsive: boolean;
+  $size: 'small' | 'normal';
 }
 
 const StyledLogoWrapper = styled(
   'div',
   transientOptions
 )<LogoWrapperProps>(
-  ({ theme, $trigger, $responsive }) => `
+  ({ theme, $trigger, $responsive, $size }) => `
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: all 250ms ease;
 
-    transform: ${$trigger ? 'scale(0.75)' : 'scale(1)'};
+    transform: ${$size === 'small' || $trigger ? 'scale(0.75)' : 'scale(1)'};
     ${theme.breakpoints.down('lg')} {
       transform: ${$responsive ? 'scale(0.75)' : 'scale(1)'};
     }
@@ -36,15 +38,16 @@ const StyledLogoWrapper = styled(
 interface LogoProps {
   trigger?: boolean;
   responsive?: boolean;
+  size?: 'small' | 'normal';
+  details: LogoDetails;
 }
 
-const Logo = ({ trigger = false, responsive = true }: LogoProps) => {
-  // TODO: Make configurable
+const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal' }: LogoProps) => {
   return (
     <StyledHeaderLink href="/">
-      <StyledLogoWrapper $trigger={trigger} $responsive={responsive}>
-        <LogoPrimaryText>St. Joseph</LogoPrimaryText>
-        <LogoSecondaryText>Catholic Church</LogoSecondaryText>
+      <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
+        <LogoPrimaryText>{primary}</LogoPrimaryText>
+        <LogoSecondaryText>{secondary}</LogoSecondaryText>
       </StyledLogoWrapper>
     </StyledHeaderLink>
   );

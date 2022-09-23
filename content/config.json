@@ -7,5 +7,6 @@
     "church"
   ],
   "posts_per_page": 5,
-  "site_image": "/files/churchslide1.avif"
+  "site_image": "/files/churchslide1.avif",
+  "privacy_policy_url": "/privacy-policy"
 }

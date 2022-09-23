@@ -10,23 +10,21 @@ interface PageProps extends SidebarProps {
   title: string;
   dateString: string;
   slug: string;
-  tags: string[];
   description?: string;
   content: string;
 }
 
-const Page = ({ title, dateString, slug, tags, description = '', content, ...sidebarProps }: PageProps) => {
+const Page = ({ title, dateString, slug, description = '', content, ...sidebarProps }: PageProps) => {
   return (
     <PageLayout
       url={`/pages/${slug}`}
       title={title}
       pageDetails={{ date: parseISO(dateString) }}
-      tags={tags}
       description={description}
       disableTitleMargin
       {...sidebarProps}
     >
-      <PageContentView tags={tags}>
+      <PageContentView>
         <div
           dangerouslySetInnerHTML={{
             __html: content
@@ -70,7 +68,6 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
       dateString: data.date,
       slug: data.slug,
       description: '',
-      tags: data.tags ?? [],
       content,
       ...getSidebarProps()
     }

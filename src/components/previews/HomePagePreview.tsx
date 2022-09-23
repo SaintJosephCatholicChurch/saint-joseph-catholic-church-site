@@ -1,8 +1,13 @@
+import { styled } from '@mui/material/styles';
 import { PreviewTemplateComponentProps } from 'netlify-cms-core';
 import { useMemo } from 'react';
 import type { HomePageData, PostContent } from '../../interface';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
+
+const StyledHomepagePreview = styled('div')`
+  margin-top: -64px;
+`;
 
 const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
   const data = useMemo(() => entry.toJS().data as HomePageData, [entry]);
@@ -62,7 +67,11 @@ const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
   );
 
   return useMemo(
-    () => <HomepageView homePageData={data} times={times} recentPosts={mockRecentPosts} />,
+    () => (
+      <StyledHomepagePreview>
+        <HomepageView homePageData={data} times={times} recentPosts={mockRecentPosts} />
+      </StyledHomepagePreview>
+    ),
     [data, mockRecentPosts]
   );
 };

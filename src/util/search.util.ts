@@ -13,12 +13,18 @@ const NO_DATE_BOOST = 30;
 
 interface SearchScore {
   entry: SearchableEntry;
+  metaScore: number;
   score: number;
   isExactTitleMatch: boolean;
 }
 
 function getSearchScore(words: string[], entry: SearchableEntry): SearchScore {
   let score = 0;
+  let metaScore = 0;
+
+  if (entry.priority) {
+    metaScore += 1;
+  }
 
   for (const word of words) {
     score +=
@@ -35,11 +41,14 @@ function getSearchScore(words: string[], entry: SearchableEntry): SearchScore {
 
   const exactMatchFavorWeight = words.length;
   const exactSearch = words.join(' ');
+  const isExactTitleMatch = Boolean((entry.title.match(new RegExp(`\\b${exactSearch}\\b`, 'gi')) ?? []).length > 0);
   const exactTitleMatchScore =
-    (entry.title.match(new RegExp(`\\b${exactSearch}\\b`, 'gi')) ?? []).length *
-    TITLE_FAVOR_WEIGHT *
-    exactMatchFavorWeight *
-    WHOLE_WORD_MATCH_FAVOR_WEIGHT;
+    (isExactTitleMatch ? 1 : 0) * TITLE_FAVOR_WEIGHT * exactMatchFavorWeight * WHOLE_WORD_MATCH_FAVOR_WEIGHT;
+
+  if (isExactTitleMatch) {
+    metaScore += 1;
+  }
+
   score += exactTitleMatchScore;
   score +=
     (entry.content.match(new RegExp(`\\b${exactSearch}\\b`, 'gi')) ?? []).length *
@@ -57,6 +66,7 @@ function getSearchScore(words: string[], entry: SearchableEntry): SearchScore {
 
   return {
     score,
+    metaScore,
     entry,
     isExactTitleMatch: exactTitleMatchScore > 0
   };
@@ -74,15 +84,11 @@ export function useSearchScores(query: string | null, entries: SearchableEntry[]
 
     const scores = entries.map((entry) => getSearchScore(queryWords, entry)).filter((result) => result.score > 0);
     scores.sort((a, b) => {
-      if (a.entry.priority === b.entry.priority) {
-        return b.score - a.score;
+      if (a.metaScore !== b.metaScore) {
+        return b.metaScore - a.metaScore;
       }
 
-      if (a.entry.priority) {
-        return -1;
-      }
-
-      return 1;
+      return b.score - a.score;
     });
 
     setResults(scores.map(({ entry }) => entry));

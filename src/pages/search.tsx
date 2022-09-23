@@ -151,7 +151,8 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
             .join(' ')}`,
           url: '/contact',
           type: PAGE,
-          priority: true
+          priority: true,
+          showSummary: false
         },
         {
           title: 'Events Calendar',
@@ -165,6 +166,22 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
           title: 'Parish Staff',
           content: `parish staff ${(staff ?? []).map(({ title, name }) => `${title} ${name}`)}`,
           url: '/staff',
+          type: PAGE,
+          priority: true,
+          showSummary: false
+        },
+        {
+          title: 'News',
+          content: `recents news articles`,
+          url: '/news',
+          type: PAGE,
+          priority: true,
+          showSummary: false
+        },
+        {
+          title: 'Parish Bulletins',
+          content: `parish bulletins news`,
+          url: '/parish-bulletins',
           type: PAGE,
           priority: true,
           showSummary: false

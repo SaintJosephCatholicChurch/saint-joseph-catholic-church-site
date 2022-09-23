@@ -1,20 +1,14 @@
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
+import { StyledLink } from './common/StyledLink';
+
+const StyledTagLink = styled(StyledLink)`
+  font-size: 15px;
+`;
 
 interface TagLinkProps {
   tag?: string;
 }
-
-const StyledLink = styled('div')`
-  color: #bf303c;
-  font-size: 15px;
-  &:hover {
-    color: #822129;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
 
 const TagLink = ({ tag }: TagLinkProps) => {
   if (!tag) {
@@ -23,7 +17,7 @@ const TagLink = ({ tag }: TagLinkProps) => {
 
   return (
     <Link href={`/posts/tags/${tag}`}>
-      <StyledLink>{`#${tag}`}</StyledLink>
+      <StyledTagLink>{`#${tag}`}</StyledTagLink>
     </Link>
   );
 };

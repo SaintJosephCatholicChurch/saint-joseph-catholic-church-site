@@ -1,17 +1,15 @@
-import addMonths from 'date-fns/addMonths';
-import addWeeks from 'date-fns/addWeeks';
-import isWithinInterval from 'date-fns/isWithinInterval';
+import differenceInDays from 'date-fns/differenceInDays';
 import parseISO from 'date-fns/parseISO';
 import { useEffect, useState } from 'react';
 import { SearchableEntry } from '../interface';
-import { isNotNullish } from './null.util';
-import { isEmpty } from './string.util';
+import { isEmpty, isNotEmpty } from './string.util';
 
 const PARTIAL_MATCH_WORD_LENGTH_THRESHOLD = 5;
 const WHOLE_WORD_MATCH_FAVOR_WEIGHT = 2;
-const TITLE_FAVOR_WEIGHT = 10;
-const IN_LAST_WEEK_AMOUNT = 10;
-const IN_LAST_MONTH_AMOUNT = 5;
+const TITLE_FAVOR_WEIGHT = 15;
+const RECENT_DAYS_MULTIPLIER = 2;
+const RECENT_DAYS = 62;
+const NO_DATE_BOOST = 30;
 
 interface SearchScore {
   entry: SearchableEntry;
@@ -48,18 +46,13 @@ function getSearchScore(words: string[], entry: SearchableEntry): SearchScore {
     exactMatchFavorWeight *
     WHOLE_WORD_MATCH_FAVOR_WEIGHT;
 
-  if (score > 0) {
-    if (isNotNullish(entry.date)) {
-      score += isWithinInterval(parseISO(entry.date), { start: addMonths(new Date(), -1), end: new Date() })
-        ? IN_LAST_MONTH_AMOUNT
-        : 0;
+  if (score > 0 && isNotEmpty(entry.date)) {
+    let daysSince = differenceInDays(new Date(), parseISO(entry.date));
+    if (daysSince > RECENT_DAYS) {
+      daysSince = RECENT_DAYS;
     }
 
-    if (isNotNullish(entry.date)) {
-      score += isWithinInterval(parseISO(entry.date), { start: addWeeks(new Date(), -1), end: new Date() })
-        ? IN_LAST_WEEK_AMOUNT
-        : 0;
-    }
+    score += (RECENT_DAYS - daysSince) * RECENT_DAYS_MULTIPLIER;
   }
 
   return {
@@ -81,11 +74,7 @@ export function useSearchScores(query: string | null, entries: SearchableEntry[]
 
     const scores = entries.map((entry) => getSearchScore(queryWords, entry)).filter((result) => result.score > 0);
     scores.sort((a, b) => {
-      if (
-        a.entry.priority === b.entry.priority ||
-        (a.entry.priority && b.isExactTitleMatch) ||
-        (b.entry.priority && a.isExactTitleMatch)
-      ) {
+      if (a.entry.priority === b.entry.priority) {
         return b.score - a.score;
       }
 

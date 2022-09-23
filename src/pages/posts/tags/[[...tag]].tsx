@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
+import { StyledLink } from '../../../components/common/StyledLink';
 import PageLayout from '../../../components/PageLayout';
 import PageTitle from '../../../components/pages/PageTitle';
 import TagPostList from '../../../components/TagPostList';
@@ -12,15 +13,6 @@ import { listTags } from '../../../lib/tags';
 
 const StyledTitle = styled('div')`
   display: flex;
-`;
-
-const StyledAllPagesLink = styled('div')`
-  color: #bf303c;
-  &:hover {
-    color: #822129;
-    text-decoration: underline;
-    cursor: pointer;
-  }
 `;
 
 interface TagsIndexProps {
@@ -41,7 +33,7 @@ const TagsIndex = ({ posts, tag, pagination, page }: TagsIndexProps) => {
         title={
           <StyledTitle>
             <Link href="/posts">
-              <StyledAllPagesLink>News</StyledAllPagesLink>
+              <StyledLink>News</StyledLink>
             </Link>
             &nbsp;/&nbsp;#{tag}
           </StyledTitle>

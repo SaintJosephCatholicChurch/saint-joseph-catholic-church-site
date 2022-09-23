@@ -178,6 +178,7 @@ export interface SearchableEntry {
   readonly subtitle?: string;
   readonly content: string;
   readonly summary?: string;
+  readonly showSummary?: boolean;
   readonly url: string;
   readonly type: ContentType;
   readonly priority?: boolean;

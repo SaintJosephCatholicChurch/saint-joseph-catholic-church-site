@@ -6,8 +6,10 @@ import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { addMonths } from 'date-fns';
+import Link from 'next/link';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useMediaQueryUp } from '../../util/useMediaQuery';
+import { StyledLink } from '../common/StyledLink';
 import CalendarEventDialog from '../events/CalendarEventDialog';
 import CalendarEventPopover from '../events/CalendarEventPopover';
 import CalendarEventRenderer from '../events/CalendarEventRenderer';
@@ -37,6 +39,19 @@ const StyledCalendarWrapper = styled('div')`
     margin-bottom: 0;
   }
 `;
+
+const StyledViewCalendarLink = styled(StyledLink)(
+  ({ theme }) => `
+    font-weight: 500;
+    font-size: 16px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+
+    margin-top: 8px;
+    ${theme.breakpoints.down('sm')} {
+      margin-top: 16px;
+    }
+  `
+);
 
 const UpcomingEvents = memo(() => {
   const calendarRef = useRef<FullCalendar>();
@@ -98,6 +113,9 @@ const UpcomingEvents = memo(() => {
       <StyledUpcomingEvents>
         <StyledUpcomingEventsTitle>Upcoming Events</StyledUpcomingEventsTitle>
         <StyledCalendarWrapper>{calendar}</StyledCalendarWrapper>
+        <Link href="/events">
+          <StyledViewCalendarLink>View Calendar</StyledViewCalendarLink>
+        </Link>
       </StyledUpcomingEvents>
       {isMediumOrBiggerScreen ? (
         <CalendarEventPopover eventInfo={clickedEvent} open={clickedEventModalOpen} onClose={handlePopoverClose} />

@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles';
+import Link from 'next/link';
 import { memo } from 'react';
 import { PostContent } from '../../../interface';
+import { StyledLink } from '../../common/StyledLink';
 import RecentNewsPost from './RecentNewsPost';
 
 const StyledRecentNews = styled('div')(
@@ -30,6 +32,20 @@ const StyledPosts = styled('div')`
   gap: 12px;
 `;
 
+const StyledViewCalendarLink = styled(StyledLink)(
+  ({ theme }) => `
+    font-weight: 500;
+    font-size: 16px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+
+    margin-top: 8px;
+    ${theme.breakpoints.down('sm')} {
+      margin-top: 12px;
+      font-size: 16px;
+    }
+  `
+);
+
 interface RecentNewsProps {
   posts: PostContent[];
   size?: 'small' | 'large';
@@ -44,6 +60,9 @@ const RecentNews = memo(({ posts, size }: RecentNewsProps) => {
           <RecentNewsPost key={`recent-news-${index}`} post={post} size={size} />
         ))}
       </StyledPosts>
+      <Link href="/news">
+        <StyledViewCalendarLink>View More News</StyledViewCalendarLink>
+      </Link>
     </StyledRecentNews>
   );
 });

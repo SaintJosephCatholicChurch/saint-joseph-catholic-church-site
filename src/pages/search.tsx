@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import PageLayout from '../components/PageLayout';
 import SearchResult from '../components/search/SearchResult';
 import SearchBox from '../components/SearchBox';
+import { SEARCH_RESULTS_TO_SHOW } from '../constants';
 import { BULLETIN, NEWS, PAGE, SearchableEntry } from '../interface';
 import { fetchBulletinsMetaData } from '../lib/bulletins';
 import churchDetails from '../lib/church_details';
@@ -50,9 +51,14 @@ const Search = ({ searchableEntries }: SearchProps) => {
       </StyledSearchQueryTitle>
       <StyledSearch>
         {searchResults?.length > 0 ? (
-          searchResults.map((entry) => {
-            let summary = entry.summary;
-            if (!summary) {
+          [...Array(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
+            if (searchResults.length <= index) {
+              return;
+            }
+
+            const entry = searchResults[index];
+            let { summary, showSummary = true } = entry;
+            if (!summary && showSummary) {
               const match = new RegExp(
                 `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                 'ig'
@@ -121,14 +127,16 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
           content: 'live stream facebook',
           url: '/live-stream',
           type: PAGE,
-          priority: true
+          priority: true,
+          showSummary: false
         },
         {
           title: 'Mass & Confession Times',
           content: 'mass times confession times adoration times stations of the cross parish office hours schedule',
           url: '/mass-confession-times',
           type: PAGE,
-          priority: true
+          priority: true,
+          showSummary: false
         },
         {
           title: 'Contact',
@@ -150,14 +158,16 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
           content: 'events calendar event schedule upcoming events',
           url: '/events',
           type: PAGE,
-          priority: true
+          priority: true,
+          showSummary: false
         },
         {
           title: 'Parish Staff',
           content: `parish staff ${(staff ?? []).map(({ title, name }) => `${title} ${name}`)}`,
           url: '/staff',
           type: PAGE,
-          priority: true
+          priority: true,
+          showSummary: false
         }
       ]
     }

@@ -46,7 +46,7 @@ const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
             }
           }}
         >
-          View past streams on facebook
+          View past streams
         </Button>
       </StyledLiveStreamPageContent>
     </PageLayout>

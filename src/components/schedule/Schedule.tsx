@@ -229,7 +229,8 @@ const Schedule = ({
                 fontSize: '20px',
                 backgroundColor: '#bc2f3b',
                 '&:hover': {
-                  backgroundColor: '#d24c57'
+                  backgroundColor: '#d24c57',
+                  color: '#ffffff'
                 },
                 '.MuiButton-startIcon > *:nth-of-type(1)': {
                   fontSize: '24px'

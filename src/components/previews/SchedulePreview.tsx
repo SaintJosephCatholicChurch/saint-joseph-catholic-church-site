@@ -6,7 +6,7 @@ import { useWindowEvent } from '../../util/window.util';
 import ScheduleWidget from '../schedule/ScheduleWidget';
 
 const SchedulePreview = ({ entry }: PreviewTemplateComponentProps) => {
-  const data = useMemo(() => entry.toJS().data.times as Times[], [entry]);
+  const data = useMemo(() => (entry.toJS().data.times ?? []) as Times[], [entry]);
   const [tab, setTab] = useState(0);
 
   const handleTabChange = useCallback((index: number) => {

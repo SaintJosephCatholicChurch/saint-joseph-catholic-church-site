@@ -17,7 +17,7 @@ import PagePreview from '../components/previews/PagePreview';
 import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
-import cmsApp from './CMSApp';
+import loadCmsApp from './CMSApp';
 import config from './config';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
@@ -25,6 +25,7 @@ import ScheduleWidget from './widgets/times/TimesWidget';
 
 const CMSView = memo(() => {
   useEffect(() => {
+    const cmsApp = loadCmsApp();
     if (!cmsApp) {
       return;
     }

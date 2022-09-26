@@ -13,6 +13,10 @@
       "url": "/live-stream"
     },
     {
+      "title": "Bulletins",
+      "url": "/parish-bulletins"
+    },
+    {
       "title": "Parish",
       "menu_links": [
         {
@@ -30,10 +34,6 @@
         {
           "page": "mass-confession-times",
           "title": "Mass & Confession Times"
-        },
-        {
-          "title": "Parish Bulletins",
-          "url": "/parish-bulletins"
         },
         {
           "title": "Parish History",

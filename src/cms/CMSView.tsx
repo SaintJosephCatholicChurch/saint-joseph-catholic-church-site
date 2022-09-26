@@ -8,7 +8,6 @@ import {
   faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cmsApp from 'netlify-cms-app';
 import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
 import { ComponentType, memo, useEffect } from 'react';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
@@ -18,6 +17,7 @@ import PagePreview from '../components/previews/PagePreview';
 import PostPreview from '../components/previews/PostPreview';
 import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
+import cmsApp from './CMSApp';
 import config from './config';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';

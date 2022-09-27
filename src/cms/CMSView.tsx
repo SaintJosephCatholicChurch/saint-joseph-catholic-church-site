@@ -9,7 +9,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
-import { ComponentType, memo, useEffect } from 'react';
+import { ComponentType, useEffect } from 'react';
+import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
 import NavigationPreview from '../components/previews/NavigationPreview';
@@ -19,12 +20,18 @@ import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
 import loadCmsApp from './CMSApp';
 import config from './config';
+import ContactFormResponses from './pages/ContactFormResponses';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-const CMSView = memo(() => {
+const CMSView = () => {
   useEffect(() => {
+    const root = document.getElementById('cms-root');
+    if (root) {
+      return;
+    }
+
     const cmsApp = loadCmsApp();
     if (!cmsApp) {
       return;
@@ -73,6 +80,12 @@ const CMSView = memo(() => {
       'https://drive.google.com/',
       'clipboard-question'
     );
+    // cmsApp.registerAdditionalLink(
+    //   'contact-form-responses',
+    //   'Contact Form Response',
+    //   ContactFormResponses,
+    //   'clipboard-question'
+    // );
   }, []);
 
   return (
@@ -90,7 +103,7 @@ const CMSView = memo(() => {
       `}</style>
     </div>
   );
-});
+};
 
 CMSView.displayName = 'CMSView';
 

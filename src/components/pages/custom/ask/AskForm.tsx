@@ -134,7 +134,7 @@ const AskForm = () => {
           }
         );
       } catch (error) {
-        console.log('There was an error', error);
+        console.error('There was an error', error);
       }
 
       setSubmitted(true);

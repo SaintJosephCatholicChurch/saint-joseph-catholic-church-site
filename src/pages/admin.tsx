@@ -10,7 +10,7 @@ const Admin = () => {
     []
   );
 
-  return <DynamicComponentWithNoSSR />;
+  return useMemo(() => <DynamicComponentWithNoSSR key="admin" />, [DynamicComponentWithNoSSR]);
 };
 
 export default Admin;

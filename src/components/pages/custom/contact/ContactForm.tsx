@@ -1,3 +1,4 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -5,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { FormEventHandler, useCallback, useMemo, useState } from 'react';
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
@@ -138,7 +138,7 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           }
         );
       } catch (error) {
-        console.log('There was an error', error);
+        console.error('There was an error', error);
       }
 
       setSubmitted(true);

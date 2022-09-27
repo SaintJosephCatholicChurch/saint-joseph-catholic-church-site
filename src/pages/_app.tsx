@@ -4,6 +4,7 @@ import '@fullcalendar/list/main.css';
 import '@fullcalendar/timegrid/main.css';
 import { AppProps } from 'next/app';
 import 'normalize.css';
+import { useMemo } from 'react';
 import '../../public/styles/global.css';
 import { disableReactDevTools } from '../util/devtools.util';
 
@@ -12,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const App = ({ Component, pageProps }: AppProps) => {
-  return <Component {...pageProps} />;
+  return useMemo(() => <Component {...pageProps} />, [Component, pageProps]);
 };
 
 export default App;

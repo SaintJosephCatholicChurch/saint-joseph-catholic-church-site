@@ -30,7 +30,8 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
         bottom: 0,
         fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
         fontSize: '17px',
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '24px auto',
         alignItems: 'center',
         padding: '1px 36px 0',
         gap: '8px',
@@ -56,14 +57,24 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
           width: 120
         },
         [theme.breakpoints.down('sm')]: {
-          width: 100
+          width: 100,
+          gridTemplateColumns: '16px auto',
+          gap: '6px'
         },
         [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
           padding: '1px 16px 0'
         }
       }}
     >
-      <FontAwesomeIcon icon={faHandHoldingDollar} style={{ width: '24px' }} />
+      <FontAwesomeIcon
+        icon={faHandHoldingDollar}
+        style={{
+          width: '24px',
+          [theme.breakpoints.down('sm')]: {
+            width: '16px'
+          }
+        }}
+      />
       {title}
     </Button>
   );

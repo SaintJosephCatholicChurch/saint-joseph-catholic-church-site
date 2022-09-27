@@ -1,7 +1,7 @@
 import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 
@@ -10,6 +10,15 @@ interface GiveButtonProps {
   onlineGivingUrl: string;
   size?: 'small' | 'normal';
 }
+
+const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
+  ({ theme }) => `
+    width: 24px;
+    ${theme.breakpoints.down('sm')} {
+      width: 16px;
+    }
+  `
+);
 
 const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps) => {
   const theme = useTheme();
@@ -66,15 +75,7 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
         }
       }}
     >
-      <FontAwesomeIcon
-        icon={faHandHoldingDollar}
-        style={{
-          width: '24px',
-          [theme.breakpoints.down('sm')]: {
-            width: '16px'
-          }
-        }}
-      />
+      <StyledFontAwesomeIcon icon={faHandHoldingDollar} />
       {title}
     </Button>
   );

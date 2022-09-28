@@ -6,6 +6,7 @@
     "build-analyze": "cross-env ANALYZE=true next build",
     "build": "next build",
     "bulletins": "ts-node ./scripts/pdf-to-images.ts",
+    "redirects": "ts-node ./scripts/generate-redirects.ts",
     "bulletins-ci": "ts-node ./scripts/pdf-to-images.ts -ci",
     "dev": "cross-env NODE_ENV=development next dev",
     "export": "cross-env NODE_ENV=production next build && next export -o ./dist",

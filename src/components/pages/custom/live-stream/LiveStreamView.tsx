@@ -18,7 +18,7 @@ const LiveStreamView = () => {
 
   const LiveStreamIFrameNoSSR = useMemo(
     () =>
-      dynamic(() => import('./LiveStreamIframe'), {
+      dynamic(() => import('./LiveStreamIFrame'), {
         ssr: false
       }),
     []

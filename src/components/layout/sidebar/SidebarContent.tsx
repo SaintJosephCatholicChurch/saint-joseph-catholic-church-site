@@ -44,7 +44,7 @@ const SidebarContent = ({ recentPosts, dailyReadings, hideSearch = false }: Side
     <StyledSidebar>
       {!hideSearch ? (
         <StyledSection key="search-section">
-          <SearchBox disableMargin />
+          <SearchBox value='' disableMargin />
         </StyledSection>
       ) : null}
       {dailyReadings ? (

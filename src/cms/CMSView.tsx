@@ -52,7 +52,7 @@ const CMSView = () => {
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
     cmsApp.registerPreviewStyle('/styles/content.module.css');
-    cmsApp.registerPreviewTemplate('posts', PostPreview);
+    cmsApp.registerPreviewTemplate('news', PostPreview);
     cmsApp.registerPreviewTemplate('pages', PagePreview);
     cmsApp.registerPreviewTemplate('homepage', HomePagePreview);
     cmsApp.registerPreviewTemplate('times', SchedulePreview);

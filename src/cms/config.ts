@@ -432,8 +432,9 @@ const config: CmsConfig = {
       ]
     },
     {
-      name: 'posts',
-      label: 'Posts',
+      name: 'news',
+      label: 'News Posts',
+      label_singular: 'News Post',
       folder: 'content/posts/',
       extension: 'mdx',
       format: 'frontmatter',

@@ -2,6 +2,7 @@ import MuiPagination from '@mui/material/Pagination';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useCallback } from 'react';
+import { useMediaQueryDown } from '../util/useMediaQuery';
 
 const StyledPagination = styled('div')`
   width: 100%;
@@ -20,6 +21,7 @@ interface PaginationProps {
 
 const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps) => {
   const router = useRouter();
+  const isSmallScreen = useMediaQueryDown('sm');
 
   const onChange = useCallback(
     (_event: ChangeEvent, newPage: number) => {
@@ -35,7 +37,7 @@ const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps
 
   return (
     <StyledPagination>
-      <MuiPagination count={pages} defaultPage={current} showFirstButton showLastButton onChange={onChange} />
+      <MuiPagination count={pages} defaultPage={current} siblingCount={1} onChange={onChange} size={isSmallScreen ? "small" : "medium"} />
     </StyledPagination>
   );
 };

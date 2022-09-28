@@ -28,8 +28,8 @@ const PostList = ({ posts, tags, pagination }: PostListProps) => {
       <Pagination
         current={pagination.current}
         pages={pagination.pages}
-        firstPageLink="/posts"
-        pageLink="/posts/page/[page]"
+        firstPageLink="/news"
+        pageLink="/news/page/[page]"
       />
     </StyledPostList>
   );

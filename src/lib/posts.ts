@@ -51,11 +51,7 @@ export function fetchPostContent(): PostContent[] {
 
   const allPostsData: PostContent[] = fetchPostMatter().map(
     ({ fileName, fullPath, matterResult: { data, content } }) => {
-      // TODO Auto generate slugs
-      // const slug = fileName.replace(/\.mdx$/, '');
-      // if (matterData.slug !== slug) {
-      //   throw new Error(`slug field (${slug}) not match with the path of its content source (${matterData.slug})`);
-      // }
+      const slug = fileName.replace(/\.mdx$/, '');
 
       const summaryRegex = /^<p>([\w\W]+?)<\/p>/i;
       let summaryMatch = summaryRegex.exec(content);
@@ -69,6 +65,7 @@ export function fetchPostContent(): PostContent[] {
         fullPath,
         data: {
           ...data,
+          slug,
           image: data.image ?? '',
           tags: data.tags ?? []
         } as PostContentData,

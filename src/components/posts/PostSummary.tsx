@@ -33,7 +33,7 @@ const PostSummary = memo(
 
     const date = useMemo(() => parseISO(dateString), [dateString]);
     return (
-      <Link href={`/posts/${slug}`}>
+      <Link href={`/news/${slug}`}>
         <Button
           sx={{
             textDecoration: 'none',

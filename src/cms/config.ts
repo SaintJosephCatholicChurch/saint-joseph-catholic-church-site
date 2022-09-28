@@ -43,7 +43,7 @@ const config: CmsConfig = {
   slug: {
     encoding: 'ascii',
     clean_accents: true,
-    sanitize_replacement: '_'
+    sanitize_replacement: '-'
   },
   collections: [
     {
@@ -438,15 +438,9 @@ const config: CmsConfig = {
       extension: 'mdx',
       format: 'frontmatter',
       create: true,
-      slug: '{{slug}}',
-      identifier_field: 'slug',
+      identifier_field: 'title',
       summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
       fields: [
-        {
-          name: 'slug',
-          label: 'Slug',
-          widget: 'string'
-        },
         {
           name: 'title',
           label: 'Title',
@@ -472,6 +466,7 @@ const config: CmsConfig = {
           label_singular: 'Tag',
           widget: 'list',
           summary: '{{fields.tag}}',
+          required: false,
           field: {
             label: 'Tag',
             name: 'tag',

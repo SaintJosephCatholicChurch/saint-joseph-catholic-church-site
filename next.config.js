@@ -17,6 +17,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const removeImports = require('next-remove-imports')();
 
+const redirects = [
+  {
+    
+  }
+]
+
 let config = removeImports(
   withTM({
     pageExtensions: ['tsx'],

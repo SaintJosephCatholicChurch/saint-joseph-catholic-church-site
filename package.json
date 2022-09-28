@@ -42,7 +42,7 @@
     "immutable": "3.7.6",
     "is-hotkey": "0.2.0",
     "js-yaml": "4.1.0",
-    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.56.tgz",
+    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.58.tgz",
     "next": "12.2.5",
     "next-pwa": "5.6.0",
     "next-transpile-modules": "9.0.0",

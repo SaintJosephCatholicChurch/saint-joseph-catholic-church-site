@@ -31,10 +31,14 @@ const StyledTitle = styled(
   'h1',
   transientOptions
 )<StyledTitleProps>(
-  ({ $disableMargin }) => `
+  ({ $disableMargin, theme }) => `
     padding: 0;
     margin: ${$disableMargin ? '0' : '16px 0'};
     color: #333;
+
+    ${theme.breakpoints.down('sm')} {
+      font-size: 24px;
+    }
   `
 );
 

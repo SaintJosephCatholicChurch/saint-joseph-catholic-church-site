@@ -10,6 +10,7 @@ import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
 import ScheduleWidget from '../schedule/ScheduleWidget';
 import DailyReadings from '../widgets/DailyReadings';
+import FeaturedLink from '../widgets/FeaturedLink';
 import FeaturedPage from '../widgets/FeaturedPage';
 import RecentNews from '../widgets/recent-news/RecentNews';
 
@@ -101,7 +102,7 @@ interface HomepageViewProps {
 
 const HomepageView = memo(
   ({
-    homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured_page },
+    homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured },
     times,
     recentPosts
   }: HomepageViewProps) => {
@@ -127,7 +128,12 @@ const HomepageView = memo(
           <Container>
             <StyledReadingsWidgetSectionContent>
               <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
-              <FeaturedPage featuredPage={featured_page} isFullWidth />
+              {featured.map((featuredContent, index) => {
+                if (featuredContent.type === 'featured_link') {
+                  return <FeaturedLink key={`page-${index}`} featuredLink={featuredContent} isFullWidth />;
+                }
+                return <FeaturedPage key={`page-${index}`} featuredPage={featuredContent} isFullWidth />;
+              })}
             </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledReadingsAndPageSectionWrapper>

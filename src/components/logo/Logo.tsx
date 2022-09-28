@@ -5,12 +5,13 @@ import transientOptions from '../../util/transientOptions';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
 
-const StyledHeaderLink = styled('a')`
+const StyledHeaderLink = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
   top: -2px;
   position: relative;
+  cursor: pointer;
 `;
 
 interface LogoWrapperProps {

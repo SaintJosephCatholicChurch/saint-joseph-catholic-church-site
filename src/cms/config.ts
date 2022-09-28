@@ -361,32 +361,69 @@ const config: CmsConfig = {
               ]
             },
             {
-              name: 'featured_page',
-              label: 'Featured Page',
-              widget: 'object',
-              summary: '{{fields.page}}',
-              fields: [
+              name: 'featured',
+              label: 'Featured Pages / Links',
+              label_singular: 'Featured Page / Link',
+              widget: 'list',
+              types: [
                 {
-                  name: 'image',
-                  label: 'Image',
-                  widget: 'image',
-                  required: false
+                  label: 'Featured Page',
+                  name: 'featured_page',
+                  widget: 'object',
+                  summary: "{{fields.page | split('|', '$2')}}",
+                  fields: [
+                    {
+                      name: 'image',
+                      label: 'Image',
+                      widget: 'image',
+                      required: false
+                    },
+                    {
+                      name: 'page',
+                      label: 'Page',
+                      widget: 'relation',
+                      collection: 'pages',
+                      search_fields: ['title'],
+                      display_fields: ['title'],
+                      value_field: '{{slug}}|{{title}}'
+                    },
+                    {
+                      name: 'summary',
+                      label: 'Summary',
+                      widget: 'text',
+                      required: false
+                    }
+                  ]
                 },
                 {
-                  name: 'page',
-                  label: 'Page',
-                  widget: 'relation',
-                  collection: 'pages',
-                  search_fields: ['title'],
-                  display_fields: ['title'],
-                  value_field: '{{slug}}|{{title}}',
-                  required: false
-                },
-                {
-                  name: 'summary',
-                  label: 'Summary',
-                  widget: 'text',
-                  required: false
+                  label: 'Featured Link',
+                  name: 'featured_link',
+                  widget: 'object',
+                  summary: "{{fields.title}}",
+                  fields: [
+                    {
+                      name: 'image',
+                      label: 'Image',
+                      widget: 'image',
+                      required: false
+                    },
+                    {
+                      name: 'title',
+                      label: 'Title',
+                      widget: 'string'
+                    },
+                    {
+                      name: 'url',
+                      label: 'URL',
+                      widget: 'string'
+                    },
+                    {
+                      name: 'summary',
+                      label: 'Summary',
+                      widget: 'text',
+                      required: false
+                    }
+                  ]
                 }
               ]
             }
@@ -403,7 +440,7 @@ const config: CmsConfig = {
       create: true,
       slug: '{{slug}}',
       identifier_field: 'slug',
-      summary: '{{title}}',
+      summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
       fields: [
         {
           name: 'slug',
@@ -418,7 +455,8 @@ const config: CmsConfig = {
         {
           name: 'image',
           label: 'Image',
-          widget: 'image'
+          widget: 'image',
+          required: false
         },
         {
           name: 'date',

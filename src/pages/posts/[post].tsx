@@ -9,7 +9,7 @@ import { getSidebarProps, SidebarProps } from '../../lib/sidebar';
 
 interface PostProps extends SidebarProps {
   title: string;
-  image: string;
+  image?: string;
   dateString: string;
   slug: string;
   tags: string[];
@@ -71,7 +71,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
   return {
     props: {
       title: data.title,
-      image: data.image,
+      image: data.image ?? '',
       dateString: data.date,
       slug: data.slug,
       description: '',

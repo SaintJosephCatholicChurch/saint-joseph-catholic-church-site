@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import Link from 'next/link';
 import { LogoDetails } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 import LogoPrimaryText from './LogoPrimaryText';
@@ -44,12 +45,14 @@ interface LogoProps {
 
 const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal' }: LogoProps) => {
   return (
-    <StyledHeaderLink href="/">
-      <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
-        <LogoPrimaryText>{primary}</LogoPrimaryText>
-        <LogoSecondaryText>{secondary}</LogoSecondaryText>
-      </StyledLogoWrapper>
-    </StyledHeaderLink>
+    <Link href="/">
+      <StyledHeaderLink>
+        <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
+          <LogoPrimaryText>{primary}</LogoPrimaryText>
+          <LogoSecondaryText>{secondary}</LogoSecondaryText>
+        </StyledLogoWrapper>
+      </StyledHeaderLink>
+    </Link>
   );
 };
 

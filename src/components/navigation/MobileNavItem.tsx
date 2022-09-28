@@ -4,6 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Link from 'next/link';
 import { MouseEvent, useCallback, useMemo, useState } from 'react';
 import type { MenuItem, MenuLink } from '../../interface';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
@@ -41,18 +42,32 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     return getMenuLinkUrl(item);
   }, [item]);
 
-  return (
-    <>
+  const wrappedLink = useMemo(() => {
+    const button = (
       <ListItemButton
         key={`drawer-nav-item-${item.title}`}
         sx={{ color: '#fde7a5', textTransform: 'uppercase', '&:hover': { color: '#fde7a5' } }}
         onClick={handleOnClick(item)}
-        target={url?.startsWith('http') ? '_blank' : undefined}
-        href={url}
       >
         <ListItemText primary={item.title} />
         {item.menu_links?.length ? open ? <ExpandLess /> : <ExpandMore /> : null}
       </ListItemButton>
+    );
+
+    if (!url) {
+      return button;
+    }
+
+    return (
+      <Link target={url?.startsWith('http') ? '_blank' : undefined} href={url}>
+        {button}
+      </Link>
+    );
+  }, [handleOnClick, item, open, url]);
+
+  return (
+    <>
+      {wrappedLink}
       {item.menu_links?.length ? (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>

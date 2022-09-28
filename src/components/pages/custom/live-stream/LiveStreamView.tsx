@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useMemo, useState } from 'react';
 import useElementSize from '../../../../util/useElementSize';
 
 const StyledLiveStreamWrapper = styled('div')`
@@ -15,21 +16,17 @@ const LiveStreamView = () => {
     setHeight((width / 16) * 9);
   }, [width]);
 
+  const LiveStreamIFrameNoSSR = useMemo(
+    () =>
+      dynamic(() => import('./LiveStreamIframe'), {
+        ssr: false
+      }),
+    []
+  );
+
   return (
-    <StyledLiveStreamWrapper ref={ref}>
-      <iframe
-        src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2Flive&show_text=false"
-        width={width}
-        height={height}
-        style={{
-          border: 'none',
-          overflow: 'hidden'
-        }}
-        scrolling="no"
-        frameBorder="0"
-        allowFullScreen={true}
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      />
+    <StyledLiveStreamWrapper ref={ref} style={{ height }}>
+      <LiveStreamIFrameNoSSR width={width} height={height} />
     </StyledLiveStreamWrapper>
   );
 };

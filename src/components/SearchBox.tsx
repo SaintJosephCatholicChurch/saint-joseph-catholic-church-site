@@ -2,10 +2,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { memo, useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { isEmpty } from '../util/string.util';
 import { useMediaQueryDown } from '../util/useMediaQuery';
-import useNavigate from '../util/useNavigate';
 
 const StyledSearchBox = styled('div')`
   display: flex;
@@ -13,21 +13,31 @@ const StyledSearchBox = styled('div')`
 
 interface SearchBoxProps {
   disableMargin?: boolean;
-  defaultValue?: string;
+  value: string | undefined;
 }
 
-const SearchBox = memo(({ disableMargin = false, defaultValue }: SearchBoxProps) => {
+const SearchBox = memo(({ disableMargin = false, value: controlledValue = '' }: SearchBoxProps) => {
   const isSmallScreen = useMediaQueryDown('lg');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [value, setValue] = useState<string>('');
+  useEffect(() => {
+    if (!controlledValue) {
+      return;
+    }
+
+    if (controlledValue !== value) {
+      setValue(controlledValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlledValue]);
 
   const onSearch = useCallback(() => {
     if (isEmpty(value.trim())) {
       return;
     }
-    navigate(`/search?q=${value}`);
-  }, [navigate, value]);
+    router.push(`/search?q=${value}`);
+  }, [router, value]);
 
   return (
     <StyledSearchBox>
@@ -35,7 +45,7 @@ const SearchBox = memo(({ disableMargin = false, defaultValue }: SearchBoxProps)
         variant="outlined"
         size={isSmallScreen ? 'medium' : 'small'}
         placeholder="Search..."
-        defaultValue={defaultValue}
+        value={value}
         sx={{ background: 'white', mb: !disableMargin ? 4 : undefined }}
         fullWidth
         onChange={(event) => {

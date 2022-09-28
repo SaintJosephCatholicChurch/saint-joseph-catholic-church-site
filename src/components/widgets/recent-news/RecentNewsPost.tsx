@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
+import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
 import { PostContent } from '../../../interface';
 import transientOptions from '../../../util/transientOptions';
@@ -81,6 +82,9 @@ const StyledPostSummary = styled(
     overflow: hidden;
     height: 52px;
     font-size: ${$size === 'large' ? '16' : '15'}px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 
     ${theme.breakpoints.down('sm')} {
       font-size: 15px;
@@ -88,13 +92,6 @@ const StyledPostSummary = styled(
 
     ${theme.breakpoints.only('md')} {
       font-size: 15px;
-    }
-
-    p {
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
     }
   `
 );
@@ -120,41 +117,43 @@ const RecentNewsPost = memo(
     }, [summary]);
 
     return (
-      <Button
-        href={`/posts/${slug}`}
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: `${size === 'large' ? '160' : '110'}px auto`,
-          [theme.breakpoints.down('sm')]: {
-            gridTemplateColumns: '110px auto'
-          },
-          [theme.breakpoints.only('md')]: {
-            gridTemplateColumns: '110px auto'
-          },
-          gap: '8px',
-          width: '100%',
-          color: 'inherit',
-          lineHeight: 'inherit',
-          letterSpacing: 'inherit',
-          textTransform: 'unset',
-          padding: '6px 8px',
-          margin: '-6px -8px',
-          '&:hover': {
-            backgroundColor: 'rgba(100,100,100,0.12)'
-          }
-        }}
-      >
-        <StyledPostImage $image={image} $size={size} />
-        <StyledPostDetails>
-          <StyledPostTitle $size={size}>{title}</StyledPostTitle>
-          <StyledPostSummary
-            $size={size}
-            dangerouslySetInnerHTML={{
-              __html: html
-            }}
-          />
-        </StyledPostDetails>
-      </Button>
+      <Link href={`/posts/${slug}`}>
+        <Button
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: `${size === 'large' ? '160' : '110'}px auto`,
+            [theme.breakpoints.down('sm')]: {
+              gridTemplateColumns: '110px auto'
+            },
+            [theme.breakpoints.only('md')]: {
+              gridTemplateColumns: '110px auto'
+            },
+            gap: '8px',
+            width: '100%',
+            color: 'inherit',
+            lineHeight: 'inherit',
+            letterSpacing: 'inherit',
+            textTransform: 'unset',
+            textAlign: 'left',
+            padding: '6px 8px',
+            margin: '-6px -8px',
+            '&:hover': {
+              backgroundColor: 'rgba(100,100,100,0.12)'
+            }
+          }}
+        >
+          <StyledPostImage $image={image} $size={size} />
+          <StyledPostDetails>
+            <StyledPostTitle $size={size}>{title}</StyledPostTitle>
+            <StyledPostSummary
+              $size={size}
+              dangerouslySetInnerHTML={{
+                __html: html
+              }}
+            />
+          </StyledPostDetails>
+        </Button>
+      </Link>
     );
   }
 );

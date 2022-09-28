@@ -11,12 +11,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Bulletin, BulletinPDFData } from '../../../../interface';
 import { isNotNullish } from '../../../../util/null.util';
 import transientOptions from '../../../../util/transientOptions';
 import useElementSize from '../../../../util/useElementSize';
-import useNavigate from '../../../../util/useNavigate';
 import BulletListButton from './BulletListButton';
 import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
 
@@ -277,16 +277,16 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const [height, setHeight] = useState(0);
 
   const theme = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const onBulletinChange = useCallback(
     (pdf: string) => {
       const newBulletin = bulletins.find((aBulletin) => aBulletin.pdf === pdf);
       if (isNotNullish(newBulletin)) {
-        navigate(`/parish-bulletins/${formatBulletinUrlDate(newBulletin)}`);
+        router.push(`/parish-bulletins/${formatBulletinUrlDate(newBulletin)}`);
       }
     },
-    [bulletins, navigate]
+    [bulletins, router]
   );
 
   useEffect(() => {
@@ -329,7 +329,12 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const bulletinListItems = useMemo(
     () =>
       bulletins?.map((aBulletin, index) => (
-        <BulletListButton key={`bulletin-${index}`} bulletin={aBulletin} selected={aBulletin.pdf === bulletin.pdf} />
+        <BulletListButton
+          key={`bulletin-${index}`}
+          index={index}
+          bulletin={aBulletin}
+          selected={aBulletin.pdf === bulletin.pdf}
+        />
       )),
     [bulletin.pdf, bulletins]
   );

@@ -2,6 +2,7 @@ import CopyrightIcon from '@mui/icons-material/Copyright';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
+import Link from 'next/link';
 import { useMemo } from 'react';
 import churchDetails from '../../../lib/church_details';
 
@@ -49,8 +50,9 @@ const StyledCopyrightText = styled('div')(
   `
 );
 
-const StyledPrivacyPolicyLink = styled('a')`
+const StyledPrivacyPolicyLink = styled('div')`
   color: #fde7a5;
+  cursor: pointer;
 
   &:hover {
     color: #ffffff;
@@ -84,7 +86,9 @@ const Copyright = ({ privacyPolicyLink }: CopyrightProps) => {
           <Box>All Rights Reserved.</Box>
         </StyledCopyrightSection>
       </StyledCopyrightText>
-      <StyledPrivacyPolicyLink href={privacyPolicyLink}>Privacy Policy.</StyledPrivacyPolicyLink>
+      <Link href={privacyPolicyLink}>
+        <StyledPrivacyPolicyLink>Privacy Policy.</StyledPrivacyPolicyLink>
+      </Link>
     </StyledCopyright>
   );
 };

@@ -47,7 +47,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
   return (
     <PageLayout url="/search" title="Search" hideSearch>
       <StyledSearchQueryTitle>
-        {isNotEmpty(query) ? <SearchBox defaultValue={query} disableMargin /> : null}
+        {isNotEmpty(query) ? <SearchBox value={query} disableMargin /> : null}
       </StyledSearchQueryTitle>
       <StyledSearch>
         {searchResults?.length > 0 ? (

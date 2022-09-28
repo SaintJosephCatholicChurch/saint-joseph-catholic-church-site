@@ -1,7 +1,7 @@
 import MuiPagination from '@mui/material/Pagination';
 import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 import { ChangeEvent, useCallback } from 'react';
-import useNavigate from '../util/useNavigate';
 
 const StyledPagination = styled('div')`
   width: 100%;
@@ -19,18 +19,18 @@ interface PaginationProps {
 }
 
 const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const onChange = useCallback(
     (_event: ChangeEvent, newPage: number) => {
       if (newPage === 1) {
-        navigate(firstPageLink);
+        router.push(firstPageLink);
         return;
       }
 
-      navigate(pageLink.replace('[page]', `${newPage}`));
+      router.push(pageLink.replace('[page]', `${newPage}`));
     },
-    [firstPageLink, navigate, pageLink]
+    [firstPageLink, pageLink, router]
   );
 
   return (

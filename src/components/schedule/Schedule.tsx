@@ -120,14 +120,7 @@ interface ScheduleProps {
   onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({
-  times,
-  title,
-  liveStreamButton,
-  invitationText,
-  tab,
-  onTabChange
-}: ScheduleProps) => {
+const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabChange }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -234,6 +227,12 @@ const Schedule = ({
                 },
                 '.MuiButton-startIcon > *:nth-of-type(1)': {
                   fontSize: '24px'
+                },
+                [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+                  fontSize: '16px',
+                  '.MuiButton-startIcon > *:nth-of-type(1)': {
+                    fontSize: '20px'
+                  }
                 }
               }}
             >

@@ -1,6 +1,7 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
+import Link from 'next/link';
 import { KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MENU_DELAY } from '../../constants';
 import type { MenuItem, MenuLink } from '../../interface';
@@ -57,7 +58,7 @@ interface NavItemProps {
 const NavItem = ({ item, size }: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
-  const buttonRef = useRef<HTMLAnchorElement>();
+  const buttonRef = useRef<HTMLButtonElement>();
   const activeMenuItemRef = useRef<HTMLButtonElement>();
   const [keyboardSelectedIndex, setKeyboardSelectedIndex] = useState(-1);
   const [open, setOpen] = useState<HoverState>({
@@ -111,7 +112,7 @@ const NavItem = ({ item, size }: NavItemProps) => {
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
 
   const handleOnKeyDown = useCallback(
-    (type: keyof HoverState) => (event: KeyboardEvent<HTMLAnchorElement>) => {
+    (type: keyof HoverState) => (event: KeyboardEvent<HTMLButtonElement>) => {
       if (event.key === 'Enter') {
         setOpen({
           ...open,
@@ -246,8 +247,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
     setSelected(false);
   }, [item, pathname]);
 
-  return (
-    <StyledNavItem>
+  const wrappedLink = useMemo(() => {
+    const button = (
       <Button
         ref={buttonRef}
         onClick={handleOnClick(item, 'buttonClick')}
@@ -255,8 +256,6 @@ const NavItem = ({ item, size }: NavItemProps) => {
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
         size="large"
-        target={url?.startsWith('http') ? '_blank' : undefined}
-        href={url}
         sx={{
           padding: '12px 18px 14px',
           whitespace: 'nowrap',
@@ -317,6 +316,33 @@ const NavItem = ({ item, size }: NavItemProps) => {
           <StyledUnderline className="menu-item-underline" />
         </StyledUnderlineWrapper>
       </Button>
+    );
+
+    if (!url) {
+      return button;
+    }
+
+    return (
+      <Link target={url?.startsWith('http') ? '_blank' : undefined} href={url}>
+        {button}
+      </Link>
+    );
+  }, [
+    debouncedIsOpen,
+    handleOnClick,
+    handleOnKeyDown,
+    handleOnMouseOut,
+    handleOnMouseOver,
+    item,
+    selected,
+    size,
+    theme.breakpoints,
+    url
+  ]);
+
+  return (
+    <StyledNavItem>
+      {wrappedLink}
       {item.menu_links?.length && debouncedIsOpen ? (
         <NavItemPopup
           item={item}

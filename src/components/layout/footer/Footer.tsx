@@ -1,7 +1,9 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
 import type { ChurchDetails, StylesConfig } from '../../../interface';
 import transientOptions from '../../../util/transientOptions';
+import useLocation from '../../../util/useLocation';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';
 import ContactDetails from './ContactDetails';
@@ -62,6 +64,14 @@ interface FooterProps {
 }
 
 const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
+  const { search } = useLocation();
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    setQuery(params.get('q'));
+  }, [search]);
+  
   return (
     <footer>
       <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
@@ -73,7 +83,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
             </Box>
             <Box>
               <FooterHeader text="Search Our Site" />
-              <SearchBox />
+              <SearchBox value={query} />
               <ContactDetails churchDetails={churchDetails} />
             </Box>
           </StyledFooterContents>

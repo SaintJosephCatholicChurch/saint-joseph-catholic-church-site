@@ -1,11 +1,12 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta2",
   "private": true,
   "scripts": {
     "build-analyze": "cross-env ANALYZE=true next build",
     "build": "next build",
     "bulletins": "ts-node ./scripts/pdf-to-images.ts",
+    "redirects": "ts-node ./scripts/generate-redirects.ts",
     "bulletins-ci": "ts-node ./scripts/pdf-to-images.ts -ci",
     "dev": "cross-env NODE_ENV=development next dev",
     "export": "cross-env NODE_ENV=production next build && next export -o ./dist",
@@ -42,7 +43,7 @@
     "immutable": "3.7.6",
     "is-hotkey": "0.2.0",
     "js-yaml": "4.1.0",
-    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.53.tgz",
+    "netlify-cms-core": "file:src/cms/overrides/netlify-cms-core-2.55.58.tgz",
     "next": "12.2.5",
     "next-pwa": "5.6.0",
     "next-transpile-modules": "9.0.0",

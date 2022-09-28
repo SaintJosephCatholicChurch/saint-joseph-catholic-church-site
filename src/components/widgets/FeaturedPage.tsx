@@ -36,17 +36,17 @@ interface FeaturedPageProps {
   isFullWidth?: boolean;
 }
 
-const FeaturedPage = memo(({ featuredPage, isFullWidth = false }: FeaturedPageProps) => {
+const FeaturedPage = memo(({ featuredPage: { page, image, summary }, isFullWidth = false }: FeaturedPageProps) => {
   const theme = useTheme();
 
   const [slug, title] = useMemo(() => {
-    const parts = (featuredPage.page ?? '').split('|');
+    const parts = (page ?? '').split('|');
     if (parts.length < 2) {
       return ['', ''];
     }
 
     return [parts[0], parts[1]];
-  }, [featuredPage.page]);
+  }, [page]);
 
   if (isEmpty(slug) || isEmpty(title)) {
     return null;
@@ -62,7 +62,7 @@ const FeaturedPage = memo(({ featuredPage, isFullWidth = false }: FeaturedPagePr
           textTransform: 'none',
           textAlign: 'left',
           margin: '-8px -8px',
-          padding: '0 8px',
+          padding: '0 8px 8px',
           alignItems: 'flex-start',
           [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
             gap: '12px'
@@ -70,8 +70,8 @@ const FeaturedPage = memo(({ featuredPage, isFullWidth = false }: FeaturedPagePr
         }}
       >
         <StyledTitle>{title}</StyledTitle>
-        <StyledImage src={featuredPage.image} alt={title} />
-        {isNotEmpty(featuredPage.summary) ? <StyledSummary>{featuredPage.summary}</StyledSummary> : null}
+        {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
+        {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
       </Button>
     </Link>
   );

@@ -5,6 +5,7 @@ import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
 import { memo, useEffect, useMemo, useState } from 'react';
 import type { PostContent } from '../../interface';
+import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';
@@ -32,7 +33,7 @@ const PostSummary = memo(
 
     const date = useMemo(() => parseISO(dateString), [dateString]);
     return (
-      <Link href={`/posts/${slug}`}>
+      <Link href={`/news/${slug}`}>
         <Button
           sx={{
             textDecoration: 'none',
@@ -41,6 +42,8 @@ const PostSummary = memo(
             alignItems: 'flex-start',
             textAlign: 'left',
             margin: '-6px -8px',
+            boxSizing: 'content-box',
+            width: '100%',
             '&:hover': {
               backgroundColor: 'transparent',
               '.read-more': {
@@ -50,8 +53,8 @@ const PostSummary = memo(
             }
           }}
         >
-          <PostImage title={title} image={image} />
-          <PostTitle title={title} enableMarginTop />
+          {isNotEmpty(image) ? <PostImage title={title} image={image} /> : null}
+          <PostTitle title={title} enableMarginTop={isNotEmpty(image)} />
           <PostDateAuthorLine date={date} disableMargin />
           <Box>
             <PageContentView>

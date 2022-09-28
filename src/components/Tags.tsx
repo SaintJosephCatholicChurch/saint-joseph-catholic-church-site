@@ -9,10 +9,10 @@ const StyledTags = styled('div')`
 `;
 
 interface PostTagsProps {
-  tags?: string[];
+  tags: string[];
 }
 
-const PostTags = memo(({ tags = [] }: PostTagsProps) => {
+const PostTags = memo(({ tags }: PostTagsProps) => {
   const uniqueTags = useMemo(() => tags.filter((value, index, self) => self.indexOf(value) === index), [tags]);
 
   return (

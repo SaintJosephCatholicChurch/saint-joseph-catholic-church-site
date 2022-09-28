@@ -16,7 +16,7 @@ const TagLink = ({ tag }: TagLinkProps) => {
   }
 
   return (
-    <Link href={`/posts/tags/${tag}`}>
+    <Link href={`/news/tags/${tag}`}>
       <StyledTagLink>{`#${tag}`}</StyledTagLink>
     </Link>
   );

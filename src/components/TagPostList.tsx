@@ -28,8 +28,8 @@ const TagPostList = ({ posts, tag, pagination }: TagPostListProps) => {
       <Pagination
         current={pagination.current}
         pages={pagination.pages}
-        firstPageLink={`/posts/tags/${tag}`}
-        pageLink={`/posts/tags/${tag}/[page]`}
+        firstPageLink={`/news/tags/${tag}`}
+        pageLink={`/news/tags/${tag}/[page]`}
       />
     </StyledPostList>
   );

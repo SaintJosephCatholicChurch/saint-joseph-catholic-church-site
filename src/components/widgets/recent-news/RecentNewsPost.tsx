@@ -3,6 +3,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
 import { PostContent } from '../../../interface';
+import { isNotEmpty } from '../../../util/string.util';
 import transientOptions from '../../../util/transientOptions';
 
 interface StyledPostImageProps {
@@ -84,7 +85,11 @@ const StyledPostSummary = styled(
     font-size: ${$size === 'large' ? '16' : '15'}px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: vertical;,
+
+    & > p {
+      margin: 0;
+    }
 
     ${theme.breakpoints.down('sm')} {
       font-size: 15px;
@@ -117,10 +122,10 @@ const RecentNewsPost = memo(
     }, [summary]);
 
     return (
-      <Link href={`/posts/${slug}`}>
+      <Link href={`/news/${slug}`}>
         <Button
           sx={{
-            display: 'grid',
+            display: isNotEmpty(image) ? 'grid' : 'flex',
             gridTemplateColumns: `${size === 'large' ? '160' : '110'}px auto`,
             [theme.breakpoints.down('sm')]: {
               gridTemplateColumns: '110px auto'
@@ -142,7 +147,7 @@ const RecentNewsPost = memo(
             }
           }}
         >
-          <StyledPostImage $image={image} $size={size} />
+          {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
           <StyledPostDetails>
             <StyledPostTitle $size={size}>{title}</StyledPostTitle>
             <StyledPostSummary

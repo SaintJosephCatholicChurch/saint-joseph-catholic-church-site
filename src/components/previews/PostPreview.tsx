@@ -26,9 +26,9 @@ const BlogPostPreview = ({ entry, widgetFor }: PreviewTemplateComponentProps) =>
       <StyledBlogPostPreviewContent>
         <PostView
           title={entry.getIn(['data', 'title'])}
-          tags={entry.getIn(['data', 'tags'])}
+          tags={entry.getIn(['data', 'tags']) ?? []}
           date={date}
-          image={entry.getIn(['data', 'image'])}
+          image={entry.getIn(['data', 'image']) ?? ''}
         >
           {widgetFor('body')}
         </PostView>

@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
 import { ReactNode } from 'react';
+import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import Tags from '../Tags';
@@ -19,8 +19,8 @@ const PostView = ({ title, date, image, children, tags }: PostViewProps) => {
     <>
       <PostTitle title={title} />
       <PostDateAuthorLine date={date} />
-      <PostImage title={title} image={image} />
-      <Tags tags={tags} />
+      {isNotEmpty(image) ? <PostImage title={title} image={image} /> : null}
+      {tags.length ? <Tags tags={tags} /> : null}
       <PageContentView>{children}</PageContentView>
     </>
   );

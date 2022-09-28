@@ -9,9 +9,18 @@ export interface FileMatter {
 }
 
 export interface FeaturedPage {
+  type: 'featured_page';
+  page: string;
   image?: string;
   summary?: string;
-  page?: string;
+}
+
+export interface FeaturedLink {
+  type: 'featured_link';
+  title: string;
+  url: string;
+  image?: string;
+  summary?: string;
 }
 
 export interface LiveStreamButton {
@@ -36,7 +45,7 @@ export interface HomePageData {
   invitation_text: string;
   schedule_section: ScheduleSection;
   daily_readings: DailyReadings;
-  featured_page: FeaturedPage;
+  featured: (FeaturedPage | FeaturedLink)[];
 }
 
 export interface Slide {
@@ -115,7 +124,7 @@ export interface Staff {
 export interface PostContentData {
   readonly date: string;
   readonly title: string;
-  readonly image: string;
+  readonly image?: string;
   readonly slug: string;
   readonly tags?: string[];
 }

@@ -111,7 +111,7 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
           subtitle: format(parseISO(date), 'LLLL d, yyyy'),
           content,
           summary,
-          url: `/posts/${slug}`,
+          url: `/news/${slug}`,
           type: NEWS,
           date
         })),

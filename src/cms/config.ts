@@ -35,7 +35,8 @@ export interface CmsConfig extends Omit<NetlifyCmsConfig, 'collections'> {
 
 const config: CmsConfig = {
   backend: {
-    name: 'git-gateway',
+    name: 'github',
+    repo: 'SaintJosephCatholicChurch/saint-joseph-catholic-church-site',
     branch: 'main'
   },
   media_folder: '/public/files',

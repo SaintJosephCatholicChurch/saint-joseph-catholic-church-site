@@ -3,7 +3,7 @@ import CMS, {
   ColorStringWidget,
   DateTimeWidget,
   FileWidget,
-  GitGatewayBackend,
+  GitHubBackend,
   Icon,
   imageEditorComponent,
   images,
@@ -22,8 +22,8 @@ import CMS, {
 
 const loadCmsApp = () => {
   // Register all the things
-  CMS.registerBackend('git-gateway', GitGatewayBackend as any);
-  CMS.registerBackend('proxy', ProxyBackend as any);
+  CMS.registerBackend('github', GitHubBackend);
+  CMS.registerBackend('proxy', ProxyBackend);
   CMS.registerWidget([
     StringWidget.Widget(),
     NumberWidget.Widget(),

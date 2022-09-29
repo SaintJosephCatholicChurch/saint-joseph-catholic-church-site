@@ -17,9 +17,10 @@ const StyledBlogPostPreviewContent = styled('div')`
   margin-top: 32px;
 `;
 
-const BlogPostPreview = ({ entry, widgetFor }: PreviewTemplateComponentProps) => {
+const BlogPostPreview = ({ entry, widgetFor, getAsset }: PreviewTemplateComponentProps) => {
   const dateString = useMemo(() => entry.getIn(['data', 'date']), [entry]);
   const date = useMemo(() => parseISO(dateString), [dateString]);
+  const image = useMemo(() => getAsset(entry.getIn(['data', 'image'])), [entry, getAsset]);
 
   return (
     <StyledBlogPostPreview>
@@ -28,7 +29,7 @@ const BlogPostPreview = ({ entry, widgetFor }: PreviewTemplateComponentProps) =>
           title={entry.getIn(['data', 'title'])}
           tags={entry.getIn(['data', 'tags']) ?? []}
           date={date}
-          image={entry.getIn(['data', 'image']) ?? ''}
+          image={image.url}
         >
           {widgetFor('body')}
         </PostView>

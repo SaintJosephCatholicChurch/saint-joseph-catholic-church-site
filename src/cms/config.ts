@@ -441,6 +441,13 @@ const config: CmsConfig = {
       create: true,
       identifier_field: 'title',
       summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
+      sortable_fields: {
+        fields: ['title', 'date'],
+        default: {
+          field: 'date',
+          direction: 'Descending'
+        }
+      },
       fields: [
         {
           name: 'title',

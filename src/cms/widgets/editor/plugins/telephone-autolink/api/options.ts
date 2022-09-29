@@ -11,6 +11,12 @@ const register = (editor: Editor): void => {
   registerOption('telephone_autolink_pattern', {
     processor: 'regexp',
     // Use the Polaris link detection, however for autolink we need to make it be an exact match
+    default: /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/i
+  });
+
+  registerOption('telephone_autolink_pattern_absolute', {
+    processor: 'regexp',
+    // Use the Polaris link detection, however for autolink we need to make it be an exact match
     default: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/i
   });
 
@@ -25,5 +31,6 @@ const register = (editor: Editor): void => {
 };
 
 const getAutoLinkPattern = option<RegExp>('telephone_autolink_pattern');
+const getAutoLinkAbsolutePattern = option<RegExp>('telephone_autolink_pattern_absolute');
 
-export { register, getAutoLinkPattern };
+export { register, getAutoLinkPattern, getAutoLinkAbsolutePattern };

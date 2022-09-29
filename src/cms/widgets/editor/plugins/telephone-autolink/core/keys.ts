@@ -2,7 +2,7 @@ import { Fun, Obj, Type, Unicode } from '@ephox/katamari';
 import tinymce, { Editor } from 'tinymce';
 
 import * as Options from '../api/options';
-import { findChar, freefallRtl, isNonPhoneNumberCharacter, isPunctuation, isSpace } from './utils';
+import { findChar, freefallRtl, isNonPhoneNumberCharacter, isOpenParan, isPunctuation, isSpace } from './utils';
 
 interface ParseResult {
   readonly rng: Range;
@@ -12,6 +12,7 @@ interface ParseResult {
 const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null => {
   const voidElements = editor.schema.getVoidElements();
   const autoLinkPattern = Options.getAutoLinkPattern(editor);
+  const autoLinkAbsolutePattern = Options.getAutoLinkAbsolutePattern(editor);
   const { dom, selection } = editor;
 
   // Never create a link when we are inside a link
@@ -61,11 +62,20 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
       lastTextNode = node;
       const idx = findChar(node.data, offset, isNonPhoneNumberCharacter);
 
+      const match = autoLinkPattern.exec(node.data);
+      if (match && match.length > 0) {
+        return node.data.indexOf(match[0]);
+      }
+
       if (idx === -1) {
         return idx;
       }
 
       if (isSpace(node.data.charAt(idx + 1))) {
+        return idx + 2;
+      }
+
+      if (isOpenParan(node.data.charAt(idx + 1)) && isOpenParan(node.data.charAt(idx + 2))) {
         return idx + 2;
       }
 
@@ -83,7 +93,7 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
   newRng.setEnd(endSpot.container, endSpot.offset);
 
   const rngText = Unicode.removeZwsp(newRng.toString());
-  const matches = rngText.match(autoLinkPattern);
+  const matches = rngText.match(autoLinkAbsolutePattern);
   if (matches) {
     return { rng: newRng, url: `tel:${matches[0]}` };
   } else {

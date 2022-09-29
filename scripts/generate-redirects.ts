@@ -13,5 +13,5 @@ import { readdirSync } from 'fs';
     };
   });
 
-  console.log(redirects);
+  console.info(redirects);
 })();

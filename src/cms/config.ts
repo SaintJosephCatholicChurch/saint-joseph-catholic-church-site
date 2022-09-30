@@ -4,7 +4,7 @@ import {
   CmsConfig as NetlifyCmsConfig,
   CmsField as NetlifyCmsField,
   CmsFieldBase
-} from 'netlify-cms-core';
+} from '@simplecms/simple-cms-core';
 
 export interface CmsFieldTimes {
   widget: 'times';

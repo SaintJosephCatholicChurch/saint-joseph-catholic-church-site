@@ -18,7 +18,7 @@ import CMS, {
   SelectWidget,
   StringWidget,
   TextWidget
-} from 'netlify-cms-core';
+} from '@simplecms/simple-cms-core';
 
 const loadCmsApp = () => {
   // Register all the things

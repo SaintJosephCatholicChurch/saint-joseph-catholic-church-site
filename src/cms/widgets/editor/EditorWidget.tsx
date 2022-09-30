@@ -1,4 +1,4 @@
-import { CmsWidgetControlProps } from 'netlify-cms-core';
+import { CmsWidgetControlProps } from '@simplecms/simple-cms-core';
 import { Component } from 'react';
 import EditorControl from './EditorControl';
 

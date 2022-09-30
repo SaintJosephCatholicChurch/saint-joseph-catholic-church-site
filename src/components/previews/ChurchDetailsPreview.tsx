@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { PreviewTemplateComponentProps } from 'netlify-cms-core';
+import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
 import { useMemo } from 'react';
 import type { ChurchDetails } from '../../interface';
 import Footer from '../layout/footer/Footer';

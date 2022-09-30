@@ -8,7 +8,7 @@ import {
   faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CmsConfig, CmsWidgetPreviewProps } from 'netlify-cms-core';
+import { CmsConfig, CmsWidgetPreviewProps } from '@simplecms/simple-cms-core';
 import { ComponentType, useEffect } from 'react';
 import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';

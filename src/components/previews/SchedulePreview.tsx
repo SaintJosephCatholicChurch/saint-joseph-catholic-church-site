@@ -1,4 +1,4 @@
-import { PreviewTemplateComponentProps } from 'netlify-cms-core';
+import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
 import { useCallback, useMemo, useState } from 'react';
 import type { Times } from '../../interface';
 import ScheduleTabChangeEvent from '../../util/events/ScheduleTabChangeEvent';

@@ -4,9 +4,20 @@ import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM 
 import type { Slide } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 
-const StyledCarouselSlide = styled('div')`
-  position: relative;
-`;
+const StyledCarouselSlide = styled('div')(
+  ({ theme }) => `
+    position: relative;
+    
+    width: 100%;
+    height: ${CAROUSEL_MAX_HEIGHT_LG}px;
+    ${theme.breakpoints.only('md')} {
+      height: ${CAROUSEL_MAX_HEIGHT_MD}px;
+    }
+    ${theme.breakpoints.down('md')} {
+      height: ${CAROUSEL_MAX_HEIGHT_SM}px;
+    }
+  `
+);
 
 interface StyledImageProps {
   $image: string;

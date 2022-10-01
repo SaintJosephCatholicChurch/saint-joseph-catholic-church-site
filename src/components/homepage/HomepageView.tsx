@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import type { HomePageData, PostContent, Times } from '../../interface';
 import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
@@ -94,6 +94,11 @@ const StyledDailyReadingsSectionBackground = styled(
   `
 );
 
+interface RenderFeatureOptions {
+  hideOnMobile?: boolean;
+  hideOnNonMobile?: boolean;
+}
+
 interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
@@ -114,6 +119,39 @@ const HomepageView = memo(
       []
     );
 
+    const renderFeaturedLinkPage = useCallback((featuredContent, index, options?: RenderFeatureOptions) => {
+      const { hideOnMobile = false, hideOnNonMobile = false } = options ?? {};
+
+      if (featuredContent.type === 'featured_link') {
+        return (
+          <FeaturedLink
+            key={`page-${index}`}
+            featuredLink={featuredContent}
+            isFullWidth
+            hideOnMobile={hideOnMobile}
+            hideOnNonMobile={hideOnNonMobile}
+          />
+        );
+      }
+      return (
+        <FeaturedPage
+          key={`page-${index}`}
+          featuredPage={featuredContent}
+          isFullWidth
+          hideOnMobile={hideOnMobile}
+          hideOnNonMobile={hideOnNonMobile}
+        />
+      );
+    }, []);
+
+    const firstFeaturedLinkPage = useMemo(() => {
+      if (featured.length === 0) {
+        return null;
+      }
+
+      return renderFeaturedLinkPage(featured[0], 0);
+    }, [featured, renderFeaturedLinkPage]);
+
     return (
       <StyledHomepageView>
         <CarouselView slides={slides} />
@@ -127,12 +165,19 @@ const HomepageView = memo(
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
+              {firstFeaturedLinkPage}
+              {featured.map((featuredContent, index) => {
+                if (index > 0) {
+                  return renderFeaturedLinkPage(featuredContent, index, { hideOnNonMobile: true });
+                }
+                return null;
+              })}
               <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
               {featured.map((featuredContent, index) => {
-                if (featuredContent.type === 'featured_link') {
-                  return <FeaturedLink key={`page-${index}`} featuredLink={featuredContent} isFullWidth />;
+                if (index > 0) {
+                  return renderFeaturedLinkPage(featuredContent, index, { hideOnMobile: true });
                 }
-                return <FeaturedPage key={`page-${index}`} featuredPage={featuredContent} isFullWidth />;
+                return null;
               })}
             </StyledReadingsWidgetSectionContent>
           </Container>

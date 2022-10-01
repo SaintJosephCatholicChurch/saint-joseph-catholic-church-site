@@ -27,7 +27,7 @@ import ScheduleWidget from './widgets/times/TimesWidget';
 
 const CMSView = () => {
   useEffect(() => {
-    const root = document.getElementById('cms-root');
+    const root = document.getElementById('cms');
     if (root) {
       return;
     }

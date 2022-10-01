@@ -4,6 +4,39 @@ import Link from 'next/link';
 import { memo } from 'react';
 import { FeaturedLink } from '../../interface';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+import transientOptions from '../../util/transientOptions';
+
+interface StyledFeaturedLinkWrapperProps {
+  $hideOnMobile: boolean;
+  $hideOnNonMobile: boolean;
+}
+
+const StyledFeaturedLinkWrapper = styled(
+  'div',
+  transientOptions
+)<StyledFeaturedLinkWrapperProps>(
+  ({ $hideOnMobile, $hideOnNonMobile, theme }) => `
+    ${
+      $hideOnMobile
+        ? `
+      ${theme.breakpoints.down('sm')} {
+        display: none;
+      }
+    `
+        : ''
+    }
+
+    ${
+      $hideOnNonMobile
+        ? `
+      ${theme.breakpoints.up('sm')} {
+        display: none;
+      }
+    `
+        : ''
+    }
+  `
+);
 
 const StyledTitle = styled('h3')`
   margin: 0;
@@ -34,10 +67,17 @@ const StyledSummary = styled('div')(
 interface FeaturedLinkProps {
   featuredLink?: FeaturedLink;
   isFullWidth?: boolean;
+  hideOnMobile?: boolean;
+  hideOnNonMobile?: boolean;
 }
 
 const FeaturedLink = memo(
-  ({ featuredLink: { title, url, image, summary }, isFullWidth = false }: FeaturedLinkProps) => {
+  ({
+    featuredLink: { title, url, image, summary },
+    isFullWidth = false,
+    hideOnMobile = false,
+    hideOnNonMobile = false
+  }: FeaturedLinkProps) => {
     const theme = useTheme();
 
     if (isEmpty(title) || isEmpty(url)) {
@@ -45,27 +85,30 @@ const FeaturedLink = memo(
     }
 
     return (
-      <Link href={url}>
-        <Button
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            textTransform: 'none',
-            textAlign: 'left',
-            margin: '-8px -8px',
-            padding: '0 8px 8px',
-            alignItems: 'flex-start',
-            [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
-              gap: '12px'
-            }
-          }}
-        >
-          <StyledTitle>{title}</StyledTitle>
-          {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
-          {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
-        </Button>
-      </Link>
+      <StyledFeaturedLinkWrapper $hideOnMobile={hideOnMobile} $hideOnNonMobile={hideOnNonMobile}>
+        <Link href={url}>
+          <Button
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              textTransform: 'none',
+              textAlign: 'left',
+              margin: '-8px -8px',
+              padding: '0 8px 8px',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
+                gap: '12px'
+              }
+            }}
+          >
+            <StyledTitle>{title}</StyledTitle>
+            {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
+            {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
+          </Button>
+        </Link>
+      </StyledFeaturedLinkWrapper>
     );
   }
 );

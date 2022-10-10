@@ -8,6 +8,7 @@ const withTM = require('next-transpile-modules')([
 ]);
 
 const withPWA = require('next-pwa')({
+  publicExcludes: ['!bulletins/**/*'],
   dest: 'public'
 });
 

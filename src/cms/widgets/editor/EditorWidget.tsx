@@ -1,4 +1,4 @@
-import { CmsWidgetControlProps } from '@simplecms/simple-cms-core';
+import { CmsWidgetControlProps } from '@staticcms/core';
 import { Component } from 'react';
 import EditorControl from './EditorControl';
 

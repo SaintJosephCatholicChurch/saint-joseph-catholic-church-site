@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { BulletinPDFMeta } from '../src/interface';
-import bulletins from '../src/lib/bulletins';
+import { fetchBulletins } from '../src/lib/bulletins';
 import pdf2img from '../src/util/pdf/pdf-img-convert';
 import git from '@npmcli/git';
 import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
@@ -170,6 +170,7 @@ function fixCommonBulletinErrors(textContent: string) {
     normalizeWhitespace: true
   };
   let bulletinsProcessed = 0;
+  const bulletins = fetchBulletins();
   for (const bulletin of bulletins) {
     const pdfFullPath = join(publicPath, bulletin.pdf);
 

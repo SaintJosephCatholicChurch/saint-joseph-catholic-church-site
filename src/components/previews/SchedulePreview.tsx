@@ -1,4 +1,4 @@
-import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
+import { PreviewTemplateComponentProps } from '@staticcms/core';
 import { useCallback, useMemo, useState } from 'react';
 import type { Times } from '../../interface';
 import ScheduleTabChangeEvent from '../../util/events/ScheduleTabChangeEvent';

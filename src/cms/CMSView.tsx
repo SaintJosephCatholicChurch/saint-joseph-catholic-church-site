@@ -5,10 +5,11 @@ import {
   faFileLines,
   faGear,
   faHouse,
-  faTag
+  faTag,
+  faNewspaper
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CmsConfig, CmsWidgetPreviewProps } from '@simplecms/simple-cms-core';
+import { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
 import { ComponentType, useEffect } from 'react';
 import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
@@ -20,7 +21,6 @@ import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
 import loadCmsApp from './CMSApp';
 import config from './config';
-import ContactFormResponses from './pages/ContactFormResponses';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
@@ -67,6 +67,7 @@ const CMSView = () => {
     cmsApp.registerIcon('gear', <FontAwesomeIcon icon={faGear} size="lg" />);
     cmsApp.registerIcon('calendar-days', <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
     cmsApp.registerIcon('clipboard-question', <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
+    cmsApp.registerIcon('newspaper', <FontAwesomeIcon icon={faNewspaper} size="lg" />);
 
     cmsApp.registerAdditionalLink(
       'events',

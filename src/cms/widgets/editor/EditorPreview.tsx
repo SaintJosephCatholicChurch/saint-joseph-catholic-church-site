@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import { Map } from 'immutable';
-import { CmsWidgetPreviewProps } from '@simplecms/simple-cms-core';
+import { CmsWidgetPreviewProps } from '@staticcms/core';
 import { useEffect, useMemo, useState } from 'react';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';

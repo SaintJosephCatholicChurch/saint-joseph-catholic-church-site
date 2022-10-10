@@ -4,7 +4,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
 import type { Bulletin, BulletinPDFData } from '../../interface';
-import bulletins, { fetchBulletinMetaData } from '../../lib/bulletins';
+import { fetchBulletins, fetchBulletinMetaData } from '../../lib/bulletins';
 import { isNotNullish } from '../../util/null.util';
 
 interface ParishBulletinsProps {
@@ -28,7 +28,7 @@ const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => 
 export default ParishBulletin;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = bulletins.map((bulletin) => `/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`);
+  const paths = fetchBulletins().map((bulletin) => `/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`);
   return {
     paths,
     fallback: false
@@ -37,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const buildDateToBulletin = () => {
   const hash: Record<string, Bulletin> = {};
-  bulletins.forEach((bulletin) => {
+  fetchBulletins().forEach((bulletin) => {
     if (!(bulletin.date in hash)) {
       hash[format(parseISO(bulletin.date), 'yyyy-MM-dd')] = bulletin;
     }
@@ -59,7 +59,7 @@ export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ prop
   return {
     props: {
       bulletin,
-      bulletins,
+      bulletins: fetchBulletins(),
       meta: fetchBulletinMetaData(bulletin)
     }
   };

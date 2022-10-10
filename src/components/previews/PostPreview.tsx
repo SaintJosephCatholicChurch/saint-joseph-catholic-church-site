@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
-import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
+import { PreviewTemplateComponentProps } from '@staticcms/core';
 import { useMemo } from 'react';
 import PostView from '../posts/PostView';
 

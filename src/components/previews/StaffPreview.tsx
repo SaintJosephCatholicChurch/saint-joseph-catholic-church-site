@@ -1,5 +1,5 @@
 import { styled, useTheme } from '@mui/material/styles';
-import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
+import { PreviewTemplateComponentProps } from '@staticcms/core';
 import { useMemo } from 'react';
 import { Staff } from '../../interface';
 import StaffView from '../pages/custom/staff/StaffView';

@@ -18,7 +18,7 @@ import CMS, {
   SelectWidget,
   StringWidget,
   TextWidget
-} from '@simplecms/simple-cms-core';
+} from '@staticcms/core';
 
 const loadCmsApp = () => {
   // Register all the things

@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
+import { ListChildComponentProps } from 'react-window';
 import type { Bulletin } from '../../../../interface';
 import { useFormattedBulletinTitle, useFormattedBulletinUrlDate } from './util';
 
@@ -23,63 +24,66 @@ interface BulletListButtonProps {
   index: number;
   selected: boolean;
   openInNewWindow?: boolean;
+  style: ListChildComponentProps['style'];
 }
 
-const BulletListButton = memo(({ bulletin, index, selected, openInNewWindow = false }: BulletListButtonProps) => {
-  const title = useFormattedBulletinTitle(bulletin);
-  const urlDate = useFormattedBulletinUrlDate(bulletin);
+const BulletListButton = memo(
+  ({ bulletin, index, selected, openInNewWindow = false, style }: BulletListButtonProps) => {
+    const title = useFormattedBulletinTitle(bulletin);
+    const urlDate = useFormattedBulletinUrlDate(bulletin);
 
-  return (
-    <StyledListItemWrapper>
-      <Link
-        href={index === 0 ? '/parish-bulletins' : `/parish-bulletins/${urlDate}`}
-        target={openInNewWindow ? '_blank' : undefined}
-      >
-        <ListItemButton
-          selected={selected}
-          sx={{
-            '&:hover': {
-              backgroundColor: 'rgba(0,0,0,0.1)'
-            },
-            '&.Mui-selected': {
-              backgroundColor: '#bc2f3b',
+    return (
+      <StyledListItemWrapper style={style}>
+        <Link
+          href={index === 0 ? '/parish-bulletins' : `/parish-bulletins/${urlDate}`}
+          target={openInNewWindow ? '_blank' : undefined}
+        >
+          <ListItemButton
+            selected={selected}
+            sx={{
               '&:hover': {
-                backgroundColor: '#cd3744'
+                backgroundColor: 'rgba(0,0,0,0.1)'
+              },
+              '&.Mui-selected': {
+                backgroundColor: '#bc2f3b',
+                '&:hover': {
+                  backgroundColor: '#cd3744'
+                },
+                '.MuiListItemText-primary': {
+                  color: '#fde7a5',
+                  '&:hover': {
+                    color: '#ffffff'
+                  }
+                }
               },
               '.MuiListItemText-primary': {
-                color: '#fde7a5',
-                '&:hover': {
-                  color: '#ffffff'
-                }
+                color: '#444444'
               }
-            },
-            '.MuiListItemText-primary': {
-              color: '#444444'
-            }
+            }}
+          >
+            <ListItemText
+              primary={
+                <StyledListItemPrimary>
+                  <div>{title}</div>
+                </StyledListItemPrimary>
+              }
+            />
+          </ListItemButton>
+        </Link>
+        <IconButton
+          href={bulletin.pdf}
+          target="_blank"
+          onClick={(event) => {
+            event.stopPropagation();
           }}
+          sx={{ position: 'absolute', right: '16px', top: '4px', color: selected ? '#ffffff' : undefined }}
         >
-          <ListItemText
-            primary={
-              <StyledListItemPrimary>
-                <div>{title}</div>
-              </StyledListItemPrimary>
-            }
-          />
-        </ListItemButton>
-      </Link>
-      <IconButton
-        href={bulletin.pdf}
-        target="_blank"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-        sx={{ position: 'absolute', right: '16px', top: '4px', color: selected ? '#ffffff' : undefined }}
-      >
-        <DownloadIcon />
-      </IconButton>
-    </StyledListItemWrapper>
-  );
-});
+          <DownloadIcon />
+        </IconButton>
+      </StyledListItemWrapper>
+    );
+  }
+);
 
 BulletListButton.displayName = 'BulletListButton';
 

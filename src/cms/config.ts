@@ -4,7 +4,7 @@ import {
   CmsConfig as NetlifyCmsConfig,
   CmsField as NetlifyCmsField,
   CmsFieldBase
-} from '@simplecms/simple-cms-core';
+} from '@staticcms/core';
 
 export interface CmsFieldTimes {
   widget: 'times';
@@ -192,46 +192,6 @@ const config: CmsConfig = {
           ]
         },
         {
-          name: 'bulletins',
-          label: 'Parish Bulletins',
-          file: 'content/bulletins.json',
-          description: 'Parish bulletins',
-          editor: {
-            preview: false
-          },
-          fields: [
-            {
-              name: 'bulletins',
-              label: 'Bulletins',
-              widget: 'list',
-              summary: "{{date | date('MMM DD, YYYY')}} - {{fields.name}}",
-              add_to_top: true,
-              fields: [
-                {
-                  name: 'name',
-                  label: 'Name',
-                  widget: 'string',
-                  default: 'Bulletin'
-                },
-                {
-                  name: 'date',
-                  label: 'Date',
-                  widget: 'datetime',
-                  date_format: 'MMM DD, YYYY',
-                  time_format: false
-                },
-                {
-                  name: 'pdf',
-                  label: 'PDF',
-                  widget: 'file',
-                  media_folder: '/public/bulletins',
-                  public_folder: '/bulletins'
-                }
-              ]
-            }
-          ]
-        },
-        {
           name: 'staff',
           label: 'Staff',
           file: 'content/staff.json',
@@ -400,7 +360,7 @@ const config: CmsConfig = {
                   label: 'Featured Link',
                   name: 'featured_link',
                   widget: 'object',
-                  summary: "{{fields.title}}",
+                  summary: '{{fields.title}}',
                   fields: [
                     {
                       name: 'image',
@@ -429,6 +389,50 @@ const config: CmsConfig = {
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      name: 'bulletins',
+      label: 'Bulletins',
+      icon: 'newspaper',
+      label_singular: 'Bulletin',
+      folder: 'content/bulletins/',
+      extension: 'json',
+      format: 'json',
+      create: true,
+      slug: "{{fields.date | date('YYYYMMDD')}}",
+      summary: "{{date | date('MMM DD, YYYY')}} - {{fields.name}}",
+      sortable_fields: {
+        fields: ['date'],
+        default: {
+          field: 'date',
+          direction: 'Descending'
+        }
+      },
+      editor: {
+        preview: false
+      },
+      fields: [
+        {
+          name: 'name',
+          label: 'Name',
+          widget: 'string',
+          default: 'Bulletin'
+        },
+        {
+          name: 'date',
+          label: 'Date',
+          widget: 'datetime',
+          date_format: 'MMM DD, YYYY',
+          time_format: false
+        },
+        {
+          name: 'pdf',
+          label: 'PDF',
+          widget: 'file',
+          media_folder: '/public/bulletins',
+          public_folder: '/bulletins'
         }
       ]
     },
@@ -627,7 +631,7 @@ const config: CmsConfig = {
           name: 'menu',
           label: 'Menu & Logo',
           file: 'content/menu.json',
-          description: 'Parish bulletins',
+          description: 'Site menu and logo',
           editor: {
             preview: true
           },

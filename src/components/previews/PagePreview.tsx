@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { PreviewTemplateComponentProps } from '@simplecms/simple-cms-core';
+import { PreviewTemplateComponentProps } from '@staticcms/core';
 import PageContentView from '../pages/PageContentView';
 import PageTitle from '../pages/PageTitle';
 

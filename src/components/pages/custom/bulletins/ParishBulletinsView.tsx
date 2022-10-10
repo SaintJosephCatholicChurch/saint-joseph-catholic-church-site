@@ -19,6 +19,8 @@ import transientOptions from '../../../../util/transientOptions';
 import useElementSize from '../../../../util/useElementSize';
 import BulletListButton from './BulletListButton';
 import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import Box from '@mui/material/Box';
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
@@ -265,6 +267,35 @@ const StyledSlidableArea = styled(
   `
 );
 
+const BulletinListRowFactory = (bulletin: Bulletin) => {
+  const BulletinListRow = (props: ListChildComponentProps<Bulletin[]>) => {
+    const { index, style, data } = props;
+
+    return (
+      <BulletListButton
+        key={`bulletin-${index}`}
+        style={style}
+        index={index}
+        bulletin={data[index]}
+        selected={data[index].pdf === bulletin.pdf}
+      />
+    );
+  };
+
+  return BulletinListRow;
+};
+
+// TODO Implement virtualization for the select in the future
+// const BulletinSelectRow = (props: ListChildComponentProps<Bulletin[]>) => {
+//   const { index, style, data } = props;
+
+//   return (
+//     <MenuItem style={style} key={`bulletin-menu-item-${index}`} value={data[index].pdf}>
+//       {getFormattedBulletinTitle(data[index])}
+//     </MenuItem>
+//   );
+// };
+
 interface ParishBulletinsViewProps {
   bulletins: Bulletin[];
   bulletin: Bulletin;
@@ -326,18 +357,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
     setHeight((width / 8.5) * 11);
   }, [width]);
 
-  const bulletinListItems = useMemo(
-    () =>
-      bulletins?.map((aBulletin, index) => (
-        <BulletListButton
-          key={`bulletin-${index}`}
-          index={index}
-          bulletin={aBulletin}
-          selected={aBulletin.pdf === bulletin.pdf}
-        />
-      )),
-    [bulletin.pdf, bulletins]
-  );
+  const BulletinRow = useMemo(() => BulletinListRowFactory(bulletin), [bulletin]);
 
   const bulletinMenuItems = useMemo(
     () =>
@@ -353,17 +373,25 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
 
   return (
     <StyledParishBulletinsView ref={topRef}>
-      <List
+      <Box
         sx={{
           backgroundColor: '#e8e5e1',
           [theme.breakpoints.down('lg')]: {
             display: 'none'
           }
         }}
-        disablePadding
       >
-        {bulletinListItems}
-      </List>
+        <FixedSizeList
+          height={height}
+          width="100%"
+          itemSize={46}
+          itemCount={bulletins?.length ?? 0}
+          overscanCount={5}
+          itemData={bulletins ?? []}
+        >
+          {BulletinRow}
+        </FixedSizeList>
+      </Box>
       <StyledSelectWrapper>
         <FormControl fullWidth>
           <InputLabel id="bulletin-label">Bulletin</InputLabel>

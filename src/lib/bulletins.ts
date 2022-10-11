@@ -13,8 +13,8 @@ let bulletinCache: BulletinPDFData[];
 let metaCache: BulletinPDFData[];
 
 export function fetchBulletins(): Bulletin[] {
-  if (metaCache && process.env.NODE_ENV !== 'development') {
-    return metaCache;
+  if (bulletinCache && process.env.NODE_ENV !== 'development') {
+    return bulletinCache;
   }
 
   const fileNames = readdirSync(pagesDirectory).filter((it) => it.endsWith('.json'));

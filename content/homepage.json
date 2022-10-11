@@ -12,7 +12,7 @@
     {
       "type": "featured_page",
       "image": "/files/did-you-know-banner.webp",
-      "summary": "A description goes here, a brief explanation of the page and what awaits the user when they click here!",
+      "summary": "",
       "page": "did-you-know|Did You Know?"
     },
     {
@@ -21,11 +21,6 @@
       "summary": "",
       "image": "/files/aba-36-video.webp",
       "url": "https://vimeo.com/732233106?embedded=true&source=video_title&owner=1005171"
-    },
-    {
-      "type": "featured_page",
-      "page": "formed|Connect to Formed.org",
-      "image": "/files/formed-banner-with-bible.webp"
     }
   ],
   "daily_readings_background": "/files/scripture-background.webp",

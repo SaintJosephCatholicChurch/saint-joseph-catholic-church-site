@@ -13,7 +13,7 @@ interface ParishBulletinsProps {
 
 const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => {
   return (
-    <PageLayout url="/parish-bulletins" title="Parish Bulletins" hideSidebar>
+    <PageLayout url="/parish-bulletins" title="Parish Bulletins" hideSidebar hideHeader>
       {isNotNullish(bulletin) && isNotNullish(meta) ? (
         <ParishBulletinsView bulletins={bulletins} bulletin={bulletin} meta={meta} />
       ) : (

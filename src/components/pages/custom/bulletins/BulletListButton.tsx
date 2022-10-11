@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { memo } from 'react';
 import { ListChildComponentProps } from 'react-window';
 import type { Bulletin } from '../../../../interface';
-import { useFormattedBulletinTitle, useFormattedBulletinUrlDate } from './util';
+import { useFormattedBulletinDate, useFormattedBulletinUrlDate } from './util';
 
 const StyledListItemWrapper = styled('div')`
   position: relative;
@@ -29,7 +29,7 @@ interface BulletListButtonProps {
 
 const BulletListButton = memo(
   ({ bulletin, index, selected, openInNewWindow = false, style }: BulletListButtonProps) => {
-    const title = useFormattedBulletinTitle(bulletin);
+    const date = useFormattedBulletinDate(bulletin);
     const urlDate = useFormattedBulletinUrlDate(bulletin);
 
     return (
@@ -41,6 +41,7 @@ const BulletListButton = memo(
           <ListItemButton
             selected={selected}
             sx={{
+              height: 60,
               '&:hover': {
                 backgroundColor: 'rgba(0,0,0,0.1)'
               },
@@ -54,19 +55,30 @@ const BulletListButton = memo(
                   '&:hover': {
                     color: '#ffffff'
                   }
+                },
+                '.MuiListItemText-secondary': {
+                  color: '#ffffff',
+                  '&:hover': {
+                    color: '#ffffff'
+                  }
                 }
               },
               '.MuiListItemText-primary': {
                 color: '#444444'
+              },
+              '.MuiListItemText-secondary': {
+                color: '#8D6D26'
               }
             }}
           >
             <ListItemText
               primary={
                 <StyledListItemPrimary>
-                  <div>{title}</div>
+                  <div>{date}</div>
                 </StyledListItemPrimary>
               }
+              secondary={bulletin.name}
+              sx={{ margin: 0 }}
             />
           </ListItemButton>
         </Link>

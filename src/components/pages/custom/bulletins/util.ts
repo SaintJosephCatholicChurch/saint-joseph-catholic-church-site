@@ -2,18 +2,20 @@ import format from 'date-fns/format';
 import { useMemo } from 'react';
 import { Bulletin } from '../../../../interface';
 
-export function getFormattedBulletinTitle(bulletin: Bulletin) {
-  let date: string | undefined;
-
+export function getFormattedBulletinDate(bulletin: Bulletin) {
   try {
-    date = format(new Date(bulletin.date), 'MMM dd, yyyy');
+    return format(new Date(bulletin.date), 'MMM dd, yyyy');
   } catch {
-    date = 'N/A';
+    return 'N/A';
   }
+}
 
-  const name = bulletin.name ? ` - ${bulletin.name}` : '';
+export function useFormattedBulletinDate(bulletin: Bulletin) {
+  return useMemo(() => getFormattedBulletinDate(bulletin), [bulletin]);
+}
 
-  return `${date}${name}`;
+export function getFormattedBulletinTitle(bulletin: Bulletin) {
+  return `${getFormattedBulletinDate(bulletin)}${bulletin.name ? ` - ${bulletin.name}` : ''}`;
 }
 
 export function useFormattedBulletinTitle(bulletin: Bulletin) {

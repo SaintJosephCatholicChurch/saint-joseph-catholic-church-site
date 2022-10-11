@@ -2,25 +2,53 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DownloadIcon from '@mui/icons-material/Download';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
-import List from '@mui/material/List';
 import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import type { Bulletin, BulletinPDFData } from '../../../../interface';
 import { isNotNullish } from '../../../../util/null.util';
 import transientOptions from '../../../../util/transientOptions';
-import useElementSize from '../../../../util/useElementSize';
+import useWindowSize from '../../../../util/useWindowSize';
+import PageTitle from '../../PageTitle';
 import BulletListButton from './BulletListButton';
 import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import Box from '@mui/material/Box';
+
+const MARGIN_TOP = 215;
+const MARGIN_BOTTOM = 36;
+const MAX_HEIGHT = 1115;
+const MIN_HEIGHT = 558;
+const BUTTON_WIDTH = 280;
+
+interface StyledParishBulletinsViewWrapperProps {
+  $width: number;
+}
+
+const StyledParishBulletinsViewWrapper = styled(
+  'div',
+  transientOptions
+)<StyledParishBulletinsViewWrapperProps>(
+  ({ theme, $width }) => `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+
+    ${theme.breakpoints.up('lg')} {
+      width: ${$width}px;
+      margin: 0 auto;
+    }
+  `
+);
 
 const StyledParishBulletinsView = styled('div')(
   ({ theme }) => `
@@ -28,7 +56,7 @@ const StyledParishBulletinsView = styled('div')(
     align-items: flex-start;
     margin-top: 16px;
 
-    grid-template-columns: 25% 1fr;
+    grid-template-columns: ${BUTTON_WIDTH}px 1fr;
     ${theme.breakpoints.down('lg')} {
       grid-template-columns: 1fr;
     }
@@ -49,14 +77,36 @@ const StyledSelectWrapper = styled('div')(
   `
 );
 
-const StyledPDFViewerWrapper = styled('div')(
-  ({ theme }) => `
+interface StyledPDFViewerWrapperProps {
+  $height: number;
+  $width: number;
+}
+
+const StyledPDFViewerWrapper = styled(
+  'div',
+  transientOptions
+)<StyledPDFViewerWrapperProps>(
+  ({ theme, $height, $width }) => `
+    height: auto;
     width: 100%;
     box-sizing: border-box;
 
     border: 1px solid #e8e5e1;
     ${theme.breakpoints.down('lg')} {
       border: none;
+    }
+
+    ${theme.breakpoints.up('lg')} {
+      width: ${$width}px;
+      &:hover .pdf-pagination {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s linear 0s, opacity 300ms;
+      }
+
+      .react-pdf__Document {
+        height: ${$height}px;
+      }
     }
   `
 );
@@ -80,11 +130,12 @@ const StyledPDFViewerContent = styled(
   transientOptions
 )<StyledPDFViewerContentProps>(
   ({ theme, $height, $width }) => `
-    min-height: ${$height}px;
     height: auto;
-    width: ${$width}px;
+    width: 100%;
 
     ${theme.breakpoints.up('lg')} {
+      min-height: ${$height}px;
+      width: ${$width}px;
       &:hover .pdf-pagination {
         visibility: visible;
         opacity: 1;
@@ -232,12 +283,12 @@ const StyledSlidableAreaWrapper = styled(
   ({ theme, $height }) => `
     display: flex;
     position: relative;
-    height: ${$height}px;
-    overflow: hidden;
+    overflow: auto;
+    height: auto;
 
-    ${theme.breakpoints.down('lg')} {
-      overflow: auto;
-      height: auto;
+    ${theme.breakpoints.up('lg')} {
+      overflow: hidden;
+      height: ${$height}px;
     }
   `
 );
@@ -263,6 +314,15 @@ const StyledSlidableArea = styled(
     
     ${theme.breakpoints.down('lg')} {
       flex-direction: column;
+    }
+  `
+);
+
+const StyledImage = styled('img')(
+  ({ theme }) => `
+    ${theme.breakpoints.down('lg')} {
+      width: 100%;
+      height: auto;
     }
   `
 );
@@ -305,7 +365,7 @@ interface ParishBulletinsViewProps {
 const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsViewProps) => {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
 
   const theme = useTheme();
   const router = useRouter();
@@ -321,8 +381,9 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   );
 
   useEffect(() => {
+    setPage(1);
     setTotalPages(pages.length);
-  }, [pages.length]);
+  }, [pages]);
 
   const onPageChange = useCallback(
     (newPage: number) => {
@@ -349,13 +410,12 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
     onPageChange(page + 1);
   }, [onPageChange, page]);
 
-  const [topRef, { width: topWidth }] = useElementSize();
-  const [pdfRef, { width: pdfWidth }] = useElementSize();
-  const width = useMemo(() => Math.min(topWidth, pdfWidth), [pdfWidth, topWidth]);
+  const { height: windowHeight } = useWindowSize();
+  const height = Math.min(Math.max((windowHeight ?? 0) - MARGIN_TOP - MARGIN_BOTTOM, MIN_HEIGHT), MAX_HEIGHT);
 
   useEffect(() => {
-    setHeight((width / 8.5) * 11);
-  }, [width]);
+    setWidth((height / 11) * 8.5);
+  }, [height]);
 
   const BulletinRow = useMemo(() => BulletinListRowFactory(bulletin), [bulletin]);
 
@@ -372,96 +432,99 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const title = useFormattedBulletinTitle(bulletin);
 
   return (
-    <StyledParishBulletinsView ref={topRef}>
-      <Box
-        sx={{
-          backgroundColor: '#e8e5e1',
-          [theme.breakpoints.down('lg')]: {
-            display: 'none'
-          }
-        }}
-      >
-        <FixedSizeList
-          height={height}
-          width="100%"
-          itemSize={46}
-          itemCount={bulletins?.length ?? 0}
-          overscanCount={5}
-          itemData={bulletins ?? []}
-        >
-          {BulletinRow}
-        </FixedSizeList>
-      </Box>
-      <StyledSelectWrapper>
-        <FormControl fullWidth>
-          <InputLabel id="bulletin-label">Bulletin</InputLabel>
-          <Select
-            labelId="bulletin-label"
-            id="bulletin"
-            value={bulletin.pdf}
-            label="Bulletin"
-            onChange={(event) => onBulletinChange(event.target.value)}
-          >
-            {bulletinMenuItems}
-          </Select>
-        </FormControl>
-        <IconButton
-          href={bulletin.pdf}
-          target="_blank"
-          onClick={(event) => {
-            event.stopPropagation();
+    <StyledParishBulletinsViewWrapper $width={width + BUTTON_WIDTH}>
+      <PageTitle title="Parish Bulletins" />
+      <StyledParishBulletinsView>
+        <Box
+          sx={{
+            backgroundColor: '#e8e5e1',
+            [theme.breakpoints.down('lg')]: {
+              display: 'none'
+            }
           }}
         >
-          <DownloadIcon />
-        </IconButton>
-      </StyledSelectWrapper>
-      <StyledPDFViewerWrapper>
-        <StyledPDFViewer ref={pdfRef}>
-          <StyledPDFViewerContent $width={width} $height={height}>
-            {pages.length > 0 ? (
-              <StyledSlidableAreaWrapper $height={height}>
-                <StyledSlidableArea $width={width} $index={page - 1}>
-                  {pages.map((pageImage, index) => (
-                    <img
-                      key={`${bulletin.pdf}-page-${index + 1}`}
-                      src={pageImage}
-                      alt={`${title} - Page ${index + 1}`}
-                      width={width}
-                      height={height}
-                    />
-                  ))}
-                </StyledSlidableArea>
-              </StyledSlidableAreaWrapper>
-            ) : null}
-            <StyledPaginationContainer className="pdf-pagination">
-              <StyledFloatingPagination aria-label="pagination">
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={handlePaginationChange}
-                  hidePrevButton
-                  hideNextButton
-                />
-              </StyledFloatingPagination>
-            </StyledPaginationContainer>
-            {page !== 1 ? (
-              <StyledNavigationButtonWrapper $align="left">
-                <Button onClick={onPreviousClick}>
-                  <ChevronLeftIcon fontSize="large" />
-                </Button>
-              </StyledNavigationButtonWrapper>
-            ) : null}
-            {page !== totalPages ? (
-              <StyledNavigationButtonWrapper $align="right">
-                <Button onClick={onNextClick}>
-                  <ChevronRightIcon fontSize="large" />
-                </Button>
-              </StyledNavigationButtonWrapper>
-            ) : null}
-          </StyledPDFViewerContent>
-        </StyledPDFViewer>
-      </StyledPDFViewerWrapper>
-    </StyledParishBulletinsView>
+          <FixedSizeList
+            height={height}
+            width="100%"
+            itemSize={60}
+            itemCount={bulletins?.length ?? 0}
+            overscanCount={5}
+            itemData={bulletins ?? []}
+          >
+            {BulletinRow}
+          </FixedSizeList>
+        </Box>
+        <StyledSelectWrapper>
+          <FormControl fullWidth>
+            <InputLabel id="bulletin-label">Bulletin</InputLabel>
+            <Select
+              labelId="bulletin-label"
+              id="bulletin"
+              value={bulletin.pdf}
+              label="Bulletin"
+              onChange={(event) => onBulletinChange(event.target.value)}
+            >
+              {bulletinMenuItems}
+            </Select>
+          </FormControl>
+          <IconButton
+            href={bulletin.pdf}
+            target="_blank"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
+        </StyledSelectWrapper>
+        <StyledPDFViewerWrapper $width={width} $height={height}>
+          <StyledPDFViewer>
+            <StyledPDFViewerContent $width={width} $height={height}>
+              {pages.length > 0 ? (
+                <StyledSlidableAreaWrapper $height={height}>
+                  <StyledSlidableArea $width={width} $index={page - 1}>
+                    {pages.map((pageImage, index) => (
+                      <StyledImage
+                        key={`${bulletin.pdf}-page-${index + 1}`}
+                        src={pageImage}
+                        alt={`${title} - Page ${index + 1}`}
+                        width={width}
+                        height={height}
+                      />
+                    ))}
+                  </StyledSlidableArea>
+                </StyledSlidableAreaWrapper>
+              ) : null}
+              <StyledPaginationContainer className="pdf-pagination">
+                <StyledFloatingPagination aria-label="pagination">
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handlePaginationChange}
+                    hidePrevButton
+                    hideNextButton
+                  />
+                </StyledFloatingPagination>
+              </StyledPaginationContainer>
+              {page !== 1 ? (
+                <StyledNavigationButtonWrapper $align="left">
+                  <Button onClick={onPreviousClick}>
+                    <ChevronLeftIcon fontSize="large" />
+                  </Button>
+                </StyledNavigationButtonWrapper>
+              ) : null}
+              {page !== totalPages ? (
+                <StyledNavigationButtonWrapper $align="right">
+                  <Button onClick={onNextClick}>
+                    <ChevronRightIcon fontSize="large" />
+                  </Button>
+                </StyledNavigationButtonWrapper>
+              ) : null}
+            </StyledPDFViewerContent>
+          </StyledPDFViewer>
+        </StyledPDFViewerWrapper>
+      </StyledParishBulletinsView>
+    </StyledParishBulletinsViewWrapper>
   );
 };
 

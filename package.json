@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "private": true,
   "scripts": {
     "build-analyze": "cross-env ANALYZE=true next build",

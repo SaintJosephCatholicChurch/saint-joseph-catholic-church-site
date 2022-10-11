@@ -9,8 +9,15 @@ import { isNullish } from '../../../util/null.util';
 
 export default function useEventDateTimeText(start: Date | null | undefined, end: Date | null | undefined, allDay: boolean): [string, string | undefined] {
   return useMemo(() => {
-    if (isNullish(start) || isNullish(end)) {
+    if (isNullish(start)) {
       return ['', undefined];
+    }
+
+    if (isNullish(end)) {
+      if (allDay) {
+        return [format(start, 'EEEE, MMMM d, yyyy'), undefined];
+      }
+      return [format(start, 'EEEE, MMMM d, yyyy'), format(start, 'h:mm aaa')];
     }
 
     if (isSameDay(start, end)) {

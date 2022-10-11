@@ -6,7 +6,8 @@ import {
   faGear,
   faHouse,
   faTag,
-  faNewspaper
+  faNewspaper,
+  faCircleQuestion
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
@@ -21,6 +22,7 @@ import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
 import loadCmsApp from './CMSApp';
 import config from './config';
+import Help from './pages/help/Help';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
@@ -68,6 +70,7 @@ const CMSView = () => {
     cmsApp.registerIcon('calendar-days', <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
     cmsApp.registerIcon('clipboard-question', <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
     cmsApp.registerIcon('newspaper', <FontAwesomeIcon icon={faNewspaper} size="lg" />);
+    cmsApp.registerIcon('circle-question', <FontAwesomeIcon icon={faCircleQuestion} size="lg" />);
 
     cmsApp.registerAdditionalLink(
       'events',
@@ -81,12 +84,7 @@ const CMSView = () => {
       'https://drive.google.com/',
       'clipboard-question'
     );
-    // cmsApp.registerAdditionalLink(
-    //   'contact-form-responses',
-    //   'Contact Form Response',
-    //   ContactFormResponses,
-    //   'clipboard-question'
-    // );
+    cmsApp.registerAdditionalLink('help', 'Help', Help, 'circle-question');
   }, []);
 
   return (

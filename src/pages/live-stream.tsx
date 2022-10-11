@@ -4,6 +4,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import PageLayout from '../components/PageLayout';
 import LiveStreamView from '../components/pages/custom/live-stream/LiveStreamView';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../constants';
+import churchDetails from '../lib/church_details';
 import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
 
 const StyledLiveStreamPageContent = styled('div')`
@@ -20,12 +21,12 @@ const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
   return (
     <PageLayout url="/live-stream" title="Live Stream" {...sidebarProps}>
       <StyledLiveStreamPageContent>
-        <LiveStreamView />
+        <LiveStreamView facebookPage={churchDetails.facebook_page} />
         <Button
           variant="contained"
           size="large"
           startIcon={<FacebookIcon />}
-          href="https://www.facebook.com/stjosephchurchbluffton/live"
+          href={`https://www.facebook.com/${churchDetails.facebook_page}/live`}
           target="_blank"
           sx={{
             marginTop: '16px',

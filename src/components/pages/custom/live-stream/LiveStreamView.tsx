@@ -8,7 +8,11 @@ const StyledLiveStreamWrapper = styled('div')`
   display: flex;
 `;
 
-const LiveStreamView = () => {
+interface LiveStreamViewProps {
+  facebookPage: string;
+}
+
+const LiveStreamView = ({ facebookPage }: LiveStreamViewProps) => {
   const [height, setHeight] = useState(0);
   const [ref, { width }] = useElementSize();
 
@@ -26,7 +30,7 @@ const LiveStreamView = () => {
 
   return (
     <StyledLiveStreamWrapper ref={ref} style={{ height }}>
-      <LiveStreamIFrameNoSSR width={width} height={height} />
+      <LiveStreamIFrameNoSSR width={width} height={height} facebookPage={facebookPage} />
     </StyledLiveStreamWrapper>
   );
 };

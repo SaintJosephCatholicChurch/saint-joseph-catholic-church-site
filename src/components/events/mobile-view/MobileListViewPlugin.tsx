@@ -82,9 +82,11 @@ const MobileListView =
     return (
       <StyledMobileListView>
         <StyledEvents>
-          {sortedSegs.map((seg) => (
-            <MobileListEvent key={`event-${seg.def.defId}`} segment={seg} onClick={handleOnClick(seg.def.defId)} />
-          ))}
+          {sortedSegs.length > 0
+            ? sortedSegs.map((seg) => (
+                <MobileListEvent key={`event-${seg.def.defId}`} segment={seg} onClick={handleOnClick(seg.def.defId)} />
+              ))
+            : 'No events'}
         </StyledEvents>
       </StyledMobileListView>
     );

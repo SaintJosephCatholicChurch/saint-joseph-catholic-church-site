@@ -46,7 +46,7 @@ const SearchBox = memo(({ disableMargin = false, value: controlledValue = '' }: 
         size={isSmallScreen ? 'medium' : 'small'}
         placeholder="Search..."
         value={value}
-        sx={{ background: 'white', mb: !disableMargin ? 4 : undefined }}
+        sx={{ background: 'white', mt: !disableMargin ? undefined : 0, mb: !disableMargin ? 4 : 0 }}
         fullWidth
         onChange={(event) => {
           setValue(event.currentTarget.value);

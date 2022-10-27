@@ -70,6 +70,7 @@ const StyledSelectWrapper = styled('div')(
     justify-content: center;
     gap: 8px;
     margin-bottom: 24px;
+    width: 100%;
 
     ${theme.breakpoints.up('lg')} {
       display: none;

@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import carouselStyles from '../../../public/styles/carousel-content.module.css';
+import { useEffect, useState } from 'react';
 import {
   CAROUSEL_DURATION,
   CAROUSEL_MAX_HEIGHT_LG,
@@ -76,14 +76,30 @@ const StyledTitle = styled(
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 2px;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
     
-    ${$active ? `transition: font-size ${CAROUSEL_DURATION / 1000}s;` : ''}
-    font-size: ${$active ? '72px' : '64px'};
+    scale: 1;
+    ${
+      $active
+        ? `
+          transition: scale ${CAROUSEL_DURATION / 1000}s linear;
+          scale: 1.1;
+        `
+        : ''
+    }
+  
+    font-size: 64px;
     ${theme.breakpoints.only('md')} {
-      font-size: ${$active ? '72px' : '64px'};
+      font-size: 64px;
     }
     ${theme.breakpoints.down('md')} {
-      font-size: ${$active ? '40px' : '32px'};
+      font-size: 32px;
     }
   `
 );
@@ -94,11 +110,17 @@ interface CarouselSlideProps {
 }
 
 const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) => {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    setIsActive(active);
+  }, [active]);
+
   return (
     <StyledCarouselSlide className="each-fade">
       <StyledImage className="image-container" $image={image} />
       <StyledTitleWrapper>
-        <StyledTitle className={`${carouselStyles.carouselContent}`} $active={active}>
+        <StyledTitle $active={isActive}>
           {title}
         </StyledTitle>
       </StyledTitleWrapper>

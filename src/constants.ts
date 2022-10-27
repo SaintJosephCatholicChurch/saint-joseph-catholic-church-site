@@ -2,6 +2,7 @@ import type { ScreenSize } from './interface';
 
 export const MAX_APP_WIDTH = 1200;
 
+export const CAROUSEL_DURATION = 5000;
 export const CAROUSEL_MAX_HEIGHT_LG = 640;
 export const CAROUSEL_MAX_HEIGHT_MD = 420;
 export const CAROUSEL_MAX_HEIGHT_SM = 210;

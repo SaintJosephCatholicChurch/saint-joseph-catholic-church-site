@@ -1,6 +1,11 @@
 import { styled } from '@mui/material/styles';
 import carouselStyles from '../../../public/styles/carousel-content.module.css';
-import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
+import {
+  CAROUSEL_DURATION,
+  CAROUSEL_MAX_HEIGHT_LG,
+  CAROUSEL_MAX_HEIGHT_MD,
+  CAROUSEL_MAX_HEIGHT_SM
+} from '../../constants';
 import type { Slide } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 
@@ -58,33 +63,44 @@ const StyledTitleWrapper = styled('div')`
   justify-content: center;
 `;
 
-const StyledTitle = styled('h1')(
-  ({ theme }) => `
+interface StyledTitleProps {
+  $active: boolean;
+}
+
+const StyledTitle = styled(
+  'h1',
+  transientOptions
+)<StyledTitleProps>(
+  ({ theme, $active }) => `
     color: #fff;
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 2px;
     
-    font-size: 64px;
+    ${$active ? `transition: font-size ${CAROUSEL_DURATION / 1000}s;` : ''}
+    font-size: ${$active ? '72px' : '64px'};
     ${theme.breakpoints.only('md')} {
-      font-size: 64px;
+      font-size: ${$active ? '72px' : '64px'};
     }
     ${theme.breakpoints.down('md')} {
-      font-size: 32px;
+      font-size: ${$active ? '40px' : '32px'};
     }
   `
 );
 
 interface CarouselSlideProps {
   slide: Slide;
+  active: boolean;
 }
 
-const CarouselSlide = ({ slide: { image, title } }: CarouselSlideProps) => {
+const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) => {
   return (
     <StyledCarouselSlide className="each-fade">
       <StyledImage className="image-container" $image={image} />
       <StyledTitleWrapper>
-        <StyledTitle className={`${carouselStyles.carouselContent}`}>{title}</StyledTitle>
+        <StyledTitle className={`${carouselStyles.carouselContent}`} $active={active}>
+          {title}
+        </StyledTitle>
       </StyledTitleWrapper>
     </StyledCarouselSlide>
   );

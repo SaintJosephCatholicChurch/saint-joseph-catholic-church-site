@@ -1,7 +1,13 @@
 import { styled } from '@mui/material/styles';
+import { useCallback, useState } from 'react';
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
+import {
+  CAROUSEL_DURATION,
+  CAROUSEL_MAX_HEIGHT_LG,
+  CAROUSEL_MAX_HEIGHT_MD,
+  CAROUSEL_MAX_HEIGHT_SM
+} from '../../constants';
 import type { Slide } from '../../interface';
 import CarouselSlide from './CarouselSlide';
 
@@ -58,11 +64,17 @@ interface CarouselViewProps {
 }
 
 const CarouselView = ({ slides }: CarouselViewProps) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const handleSlideChange = useCallback((_old: number, next: number) => {
+    setActiveSlide(next);
+  }, []);
+
   return (
     <StyledCarouselView className="slide-container">
-      <Fade>
+      <Fade duration={CAROUSEL_DURATION} onChange={handleSlideChange}>
         {slides.map((slide, index) => (
-          <CarouselSlide key={`slide-${index}`} slide={slide} />
+          <CarouselSlide key={`slide-${index}`} slide={slide} active={activeSlide === index} />
         ))}
       </Fade>
     </StyledCarouselView>

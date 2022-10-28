@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { useEffect } from 'react';
-import ScheduleTabChangeEvent from './events/ScheduleTabChangeEvent';
+
+import type ScheduleTabChangeEvent from './events/ScheduleTabChangeEvent';
 
 interface EventMap {
   scheduleTabChange: ScheduleTabChangeEvent;

@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+
 import FooterHeader from './FooterHeader';
 
 const StyledFooterAside = styled('aside')`

@@ -1,9 +1,11 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
-import type { Times } from '../../interface';
+
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import TabPanel from '../TabPanel';
+
+import type { Times } from '../../interface';
 
 interface StyledTabPanelContentProps {
   $disablePadding: boolean;

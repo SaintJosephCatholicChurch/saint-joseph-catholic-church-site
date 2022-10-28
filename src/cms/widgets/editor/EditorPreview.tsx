@@ -1,10 +1,12 @@
 import DOMPurify from 'dompurify';
-import { Map } from 'immutable';
-import { CmsWidgetPreviewProps } from '@staticcms/core';
 import { useEffect, useMemo, useState } from 'react';
+
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
 import { getFieldAsset } from '../../util/asset.util';
+
+import type { Map } from 'immutable';
+import type { CmsWidgetPreviewProps } from '@staticcms/core';
 
 async function fromStorageToEditor(
   value: string,
@@ -13,7 +15,7 @@ async function fromStorageToEditor(
 ): Promise<{ result: string; cache: Record<string, boolean> }> {
   let newValue = value;
 
-  const imageRegex = /<img(?:[\w\W]+?)src="([\w\W]+?)"(?:[\w\W]+?)[\/]{0,1}>/g;
+  const imageRegex = /<img(?:[\w\W]+?)src="([\w\W]+?)"(?:[\w\W]+?)[/]{0,1}>/g;
   let imageMatch = imageRegex.exec(newValue);
   while (imageMatch && imageMatch.length === 2) {
     if (imageMatch[1] in cache ? cache[imageMatch[1]] : (await doesUrlFileExist(imageMatch[1])).exists) {
@@ -92,7 +94,7 @@ type EditorPreviewProps = Omit<CmsWidgetPreviewProps<string>, 'getAsset'> & {
 };
 
 const EditorPreview = ({ value, field, getAsset }: EditorPreviewProps) => {
-  const sanitizedHtml = field?.get('sanitize_preview', false) ? DOMPurify.sanitize(value) : value;
+  const sanitizedHtml = (field?.get('sanitize_preview', false) ? DOMPurify.sanitize(value) : value) as string;
   const html = useStorageToEditor(sanitizedHtml, field, getAsset);
 
   return useMemo(

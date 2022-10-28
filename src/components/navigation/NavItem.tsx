@@ -2,14 +2,17 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
-import { KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import { MENU_DELAY } from '../../constants';
-import type { MenuItem, MenuLink } from '../../interface';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
 import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import NavItemPopup from './NavItemPopup';
+
+import type { KeyboardEvent, MouseEvent } from 'react';
+import type { MenuItem, MenuLink } from '../../interface';
 
 const StyledNavItem = styled('div')`
   position: relative;
@@ -38,7 +41,7 @@ const StyledUnderline = styled('div')`
 `;
 
 function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
-  return Boolean('menu_links' in link && (link as MenuItem).menu_links?.length);
+  return Boolean('menu_links' in link && link.menu_links?.length);
 }
 
 export interface HoverState {

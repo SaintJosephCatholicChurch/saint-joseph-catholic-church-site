@@ -5,8 +5,11 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { useMemo } from 'react';
+
 import contentStyles from '../../../public/styles/content.module.css';
-import { BULLETIN, NEWS, SearchableEntry } from '../../interface';
+import { BULLETIN, NEWS } from '../../constants';
+
+import type { SearchableEntry } from '../../interface';
 
 const StyledSearchResultBody = styled('div')`
   display: flex;

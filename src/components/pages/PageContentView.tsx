@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
 import contentStyles from '../../../public/styles/content.module.css';
+
+import type { ReactNode } from 'react';
 
 interface PageViewProps {
   children: ReactNode;

@@ -1,13 +1,12 @@
 import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import type { GetStaticProps } from 'next/types';
 import { useEffect, useState } from 'react';
+
 import PageLayout from '../components/PageLayout';
 import SearchResult from '../components/search/SearchResult';
 import SearchBox from '../components/SearchBox';
-import { SEARCH_RESULTS_TO_SHOW } from '../constants';
-import { BULLETIN, NEWS, PAGE, SearchableEntry } from '../interface';
+import { BULLETIN, NEWS, PAGE, SEARCH_RESULTS_TO_SHOW } from '../constants';
 import { fetchBulletinsMetaData } from '../lib/bulletins';
 import churchDetails from '../lib/church_details';
 import { fetchPageContent } from '../lib/pages';
@@ -16,6 +15,9 @@ import staff from '../lib/staff';
 import { useSearchScores } from '../util/search.util';
 import { isNotEmpty } from '../util/string.util';
 import useLocation from '../util/useLocation';
+
+import type { GetStaticProps } from 'next/types';
+import type { SearchableEntry } from '../interface';
 
 const StyledSearch = styled('div')`
   display: flex;
@@ -51,7 +53,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
       </StyledSearchQueryTitle>
       <StyledSearch>
         {searchResults?.length > 0 ? (
-          [...Array(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
+          [...Array<unknown>(SEARCH_RESULTS_TO_SHOW)].map((_, index) => {
             if (searchResults.length <= index) {
               return;
             }
@@ -60,7 +62,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
             let { summary, showSummary = true } = entry;
             if (!summary && showSummary) {
               const match = new RegExp(
-                `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+                `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                 'ig'
               ).exec(entry.content);
               if (match && match.length >= 1) {
@@ -69,7 +71,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
                 const match = new RegExp(
                   `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query
                     .split(' ')
-                    .join('|')}(?![^<>]*(([\/\"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+                    .join('|')}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                   'ig'
                 ).exec(entry.content);
                 if (match && match.length >= 1) {
@@ -79,7 +81,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
             }
 
             summary = summary?.replace(
-              new RegExp(`(${query.split(' ').join('|')})(?![^<>]*(([\/\"']|]]|\b)>))`, 'ig'),
+              new RegExp(`(${query.split(' ').join('|')})(?![^<>]*(([/"']|]]|\b)>))`, 'ig'),
               `<strong style="color: #000">$1</strong>`
             );
 
@@ -95,7 +97,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
 
 export default Search;
 
-export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchProps }> => {
+export const getStaticProps: GetStaticProps = (): { props: SearchProps } => {
   return {
     props: {
       searchableEntries: [
@@ -164,7 +166,7 @@ export const getStaticProps: GetStaticProps = async (): Promise<{ props: SearchP
         },
         {
           title: 'Parish Staff',
-          content: `parish staff ${(staff ?? []).map(({ title, name }) => `${title} ${name}`)}`,
+          content: `parish staff ${(staff ?? []).map(({ title, name }) => `${title} ${name}`).join(' ')}`,
           url: '/staff',
           type: PAGE,
           priority: true,

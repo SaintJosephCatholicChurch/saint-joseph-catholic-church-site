@@ -1,14 +1,15 @@
+// eslint-disable-next-line import/order
 import FullCalendar from '@fullcalendar/react';
 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import listPlugin from '@fullcalendar/list';
-import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+
 import useIsomorphicLayoutEffect from '../../util/useIsomorphicLayoutEffect';
 import { useMediaQueryDown, useMediaQueryUp } from '../../util/useMediaQuery';
 import CalendarEventDialog from './CalendarEventDialog';
@@ -16,6 +17,8 @@ import CalendarEventPopover from './CalendarEventPopover';
 import CalendarEventRenderer from './CalendarEventRenderer';
 import CalendarHeader from './CalendarHeader';
 import createMobileListViewPlugin from './mobile-view/MobileListViewPlugin';
+
+import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
 
 const StyledCalendarWrapper = styled('div')(
   ({ theme }) => `

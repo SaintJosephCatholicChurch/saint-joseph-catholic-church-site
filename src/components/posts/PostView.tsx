@@ -1,10 +1,11 @@
-import { ReactNode } from 'react';
 import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import Tags from '../Tags';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
+
+import type { ReactNode } from 'react';
 
 interface PostViewProps {
   title: string;

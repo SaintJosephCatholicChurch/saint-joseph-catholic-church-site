@@ -1,4 +1,5 @@
 import tinymce from 'tinymce';
+
 import * as Options from './api/options';
 import * as Keys from './core/keys';
 

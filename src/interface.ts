@@ -1,4 +1,4 @@
-import matter from 'gray-matter';
+import type matter from 'gray-matter';
 
 export type ScreenSize = 'large' | 'medium' | 'small' | 'mobile';
 
@@ -178,9 +178,6 @@ export interface MenuData {
 }
 
 export type ContentType = 'News' | 'Page' | 'Bulletin';
-export const NEWS: ContentType = 'News';
-export const PAGE: ContentType = 'Page';
-export const BULLETIN: ContentType = 'Bulletin';
 
 export interface SearchableEntry {
   readonly title: string;

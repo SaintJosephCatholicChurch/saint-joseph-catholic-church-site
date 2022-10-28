@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
+
 import useElementSize from '../../../../util/useElementSize';
 
 const StyledLiveStreamWrapper = styled('div')`
@@ -8,7 +9,11 @@ const StyledLiveStreamWrapper = styled('div')`
   display: flex;
 `;
 
-const LiveStreamView = () => {
+interface LiveStreamViewProps {
+  facebookPage: string;
+}
+
+const LiveStreamView = ({ facebookPage }: LiveStreamViewProps) => {
   const [height, setHeight] = useState(0);
   const [ref, { width }] = useElementSize();
 
@@ -26,7 +31,7 @@ const LiveStreamView = () => {
 
   return (
     <StyledLiveStreamWrapper ref={ref} style={{ height }}>
-      <LiveStreamIFrameNoSSR width={width} height={height} />
+      <LiveStreamIFrameNoSSR width={width} height={height} facebookPage={facebookPage} />
     </StyledLiveStreamWrapper>
   );
 };

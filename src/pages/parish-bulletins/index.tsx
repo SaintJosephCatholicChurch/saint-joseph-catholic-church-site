@@ -1,9 +1,10 @@
-import type { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
-import type { Bulletin, BulletinPDFData } from '../../interface';
-import { fetchBulletins, fetchBulletinMetaData } from '../../lib/bulletins';
+import { fetchBulletinMetaData, fetchBulletins } from '../../lib/bulletins';
 import { isNotNullish } from '../../util/null.util';
+
+import type { GetStaticProps } from 'next/types';
+import type { Bulletin, BulletinPDFData } from '../../interface';
 
 interface ParishBulletinsProps {
   bulletin?: Bulletin;
@@ -25,7 +26,7 @@ const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => 
 
 export default ParishBulletin;
 
-export const getStaticProps: GetStaticProps = async (): Promise<{ props: ParishBulletinsProps }> => {
+export const getStaticProps: GetStaticProps = (): { props: ParishBulletinsProps } => {
   let bulletin: Bulletin | undefined;
 
   const bulletins = fetchBulletins();

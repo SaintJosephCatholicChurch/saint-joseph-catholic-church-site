@@ -1,8 +1,10 @@
-import { styled, useTheme } from '@mui/material/styles';
-import { PreviewTemplateComponentProps } from '@staticcms/core';
+import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
-import { Staff } from '../../interface';
+
 import StaffView from '../pages/custom/staff/StaffView';
+
+import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { Staff } from '../../interface';
 
 const StyledStaffWrapper = styled('div')`
   display: flex;
@@ -18,8 +20,7 @@ const StyledStaffContent = styled('div')`
 `;
 
 const StaffPreview = ({ entry }: PreviewTemplateComponentProps) => {
-  const theme = useTheme();
-
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const staff = useMemo(() => entry.toJS().data.staff as Staff[], [entry]);
 
   return useMemo(

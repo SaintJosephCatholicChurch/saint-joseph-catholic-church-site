@@ -1,8 +1,10 @@
 import { styled } from '@mui/material/styles';
-import type { LiveStreamButton, ScheduleSection, Times } from '../../interface';
+
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
+
+import type { LiveStreamButton, ScheduleSection, Times } from '../../interface';
 
 interface StyledScheduleProps {
   $background: string;

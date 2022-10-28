@@ -1,10 +1,13 @@
 import { styled } from '@mui/material/styles';
-import { ReactNode, useMemo } from 'react';
-import { DailyReadings, PostContent } from '../../interface';
+import { useMemo } from 'react';
+
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
 import PageTitle from './PageTitle';
+
+import type { ReactNode } from 'react';
+import type { DailyReadings, PostContent } from '../../interface';
 
 interface StyledPageViewProps {
   $disableMargin: boolean;

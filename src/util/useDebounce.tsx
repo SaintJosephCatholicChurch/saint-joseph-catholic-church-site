@@ -7,7 +7,7 @@ export default function useDebounce<T>(value: T, delay: number) {
     () => {
       if (delay <= 0) {
         setDebouncedValue(value);
-        return () => {};
+        return;
       }
 
       // Update debounced value after delay
@@ -35,7 +35,7 @@ export function useDebouncedToggleOff(value: boolean, delay: number) {
     () => {
       if (delay <= 0 || value) {
         setToggleValue(value);
-        return () => {};
+        return;
       }
 
       // Update debounced value after delay

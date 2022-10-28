@@ -1,7 +1,9 @@
 import PageLayout from '../components/PageLayout';
 import StaffView from '../components/pages/custom/staff/StaffView';
-import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarStaticProps } from '../lib/sidebar';
 import staff from '../lib/staff';
+
+import type { SidebarProps } from '../lib/sidebar';
 
 type StaffProps = SidebarProps;
 

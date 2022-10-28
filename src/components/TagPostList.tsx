@@ -1,7 +1,9 @@
 import { styled } from '@mui/material/styles';
-import type { PostContent } from '../interface';
+
 import Pagination from './Pagination';
 import PostSummary from './posts/PostSummary';
+
+import type { PostContent } from '../interface';
 
 const StyledPostList = styled('div')`
   display: flex;

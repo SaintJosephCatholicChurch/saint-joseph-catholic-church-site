@@ -3,12 +3,14 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+
 import Container from '../../../../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
 import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
 import PageTitle from '../../../../components/pages/PageTitle';
-import { ChurchDetails } from '../../../../interface';
 import homePageData from '../../../../lib/homepage';
+
+import type { ChurchDetails } from '../../../../interface';
 
 const StyledContactSection = styled('div')`
   display: flex;

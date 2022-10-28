@@ -1,17 +1,18 @@
-import type { EventClickArg } from '@fullcalendar/react';
 import CloseIcon from '@mui/icons-material/Close';
-import EventIcon from '@mui/icons-material/Event';
 import AppBar from '@mui/material/AppBar';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
-import type { TransitionProps } from '@mui/material/transitions';
 import Typography from '@mui/material/Typography';
 import { forwardRef } from 'react';
+
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';
+
+import type { TransitionProps } from '@mui/material/transitions';
+import type { EventClickArg } from '@fullcalendar/react';
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -61,8 +62,8 @@ const CalendarEventDialog = ({ eventInfo, open, onClose }: CalendarEventDialogPr
       <CalendarEventModalContent
         date={date}
         time={time}
-        location={eventInfo?.event.extendedProps.location}
-        description={eventInfo?.event.extendedProps.description}
+        location={eventInfo?.event.extendedProps.location as string | undefined}
+        description={eventInfo?.event.extendedProps.description as string | undefined}
       />
     </Dialog>
   );

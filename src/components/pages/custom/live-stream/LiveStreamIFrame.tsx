@@ -1,12 +1,13 @@
 interface LiveStreamIFrameProps {
   width: number;
   height: number;
+  facebookPage: string;
 }
 
-const LiveStreamIFrame = ({ width, height }: LiveStreamIFrameProps) => {
+const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps) => {
   return (
     <iframe
-      src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2Flive&show_text=false"
+      src={`https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F${facebookPage}%2Flive&show_text=false`}
       width={width}
       height={height}
       style={{

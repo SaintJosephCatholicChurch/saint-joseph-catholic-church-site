@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import type { MenuLink } from '../../../interface';
+
 import { isNotEmpty } from '../../../util/string.util';
+
+import type { MenuLink } from '../../../interface';
 
 export function getMenuLinkUrl(link: MenuLink) {
   if (isNotEmpty(link.url)) {

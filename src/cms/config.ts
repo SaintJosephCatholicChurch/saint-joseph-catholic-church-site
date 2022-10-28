@@ -1,4 +1,4 @@
-import {
+import type {
   CmsCollection as NetlifyCmsCollection,
   CmsCollectionFile as NetlifyCmsCollectionFile,
   CmsConfig as NetlifyCmsConfig,

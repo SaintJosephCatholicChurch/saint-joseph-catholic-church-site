@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useMemo } from 'react';
+
 import config from '../../lib/config';
 
 interface OpenGraphMetaProps {

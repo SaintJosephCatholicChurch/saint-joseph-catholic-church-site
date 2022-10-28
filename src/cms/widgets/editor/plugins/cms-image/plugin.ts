@@ -1,7 +1,8 @@
 import tinymce from 'tinymce';
 
-import { CmsFunctions } from './interface';
 import * as Buttons from './ui/Buttons';
+
+import type { CmsFunctions } from './interface';
 
 const CmsImagePlugin = (props: CmsFunctions): void => {
   tinymce.PluginManager.add('image', (editor) => {

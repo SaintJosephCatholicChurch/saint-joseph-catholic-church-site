@@ -1,15 +1,18 @@
 import { styled } from '@mui/material/styles';
-import { PreviewTemplateComponentProps } from '@staticcms/core';
 import { useMemo } from 'react';
-import type { HomePageData, PostContent } from '../../interface';
+
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
+
+import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { HomePageData, PostContent } from '../../interface';
 
 const StyledHomepagePreview = styled('div')`
   margin-top: -64px;
 `;
 
 const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const data = useMemo(() => entry.toJS().data as HomePageData, [entry]);
 
   const mockRecentPosts: PostContent[] = useMemo(

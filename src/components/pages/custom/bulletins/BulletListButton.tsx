@@ -5,9 +5,11 @@ import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
-import { ListChildComponentProps } from 'react-window';
-import type { Bulletin } from '../../../../interface';
+
 import { useFormattedBulletinDate, useFormattedBulletinUrlDate } from './util';
+
+import type { ListChildComponentProps } from 'react-window';
+import type { Bulletin } from '../../../../interface';
 
 const StyledListItemWrapper = styled('div')`
   position: relative;

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 
 interface GiveButtonProps {

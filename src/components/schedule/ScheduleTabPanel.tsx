@@ -61,7 +61,7 @@ const StyledTabPanelTitle = styled(
 
     font-size: 24px;
     line-height: 24px;
-    
+
     ${theme.breakpoints.up('lg')} {
       font-size: 30px;
     }
@@ -105,7 +105,7 @@ const StyledSections = styled(
 
 const StyledDayTimeLine = styled('div')`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   min-height: 20px;
   margin-top: 2px;

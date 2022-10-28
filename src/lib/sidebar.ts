@@ -17,7 +17,7 @@ export const getSidebarProps = (): SidebarProps => {
   };
 };
 
-export const getSidebarStaticProps: GetStaticProps = async (): Promise<{ props: SidebarProps }> => {
+export const getSidebarStaticProps: GetStaticProps = (): { props: SidebarProps } => {
   return {
     props: {
       ...getSidebarProps()

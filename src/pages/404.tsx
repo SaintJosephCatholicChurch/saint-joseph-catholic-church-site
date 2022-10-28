@@ -32,7 +32,7 @@ const NotFoundPage = ({ ...sidebarProps }: SidebarProps) => {
 
 export default NotFoundPage;
 
-export const getStaticProps: GetStaticProps = async (): Promise<{ props: SidebarProps }> => {
+export const getStaticProps: GetStaticProps = (): { props: SidebarProps } => {
   return {
     props: {
       ...getSidebarProps()

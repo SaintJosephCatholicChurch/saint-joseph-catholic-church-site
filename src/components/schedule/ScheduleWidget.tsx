@@ -14,7 +14,7 @@ const StyledSchedule = styled(
 )<StyledScheduleProps>(
   ({ theme, $background }) => `
     padding-bottom: 40px;
-    background :linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%), url(${$background}), #c7c7c7;
+    background: linear-gradient(rgba(241, 241, 241, 0.5) 0%, rgba(241, 241, 241, 0) 50%), url(${$background}), #c7c7c7;
     background-repeat: repeat;
     background-position: center top;
     display: flex;
@@ -37,14 +37,7 @@ interface ScheduleProps {
   onTabChange?: (index: number) => void;
 }
 
-const ScheduleWidget = ({
-  times,
-  details,
-  liveStreamButton,
-  invitationText,
-  tab,
-  onTabChange
-}: ScheduleProps) => {
+const ScheduleWidget = ({ times, details, liveStreamButton, invitationText, tab, onTabChange }: ScheduleProps) => {
   return (
     <StyledSchedule $background={details?.schedule_background}>
       <Container>

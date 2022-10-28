@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
-import { useScript } from "./useScript";
+import { useState, useCallback } from 'react';
 
-export const useDeferredScript = <T extends unknown = unknown>(
+import { useScript } from './useScript';
+
+export const useDeferredScript = <T = unknown>(
   url: string,
-  name: string = "default"
+  name = 'default'
 ): { script: T | null; loaded: boolean; load: () => void } => {
   const [loadNow, setLoadNow] = useState(false);
   const { script, loaded } = useScript<T>(url, name, loadNow);

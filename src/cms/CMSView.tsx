@@ -1,17 +1,17 @@
 import {
   faCalendarDays,
   faChurch,
+  faCircleQuestion,
   faClipboardQuestion,
   faFileLines,
   faGear,
   faHouse,
-  faTag,
   faNewspaper,
-  faCircleQuestion
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
-import { ComponentType, useEffect } from 'react';
+import { useEffect } from 'react';
+
 import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
@@ -26,6 +26,9 @@ import Help from './pages/help/Help';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
+
+import type { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
+import type { ComponentType } from 'react';
 
 const CMSView = () => {
   useEffect(() => {

@@ -1,9 +1,11 @@
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
-import { LogoDetails } from '../../interface';
+
 import transientOptions from '../../util/transientOptions';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
+
+import type { LogoDetails } from '../../interface';
 
 const StyledHeaderLink = styled('div')`
   display: flex;

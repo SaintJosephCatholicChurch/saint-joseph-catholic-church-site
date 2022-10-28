@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import Link from 'next/link';
 import { useMemo } from 'react';
+
 import churchDetails from '../../../lib/church_details';
 
 const StyledCopyright = styled('div')(

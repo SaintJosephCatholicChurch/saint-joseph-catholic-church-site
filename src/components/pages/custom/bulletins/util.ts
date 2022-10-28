@@ -1,6 +1,7 @@
 import format from 'date-fns/format';
 import { useMemo } from 'react';
-import { Bulletin } from '../../../../interface';
+
+import type { Bulletin } from '../../../../interface';
 
 export function getFormattedBulletinDate(bulletin: Bulletin) {
   try {

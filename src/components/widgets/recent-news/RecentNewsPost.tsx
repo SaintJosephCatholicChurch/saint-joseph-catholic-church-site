@@ -2,9 +2,11 @@ import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
-import { PostContent } from '../../../interface';
+
 import { isNotEmpty } from '../../../util/string.util';
 import transientOptions from '../../../util/transientOptions';
+
+import type { PostContent } from '../../../interface';
 
 interface StyledPostImageProps {
   $image: string;

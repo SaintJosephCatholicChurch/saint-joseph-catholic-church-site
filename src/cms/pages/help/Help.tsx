@@ -3,10 +3,10 @@ import HelpContent from './HelpContent';
 import HelpTableOfContents from './HelpTableOfContents';
 
 const StyledWrapper = styled('div')`
-  width: calc(100% - 270px);
-  margin-left: 270px;
+  width: calc(100% - 280px);
+  margin-left: 280px;
   display: flex;
-  max-width: 800px;
+  gap: 16px;
 `;
 
 const Help = () => {

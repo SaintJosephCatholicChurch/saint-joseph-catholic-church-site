@@ -1,8 +1,10 @@
 import { styled } from '@mui/material/styles';
 import parseISO from 'date-fns/parseISO';
-import { PreviewTemplateComponentProps } from '@staticcms/core';
 import { useMemo } from 'react';
+
 import PostView from '../posts/PostView';
+
+import type { PreviewTemplateComponentProps } from '@staticcms/core';
 
 const StyledBlogPostPreview = styled('div')`
   display: flex;
@@ -18,16 +20,18 @@ const StyledBlogPostPreviewContent = styled('div')`
 `;
 
 const BlogPostPreview = ({ entry, widgetFor, getAsset }: PreviewTemplateComponentProps) => {
-  const dateString = useMemo(() => entry.getIn(['data', 'date']), [entry]);
+  const dateString = useMemo(() => entry.getIn(['data', 'date']) as string, [entry]);
+
   const date = useMemo(() => parseISO(dateString), [dateString]);
-  const image = useMemo(() => getAsset(entry.getIn(['data', 'image'])), [entry, getAsset]);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const image = useMemo(() => getAsset(entry.getIn(['data', 'image'])) as { url: string }, [entry, getAsset]);
 
   return (
     <StyledBlogPostPreview>
       <StyledBlogPostPreviewContent>
         <PostView
-          title={entry.getIn(['data', 'title'])}
-          tags={entry.getIn(['data', 'tags']) ?? []}
+          title={entry.getIn(['data', 'title']) as string}
+          tags={(entry.getIn(['data', 'tags']) as string[]) ?? []}
           date={date}
           image={image.url}
         >

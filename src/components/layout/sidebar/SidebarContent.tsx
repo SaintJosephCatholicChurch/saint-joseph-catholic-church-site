@@ -1,12 +1,14 @@
 import { styled } from '@mui/material/styles';
 import { useLayoutEffect, useState } from 'react';
+
 import { SMALL_BREAKPOINT } from '../../../constants';
-import type { DailyReadings as DailyReadingsDetails, PostContent } from '../../../interface';
 import useWindowSize from '../../../util/useWindowSize';
 import SearchBox from '../../SearchBox';
 import DailyReadings from '../../widgets/DailyReadings';
 import RecentNews from '../../widgets/recent-news/RecentNews';
 import UpcomingEvents from '../../widgets/UpcomingEvents';
+
+import type { DailyReadings as DailyReadingsDetails, PostContent } from '../../../interface';
 
 const StyledSidebar = styled('div')(
   ({ theme }) => `
@@ -44,7 +46,7 @@ const SidebarContent = ({ recentPosts, dailyReadings, hideSearch = false }: Side
     <StyledSidebar>
       {!hideSearch ? (
         <StyledSection key="search-section">
-          <SearchBox value='' disableMargin />
+          <SearchBox value="" disableMargin />
         </StyledSection>
       ) : null}
       {dailyReadings ? (

@@ -1,11 +1,12 @@
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import PageLayout from '../../../components/PageLayout';
 import PostList from '../../../components/posts/PostList';
-import type { PostContent } from '../../../interface';
 import config from '../../../lib/config';
 import homepageData from '../../../lib/homepage';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { listTags } from '../../../lib/tags';
+
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { PostContent } from '../../../interface';
 
 interface PostPageProps {
   posts: PostContent[];
@@ -27,19 +28,19 @@ const PostPage = ({ posts, tags, pagination, page }: PostPageProps) => {
 
 export default PostPage;
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = () => {
   const pages = Math.ceil(countPosts() / config.posts_per_page);
   const paths = Array.from(Array(pages - 1).keys()).map((it) => ({
     params: { page: (it + 2).toString() }
   }));
 
   return {
-    paths: paths,
+    paths,
     fallback: false
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PostPageProps }> => {
+export const getStaticProps: GetStaticProps = ({ params }): { props: PostPageProps } => {
   const page = parseInt(params.page as string);
   const posts = listPostContent(page, config.posts_per_page);
   const tags = listTags();

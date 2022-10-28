@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import git from '@npmcli/git';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import type { BulletinPDFMeta } from '../src/interface';
-import { fetchBulletins } from '../src/lib/bulletins';
-import pdf2img from '../src/util/pdf/pdf-img-convert';
-import git from '@npmcli/git';
-import { PDFExtract, PDFExtractOptions } from 'pdf.js-extract';
+import { PDFExtract } from 'pdf.js-extract';
 import webp from 'webp-converter';
+
+import { fetchBulletins } from '../src/lib/bulletins';
+// eslint-disable-next-line import/default
+import pdfImg from '../src/util/pdf/pdf-img-convert';
+
+import type { PDFExtractOptions } from 'pdf.js-extract';
+import type { BulletinPDFMeta } from '../src/interface';
 
 const publicPath = 'public';
 
@@ -182,7 +188,7 @@ function fixCommonBulletinErrors(textContent: string) {
 
     mkdirSync(folderFullPath);
 
-    const images = await pdf2img.convert(pdfFullPath, {
+    const images = await pdfImg.convert(pdfFullPath, {
       width: 1224,
       height: 1584
     });
@@ -197,9 +203,9 @@ function fixCommonBulletinErrors(textContent: string) {
         await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
         rmSync(imageFullPathJpg);
         pageImages.push(join(folderPath, `${i + 1}.webp`).replace(/\\/g, '/'));
-      } catch (error) {
-        if (error) {
-          console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error}`);
+      } catch (error: unknown) {
+        if (error && error instanceof Error) {
+          console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);
         } else {
           console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
         }
@@ -213,11 +219,11 @@ function fixCommonBulletinErrors(textContent: string) {
       textContent = pdfData.pages
         .map((page) => page.content.map((content) => content.str).join(' '))
         .join(' ')
-        .replace(/  /g, ' ')
+        .replace(/[ ]{2}/g, ' ')
         .replace(/[^a-z0-9 ]/gi, '');
-    } catch (error) {
-      if (error) {
-        console.error(`Error generating text content for ${pdfFullPath}: ${error}`);
+    } catch (error: unknown) {
+      if (error && error instanceof Error) {
+        console.error(`Error generating text content for ${pdfFullPath}: ${error.toString()}`);
       } else {
         console.error(`Unknown error generating text content for ${pdfFullPath}`);
       }

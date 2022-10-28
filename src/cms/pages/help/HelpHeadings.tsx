@@ -1,5 +1,7 @@
 import { styled } from '@mui/material/styles';
 
+import type { NestedHeading } from './HelpTableOfContents';
+
 const StyledList = styled('ul')`
   display: flex;
   flex-direction: column;
@@ -32,7 +34,12 @@ const StyledListItem = styled('li')`
   }
 `;
 
-const HelpHeadings = ({ headings, activeId }) => (
+interface HelpHeadingsProps {
+  headings: NestedHeading[];
+  activeId: string | undefined;
+}
+
+const HelpHeadings = ({ headings, activeId }: HelpHeadingsProps) => (
   <StyledList>
     {headings.map((heading) => (
       <StyledListItem key={heading.id} className={heading.id === activeId ? 'active' : ''}>

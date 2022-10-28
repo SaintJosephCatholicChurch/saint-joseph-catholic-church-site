@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 export const bibleAbbreviations: Record<string, string[]> = {
   genesis: ['ge', 'gn'],
   exodus: ['ex', 'exod', 'exo'],

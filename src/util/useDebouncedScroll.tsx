@@ -1,5 +1,8 @@
-import { MutableRefObject, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+
 import useEventListener from './useEventListener';
+
+import type { MutableRefObject } from 'react';
 
 export default function useDebouncedScroll(
   ref: MutableRefObject<HTMLElement>,

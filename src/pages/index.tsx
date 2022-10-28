@@ -1,12 +1,15 @@
 import Head from 'next/head';
+
 import HomepageView from '../components/homepage/HomepageView';
 import Layout from '../components/Layout';
 import BasicMeta from '../components/meta/BasicMeta';
 import OpenGraphMeta from '../components/meta/OpenGraphMeta';
 import TwitterCardMeta from '../components/meta/TwitterCardMeta';
 import homePageData from '../lib/homepage';
-import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarStaticProps } from '../lib/sidebar';
 import times from '../lib/times';
+
+import type { SidebarProps } from '../lib/sidebar';
 
 type HomepageProps = SidebarProps;
 

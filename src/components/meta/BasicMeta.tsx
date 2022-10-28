@@ -1,4 +1,5 @@
 import Head from 'next/head';
+
 import config from '../../lib/config';
 
 interface BasicMetaProps {

@@ -1,7 +1,6 @@
 
-import { Editor } from 'tinymce';
-
-import { CmsFunctions } from '../interface';
+import type { Editor } from 'tinymce';
+import type { CmsFunctions } from '../interface';
 
 const register = (editor: Editor, { onOpenMediaLibrary }: CmsFunctions): void => {
   editor.ui.registry.addButton('quick-cms-image', {

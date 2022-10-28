@@ -1,10 +1,11 @@
-import { Editor, EditorOptions } from 'tinymce';
 import { bibleAbbreviationRegex } from '../core/abbreviations';
+
+import type { Editor, EditorOptions } from 'tinymce';
 
 const option: {
   <K extends keyof EditorOptions>(name: K): (editor: Editor) => EditorOptions[K];
   <T>(name: string): (editor: Editor) => T;
-} = (name: string) => (editor: Editor) => editor.options.get(name);
+} = (name: string) => (editor: Editor) => editor.options.get(name) as string;
 
 export const register = (editor: Editor): void => {
   const registerOption = editor.options.register;

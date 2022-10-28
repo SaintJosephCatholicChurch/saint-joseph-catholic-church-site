@@ -1,7 +1,9 @@
 import { styled } from '@mui/material/styles';
-import type { PostContent } from '../../interface';
+
 import Pagination from '../Pagination';
 import PostSummary from './PostSummary';
+
+import type { PostContent } from '../../interface';
 
 const StyledPostList = styled('div')`
   display: flex;
@@ -19,7 +21,7 @@ interface PostListProps {
   };
 }
 
-const PostList = ({ posts, tags, pagination }: PostListProps) => {
+const PostList = ({ posts, pagination }: PostListProps) => {
   return (
     <StyledPostList>
       {posts.map((post) => (

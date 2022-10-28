@@ -8,6 +8,10 @@ const StyledContent = styled('main')`
     margin: 16px 0 24px;
   }
 
+  ul {
+    padding-left: 40px;
+  }
+
   li {
     margin: 6px 0;
   }
@@ -19,6 +23,17 @@ const StyledContent = styled('main')`
       text-decoration: underline;
       cursor: pointer;
     }
+  }
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    margin-top: 40px;
+  }
+
+  h2:first-child {
+    margin-top: 0;
   }
 `;
 

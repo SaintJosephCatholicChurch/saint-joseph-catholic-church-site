@@ -1,25 +1,21 @@
 import { styled } from '@mui/material/styles';
 import { useEffect, useRef, useState } from 'react';
+
 import HelpHeadings from './HelpHeadings';
 
-const useHeadingsData = () => {
-  const [nestedHeadings, setNestedHeadings] = useState([]);
+export interface Heading {
+  id: string;
+  title: string;
+}
 
-  useEffect(() => {
-    const headingElements = Array.from(document.querySelectorAll('main h2, main h3'));
+export interface NestedHeading extends Heading {
+  items: Heading[];
+}
 
-    // Created a list of headings, with H3s nested
-    const newNestedHeadings = getNestedHeadings(headingElements);
-    setNestedHeadings(newNestedHeadings);
-  }, []);
+const getNestedHeadings = (headingElements: HTMLHeadingElement[]) => {
+  const nestedHeadings: NestedHeading[] = [];
 
-  return { nestedHeadings };
-};
-
-const getNestedHeadings = (headingElements) => {
-  const nestedHeadings = [];
-
-  headingElements.forEach((heading, index) => {
+  headingElements.forEach((heading) => {
     const { innerText: title, id } = heading;
 
     if (heading.nodeName === 'H2') {
@@ -35,17 +31,38 @@ const getNestedHeadings = (headingElements) => {
   return nestedHeadings;
 };
 
-const useIntersectionObserver = (setActiveId) => {
-  const headingElementsRef = useRef({});
+const useHeadingsData = () => {
+  const [nestedHeadings, setNestedHeadings] = useState([]);
+
   useEffect(() => {
-    const callback = (headings) => {
+    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('main h2, main h3'));
+
+    // Created a list of headings, with H3s nested
+    const newNestedHeadings = getNestedHeadings(headingElements);
+    setNestedHeadings(newNestedHeadings);
+  }, []);
+
+  return { nestedHeadings };
+};
+
+const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
+  const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>({});
+  useEffect(() => {
+    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('h2, h3'));
+
+    if (headingElementsRef.current) {
+      headingElementsRef.current = {};
+    }
+
+    const callback: IntersectionObserverCallback = (headings) => {
+      console.log('intersected headings', headings);
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         map[headingElement.target.id] = headingElement;
         return map;
       }, headingElementsRef.current);
 
       // Get all headings that are currently visible on the page
-      const visibleHeadings = [];
+      const visibleHeadings: IntersectionObserverEntry[] = [];
       Object.keys(headingElementsRef.current).forEach((key) => {
         const headingElement = headingElementsRef.current[key];
         if (headingElement.isIntersecting) visibleHeadings.push(headingElement);
@@ -67,33 +84,35 @@ const useIntersectionObserver = (setActiveId) => {
       }
     };
 
-    const observer = new IntersectionObserver(callback);
-
-    const headingElements = Array.from(document.querySelectorAll('h2, h3'));
+    const observer = new IntersectionObserver(callback, {
+      rootMargin: '0px 0px -36px 0px'
+    });
 
     headingElements.forEach((element) => observer.observe(element));
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, [setActiveId]);
 };
 
 const StyledNav = styled('nav')`
   width: 240px;
   min-width: 240px;
-  padding: 16px;
-  margin: 8px;
+  padding: 0 16px 16px;
   align-self: flex-start;
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 16px;
+  top: 84px;
   max-height: calc(100vh - 70px);
   overflow: auto;
 `;
 
 const HelpTableOfContents = () => {
-  const [activeId, setActiveId] = useState();
+  const [activeId, setActiveId] = useState<string>();
   const { nestedHeadings } = useHeadingsData();
   useIntersectionObserver(setActiveId);
+  console.log('activeId', activeId);
 
   return (
     <StyledNav aria-label="Table of contents">

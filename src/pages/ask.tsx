@@ -1,8 +1,11 @@
 import { styled } from '@mui/material/styles';
+
 import contentStyles from '../../public/styles/content.module.css';
 import PageLayout from '../components/PageLayout';
 import AskForm from '../components/pages/custom/ask/AskForm';
-import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarStaticProps } from '../lib/sidebar';
+
+import type { SidebarProps } from '../lib/sidebar';
 
 const StyledDetails = styled('div')`
   margin-bottom: 32px;

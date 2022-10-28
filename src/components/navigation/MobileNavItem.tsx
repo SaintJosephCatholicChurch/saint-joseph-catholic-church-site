@@ -5,17 +5,20 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
-import { MouseEvent, useCallback, useMemo, useState } from 'react';
-import type { MenuItem, MenuLink } from '../../interface';
+import { useCallback, useMemo, useState } from 'react';
+
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import MobileNavLink from './MobileNavLink';
+
+import type { MouseEvent } from 'react';
+import type { MenuItem, MenuLink } from '../../interface';
 
 interface MobileNavItemProps {
   item: MenuItem;
 }
 
 function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
-  return Boolean('menu_links' in link && (link as MenuItem).menu_links?.length);
+  return Boolean('menu_links' in link && link.menu_links?.length);
 }
 
 const MobileNavItem = ({ item }: MobileNavItemProps) => {

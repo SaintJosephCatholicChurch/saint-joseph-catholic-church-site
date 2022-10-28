@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-import type { DailyReadings, PostContent } from '../interface';
 import churchDetails from '../lib/church_details';
 import config from '../lib/config';
 import { isNotEmpty } from '../util/string.util';
@@ -10,6 +8,9 @@ import JsonLdMeta from './meta/JsonLdMeta';
 import OpenGraphMeta from './meta/OpenGraphMeta';
 import TwitterCardMeta from './meta/TwitterCardMeta';
 import PageView from './pages/PageView';
+
+import type { ReactNode } from 'react';
+import type { DailyReadings, PostContent } from '../interface';
 
 interface PageProps {
   children: ReactNode;

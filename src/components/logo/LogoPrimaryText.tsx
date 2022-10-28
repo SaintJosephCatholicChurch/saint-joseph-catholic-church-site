@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
+
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
 
 const StyledHeaderPrimaryTextWrapper = styled('div')`

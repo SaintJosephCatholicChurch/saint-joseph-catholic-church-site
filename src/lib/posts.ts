@@ -2,7 +2,9 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'path';
+
 import { SUMMARY_MIN_PARAGRAPH_LENGTH } from '../constants';
+
 import type { FileMatter, PostContent, PostContentData } from '../interface';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
@@ -34,7 +36,9 @@ export function fetchPostMatter(): FileMatter[] {
 
   // Sort posts by date
   postMatterCache = allPostsMatter.sort((a, b) => {
-    if (new Date(a.matterResult.data.date).getTime() < new Date(b.matterResult.data.date).getTime()) {
+    if (
+      new Date(a.matterResult.data.date as string).getTime() < new Date(b.matterResult.data.date as string).getTime()
+    ) {
       return 1;
     } else {
       return -1;
@@ -56,7 +60,8 @@ export function fetchPostContent(): PostContent[] {
       const summaryRegex = /^<p>([\w\W]+?)<\/p>/i;
       let summaryMatch = summaryRegex.exec(content);
 
-      const htmlSummaryRegex = /^([\s\n]*(?:<(?:p|ul|ol|h1|h2|h3|h4|h5|h6|div)>(?:[\s\S])*?<\/(?:p|ul|ol|h1|h2|h3|h4|h5|h6|div)>[\s\n]*){1,2})/i;
+      const htmlSummaryRegex =
+        /^([\s\n]*(?:<(?:p|ul|ol|h1|h2|h3|h4|h5|h6|div)>(?:[\s\S])*?<\/(?:p|ul|ol|h1|h2|h3|h4|h5|h6|div)>[\s\n]*){1,2})/i;
       if (!summaryMatch || summaryMatch.length < 2 || summaryMatch[1].length < SUMMARY_MIN_PARAGRAPH_LENGTH) {
         summaryMatch = htmlSummaryRegex.exec(content);
       }
@@ -66,8 +71,8 @@ export function fetchPostContent(): PostContent[] {
         data: {
           ...data,
           slug,
-          image: data.image ?? '',
-          tags: data.tags ?? []
+          image: data.image as string | undefined ?? '',
+          tags: data.tags as string[] | undefined ?? []
         } as PostContentData,
         summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
         content

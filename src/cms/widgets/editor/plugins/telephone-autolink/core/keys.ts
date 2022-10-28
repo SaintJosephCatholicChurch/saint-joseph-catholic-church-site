@@ -1,8 +1,10 @@
 import { Fun, Obj, Type, Unicode } from '@ephox/katamari';
-import tinymce, { Editor } from 'tinymce';
+import tinymce from 'tinymce';
 
 import * as Options from '../api/options';
 import { findChar, freefallRtl, isNonPhoneNumberCharacter, isOpenParan, isPunctuation, isSpace } from './utils';
+
+import type { Editor } from 'tinymce';
 
 interface ParseResult {
   readonly rng: Range;

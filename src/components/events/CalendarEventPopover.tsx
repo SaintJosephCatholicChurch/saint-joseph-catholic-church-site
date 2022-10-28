@@ -1,8 +1,10 @@
-import type { EventClickArg } from '@fullcalendar/react';
 import Popover from '@mui/material/Popover';
+
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';
+
+import type { EventClickArg } from '@fullcalendar/react';
 
 interface CalendarEventPopoverProps {
   eventInfo: EventClickArg | null;
@@ -37,8 +39,8 @@ const CalendarEventPopover = ({ eventInfo, open, onClose }: CalendarEventPopover
         title={title}
         date={date}
         time={time}
-        location={eventInfo?.event.extendedProps.location}
-        description={eventInfo?.event.extendedProps.description}
+        location={eventInfo?.event.extendedProps.location as string | undefined}
+        description={eventInfo?.event.extendedProps.description as string | undefined}
       />
     </Popover>
   );

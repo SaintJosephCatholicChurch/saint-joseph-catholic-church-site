@@ -1,11 +1,14 @@
 import FacebookIcon from '@mui/icons-material/Facebook';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
+
 import PageLayout from '../components/PageLayout';
 import LiveStreamView from '../components/pages/custom/live-stream/LiveStreamView';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../constants';
 import churchDetails from '../lib/church_details';
-import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarStaticProps } from '../lib/sidebar';
+
+import type { SidebarProps } from '../lib/sidebar';
 
 const StyledLiveStreamPageContent = styled('div')`
   display: flex;

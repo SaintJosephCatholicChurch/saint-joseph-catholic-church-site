@@ -2,6 +2,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
 import Head from 'next/head';
+
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 import churchDetails from '../lib/church_details';

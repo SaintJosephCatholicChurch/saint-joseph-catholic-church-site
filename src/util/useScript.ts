@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useScript = <T extends unknown = unknown>(url: string, name: string = 'default', loadNow = true): { script: T | null, loaded: boolean } => {
+export const useScript = <T = unknown>(url: string, name = 'default', loadNow = true): { script: T | null, loaded: boolean } => {
   const [lib, setLib] = useState<Record<string, T | null>>({ [name]: null });
   const [loaded, setLoaded] = useState(false);
 
@@ -14,6 +14,7 @@ export const useScript = <T extends unknown = unknown>(url: string, name: string
     script.src = url;
     script.async = true;
     script.onload = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setLib({ [name]: window[name as any] as T });
       setLoaded(true);
     }
@@ -25,5 +26,5 @@ export const useScript = <T extends unknown = unknown>(url: string, name: string
     };
   }, [url, name, loadNow]);
 
-  return { script: lib[name] as T, loaded };
+  return { script: lib[name], loaded };
 };

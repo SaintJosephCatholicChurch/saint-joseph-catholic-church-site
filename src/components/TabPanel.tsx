@@ -1,6 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { memo, ReactNode, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+
 import transientOptions from '../util/transientOptions';
+
+import type { ReactNode } from 'react';
 
 interface StyledTabPanelProps {
   $inactive: boolean;

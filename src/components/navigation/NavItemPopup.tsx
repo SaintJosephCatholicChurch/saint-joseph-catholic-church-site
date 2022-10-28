@@ -1,11 +1,14 @@
 import { styled } from '@mui/material/styles';
-import { KeyboardEvent, MouseEvent, MutableRefObject, useMemo, useRef } from 'react';
-import type { MenuItem, MenuLink } from '../../interface';
+import { useMemo } from 'react';
+
 import transientOptions from '../../util/transientOptions';
 import useElementSize from '../../util/useElementSize';
 import useWindowSize from '../../util/useWindowSize';
-import { HoverState } from './NavItem';
 import NavLink from './NavLink';
+
+import type { KeyboardEvent, MouseEvent, MutableRefObject } from 'react';
+import type { MenuItem, MenuLink } from '../../interface';
+import type { HoverState } from './NavItem';
 
 const BUFFER = 5;
 const SCROLL_BAR_OFFSET = 15;

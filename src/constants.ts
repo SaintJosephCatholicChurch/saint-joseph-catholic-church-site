@@ -1,4 +1,4 @@
-import type { ScreenSize } from './interface';
+import type { ContentType, ScreenSize } from './interface';
 
 export const MAX_APP_WIDTH = 1200;
 
@@ -44,6 +44,10 @@ export const SMALL_BREAKPOINT = 600;
 export const SEARCH_RESULTS_TO_SHOW = 10;
 
 export const SUMMARY_MIN_PARAGRAPH_LENGTH = 150;
+
+export const NEWS: ContentType = 'News';
+export const PAGE: ContentType = 'Page';
+export const BULLETIN: ContentType = 'Bulletin';
 
 export const REDIRECTS = {
   '/3763-2': '/news/discussion-forum-the-saints',

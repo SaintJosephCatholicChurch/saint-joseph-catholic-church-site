@@ -1,11 +1,12 @@
-import { parse } from 'date-fns';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import { readFileSync, readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
+
 import { getFormattedBulletinTitle } from '../components/pages/custom/bulletins/util';
-import { Bulletin, BulletinPDFData } from '../interface';
 import { isNullish } from '../util/null.util';
+
+import type { Bulletin, BulletinPDFData } from '../interface';
 
 const pagesDirectory = join(process.cwd(), 'content/bulletins');
 
@@ -40,7 +41,7 @@ export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinP
     slug: format(parseISO(bulletin.date), 'yyyy-MM-dd'),
     date: bulletin.date,
     ...JSON.parse(readFileSync(metaFullPath, 'utf8'))
-  };
+  } as BulletinPDFData;
 }
 
 export function fetchBulletinsMetaData(): BulletinPDFData[] {

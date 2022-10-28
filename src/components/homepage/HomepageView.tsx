@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { memo, useCallback, useMemo } from 'react';
-import type { HomePageData, PostContent, Times } from '../../interface';
+
 import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
 import transientOptions from '../../util/transientOptions';
@@ -10,9 +10,11 @@ import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
 import ScheduleWidget from '../schedule/ScheduleWidget';
 import DailyReadings from '../widgets/DailyReadings';
-import FeaturedLink from '../widgets/FeaturedLink';
-import FeaturedPage from '../widgets/FeaturedPage';
+import FeaturedLinkView from '../widgets/FeaturedLink';
+import FeaturedPageView from '../widgets/FeaturedPage';
 import RecentNews from '../widgets/recent-news/RecentNews';
+
+import type { FeaturedLink, FeaturedPage, HomePageData, PostContent, Times } from '../../interface';
 
 const StyledHomepageView = styled('div')`
   width: 100%;
@@ -119,30 +121,33 @@ const HomepageView = memo(
       []
     );
 
-    const renderFeaturedLinkPage = useCallback((featuredContent, index, options?: RenderFeatureOptions) => {
-      const { hideOnMobile = false, hideOnNonMobile = false } = options ?? {};
+    const renderFeaturedLinkPage = useCallback(
+      (featuredContent: FeaturedLink | FeaturedPage, index: number, options?: RenderFeatureOptions) => {
+        const { hideOnMobile = false, hideOnNonMobile = false } = options ?? {};
 
-      if (featuredContent.type === 'featured_link') {
+        if (featuredContent.type === 'featured_link') {
+          return (
+            <FeaturedLinkView
+              key={`page-${index}`}
+              featuredLink={featuredContent}
+              isFullWidth
+              hideOnMobile={hideOnMobile}
+              hideOnNonMobile={hideOnNonMobile}
+            />
+          );
+        }
         return (
-          <FeaturedLink
+          <FeaturedPageView
             key={`page-${index}`}
-            featuredLink={featuredContent}
+            featuredPage={featuredContent}
             isFullWidth
             hideOnMobile={hideOnMobile}
             hideOnNonMobile={hideOnNonMobile}
           />
         );
-      }
-      return (
-        <FeaturedPage
-          key={`page-${index}`}
-          featuredPage={featuredContent}
-          isFullWidth
-          hideOnMobile={hideOnMobile}
-          hideOnNonMobile={hideOnNonMobile}
-        />
-      );
-    }, []);
+      },
+      []
+    );
 
     const firstFeaturedLinkPage = useMemo(() => {
       if (featured.length === 0) {

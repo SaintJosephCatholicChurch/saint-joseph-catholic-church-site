@@ -1,15 +1,16 @@
 import differenceInDays from 'date-fns/differenceInDays';
 import parseISO from 'date-fns/parseISO';
 import { useEffect, useState } from 'react';
-import { SearchableEntry } from '../interface';
+
 import { isEmpty, isNotEmpty } from './string.util';
+
+import type { SearchableEntry } from '../interface';
 
 const PARTIAL_MATCH_WORD_LENGTH_THRESHOLD = 5;
 const WHOLE_WORD_MATCH_FAVOR_WEIGHT = 2;
 const TITLE_FAVOR_WEIGHT = 15;
 const RECENT_DAYS_MULTIPLIER = 2;
 const RECENT_DAYS = 62;
-const NO_DATE_BOOST = 30;
 
 interface SearchScore {
   entry: SearchableEntry;

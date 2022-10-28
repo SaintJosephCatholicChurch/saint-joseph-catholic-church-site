@@ -4,12 +4,15 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+
 import Container from '../../../components/layout/Container';
-import type { Times } from '../../../interface';
 import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
 import { useWindowEvent } from '../../../util/window.util';
 import ScheduleTabPanel from './TimesWidgetTabPanelWidget';
+
+import type { SyntheticEvent } from 'react';
+import type { Times } from '../../../interface';
 
 const StyledScheduleWidget = styled('div')`
   border: 1px solid rgb(223, 223, 227);

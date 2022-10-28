@@ -13,12 +13,15 @@ import TextField from '@mui/material/TextField';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
-import { memo, MouseEvent, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
+
 import CollapseSection from '../../../components/layout/CollapseSection';
 import TabPanel from '../../../components/TabPanel';
-import type { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
+
+import type { MouseEvent } from 'react';
+import type { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
 
 const StyledTabPanelContent = styled('div')`
   padding: 16px;
@@ -212,7 +215,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
   const handleOnDayLineDelete = useCallback((daylineId: DayLineId) => () => setDeletingDayLine(daylineId), []);
   const handleOnDayLineDeleteConfirm = useCallback(() => {
     if (deletingDayLine) {
-      const { section, sectionIndex, day, index } = deletingDayLine;
+      const { section, sectionIndex, index } = deletingDayLine;
 
       const newDays = [...section.days];
       newDays.splice(index, 1);
@@ -402,7 +405,9 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                                             if (newValue) {
                                               newDate = format(newValue, 'h:mm a');
                                             }
-                                          } catch {}
+                                          } catch (e) {
+                                            console.error(e);
+                                          }
                                           onDayTimeChange({ time: newDate });
                                         }}
                                         renderInput={(params) => (
@@ -423,7 +428,9 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
                                             if (newValue) {
                                               newDate = format(newValue, 'h:mm a');
                                             }
-                                          } catch {}
+                                          } catch (e) {
+                                            console.error(e);
+                                          }
                                           onDayTimeChange({ end_time: newDate });
                                         }}
                                         renderInput={(params) => (

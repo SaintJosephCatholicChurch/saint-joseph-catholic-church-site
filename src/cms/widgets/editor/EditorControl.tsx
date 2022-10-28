@@ -1,14 +1,16 @@
 import { styled } from '@mui/material/styles';
 import { Map } from 'immutable';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
+
 import { IMAGE_EXTENSION_REGEX } from '../../../constants';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
 import { isEmpty, isNotEmpty } from '../../../util/string.util';
 import { getFieldAsset } from '../../util/asset.util';
 import BundledEditor from './BundledEditor';
+
+import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 
 const StyledEditorControl = styled('div')`
   width: 100%;
@@ -39,13 +41,13 @@ interface EditorControlProps {
 function fromEditorToStorage(value: string): string {
   let newValue = value;
 
-  const imageRegex = /<img(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?[\/]{0,1}>/g;
+  const imageRegex = /<img(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?[/]{0,1}>/g;
   let imageMatch = imageRegex.exec(newValue);
   while (imageMatch && imageMatch.length === 2) {
     const newImage = imageMatch[0]
       .replace(/src="(?:[\w\W]+?)"/g, `src="/${imageMatch[1].replace(/^\//, '')}"`)
       .replace(/data-asset="(?:[\w\W]+?)"/g, '')
-      .replace(/([^\/]{1})>/g, '$1/>')
+      .replace(/([^/]{1})>/g, '$1/>')
       .replace('  ', ' ');
     newValue = newValue.replaceAll(imageMatch[0], newImage);
     imageMatch = imageRegex.exec(newValue);
@@ -90,15 +92,17 @@ const EditorControl = ({
     }
   }, [onChange]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const mediaLibraryFieldOptions = field.get('media_library', Map());
   const handleOpenMedialLibrary = useCallback(
     (forImage: boolean) => {
       onOpenMediaLibrary({
-        controlID: controlID,
+        controlID,
         forImage,
-        privateUpload: field.get('private'),
+        privateUpload: field.get('private') as boolean,
         allowMultiple: false,
         field,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         config: mediaLibraryFieldOptions.get('config')
       });
     },
@@ -124,7 +128,7 @@ const EditorControl = ({
     [field, getAsset]
   );
 
-  const mediaPath: string = mediaPaths.get(controlID);
+  const mediaPath = mediaPaths.get(controlID) as string;
   useEffect(() => {
     if (isEmpty(mediaPath)) {
       return;

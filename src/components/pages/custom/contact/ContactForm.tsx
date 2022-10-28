@@ -6,9 +6,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { FormEventHandler, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
+
+import type { FormEventHandler } from 'react';
 
 const StyledCommentFormWrapper = styled('div')`
   position: relative;
@@ -105,43 +108,47 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
   );
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-      if (!valid) {
-        return;
-      }
+    (event) => {
+      const submitForm = async () => {
+        event.preventDefault();
+        if (!valid) {
+          return;
+        }
 
-      const details = {
-        'entry.1684511342': contactFormData.name,
-        'entry.1405174963': contactFormData.email,
-        'entry.1496222327': contactFormData.subject,
-        'entry.1923336410': contactFormData.comment
+        const details = {
+          'entry.1684511342': contactFormData.name,
+          'entry.1405174963': contactFormData.email,
+          'entry.1496222327': contactFormData.subject,
+          'entry.1923336410': contactFormData.comment
+        };
+
+        const formBody = [];
+        for (const property in details) {
+          const encodedKey = encodeURIComponent(property);
+          const encodedValue = encodeURIComponent(details[property as keyof typeof details]);
+          formBody.push(encodedKey + '=' + encodedValue);
+        }
+
+        try {
+          await fetch(
+            'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeD0sH95rRB3Wld-gstqjV6FJfAa5W6y1RuDBWbuJO0BLEoxg/formResponse',
+            {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+              },
+              body: formBody.join('&')
+            }
+          );
+        } catch (error) {
+          console.error('There was an error', error);
+        }
+
+        setSubmitted(true);
       };
 
-      const formBody = [];
-      for (const property in details) {
-        const encodedKey = encodeURIComponent(property);
-        const encodedValue = encodeURIComponent(details[property]);
-        formBody.push(encodedKey + '=' + encodedValue);
-      }
-
-      try {
-        await fetch(
-          'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeD0sH95rRB3Wld-gstqjV6FJfAa5W6y1RuDBWbuJO0BLEoxg/formResponse',
-          {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: formBody.join('&')
-          }
-        );
-      } catch (error) {
-        console.error('There was an error', error);
-      }
-
-      setSubmitted(true);
+      submitForm();
     },
     [contactFormData.comment, contactFormData.email, contactFormData.name, contactFormData.subject, valid]
   );

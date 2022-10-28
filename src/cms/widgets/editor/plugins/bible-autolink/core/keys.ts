@@ -1,10 +1,12 @@
 import { Fun, Obj, Type, Unicode } from '@ephox/katamari';
-import tinymce, { Editor } from 'tinymce';
-import { isNotEmpty } from '../../../../../../util/string.util';
+import tinymce from 'tinymce';
 
+import { isNotEmpty } from '../../../../../../util/string.util';
 import * as Options from '../api/options';
 import { abbreviationsToUJSCCBBook } from './abbreviations';
 import { findBookAndChapter, findChar, freefallRtl, isNonBiblbeVerseCharacter, isPunctuation, isSpace } from './utils';
+
+import type { Editor } from 'tinymce';
 
 interface ParseResult {
   readonly rng: Range;
@@ -15,15 +17,13 @@ const parseCurrentLine = (editor: Editor, offset: number): ParseResult | null =>
   const voidElements = editor.schema.getVoidElements();
   const autoLinkPattern = Options.getAutoLinkPattern(editor);
   const autoLinkAdditonalPattern = Options.getAutoLinkAdditonalPattern(editor);
-  const bibleUrl = Options.getBibleUrl(editor);
+  const bibleUrl = Options.getBibleUrl(editor) as string;
   const { dom, selection } = editor;
 
   // Never create a link when we are inside a link
   if (dom.getParent(selection.getNode(), 'a[href]') !== null) {
     return null;
   }
-
-  const previousNode = dom.getPrev(selection.getNode(), () => true);
 
   const rng = selection.getRng();
   const textSeeker = tinymce.dom.TextSeeker(dom, (node) => {
@@ -150,7 +150,7 @@ const convertToLink = (editor: Editor, result: ParseResult): void => {
     editor.getDoc().execCommand(command, false, url);
     editor.dispatch('ExecCommand', args);
 
-    const defaultLinkTarget = Options.getDefaultLinkTarget(editor);
+    const defaultLinkTarget = Options.getDefaultLinkTarget(editor) as string;
     if (Type.isString(defaultLinkTarget)) {
       const anchor = selection.getNode();
       dom.setAttrib(anchor, 'target', defaultLinkTarget);
@@ -192,7 +192,7 @@ const setup = (editor: Editor): void => {
   editor.on('keyup', (e) => {
     if (e.key === ' ') {
       handleSpacebar(editor);
-    } else if (/[.,\/#!$%\^&\*;{}=\_`~()]/g.test(e.key)) {
+    } else if (/[.,/#!$%^&*;{}=_`~()]/g.test(e.key)) {
       handlePunctuation(editor);
     }
   });

@@ -13,14 +13,17 @@ import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import type { Bulletin, BulletinPDFData } from '../../../../interface';
+import { FixedSizeList } from 'react-window';
+
 import { isNotNullish } from '../../../../util/null.util';
 import transientOptions from '../../../../util/transientOptions';
 import useWindowSize from '../../../../util/useWindowSize';
 import PageTitle from '../../PageTitle';
 import BulletListButton from './BulletListButton';
 import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
+
+import type { ListChildComponentProps } from 'react-window';
+import type { Bulletin, BulletinPDFData } from '../../../../interface';
 
 const MARGIN_TOP = 215;
 const MARGIN_BOTTOM = 36;

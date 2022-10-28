@@ -1,10 +1,12 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Immutable from 'immutable';
-import { CmsWidgetControlProps } from '@staticcms/core';
 import { Component } from 'react';
-import type { Times } from '../../../interface';
+
 import ScheduleWidget from './TimesWidgetControl';
+
+import type { CmsWidgetControlProps } from '@staticcms/core';
+import type { Times } from '../../../interface';
 
 export default class TimesWidget extends Component<CmsWidgetControlProps<Immutable.List<unknown>>> {
   handleOnChange(times: Times[]) {

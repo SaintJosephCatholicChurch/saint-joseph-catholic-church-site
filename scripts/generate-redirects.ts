@@ -1,6 +1,6 @@
 import { readdirSync } from 'fs';
 
-(async function () {
+(function () {
   const files = readdirSync('./content/posts');
 
   const redirects = files.map((file) => {

@@ -5,6 +5,7 @@ import isSameDay from 'date-fns/isSameDay';
 import isSameMonth from 'date-fns/isSameMonth';
 import isSameYear from 'date-fns/isSameYear';
 import { useMemo } from 'react';
+
 import { isNullish } from '../../../util/null.util';
 
 export default function useEventDateTimeText(start: Date | null | undefined, end: Date | null | undefined, allDay: boolean): [string, string | undefined] {

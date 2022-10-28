@@ -1,11 +1,13 @@
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
+
 import PageLayout from '../../components/PageLayout';
 import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
-import type { Bulletin, BulletinPDFData } from '../../interface';
-import { fetchBulletins, fetchBulletinMetaData } from '../../lib/bulletins';
+import { fetchBulletinMetaData, fetchBulletins } from '../../lib/bulletins';
 import { isNotNullish } from '../../util/null.util';
+
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { Bulletin, BulletinPDFData } from '../../interface';
 
 interface ParishBulletinsProps {
   bulletin?: Bulletin;
@@ -27,8 +29,10 @@ const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => 
 
 export default ParishBulletin;
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchBulletins().map((bulletin) => `/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`);
+export const getStaticPaths: GetStaticPaths = () => {
+  const paths = fetchBulletins().map(
+    (bulletin) => `/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`
+  );
   return {
     paths,
     fallback: false
@@ -47,7 +51,7 @@ const buildDateToBulletin = () => {
 
 let dateToBulletin = buildDateToBulletin();
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: ParishBulletinsProps }> => {
+export const getStaticProps: GetStaticProps = ({ params }): { props: ParishBulletinsProps } => {
   const date = params.date as string;
 
   if (process.env.NODE_ENV === 'development') {

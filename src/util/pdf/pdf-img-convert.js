@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-unsafe-negation */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /*
 
 Copyright (c) 2020 Ollie Thwaites
@@ -39,8 +42,8 @@ NodeCanvasFactory.prototype = {
     var canvas = Canvas.createCanvas(width, height);
     var context = canvas.getContext("2d");
     return {
-      canvas: canvas,
-      context: context,
+      canvas,
+      context,
     };
   },
 
@@ -108,9 +111,9 @@ module.exports.convert = async function (pdf, conversion_config = {}) {
 
   // If there are page numbers supplied in the conversion config
   if (conversion_config.page_numbers)
-    for (i = 0; i < conversion_config.page_numbers.length; i++) {
+    for (let i = 0; i < conversion_config.page_numbers.length; i++) {
       // This just pushes a render of the page to the array
-      let currentPage = await doc_render(pdfDocument, conversion_config.page_numbers[i], canvasFactory, conversion_config);
+      const currentPage = await doc_render(pdfDocument, conversion_config.page_numbers[i], canvasFactory, conversion_config);
       if (currentPage != null) {
         // This allows for base64 conversion of output images
         if (conversion_config.base64)
@@ -121,8 +124,8 @@ module.exports.convert = async function (pdf, conversion_config = {}) {
     }
   // Otherwise just loop the whole doc
   else
-    for (i = 1; i <= pdfDocument.numPages; i++) {
-      let currentPage = await doc_render(pdfDocument, i, canvasFactory, conversion_config)
+    for (let i = 1; i <= pdfDocument.numPages; i++) {
+      const currentPage = await doc_render(pdfDocument, i, canvasFactory, conversion_config)
       if (currentPage != null) {
         // This allows for base64 conversion of output images
         if (conversion_config.base64)
@@ -145,7 +148,7 @@ async function doc_render(pdfDocument, pageNo, canvasFactory, conversion_config)
   }
 
   // Get the page
-  let page = await pdfDocument.getPage(pageNo);
+  const page = await pdfDocument.getPage(pageNo);
 
   // Create a viewport at 100% scale
   let outputScale = 1.0;
@@ -160,21 +163,21 @@ async function doc_render(pdfDocument, pageNo, canvasFactory, conversion_config)
   if (outputScale != 1 && outputScale > 0)
     viewport = page.getViewport({ scale: outputScale });
 
-  let canvasAndContext = canvasFactory.create(
+  const canvasAndContext = canvasFactory.create(
     viewport.width,
     viewport.height
   );
 
-  let renderContext = {
+  const renderContext = {
     canvasContext: canvasAndContext.context,
-    viewport: viewport,
-    canvasFactory: canvasFactory
+    viewport,
+    canvasFactory
   };
 
-  let renderTask = await page.render(renderContext).promise;
+  await page.render(renderContext).promise;
 
   // Convert the canvas to an image buffer.
-  let image = canvasAndContext.canvas.toBuffer();
+  const image = canvasAndContext.canvas.toBuffer();
 
   return image;
 } // doc_render

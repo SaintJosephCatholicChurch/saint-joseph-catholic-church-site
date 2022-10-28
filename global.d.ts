@@ -1,22 +1,22 @@
-declare module "*.svg" {
-  import * as React from "react";
+declare module '*.svg' {
+  import type { FunctionComponent, SVGProps } from 'react';
 
-  export const ReactComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  export const ReactComponent: FunctionComponent<SVGProps<SVGSVGElement>>;
 
   export default ReactComponent;
 }
 
-declare module "*.json" {
+declare module '*.json' {
   const value: any;
   export default value;
 }
 
-declare module "*.yml" {
+declare module '*.yml' {
   const value: any;
   export default value;
 }
 
-declare module "!!raw-loader!*.css" {
+declare module '!!raw-loader!*.css' {
   const value: string;
   export default value;
 }

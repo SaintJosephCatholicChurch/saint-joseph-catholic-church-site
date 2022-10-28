@@ -5,9 +5,9 @@ export const isTextNode = (node: Node): node is Text => node.nodeType === 3;
 export const isElement = (node: Node): node is Element => node.nodeType === 1;
 
 export const isSpace = (char: string): boolean => /^[ ]$/.test(char);
-export const isOpenParan = (char: string): boolean => /^[\(]$/.test(char);
+export const isOpenParan = (char: string): boolean => /^[(]$/.test(char);
 
-export const isNonPhoneNumberCharacter = (char: string): boolean => /^[^\(\)\-0-9 ]$/.test(char);
+export const isNonPhoneNumberCharacter = (char: string): boolean => /^[^()\-0-9 ]$/.test(char);
 
 // A limited list of punctuation characters that might be used after a link
 export const isPunctuation = (char: string): boolean => /[?!,.;:]/.test(char);

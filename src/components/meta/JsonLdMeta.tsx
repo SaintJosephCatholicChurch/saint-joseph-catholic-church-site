@@ -1,8 +1,10 @@
 import formatISO from 'date-fns/formatISO';
 import Head from 'next/head';
 import { jsonLdScriptProps } from 'react-schemaorg';
-import { BlogPosting } from 'schema-dts';
+
 import config from '../../lib/config';
+
+import type { BlogPosting } from 'schema-dts';
 
 interface JsonLdMetaProps {
   url: string;
@@ -24,8 +26,8 @@ const JsonLdMeta = ({ url, title, keywords, date, image, description }: JsonLdMe
           headline: title,
           keywords: keywords ? keywords.join(',') : undefined,
           datePublished: date ? formatISO(date) : undefined,
-          image: image,
-          description: description
+          image,
+          description
         })}
       />
     </Head>

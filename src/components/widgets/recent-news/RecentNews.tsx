@@ -1,9 +1,11 @@
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
-import { PostContent } from '../../../interface';
+
 import { StyledLink } from '../../common/StyledLink';
 import RecentNewsPost from './RecentNewsPost';
+
+import type { PostContent } from '../../../interface';
 
 const StyledRecentNews = styled('div')(
   ({ theme }) => `

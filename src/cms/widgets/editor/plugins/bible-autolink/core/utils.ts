@@ -1,5 +1,6 @@
 import { Unicode } from '@ephox/katamari';
-import { TextSeeker } from 'tinymce';
+
+import type { TextSeeker } from 'tinymce';
 
 export const isTextNode = (node: Node): node is Text => node.nodeType === 3;
 

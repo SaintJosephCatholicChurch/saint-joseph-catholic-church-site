@@ -1,10 +1,13 @@
 import parseISO from 'date-fns/parseISO';
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
+
 import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';
-import type { PageContent } from '../interface';
 import { fetchPageContent } from '../lib/pages';
-import { getSidebarProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarProps } from '../lib/sidebar';
+
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { PageContent } from '../interface';
+import type { SidebarProps } from '../lib/sidebar';
 
 interface PageProps extends SidebarProps {
   title: string;
@@ -37,7 +40,7 @@ const Page = ({ title, dateString, slug, description = '', content, ...sidebarPr
 
 export default Page;
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = () => {
   const paths = fetchPageContent().map((it) => `/${it.data.slug}`);
   return {
     paths,

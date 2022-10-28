@@ -1,16 +1,17 @@
 import {
   faCalendarDays,
   faChurch,
+  faCircleQuestion,
   faClipboardQuestion,
   faFileLines,
   faGear,
   faHouse,
-  faTag,
-  faNewspaper
+  faNewspaper,
+  faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
-import { ComponentType, useEffect } from 'react';
+import { useEffect } from 'react';
+
 import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
@@ -21,9 +22,13 @@ import SchedulePreview from '../components/previews/SchedulePreview';
 import StaffPreview from '../components/previews/StaffPreview';
 import loadCmsApp from './CMSApp';
 import config from './config';
+import Help from './pages/help/Help';
 import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
+
+import type { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
+import type { ComponentType } from 'react';
 
 const CMSView = () => {
   useEffect(() => {
@@ -68,6 +73,7 @@ const CMSView = () => {
     cmsApp.registerIcon('calendar-days', <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
     cmsApp.registerIcon('clipboard-question', <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
     cmsApp.registerIcon('newspaper', <FontAwesomeIcon icon={faNewspaper} size="lg" />);
+    cmsApp.registerIcon('circle-question', <FontAwesomeIcon icon={faCircleQuestion} size="lg" />);
 
     cmsApp.registerAdditionalLink(
       'events',
@@ -81,12 +87,7 @@ const CMSView = () => {
       'https://drive.google.com/',
       'clipboard-question'
     );
-    // cmsApp.registerAdditionalLink(
-    //   'contact-form-responses',
-    //   'Contact Form Response',
-    //   ContactFormResponses,
-    //   'clipboard-question'
-    // );
+    cmsApp.registerAdditionalLink('help', 'Help', Help, 'circle-question');
   }, []);
 
   return (

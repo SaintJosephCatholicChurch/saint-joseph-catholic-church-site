@@ -1,11 +1,14 @@
 import parseISO from 'date-fns/parseISO';
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
+
 import PageLayout from '../../components/PageLayout';
 import PostView from '../../components/posts/PostView';
-import type { PostContent } from '../../interface';
 import { fetchPostContent } from '../../lib/posts';
-import { getSidebarProps, SidebarProps } from '../../lib/sidebar';
+import { getSidebarProps } from '../../lib/sidebar';
+
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { PostContent } from '../../interface';
+import type { SidebarProps } from '../../lib/sidebar';
 
 interface PostProps extends SidebarProps {
   title: string;
@@ -43,7 +46,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content,
 
 export default Post;
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = () => {
   const paths = fetchPostContent().map((post) => `/news/${post.data.slug}`);
   return {
     paths,
@@ -59,7 +62,7 @@ const buildSlugToPostContent = (postContents: PostContent[]) => {
 
 let slugToPostContent = buildSlugToPostContent(fetchPostContent());
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: PostProps }> => {
+export const getStaticProps: GetStaticProps = ({ params }): { props: PostProps } => {
   const slug = params.post as string;
 
   if (process.env.NODE_ENV === 'development') {

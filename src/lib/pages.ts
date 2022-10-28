@@ -2,6 +2,7 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 import yaml from 'js-yaml';
+
 import type { FileMatter, PageContent, PageContentData } from '../interface';
 
 const pagesDirectory = path.join(process.cwd(), 'content/pages');
@@ -33,7 +34,9 @@ export function fetchPageMatter(): FileMatter[] {
 
   // Sort pages by date
   pageMatterCache = allPagesMatter.sort((a, b) => {
-    if (new Date(a.matterResult.data.date).getTime() < new Date(b.matterResult.data.date).getTime()) {
+    if (
+      new Date(a.matterResult.data.date as string).getTime() < new Date(b.matterResult.data.date as string).getTime()
+    ) {
       return 1;
     } else {
       return -1;

@@ -1,4 +1,5 @@
 import { XMLParser } from 'fast-xml-parser';
+
 import { isEmpty } from '../util/string.util';
 
 const CORS_FREE_API = 'https://api.allorigins.win/get?url=';

@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { memo, useMemo } from 'react';
+
 import TagLink from './TagLink';
 
 const StyledTags = styled('div')`

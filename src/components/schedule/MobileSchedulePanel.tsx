@@ -5,10 +5,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
+
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import type { Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
+
+import type { Times } from '../../interface';
 
 interface StyledMobileScheduleTabPanelProps {
   $open: boolean;

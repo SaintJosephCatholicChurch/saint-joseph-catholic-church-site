@@ -2,6 +2,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Collapse from '@mui/material/Collapse';
 import { styled } from '@mui/material/styles';
 import { memo, useCallback, useMemo, useState } from 'react';
+
 import transientOptions from '../../util/transientOptions';
 
 interface StyledArrowIconWrapperProps {

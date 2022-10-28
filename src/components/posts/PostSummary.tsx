@@ -4,12 +4,14 @@ import Button from '@mui/material/Button';
 import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
 import { memo, useEffect, useMemo, useState } from 'react';
-import type { PostContent } from '../../interface';
+
 import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';
 import PostImage from './PostImage';
+
+import type { PostContent } from '../../interface';
 
 const StyledReadMore = styled('div')`
   color: #bf303c;

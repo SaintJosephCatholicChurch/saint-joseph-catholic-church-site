@@ -1,11 +1,12 @@
-import type { GetStaticProps } from 'next/types';
 import PageLayout from '../../components/PageLayout';
 import PostList from '../../components/posts/PostList';
-import type { PostContent } from '../../interface';
 import config from '../../lib/config';
 import homepageData from '../../lib/homepage';
 import { countPosts, listPostContent } from '../../lib/posts';
 import { listTags } from '../../lib/tags';
+
+import type { GetStaticProps } from 'next/types';
+import type { PostContent } from '../../interface';
 
 interface PostsIndexProps {
   posts: PostContent[];
@@ -26,7 +27,7 @@ const PostsIndex = ({ posts, tags, pagination }: PostsIndexProps) => {
 
 export default PostsIndex;
 
-export const getStaticProps: GetStaticProps = async (): Promise<{ props: PostsIndexProps }> => {
+export const getStaticProps: GetStaticProps = (): { props: PostsIndexProps } => {
   const posts = listPostContent(1, config.posts_per_page);
   const tags = listTags();
   const pagination = {

@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { Fade } from 'react-slideshow-image';
+
 import 'react-slideshow-image/dist/styles.css';
 import {
   CAROUSEL_DURATION,
@@ -8,9 +9,10 @@ import {
   CAROUSEL_MAX_HEIGHT_MD,
   CAROUSEL_MAX_HEIGHT_SM
 } from '../../constants';
-import type { ScheduleSection, Slide } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 import CarouselSlide from './CarouselSlide';
+
+import type { ScheduleSection, Slide } from '../../interface';
 
 interface StyledScheduleProps {
   $background: string;

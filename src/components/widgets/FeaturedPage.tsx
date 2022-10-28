@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
+
 import { FeaturedPage } from '../../interface';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';

@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
+
 import type { DailyReadings as DailyReadingsDetails, PostContent } from '../../../interface';
 
 interface SidebarProps {

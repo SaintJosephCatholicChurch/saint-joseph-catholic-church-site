@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/display-name */
-import FullCalendar, {
-  CalendarApi,
-  createPlugin,
-  DateProfile,
-  Duration,
-  sliceEvents,
-  ViewProps
-} from '@fullcalendar/react';
+import { createPlugin, sliceEvents } from '@fullcalendar/react';
 import { styled } from '@mui/material/styles';
-import { MouseEvent, MutableRefObject, useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+
 import MobileListEvent from './MobileListEvent';
+
+import type { CalendarApi, DateProfile, default as FullCalendar, Duration, ViewProps } from '@fullcalendar/react';
+import type { MouseEvent, MutableRefObject } from 'react';
 
 const StyledMobileListView = styled('div')`
   padding: 0 24px;

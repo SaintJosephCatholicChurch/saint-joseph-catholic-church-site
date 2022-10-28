@@ -1,10 +1,13 @@
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
+
 import PageLayout from '../components/PageLayout';
 import MobileScheduleTabPanel from '../components/schedule/MobileSchedulePanel';
 import ScheduleTabPanel from '../components/schedule/ScheduleTabPanel';
-import { getSidebarStaticProps, SidebarProps } from '../lib/sidebar';
+import { getSidebarStaticProps } from '../lib/sidebar';
 import times from '../lib/times';
+
+import type { SidebarProps } from '../lib/sidebar';
 
 const StyledTimes = styled('div')(
   ({ theme }) => `

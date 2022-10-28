@@ -1,4 +1,3 @@
-import { CalendarApi } from '@fullcalendar/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TodayIcon from '@mui/icons-material/Today';
@@ -6,8 +5,8 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { styled, SxProps, Theme, useTheme } from '@mui/material/styles';
+import Select from '@mui/material/Select';
+import { styled, useTheme } from '@mui/material/styles';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
@@ -15,9 +14,14 @@ import addWeeks from 'date-fns/addWeeks';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { formatAsUtc } from '../../util/date.util';
 import { isEmpty } from '../../util/string.util';
 import PageTitle from '../pages/PageTitle';
+
+import type { CalendarApi } from '@fullcalendar/react';
+import type { SelectChangeEvent } from '@mui/material/Select';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 const StyledCalendarHeader = styled('div')(
   ({ theme }) => `
@@ -180,7 +184,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
 
   const handleViewChange = useCallback(
     (event: SelectChangeEvent) => {
-      const newView = event.target.value as string;
+      const newView = event.target.value;
       setView(newView);
 
       if (!isSmallScreen) {

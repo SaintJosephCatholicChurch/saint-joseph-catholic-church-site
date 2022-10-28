@@ -6,7 +6,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Link from 'next/link';
-import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   EXTRA_EXTRA_SMALL_BREAKPOINT,
   TIMES_LINE_MIN_HEIGHT,
@@ -18,11 +19,13 @@ import {
   TIMES_SECTION_TITLE_HEIGHT,
   TIMES_TITLE_HEIGHT
 } from '../../constants';
-import type { LiveStreamButton, Times } from '../../interface';
 import { isNotEmpty } from '../../util/string.util';
 import { useMediaQueryDown } from '../../util/useMediaQuery';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
+
+import type { SyntheticEvent } from 'react';
+import type { LiveStreamButton, Times } from '../../interface';
 
 const StyledContainerContents = styled('div')`
   display: flex;

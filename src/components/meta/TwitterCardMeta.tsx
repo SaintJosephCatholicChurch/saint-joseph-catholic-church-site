@@ -1,6 +1,7 @@
-import config from '../../lib/config';
 import Head from 'next/head';
 import { useMemo } from 'react';
+
+import config from '../../lib/config';
 
 interface TwitterCardMetaProps {
   url: string;
@@ -15,7 +16,7 @@ const TwitterCardMeta = ({ url, title, description, image }: TwitterCardMetaProp
       ? `${config.base_url.replace(/\/$/g, '')}/${image.replace(/^\//g, '')}`
       : `${config.base_url.replace(/\/$/g, '')}/${config.site_image.replace(/^\//g, '')}`;
   }, [image]);
-  
+
   return (
     <Head>
       <meta property="twitter:card" content="summary_large_image" />

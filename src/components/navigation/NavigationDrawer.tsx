@@ -3,9 +3,11 @@ import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
-import { MenuData } from '../../interface';
+
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
+
+import type { MenuData } from '../../interface';
 
 const DRAWER_WIDTH = 240;
 

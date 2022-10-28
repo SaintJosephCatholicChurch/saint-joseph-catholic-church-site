@@ -1,7 +1,8 @@
-import { Map } from 'immutable';
 import { isNotNullish } from '../../util/null.util';
 
-export function getFieldAsset(field: Map<string, any>, getAsset: (path: string, field: Map<string, any>) => string) {
+import type { Map } from 'immutable';
+
+export function getFieldAsset(field: Map<string, unknown>, getAsset: (path: string, field: Map<string, unknown>) => string) {
   return (url: string) => {
     const asset = getAsset(url, field);
     if (isNotNullish(asset)) {

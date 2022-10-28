@@ -1,4 +1,6 @@
+/* eslint-disable import/no-unresolved */
 import { Editor } from '@tinymce/tinymce-react';
+import { useEffect } from 'react';
 
 // TinyMCE so the global var exists
 // eslint-disable-next-line no-unused-vars
@@ -52,13 +54,18 @@ import createCmsFilePlugin from './plugins/cms-file';
 import createCmsImagePlugin from './plugins/cms-image';
 import './plugins/telephone-autolink';
 
+import type { IAllProps } from '@tinymce/tinymce-react';
+
 // Content styles, including inline UI like fake cursors
 /* eslint import/no-webpack-loader-syntax: off */
 import contentCss from '!!raw-loader!tinymce/skins/content/default/content.min.css';
 import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
-import { useEffect } from 'react';
 
-export default function BundledEditor(props) {
+interface BundleEditorProps extends Partial<IAllProps> {
+  onOpenMediaLibrary: (forImage: boolean) => void;
+}
+
+export default function BundledEditor(props: BundleEditorProps) {
   const { init, onOpenMediaLibrary, ...rest } = props;
 
   useEffect(() => {

@@ -1,19 +1,22 @@
+// eslint-disable-next-line import/order
 import FullCalendar from '@fullcalendar/react';
 
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import type { EventClickArg } from '@fullcalendar/react';
 import { styled } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { addMonths } from 'date-fns';
 import Link from 'next/link';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { StyledLink } from '../common/StyledLink';
 import CalendarEventDialog from '../events/CalendarEventDialog';
 import CalendarEventPopover from '../events/CalendarEventPopover';
 import CalendarEventRenderer from '../events/CalendarEventRenderer';
 import createUpcomingListViewPlugin from '../events/upcoming/UpcomingEventsPlugin';
+
+import type { EventClickArg } from '@fullcalendar/react';
 
 const StyledUpcomingEvents = styled('div')`
   display: flex;

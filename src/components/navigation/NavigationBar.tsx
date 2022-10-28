@@ -4,11 +4,13 @@ import IconButton from '@mui/material/IconButton';
 import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
-import { MenuData } from '../../interface';
 import Logo from '../logo/Logo';
 import GiveButton from './GiveButton';
 import NavigationItems from './NavigationItems';
+
+import type { MenuData } from '../../interface';
 
 const StyledMobileSpacer = styled('div')(
   ({ theme }) => `

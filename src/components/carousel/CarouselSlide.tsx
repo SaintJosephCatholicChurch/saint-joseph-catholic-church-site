@@ -1,13 +1,15 @@
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
+
 import {
   CAROUSEL_DURATION,
   CAROUSEL_MAX_HEIGHT_LG,
   CAROUSEL_MAX_HEIGHT_MD,
   CAROUSEL_MAX_HEIGHT_SM
 } from '../../constants';
-import type { Slide } from '../../interface';
 import transientOptions from '../../util/transientOptions';
+
+import type { Slide } from '../../interface';
 
 const StyledCarouselSlide = styled('div')(
   ({ theme }) => `

@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles';
-import { MenuData } from '../../interface';
+
 import NavItem from './NavItem';
+
+import type { MenuData } from '../../interface';
 
 const StyledDesktopNavItems = styled('div')(
   ({ theme }) => `

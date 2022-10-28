@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
+
 import { StyledLink } from './common/StyledLink';
 
 const StyledTagLink = styled(StyledLink)`

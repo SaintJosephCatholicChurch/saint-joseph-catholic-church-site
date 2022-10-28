@@ -1,7 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { ReactNode } from 'react';
+
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
 import transientOptions from '../../util/transientOptions';
+
+import type { ReactNode } from 'react';
 
 interface StyledContainerProps {
   $disablePadding: boolean;

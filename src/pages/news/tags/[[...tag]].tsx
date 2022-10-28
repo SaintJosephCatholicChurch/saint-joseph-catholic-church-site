@@ -1,15 +1,17 @@
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
-import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { useMemo } from 'react';
+
 import { StyledLink } from '../../../components/common/StyledLink';
 import PageLayout from '../../../components/PageLayout';
 import PageTitle from '../../../components/pages/PageTitle';
 import TagPostList from '../../../components/TagPostList';
-import type { PostContent } from '../../../interface';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { listTags } from '../../../lib/tags';
+
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
+import type { PostContent } from '../../../interface';
 
 const StyledTitle = styled('div')`
   display: flex;
@@ -46,7 +48,7 @@ const TagsIndex = ({ posts, tag, pagination, page }: TagsIndexProps) => {
 
 export default TagsIndex;
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = () => {
   const paths = listTags().flatMap((tag) => {
     const pages = Math.ceil(countPosts(tag) / config.posts_per_page);
     return Array.from(Array(pages).keys()).map((page) =>
@@ -60,17 +62,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
     );
   });
   return {
-    paths: paths,
+    paths,
     fallback: false
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }): Promise<{ props: TagsIndexProps }> => {
+export const getStaticProps: GetStaticProps = ({ params }): { props: TagsIndexProps } => {
   const queries = params.tag as string[];
   const [tag, page] = [queries[0], queries[1]];
-  const posts = listPostContent(page ? parseInt(page as string) : 1, config.posts_per_page, tag);
+  const posts = listPostContent(page ? parseInt(page) : 1, config.posts_per_page, tag);
   const pagination = {
-    current: page ? parseInt(page as string) : 1,
+    current: page ? parseInt(page) : 1,
     pages: Math.ceil(countPosts(tag) / config.posts_per_page)
   };
 

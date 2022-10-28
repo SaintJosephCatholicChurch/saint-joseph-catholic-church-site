@@ -1,6 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { memo, ReactNode } from 'react';
+import { memo } from 'react';
+
 import transientOptions from '../../util/transientOptions';
+
+import type { ReactNode } from 'react';
 
 interface StyledHeaderProps {
   $enableMarginTop: boolean;

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
-import type { ChurchDetails, StylesConfig } from '../../../interface';
+
 import transientOptions from '../../../util/transientOptions';
 import useLocation from '../../../util/useLocation';
 import SearchBox from '../../SearchBox';
@@ -10,6 +10,8 @@ import ContactDetails from './ContactDetails';
 import Copyright from './Copyright';
 import FooterAside from './FooterAside';
 import FooterHeader from './FooterHeader';
+
+import type { ChurchDetails, StylesConfig } from '../../../interface';
 
 interface StyledFooterContainerWrapperProps {
   $footerBackground?: string;

@@ -88,7 +88,15 @@ const BulletListButton = memo(
           onClick={(event) => {
             event.stopPropagation();
           }}
-          sx={{ position: 'absolute', right: '16px', top: '4px', color: selected ? '#ffffff' : undefined }}
+          sx={{
+            position: 'absolute',
+            right: '14px',
+            top: '10px',
+            color: selected ? '#ffffff' : undefined,
+            '&:hover': {
+              color: selected ? '#ffffff' : undefined
+            }
+          }}
         >
           <DownloadIcon />
         </IconButton>

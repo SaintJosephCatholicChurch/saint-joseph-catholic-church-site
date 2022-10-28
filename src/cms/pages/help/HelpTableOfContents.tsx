@@ -48,7 +48,7 @@ const useHeadingsData = () => {
 const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>({});
   useEffect(() => {
-    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('h2, h3'));
+    const headingElements = Array.from(document.querySelectorAll<HTMLHeadingElement>('main h2, main h3'));
 
     if (headingElementsRef.current) {
       headingElementsRef.current = {};
@@ -72,6 +72,7 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
 
       // If there is only one visible heading, this is our "active" heading
       if (visibleHeadings.length === 1) {
+        console.log('just one, setting active id', visibleHeadings[0].target, visibleHeadings[0].target.id);
         setActiveId(visibleHeadings[0].target.id);
         // If there is more than one visible heading,
         // choose the one that is closest to the top of the page
@@ -80,6 +81,7 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
           getIndexFromId(a.target.id) > getIndexFromId(b.target.id) ? 1 : -1
         );
 
+        console.log('more than one, setting active id', sortedVisibleHeadings[0].target, sortedVisibleHeadings[0].target.id);
         setActiveId(sortedVisibleHeadings[0].target.id);
       }
     };
@@ -97,13 +99,13 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
 };
 
 const StyledNav = styled('nav')`
-  width: 240px;
-  min-width: 240px;
+  width: 280px;
+  min-width: 280px;
   padding: 0 16px 16px;
   align-self: flex-start;
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 84px;
+  top: 0;
   max-height: calc(100vh - 70px);
   overflow: auto;
 `;

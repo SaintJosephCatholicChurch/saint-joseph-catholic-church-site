@@ -11,12 +11,20 @@ import {
 import type { Slide } from '../../interface';
 import CarouselSlide from './CarouselSlide';
 
+const StyledCarouselViewWrapper = styled('div')`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: linear-gradient(273.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%),#c7c7c7;
+`;
+
 const StyledCarouselView = styled('div')(
   ({ theme }) => `
     display: flex;
     overflow: hidden;
     position: relative;
     width: 100%;
+	  max-width: 1600px;
 
     & > div,
     & .react-slideshow-fadezoom-images-wrap,
@@ -73,13 +81,15 @@ const CarouselView = ({ slides }: CarouselViewProps) => {
   }, []);
 
   return (
-    <StyledCarouselView className="slide-container">
-      <Fade duration={CAROUSEL_DURATION} onChange={handleSlideChange}>
-        {slides.map((slide, index) => (
-          <CarouselSlide key={`slide-${index}`} slide={slide} active={activeSlide === index} />
-        ))}
-      </Fade>
-    </StyledCarouselView>
+    <StyledCarouselViewWrapper>
+      <StyledCarouselView className="slide-container">
+        <Fade duration={CAROUSEL_DURATION} onChange={handleSlideChange}>
+          {slides.map((slide, index) => (
+            <CarouselSlide key={`slide-${index}`} slide={slide} active={activeSlide === index} />
+          ))}
+        </Fade>
+      </StyledCarouselView>
+    </StyledCarouselViewWrapper>
   );
 };
 export default CarouselView;

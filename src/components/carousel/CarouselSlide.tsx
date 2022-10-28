@@ -1,6 +1,11 @@
 import { styled } from '@mui/material/styles';
-import carouselStyles from '../../../public/styles/carousel-content.module.css';
-import { CAROUSEL_MAX_HEIGHT_LG, CAROUSEL_MAX_HEIGHT_MD, CAROUSEL_MAX_HEIGHT_SM } from '../../constants';
+import { useEffect, useState } from 'react';
+import {
+  CAROUSEL_DURATION,
+  CAROUSEL_MAX_HEIGHT_LG,
+  CAROUSEL_MAX_HEIGHT_MD,
+  CAROUSEL_MAX_HEIGHT_SM
+} from '../../constants';
 import type { Slide } from '../../interface';
 import transientOptions from '../../util/transientOptions';
 
@@ -58,13 +63,37 @@ const StyledTitleWrapper = styled('div')`
   justify-content: center;
 `;
 
-const StyledTitle = styled('h1')(
-  ({ theme }) => `
+interface StyledTitleProps {
+  $active: boolean;
+}
+
+const StyledTitle = styled(
+  'h1',
+  transientOptions
+)<StyledTitleProps>(
+  ({ theme, $active }) => `
     color: #fff;
     text-transform: uppercase;
     font-weight: 500;
     letter-spacing: 2px;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
     
+    scale: 1;
+    ${
+      $active
+        ? `
+          transition: scale ${CAROUSEL_DURATION / 1000}s linear;
+          scale: 1.1;
+        `
+        : ''
+    }
+  
     font-size: 64px;
     ${theme.breakpoints.only('md')} {
       font-size: 64px;
@@ -77,14 +106,23 @@ const StyledTitle = styled('h1')(
 
 interface CarouselSlideProps {
   slide: Slide;
+  active: boolean;
 }
 
-const CarouselSlide = ({ slide: { image, title } }: CarouselSlideProps) => {
+const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) => {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    setIsActive(active);
+  }, [active]);
+
   return (
     <StyledCarouselSlide className="each-fade">
       <StyledImage className="image-container" $image={image} />
       <StyledTitleWrapper>
-        <StyledTitle className={`${carouselStyles.carouselContent}`}>{title}</StyledTitle>
+        <StyledTitle $active={isActive}>
+          {title}
+        </StyledTitle>
       </StyledTitleWrapper>
     </StyledCarouselSlide>
   );

@@ -154,7 +154,7 @@ const HomepageView = memo(
 
     return (
       <StyledHomepageView>
-        <CarouselView slides={slides} />
+        <CarouselView slides={slides} details={schedule_section} />
         <ScheduleWidget
           times={times}
           details={schedule_section}

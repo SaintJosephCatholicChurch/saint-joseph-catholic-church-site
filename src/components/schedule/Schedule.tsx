@@ -1,4 +1,5 @@
 import LiveTvIcon from '@mui/icons-material/LiveTv';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
@@ -48,7 +49,7 @@ const StyledHeaderPreText = styled('h1')(
   ({ theme }) => `
     font-weight: 500;
     color: #9d7b2a;
-    margin-top: 40px;
+    margin-top: 24px;
 
     font-size: 28px;
     ${theme.breakpoints.up('lg')} {
@@ -214,6 +215,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
         {isNotEmpty(liveStreamButton?.url) && isNotEmpty(liveStreamButton?.title) ? (
           <Link key="live-stream-button" href={liveStreamButton.url}>
             <Button
+              href={liveStreamButton.url}
               variant="contained"
               size="large"
               startIcon={<LiveTvIcon />}
@@ -240,6 +242,33 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
             </Button>
           </Link>
         ) : null}
+        <Link key="bulletin-button" href="/parish-bulletins">
+          <Button
+            href="/parish-bulletins"
+            variant="text"
+            size="large"
+            startIcon={<NewspaperIcon />}
+            sx={{
+              fontSize: '18px',
+              color: '#bc2f3b',
+              '&:hover': {
+                backgroundColor: 'rgba(210, 76, 87, 0.1)',
+                color: '#d24c57'
+              },
+              '.MuiButton-startIcon > *:nth-of-type(1)': {
+                fontSize: '22px'
+              },
+              [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+                fontSize: '14px',
+                '.MuiButton-startIcon > *:nth-of-type(1)': {
+                  fontSize: '18px'
+                }
+              }
+            }}
+          >
+            Bulletins
+          </Button>
+        </Link>
         {isNotEmpty(title) ? <StyledHeaderPreText key="title">{title}</StyledHeaderPreText> : null}
       </StyledHeader>
       <List

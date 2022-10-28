@@ -1,11 +1,26 @@
 {
   "slides": [
     {
-      "image": "/files/churchslide1.webp",
+      "image": "/files/homepage-image1.webp",
       "title": "All Are Welcome"
     },
     {
-      "image": "/files/churchslide2-1.webp"
+      "image": "/files/homepage-image6.webp"
+    },
+    {
+      "image": "/files/homepage-image3.webp"
+    },
+    {
+      "image": "/files/stained_glass_windows.webp"
+    },
+    {
+      "image": "/files/homepage-image2.webp"
+    },
+    {
+      "image": "/files/homepage-image5.webp"
+    },
+    {
+      "image": "/files/homepage-image7.webp"
     }
   ],
   "featured": [

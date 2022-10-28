@@ -26,7 +26,7 @@ const MARGIN_TOP = 215;
 const MARGIN_BOTTOM = 36;
 const MAX_HEIGHT = 1115;
 const MIN_HEIGHT = 558;
-const BUTTON_WIDTH = 280;
+const BUTTON_WIDTH = 250;
 
 interface StyledParishBulletinsViewWrapperProps {
   $width: number;

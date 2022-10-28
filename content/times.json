@@ -94,7 +94,7 @@
           ]
         },
         {
-          "name": "Latin Mass",
+          "name": "Mass (Ad Orientum)",
           "days": [
             {
               "day": "First Friday of the Month",
@@ -103,6 +103,54 @@
                   "time": "6:00 PM",
                   "note": "Ordinary Form",
                   "end_time": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Holy Day Mass (All Saints)",
+          "days": [
+            {
+              "day": "Monday, Oct. 31",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Tuesday, Nov. 1",
+              "times": [
+                {
+                  "time": "7:00 AM"
+                },
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "6:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "All Souls' Day Mass",
+          "days": [
+            {
+              "day": "Wednesday, Nov. 2",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                },
+                {},
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "6:00 PM",
+                  "note": "@ St. Joseph Catholic Cemetery"
                 }
               ]
             }

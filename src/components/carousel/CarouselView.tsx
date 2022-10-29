@@ -36,7 +36,7 @@ const StyledCarouselView = styled('div')(
     overflow: hidden;
     position: relative;
     width: 100%;
-	  max-width: 1600px;
+	  max-width: 1400px;
 
     & > div,
     & .react-slideshow-fadezoom-images-wrap,

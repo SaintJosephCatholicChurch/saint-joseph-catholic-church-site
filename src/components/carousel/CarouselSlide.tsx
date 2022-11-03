@@ -16,11 +16,15 @@ const StyledCarouselSlide = styled('div')(
     position: relative;
     
     width: 100%;
-    height: ${CAROUSEL_MAX_HEIGHT_LG}px;
-    ${theme.breakpoints.only('md')} {
+
+    height: 65vh;
+    ${theme.breakpoints.between('md', 'lg')} {
+      height: ${CAROUSEL_MAX_HEIGHT_LG}px;
+    }
+    ${theme.breakpoints.between('sm', 'md')} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('sm')} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -44,11 +48,14 @@ const StyledImage = styled(
     background-repeat: no-repeat;
     width: 100%;
   
-    height: ${CAROUSEL_MAX_HEIGHT_LG}px;
-    ${theme.breakpoints.only('md')} {
+    height: 65vh;
+    ${theme.breakpoints.between('md', 'lg')} {
+      height: ${CAROUSEL_MAX_HEIGHT_LG}px;
+    }
+    ${theme.breakpoints.between('sm', 'md')} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('sm')} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -122,9 +129,7 @@ const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) 
     <StyledCarouselSlide className="each-fade">
       <StyledImage className="image-container" $image={image} />
       <StyledTitleWrapper>
-        <StyledTitle $active={isActive}>
-          {title}
-        </StyledTitle>
+        <StyledTitle $active={isActive}>{title}</StyledTitle>
       </StyledTitleWrapper>
     </StyledCarouselSlide>
   );

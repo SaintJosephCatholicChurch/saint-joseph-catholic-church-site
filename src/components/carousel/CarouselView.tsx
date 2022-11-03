@@ -35,8 +35,6 @@ const StyledCarouselView = styled('div')(
     display: flex;
     overflow: hidden;
     position: relative;
-    width: 100%;
-	  max-width: 1400px;
 
     & > div,
     & .react-slideshow-fadezoom-images-wrap,
@@ -71,11 +69,17 @@ const StyledCarouselView = styled('div')(
       }
     }
 
-    height: ${CAROUSEL_MAX_HEIGHT_LG}px;
-    ${theme.breakpoints.only('md')} {
+    width: 100%;
+    max-width: calc(65vh * 2.25);
+
+    height: 65vh;
+    ${theme.breakpoints.between('md', 'lg')} {
+      height: ${CAROUSEL_MAX_HEIGHT_LG}px;
+    }
+    ${theme.breakpoints.between('sm', 'md')} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('sm')} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `

@@ -4,9 +4,6 @@ import CMS, {
   DateTimeWidget,
   FileWidget,
   GitHubBackend,
-  Icon,
-  imageEditorComponent,
-  images,
   ImageWidget,
   ListWidget,
   locales,
@@ -25,32 +22,21 @@ const loadCmsApp = () => {
   CMS.registerBackend('github', GitHubBackend);
   CMS.registerBackend('proxy', ProxyBackend);
   CMS.registerWidget([
-    StringWidget.Widget(),
-    NumberWidget.Widget(),
-    TextWidget.Widget(),
-    ImageWidget.Widget(),
-    FileWidget.Widget(),
-    SelectWidget.Widget(),
-    MarkdownWidget.Widget(),
-    ListWidget.Widget(),
-    ObjectWidget.Widget(),
-    RelationWidget.Widget(),
-    BooleanWidget.Widget(),
-    DateTimeWidget.Widget(),
-    ColorStringWidget.Widget()
+    StringWidget(),
+    NumberWidget(),
+    TextWidget(),
+    ImageWidget(),
+    FileWidget(),
+    SelectWidget(),
+    MarkdownWidget(),
+    ListWidget(),
+    ObjectWidget(),
+    RelationWidget(),
+    BooleanWidget(),
+    DateTimeWidget(),
+    ColorStringWidget()
   ]);
-  CMS.registerEditorComponent(imageEditorComponent);
-  CMS.registerEditorComponent({
-    id: 'code-block',
-    label: 'Code Block',
-    widget: 'code',
-    type: 'code-block'
-  });
   CMS.registerLocale('en', locales.en);
-
-  Object.keys(images).forEach((iconName) => {
-    CMS.registerIcon(iconName, <Icon type={iconName} />);
-  });
 
   return CMS;
 };

@@ -27,7 +27,7 @@ import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-import type { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
+import type { Config, CmsWidgetPreviewProps } from '@staticcms/core';
 import type { ComponentType } from 'react';
 
 const CMSView = () => {

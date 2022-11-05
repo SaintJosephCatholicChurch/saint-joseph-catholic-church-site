@@ -1,39 +1,24 @@
 import type {
   CmsCollection as NetlifyCmsCollection,
   CmsCollectionFile as NetlifyCmsCollectionFile,
-  CmsConfig as NetlifyCmsConfig,
+  Config
   CmsField as NetlifyCmsField,
-  CmsFieldBase
+  BaseField
 } from '@staticcms/core';
 
-export interface CmsFieldTimes {
+export interface TimesField extends BaseField {
   widget: 'times';
 }
 
-export interface CmsFieldHtml {
+export interface HtmlField extends BaseField {
   widget: 'html';
 }
 
-export interface CmsFieldEvents {
+export interface EventsField extends BaseField {
   widget: 'events';
 }
 
-export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml | CmsFieldEvents));
-
-export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
-  fields: CmsField[];
-}
-
-export interface CmsCollection extends Omit<NetlifyCmsCollection, 'files' | 'fields'> {
-  files?: CmsCollectionFile[];
-  fields?: CmsField[];
-}
-
-export interface CmsConfig extends Omit<NetlifyCmsConfig, 'collections'> {
-  collections: CmsCollection[];
-}
-
-const config: CmsConfig = {
+const config: Config<HtmlField | TimesField | EventsField> = {
   backend: {
     name: 'github',
     repo: 'SaintJosephCatholicChurch/saint-joseph-catholic-church-site',

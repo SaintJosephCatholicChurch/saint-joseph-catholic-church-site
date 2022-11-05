@@ -190,46 +190,54 @@ function fixCommonBulletinErrors(textContent: string) {
 
     mkdirSync(folderFullPath);
 
-    const images = await pdfImg.convert(pdfFullPath, {
-      width: 1224,
-      height: 1584
-    });
-
     const pageImages: string[] = [];
-    for (let i = 0; i < images.length; i++) {
-      const imageFullPathJpg = join(folderFullPath, `${i + 1}.jpg`);
-      const imageFullPathWebp = join(folderFullPath, `${i + 1}.webp`);
-
-      try {
-        writeFileSync(imageFullPathJpg, images[i]);
-        await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
-        rmSync(imageFullPathJpg);
-        pageImages.push(join(folderPath, `${i + 1}.webp`).replace(/\\/g, '/'));
-      } catch (error: unknown) {
-        if (error && error instanceof Error) {
-          console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);
-        } else {
-          console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
-        }
-      }
-    }
-
-    let textContent: string;
+    let textContent = '';
 
     try {
-      const pdfData = await pdfExtract.extract(pdfFullPath, options);
-      textContent = pdfData.pages
-        .map((page) => page.content.map((content) => content.str).join(' '))
-        .join(' ')
-        .replace(/[ ]{2}/g, ' ')
-        .replace(/[^a-z0-9 ]/gi, '');
-    } catch (error: unknown) {
-      if (error && error instanceof Error) {
-        console.error(`Error generating text content for ${pdfFullPath}: ${error.toString()}`);
-      } else {
-        console.error(`Unknown error generating text content for ${pdfFullPath}`);
+      const images = await pdfImg.convert(pdfFullPath, {
+        width: 1224,
+        height: 1584
+      });
+
+      for (let i = 0; i < images.length; i++) {
+        const imageFullPathJpg = join(folderFullPath, `${i + 1}.jpg`);
+        const imageFullPathWebp = join(folderFullPath, `${i + 1}.webp`);
+
+        try {
+          writeFileSync(imageFullPathJpg, images[i]);
+          await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
+          rmSync(imageFullPathJpg);
+          pageImages.push(join(folderPath, `${i + 1}.webp`).replace(/\\/g, '/'));
+        } catch (error: unknown) {
+          if (error && error instanceof Error) {
+            console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);
+          } else {
+            console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
+          }
+        }
       }
-      textContent = '';
+    } catch (e) {
+      console.error('Failed to create images', e);
+    }
+
+    try {
+      try {
+        const pdfData = await pdfExtract.extract(pdfFullPath, options);
+        textContent = pdfData.pages
+          .map((page) => page.content.map((content) => content.str).join(' '))
+          .join(' ')
+          .replace(/[ ]{2}/g, ' ')
+          .replace(/[^a-z0-9 ]/gi, '');
+      } catch (error: unknown) {
+        if (error && error instanceof Error) {
+          console.error(`Error generating text content for ${pdfFullPath}: ${error.toString()}`);
+        } else {
+          console.error(`Unknown error generating text content for ${pdfFullPath}`);
+        }
+        textContent = '';
+      }
+    } catch (e) {
+      console.error('Failed to get text', e);
     }
 
     const metaFullPath = join(folderFullPath, 'meta.json');

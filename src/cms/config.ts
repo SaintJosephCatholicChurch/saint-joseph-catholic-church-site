@@ -1,4 +1,4 @@
-import type { Config, BaseField } from '@staticcms/core';
+import type { Config, BaseField, MediaLibrary } from '@staticcms/core';
 
 export interface TimesField extends BaseField {
   widget: 'times';
@@ -6,6 +6,10 @@ export interface TimesField extends BaseField {
 
 export interface HtmlField extends BaseField {
   widget: 'html';
+  media_library?: MediaLibrary;
+  media_folder?: string;
+  public_folder?: string;
+  sanitize_preview?: boolean;
 }
 
 export interface EventsField extends BaseField {
@@ -590,11 +594,13 @@ const config: Config<HtmlField | TimesField | EventsField> = {
               label: 'Site keywords',
               widget: 'list',
               summary: '{{fields.keyword}}',
-              field: {
-                name: 'keyword',
-                label: 'Keyword',
-                widget: 'string'
-              }
+              fields: [
+                {
+                  name: 'keyword',
+                  label: 'Keyword',
+                  widget: 'string'
+                }
+              ]
             },
             {
               name: 'posts_per_page',

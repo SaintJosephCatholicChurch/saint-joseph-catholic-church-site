@@ -1,10 +1,4 @@
-import type {
-  CmsCollection as NetlifyCmsCollection,
-  CmsCollectionFile as NetlifyCmsCollectionFile,
-  Config
-  CmsField as NetlifyCmsField,
-  BaseField
-} from '@staticcms/core';
+import type { Config, BaseField } from '@staticcms/core';
 
 export interface TimesField extends BaseField {
   widget: 'times';
@@ -465,16 +459,18 @@ const config: Config<HtmlField | TimesField | EventsField> = {
           widget: 'list',
           summary: '{{fields.tag}}',
           required: false,
-          field: {
-            label: 'Tag',
-            name: 'tag',
-            widget: 'relation',
-            collection: 'tags',
-            file: 'tags',
-            search_fields: ['tags.*.tag'],
-            display_fields: ['tags.*.tag'],
-            value_field: 'tags.*.tag'
-          }
+          fields: [
+            {
+              label: 'Tag',
+              name: 'tag',
+              widget: 'relation',
+              collection: 'tags',
+              file: 'tags',
+              search_fields: ['tags.*.tag'],
+              display_fields: ['tags.*.tag'],
+              value_field: 'tags.*.tag'
+            }
+          ]
         },
         {
           name: 'body',

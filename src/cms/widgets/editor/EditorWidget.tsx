@@ -1,39 +1,36 @@
-import { Component } from 'react';
+import { useCallback } from 'react';
 
 import EditorControl from './EditorControl';
 
 import type { WidgetControlProps } from '@staticcms/core';
 import type { HtmlField } from '../../config';
+import type { FC } from 'react';
 
-const EditorWidget extends Component<WidgetControlProps<string, HtmlField>> {
-  handleOnChange(newValue: string) {
-    const { onChange } = this.props;
+const EditorWidget: FC<WidgetControlProps<string, HtmlField>> = ({
+  onChange,
+  field,
+  value,
+  openMediaLibrary,
+  getAsset,
+  mediaPaths
+}) => {
+  const handleOnChange = useCallback((newValue: string) => {
     onChange(newValue);
-  }
+  }, []);
 
-  shouldComponentUpdate(_nextProps: Readonly<CmsWidgetControlProps<string>>): boolean {
-    return true;
-  }
-
-  render() {
-    const { field, value } = this.props;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-    const { onOpenMediaLibrary, getAsset, mediaPaths } = this.props as any;
-
-    return (
-      <EditorControl
-        field={field}
-        value={value}
-        onChange={(newValue) => this.handleOnChange(newValue)}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        onOpenMediaLibrary={onOpenMediaLibrary}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        getAsset={getAsset}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        mediaPaths={mediaPaths}
-      />
-    );
-  }
-}
+  return (
+    <EditorControl
+      field={field}
+      value={value}
+      onChange={(newValue) => handleOnChange(newValue)}
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      onOpenMediaLibrary={onOpenMediaLibrary}
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      getAsset={getAsset}
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      mediaPaths={mediaPaths}
+    />
+  );
+};
 
 export default EditorWidget;

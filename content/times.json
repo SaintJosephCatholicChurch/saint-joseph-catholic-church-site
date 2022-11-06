@@ -168,6 +168,19 @@
               ]
             }
           ]
+        },
+        {
+          "name": "",
+          "days": [
+            {
+              "day": "By Appointment",
+              "times": [
+                {
+                  "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

@@ -24,7 +24,7 @@ import config from './config';
 import Help from './pages/help/Help';
 import EditorControl from './widgets/editor/EditorControl';
 import EditorPreview from './widgets/editor/EditorPreview';
-import ScheduleWidget from './widgets/times/TimesWidget';
+import TimesWidgetControl from './widgets/times/TimesWidgetControl';
 
 const CMSView = () => {
   useEffect(() => {
@@ -44,7 +44,7 @@ const CMSView = () => {
 
     cmsApp.init({ config });
 
-    cmsApp.registerWidget('times', ScheduleWidget);
+    cmsApp.registerWidget('times', TimesWidgetControl);
     cmsApp.registerWidget('html', EditorControl, EditorPreview);
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');

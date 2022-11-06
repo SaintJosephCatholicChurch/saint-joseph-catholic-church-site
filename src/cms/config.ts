@@ -12,11 +12,7 @@ export interface HtmlField extends BaseField {
   sanitize_preview?: boolean;
 }
 
-export interface EventsField extends BaseField {
-  widget: 'events';
-}
-
-const config: Config<HtmlField | TimesField | EventsField> = {
+const config: Config<HtmlField | TimesField> = {
   backend: {
     name: 'github',
     repo: 'SaintJosephCatholicChurch/saint-joseph-catholic-church-site',

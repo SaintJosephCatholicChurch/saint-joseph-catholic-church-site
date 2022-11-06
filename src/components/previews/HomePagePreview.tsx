@@ -4,16 +4,16 @@ import { useMemo } from 'react';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewProps } from '@staticcms/core';
 import type { HomePageData, PostContent } from '../../interface';
 
 const StyledHomepagePreview = styled('div')`
   margin-top: -64px;
 `;
 
-const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
+const PagePreview = ({ entry }: TemplatePreviewProps<HomePageData>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = useMemo(() => entry.toJS().data as HomePageData, [entry]);
+  const data = useMemo(() => entry.data, [entry]);
 
   const mockRecentPosts: PostContent[] = useMemo(
     () => [

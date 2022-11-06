@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import Footer from '../layout/footer/Footer';
 import ContactView from '../pages/custom/contact/ContactView';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewProps } from '@staticcms/core';
 import type { ChurchDetails } from '../../interface';
 
 const StyledChurchDetailsPreview = styled('div')`
@@ -12,9 +12,8 @@ const StyledChurchDetailsPreview = styled('div')`
   background-color: #f5f4f3;
 `;
 
-const ChurchDetailsPreview = ({ entry }: PreviewTemplateComponentProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = useMemo(() => entry.toJS().data as ChurchDetails, [entry]);
+const ChurchDetailsPreview = ({ entry }: TemplatePreviewProps<ChurchDetails>) => {
+  const data = useMemo(() => entry.data, [entry]);
 
   return useMemo(
     () => (

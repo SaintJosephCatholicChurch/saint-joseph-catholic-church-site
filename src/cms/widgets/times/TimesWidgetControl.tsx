@@ -13,6 +13,8 @@ import ScheduleTabPanel from './TimesWidgetTabPanelWidget';
 
 import type { SyntheticEvent } from 'react';
 import type { Times } from '../../../interface';
+import type { WidgetControlProps } from '@staticcms/core';
+import type { TimesField } from '../../config';
 
 const StyledScheduleWidget = styled('div')`
   border: 1px solid rgb(223, 223, 227);
@@ -43,47 +45,42 @@ function a11yProps(index: number) {
   };
 }
 
-interface ScheduleProps {
-  times: Times[];
-  onChange: (times: Times[]) => void;
-}
+const Schedule = ({ value, onChange }: WidgetControlProps<Times[], TimesField>) => {
+  const [selectedTab, setSelectedTab] = useState(0);
 
-const Schedule = ({ times, onChange }: ScheduleProps) => {
-  const [value, setValue] = useState(0);
-
-  const handleTabChange = useCallback((_event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-    window.dispatchEvent(new ScheduleTabChangeEvent(newValue));
+  const handleTabChange = useCallback((_event: SyntheticEvent, newSelectedTab: number) => {
+    setSelectedTab(newSelectedTab);
+    window.dispatchEvent(new ScheduleTabChangeEvent(newSelectedTab));
   }, []);
 
   const handleTabChangeEvent = useCallback((event: ScheduleTabChangeEvent) => {
-    setValue(event.detail);
+    setSelectedTab(event.detail);
   }, []);
 
   useWindowEvent('scheduleTabChange', handleTabChangeEvent);
 
   const handleDataChange = useCallback(
     (timesValue: Times, index: number) => (newData: Partial<Times>) => {
-      const newTimes = [...times];
+      const newTimes = [...value];
       newTimes[index] = { ...timesValue, ...newData };
       onChange(newTimes);
     },
-    [onChange, times]
+    [onChange, value]
   );
 
   const handleAddTimes = useCallback(() => {
-    const newTimes = [...times];
+    const newTimes = [...value];
     newTimes.push({ name: 'New Times', sections: [] });
     onChange(newTimes);
-  }, [onChange, times]);
+  }, [onChange, value]);
 
   const handleRemoveTimes = useCallback(
     (index: number) => () => {
-      const newTimes = [...times];
+      const newTimes = [...value];
       newTimes.splice(index, 1);
       onChange(newTimes);
     },
-    [onChange, times]
+    [onChange, value]
   );
 
   return (
@@ -93,7 +90,7 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
           <Tabs
             orientation="vertical"
             variant="standard"
-            value={value}
+            value={selectedTab}
             onChange={handleTabChange}
             aria-label="Vertical tabs example"
             scrollButtons={false}
@@ -105,7 +102,7 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
               }
             }}
           >
-            {times.map((timeSchedule, index) => (
+            {value.map((timeSchedule, index) => (
               <Tab
                 key={`time-schedule-${index}`}
                 label={timeSchedule.name}
@@ -145,10 +142,10 @@ const Schedule = ({ times, onChange }: ScheduleProps) => {
             </Button>
           </Tabs>
           <StyledTabPanels>
-            {times.map((timeSchedule, index) => (
+            {value.map((timeSchedule, index) => (
               <ScheduleTabPanel
                 key={`schedule-tab-${index}`}
-                value={value}
+                value={selectedTab}
                 index={index}
                 times={timeSchedule}
                 onChange={handleDataChange(timeSchedule, index)}

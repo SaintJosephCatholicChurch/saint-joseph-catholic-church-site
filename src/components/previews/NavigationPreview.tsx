@@ -6,7 +6,7 @@ import GiveButton from '../navigation/GiveButton';
 import NavigationDrawer from '../navigation/NavigationDrawer';
 import NavigationItems from '../navigation/NavigationItems';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewProps } from '@staticcms/core';
 import type { MenuData } from '../../interface';
 
 const StyledNavigationWrapper = styled('div')`
@@ -36,9 +36,9 @@ const StyledSpacer = styled('div')`
   flex-grow: 1;
 `;
 
-const NavigationPreview = ({ entry }: PreviewTemplateComponentProps) => {
+const NavigationPreview = ({ entry }: TemplatePreviewProps<MenuData>) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = useMemo(() => entry.toJS().data as MenuData, [entry]);
+  const data = useMemo(() => entry.data, [entry]);
 
   return (
     <StyledNavigationWrapper>

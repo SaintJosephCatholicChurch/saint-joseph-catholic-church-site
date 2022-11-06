@@ -3,7 +3,8 @@ import { styled } from '@mui/material/styles';
 import PageContentView from '../pages/PageContentView';
 import PageTitle from '../pages/PageTitle';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewProps } from '@staticcms/core';
+import type { PageContentData } from '../../interface';
 
 const StyledPagePreview = styled('div')`
   display: flex;
@@ -16,11 +17,15 @@ const StyledPagePreviewContent = styled('div')`
   width: 100%;
 `;
 
-const PagePreview = ({ entry, widgetFor }: PreviewTemplateComponentProps) => {
+interface PagePreviewData extends PageContentData {
+  body: string;
+}
+
+const PagePreview = ({ entry, widgetFor }: TemplatePreviewProps<PagePreviewData>) => {
   return (
     <StyledPagePreview>
       <StyledPagePreviewContent>
-        <PageTitle title={entry.getIn(['data', 'title']) as string} />
+        <PageTitle title={entry.data?.title ?? ''} />
         <PageContentView>{widgetFor('body')}</PageContentView>
       </StyledPagePreviewContent>
     </StyledPagePreview>

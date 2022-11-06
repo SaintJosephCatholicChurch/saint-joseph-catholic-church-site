@@ -2,9 +2,10 @@ import { Component } from 'react';
 
 import EditorControl from './EditorControl';
 
-import type { CmsWidgetControlProps } from '@staticcms/core';
+import type { WidgetControlProps } from '@staticcms/core';
+import type { HtmlField } from '../../config';
 
-export default class EditorWidget extends Component<CmsWidgetControlProps<string>> {
+const EditorWidget extends Component<WidgetControlProps<string, HtmlField>> {
   handleOnChange(newValue: string) {
     const { onChange } = this.props;
     onChange(newValue);
@@ -34,3 +35,5 @@ export default class EditorWidget extends Component<CmsWidgetControlProps<string
     );
   }
 }
+
+export default EditorWidget;

@@ -27,7 +27,7 @@ import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-import type { Config, CmsWidgetPreviewProps } from '@staticcms/core';
+import type { Config, WidgetPreviewProps } from '@staticcms/core';
 import type { ComponentType } from 'react';
 
 const CMSView = () => {
@@ -46,13 +46,13 @@ const CMSView = () => {
       config.local_backend = true;
     }
 
-    cmsApp.init({ config } as { config: CmsConfig });
+    cmsApp.init({ config });
 
     cmsApp.registerWidget('times', ScheduleWidget);
     cmsApp.registerWidget(
       'html',
       EditorWidget,
-      EditorPreview as unknown as ComponentType<CmsWidgetPreviewProps<string>>
+      EditorPreview
     );
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');

@@ -23,7 +23,7 @@ const StyledUpcomingEventDateTime = styled('div')`
   font-size: 14px;
   width: 100%;
   height: 56px;
-  padding: 8px;
+  padding: 4px;
   gap: 4px;
   display: flex;
   flex-direction: column;

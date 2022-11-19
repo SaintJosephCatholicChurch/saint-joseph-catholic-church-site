@@ -107,6 +107,64 @@
               ]
             }
           ]
+        },
+        {
+          "name": "Solemnity of the Immaculate Conception",
+          "days": [
+            {
+              "day": "Wednesday, Dec. 7th (Vigil Mass)",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Thursday, Dec. 8th",
+              "times": [
+                {
+                  "time": "7:00 AM"
+                },
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Christmas",
+          "days": [
+            {
+              "day": "Christmas Eve",
+              "times": [
+                {
+                  "time": "4:00 PM",
+                  "note": "Children's Choir"
+                },
+                {
+                  "time": "6:00 PM",
+                  "note": "Carols begin at 5:30 PM"
+                }
+              ]
+            },
+            {
+              "day": "Christmas Day",
+              "times": [
+                {
+                  "time": "12:00 AM",
+                  "note": "Candlelight"
+                },
+                {
+                  "time": "9:00 AM",
+                  "note": "Brunch after Mass"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

@@ -337,6 +337,15 @@
                   "end_time": "4:00 PM"
                 }
               ]
+            },
+            {
+              "day": "St. Vincent de Paul Applications Accepted on Mondays",
+              "times": [
+                {
+                  "time": "10:00 AM",
+                  "end_time": "3:00 PM"
+                }
+              ]
             }
           ]
         }

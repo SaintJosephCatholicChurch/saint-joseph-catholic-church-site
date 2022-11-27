@@ -345,6 +345,107 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Advent Schedule",
+      "sections": [
+        {
+          "name": "First Week of Advent",
+          "days": [
+            {
+              "day": "Bible Study - Monday, November 28",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Parish Social Hall"
+                }
+              ]
+            },
+            {
+              "day": "First Friday Adoration - Friday, December 2",
+              "times": [
+                {
+                  "time": "9:00 AM",
+                  "end_time": "6:00 PM",
+                  "note": "Church"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Second Week of Advent",
+          "days": [
+            {
+              "day": "Parish Mission - Monday, December 5 to Wednesday, December 7",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Church"
+                }
+              ]
+            },
+            {
+              "day": "Praise and Worship Holy Hour - Wednesday, December 7",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "",
+                  "note": "Church"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Third Week of Advent",
+          "days": [
+            {
+              "day": "Shema Culture Worship Night - Wednesday, December 14",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "7:30 PM",
+                  "note": "Church"
+                }
+              ]
+            },
+            {
+              "day": "Introduction to Lectio Divina - Thursday, December 15",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Parish Social Hall"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fourth Week of Advent",
+          "days": [
+            {
+              "day": "Advent Penance Service - Wednesday, December 21",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "7:00 PM",
+                  "note": "Church"
+                }
+              ]
+            },
+            {
+              "day": "Parish Movie Night - Thursday, December 22",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Parish Gym"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

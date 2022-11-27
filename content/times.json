@@ -197,8 +197,14 @@
               "day": "Saturday",
               "times": [
                 {
+                  "time": "8:30 AM",
+                  "end_time": "9:00 AM",
+                  "note": "After morning Mass"
+                },
+                {
                   "time": "4:00 PM",
-                  "end_time": "4:45 PM"
+                  "end_time": "4:45 PM",
+                  "note": "Before evening Mass"
                 }
               ]
             }
@@ -212,16 +218,6 @@
                 {
                   "time": "5:00 PM",
                   "end_time": "5:45 PM"
-                }
-              ]
-            },
-            {
-              "day": "First Saturday of the Month",
-              "times": [
-                {
-                  "time": "8:30 AM",
-                  "end_time": "9:00 AM",
-                  "note": "After morning Mass"
                 }
               ]
             }

@@ -109,33 +109,6 @@
           ]
         },
         {
-          "name": "Solemnity of the Immaculate Conception",
-          "days": [
-            {
-              "day": "Wednesday, Dec. 7th (Vigil Mass)",
-              "times": [
-                {
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "day": "Thursday, Dec. 8th",
-              "times": [
-                {
-                  "time": "7:00 AM"
-                },
-                {
-                  "time": "12:00 PM"
-                },
-                {
-                  "time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Christmas",
           "days": [
             {

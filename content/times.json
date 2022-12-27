@@ -109,33 +109,11 @@
           ]
         },
         {
-          "name": "Christmas",
+          "name": "Mary, Mother of God (Dec. 31st / Jan 1st)",
           "days": [
             {
-              "day": "Christmas Eve",
-              "times": [
-                {
-                  "time": "4:00 PM",
-                  "note": "Children's Choir"
-                },
-                {
-                  "time": "6:00 PM",
-                  "note": "Carols begin at 5:30 PM"
-                }
-              ]
-            },
-            {
-              "day": "Christmas Day",
-              "times": [
-                {
-                  "time": "12:00 AM",
-                  "note": "Candlelight"
-                },
-                {
-                  "time": "9:00 AM",
-                  "note": "Brunch after Mass"
-                }
-              ]
+              "day": "Regular Sunday Mass Schedule",
+              "times": []
             }
           ]
         }

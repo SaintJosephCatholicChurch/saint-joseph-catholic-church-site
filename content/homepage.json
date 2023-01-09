@@ -36,10 +36,10 @@
     },
     {
       "type": "featured_link",
-      "title": "36th Annual Bishop's Appeal",
+      "title": "Pope Francis' Apostolic Letter",
       "summary": "",
-      "image": "/files/aba-36-video.webp",
-      "url": "https://vimeo.com/732233106?embedded=true&source=video_title&owner=1005171"
+      "image": "/files/totum-amoris-est.webp",
+      "url": "https://www.vatican.va/content/francesco/en/apost_letters/documents/20221228-totum-amoris-est.html"
     }
   ],
   "daily_readings_background": "/files/scripture-background.webp",

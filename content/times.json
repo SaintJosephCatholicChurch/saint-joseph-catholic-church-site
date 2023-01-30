@@ -292,6 +292,32 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Ash Wednesday",
+      "sections": [
+        {
+          "name": "Ash Wednesday Mass Times",
+          "days": [
+            {
+              "day": "7:00 AM",
+              "times": []
+            },
+            {
+              "day": "Noon",
+              "times": []
+            },
+            {
+              "day": "7:00 PM",
+              "times": [
+                {
+                  "note": "with Choir"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

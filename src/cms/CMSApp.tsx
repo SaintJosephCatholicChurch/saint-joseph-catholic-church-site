@@ -20,7 +20,11 @@ import CMS, {
   TextWidget
 } from '@staticcms/core';
 
+import type { FC } from 'react';
+
 const loadCmsApp = () => {
+  const IconFC = Icon as FC<{ type: string }>;
+
   // Register all the things
   CMS.registerBackend('github', GitHubBackend);
   CMS.registerBackend('proxy', ProxyBackend);
@@ -49,7 +53,7 @@ const loadCmsApp = () => {
   CMS.registerLocale('en', locales.en);
 
   Object.keys(images).forEach((iconName) => {
-    CMS.registerIcon(iconName, <Icon type={iconName} />);
+    CMS.registerIcon(iconName, <IconFC type={iconName} />);
   });
 
   return CMS;

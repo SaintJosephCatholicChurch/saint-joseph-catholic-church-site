@@ -55,6 +55,7 @@ import createCmsImagePlugin from './plugins/cms-image';
 import './plugins/telephone-autolink';
 
 import type { IAllProps } from '@tinymce/tinymce-react';
+import type { FC } from 'react';
 
 // Content styles, including inline UI like fake cursors
 /* eslint import/no-webpack-loader-syntax: off */
@@ -68,6 +69,9 @@ interface BundleEditorProps extends Partial<IAllProps> {
 export default function BundledEditor(props: BundleEditorProps) {
   const { init, onOpenMediaLibrary, ...rest } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const EditorFC = Editor as unknown as FC<any>;
+
   useEffect(() => {
     createCmsImagePlugin({ onOpenMediaLibrary });
     createCmsFilePlugin({ onOpenMediaLibrary });
@@ -76,7 +80,7 @@ export default function BundledEditor(props: BundleEditorProps) {
   // note that skin and content_css is disabled to avoid the normal
   // loading process and is instead loaded as a string via content_style
   return (
-    <Editor
+    <EditorFC
       init={{
         ...init,
         skin: false,

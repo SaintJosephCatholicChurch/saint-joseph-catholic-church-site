@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - nextjs-cache-{{ checksum "package-lock.json" }}
+            - cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
           command: npm install --no-save --legacy-peer-deps
@@ -26,8 +26,6 @@ jobs:
           when: on_success
           paths:
             - ./node_modules
-            - ./.next/cache
-            - ./dist
       - run:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./dist

@@ -9,20 +9,12 @@ jobs:
           fingerprints:
             - "0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08"
       - checkout
-      - restore_cache:
-          keys:
-            - cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm install --no-save --legacy-peer-deps
+          command: yarn
       - run:
           name: Process Bulletins
-          command: npm run bulletins-ci
-      - save_cache:
-          key: nextjs-cache-{{ checksum "package-lock.json" }}
-          when: on_success
-          paths:
-            - ./node_modules
+          command: yarn bulletins-ci
 
 workflows:
   build-deploy:

@@ -12,8 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect } from 'react';
 
-// eslint-disable-next-line import/no-unresolved
-import 'react-datetime/css/react-datetime.css';
+import '@staticcms/core/node_modules/react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
 import NavigationPreview from '../components/previews/NavigationPreview';

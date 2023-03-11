@@ -20,7 +20,7 @@ import transientOptions from '../../../../util/transientOptions';
 import useWindowSize from '../../../../util/useWindowSize';
 import PageTitle from '../../PageTitle';
 import BulletListButton from './BulletListButton';
-import { formatBulletinUrlDate, getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
+import { getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
 
 import type { ListChildComponentProps } from 'react-window';
 import type { Bulletin, BulletinPDFData } from '../../../../interface';
@@ -315,7 +315,7 @@ const StyledSlidableArea = styled(
       position: absolute;
       left: -${$width * $index}px;
     }
-    
+
     ${theme.breakpoints.down('lg')} {
       flex-direction: column;
     }
@@ -378,7 +378,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
     (pdf: string) => {
       const newBulletin = bulletins.find((aBulletin) => aBulletin.pdf === pdf);
       if (isNotNullish(newBulletin)) {
-        router.push(`/parish-bulletins/${formatBulletinUrlDate(newBulletin)}`);
+        router.push(`/parish-bulletins/${newBulletin.date}`);
       }
     },
     [bulletins, router]

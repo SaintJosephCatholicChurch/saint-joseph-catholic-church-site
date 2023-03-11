@@ -424,6 +424,7 @@ const config: CmsConfig = {
           name: 'date',
           label: 'Date',
           widget: 'datetime',
+          format: 'MMM DD, YYYY',
           date_format: 'MMM DD, YYYY',
           time_format: false
         },

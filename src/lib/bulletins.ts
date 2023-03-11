@@ -1,4 +1,3 @@
-import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -38,7 +37,7 @@ export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinP
   const metaFullPath = join('public', bulletin.pdf.replace(/\.pdf$/g, ''), 'meta.json');
   return {
     title: getFormattedBulletinTitle(bulletin),
-    slug: format(parseISO(bulletin.date), 'yyyy-MM-dd'),
+    slug: bulletin.date,
     date: bulletin.date,
     ...JSON.parse(readFileSync(metaFullPath, 'utf8'))
   } as BulletinPDFData;

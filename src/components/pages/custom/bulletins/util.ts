@@ -1,12 +1,13 @@
 import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import { useMemo } from 'react';
 
 import type { Bulletin } from '../../../../interface';
 
 export function getFormattedBulletinDate(bulletin: Bulletin) {
   try {
-    return format(new Date(bulletin.date), 'MMM dd, yyyy');
-  } catch {
+    return format(parse(bulletin.date, 'yyyy-MM-dd', new Date()), 'MMM dd, yyyy');
+  } catch (e) {
     return 'N/A';
   }
 }
@@ -23,18 +24,6 @@ export function useFormattedBulletinTitle(bulletin: Bulletin) {
   return useMemo(() => getFormattedBulletinTitle(bulletin), [bulletin]);
 }
 
-export function formatBulletinUrlDate(bulletin: Bulletin) {
-  let date: string | undefined;
-
-  try {
-    date = format(new Date(bulletin.date), 'yyyy-MM-dd');
-  } catch {
-    date = '404';
-  }
-
-  return date;
-}
-
 export function useFormattedBulletinUrlDate(bulletin: Bulletin) {
-  return useMemo(() => formatBulletinUrlDate(bulletin), [bulletin]);
+  return useMemo(() => bulletin.date, [bulletin.date]);
 }

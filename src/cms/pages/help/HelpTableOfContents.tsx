@@ -114,7 +114,6 @@ const HelpTableOfContents = () => {
   const [activeId, setActiveId] = useState<string>();
   const { nestedHeadings } = useHeadingsData();
   useIntersectionObserver(setActiveId);
-  console.log('activeId', activeId);
 
   return (
     <StyledNav aria-label="Table of contents">

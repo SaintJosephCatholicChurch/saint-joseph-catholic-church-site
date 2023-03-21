@@ -261,6 +261,7 @@ function fixCommonBulletinErrors(textContent: string) {
     await git.spawn(['config', 'credential.helper', "'cache --timeout=120'"]);
     await git.spawn(['config', 'user.email', 'lautzd@gmail.com']);
     await git.spawn(['config', 'user.name', 'Circle CI Bot']);
+    await git.spawn(['checkout', 'main']);
     await git.spawn(['add', '-A']);
     await git.spawn(['commit', '-m', '"Updated bulletins from CI [skip ci]"']);
     await git.spawn(['push', '-q']);

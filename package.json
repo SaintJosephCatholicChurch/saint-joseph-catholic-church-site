@@ -7,7 +7,7 @@
     "build": "next build",
     "bulletins-ci": "ts-node ./scripts/pdf-to-images.ts -ci",
     "bulletins": "ts-node ./scripts/pdf-to-images.ts",
-    "deploy": "yarn bulletins-ci && yarn build",
+    "deploy": "npm run bulletins-ci && npm run build",
     "dev": "cross-env NODE_ENV=development next dev",
     "export": "cross-env NODE_ENV=production next build && next export -o ./dist",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",
@@ -92,9 +92,6 @@
     "ts-node": "10.9.1",
     "typescript": "4.7.4",
     "yaml-loader": "0.8.0"
-  },
-  "resolutions": {
-    "@types/react": "17.0.48"
   },
   "prettier": {
     "overrides": [

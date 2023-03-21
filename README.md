@@ -7,13 +7,13 @@
 https://stjosephchurchbluffton.org/
 
 ## Production Build
-Run `yarn build`
+Run `npm run build`
 
 ## Local Development
 
-1. Install dependencies: `yarn`
-2. Start local authication service for cms `yarn local-cms`
-3. Start dev build `yarn dev`
+1. Install dependencies: `npm install --legacy-peer-deps`
+2. Start local authication service for cms `npm run local-cms`
+3. Start dev build `npm run dev`
 
 ## License
 

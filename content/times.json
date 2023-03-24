@@ -294,24 +294,251 @@
       ]
     },
     {
-      "name": "Ash Wednesday",
+      "name": "Holy Week (2023)",
       "sections": [
         {
-          "name": "Ash Wednesday Mass Times",
+          "name": "Palm Sunday",
           "days": [
             {
-              "day": "7:00 AM",
-              "times": []
-            },
-            {
-              "day": "Noon",
-              "times": []
-            },
-            {
-              "day": "7:00 PM",
+              "day": "Palm Sunday Procession",
               "times": [
                 {
-                  "note": "with Choir"
+                  "time": "10:00 AM",
+                  "note": "Meet outside Parish Office"
+                }
+              ]
+            },
+            {
+              "day": "Shroud of Turin Presentation",
+              "times": [
+                {
+                  "time": "11:30 AM",
+                  "note": "Parish Social Hall"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Holy Monday",
+          "days": [
+            {
+              "day": "Mass",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "The Passion of the Christ",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Parish Gymnasium (Rated R)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Holy Tuesday",
+          "days": [
+            {
+              "day": "Adoration",
+              "times": [
+                {
+                  "time": "7:00 AM",
+                  "end_time": "8:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Mass",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Confession",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": "9:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Chrism Mass",
+              "times": [
+                {
+                  "time": "7:00 PM",
+                  "note": "Cathedral of the Immaculate Conception (FW)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Spy Wednesday",
+          "days": [
+            {
+              "day": "Adoration / Confession",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "end_time": "6:45 PM"
+                }
+              ]
+            },
+            {
+              "day": "Mass",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Holy Thursday",
+          "days": [
+            {
+              "day": "Lauds / Morning Prayer",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Confession",
+              "times": [
+                {
+                  "time": "4:30 PM",
+                  "end_time": "6:30 PM"
+                }
+              ]
+            },
+            {
+              "day": "Mass of the Lord's Supper",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Holy Thursday Night Watch",
+              "times": [
+                {
+                  "time": "8:30 PM",
+                  "end_time": "12:00 AM",
+                  "note": "Conference Room"
+                }
+              ]
+            },
+            {
+              "day": "Compline / Night Prayer",
+              "times": [
+                {
+                  "time": "11:45 PM",
+                  "note": "Conference Room"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Good Friday",
+          "days": [
+            {
+              "day": "Lauds / Morning Prayer",
+              "times": [
+                {
+                  "time": "8:30 AM"
+                }
+              ]
+            },
+            {
+              "day": "Celebration of the Lord's Passion",
+              "times": [
+                {
+                  "time": "1:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Confession",
+              "times": [
+                {
+                  "time": "5:00 PM",
+                  "end_time": "6:30 PM"
+                }
+              ]
+            },
+            {
+              "day": "Stations of the Cross",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Tenebrae",
+              "times": [
+                {
+                  "time": "8:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Holy Saturday",
+          "days": [
+            {
+              "day": "Lauds / Morning Prayer",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Confession",
+              "times": [
+                {
+                  "time": "8:30 AM",
+                  "end_time": "10:00 AM"
+                }
+              ]
+            },
+            {
+              "day": "Solemn Easter Vigil",
+              "times": [
+                {
+                  "time": "9:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Easter Sunday",
+          "days": [
+            {
+              "day": "Mass",
+              "times": [
+                {
+                  "time": "7:30 AM"
+                },
+                {
+                  "time": "10:00 AM"
                 }
               ]
             }

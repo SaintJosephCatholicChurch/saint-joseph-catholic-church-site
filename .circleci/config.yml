@@ -9,12 +9,28 @@ jobs:
           fingerprints:
             - "0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08"
       - checkout
+      - restore_cache:
+          keys:
+            - nextjs-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: yarn
+          command: npm install --no-save --legacy-peer-deps
       - run:
           name: Process Bulletins
-          command: yarn bulletins-ci
+          command: npm run bulletins-ci
+      - run:
+          name: NextJS Build
+          command: npm run export
+      - save_cache:
+          key: nextjs-cache-{{ checksum "package-lock.json" }}
+          when: on_success
+          paths:
+            - ./node_modules
+            - ./.next/cache
+            - ./dist
+      - run:
+          name: Deploy to Netlify
+          command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./dist
 
 workflows:
   build-deploy:

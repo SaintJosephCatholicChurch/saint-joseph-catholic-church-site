@@ -152,8 +152,22 @@ const config: CmsConfig = {
               ]
             },
             {
+              name: 'livestream_provider',
+              label: 'Livestream Provider',
+              widget: 'select',
+              options: [
+                { value: 'youtube', label: 'YouTube' },
+                { value: 'facebook', label: 'Facebook' }
+              ]
+            },
+            {
               name: 'facebook_page',
               label: 'Facebook Page',
+              widget: 'string'
+            },
+            {
+              name: 'youtube_channel',
+              label: 'YouTube Channel',
               widget: 'string'
             },
             {

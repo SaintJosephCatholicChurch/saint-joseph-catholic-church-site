@@ -24,7 +24,11 @@ const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
   return (
     <PageLayout url="/live-stream" title="Live Stream" {...sidebarProps}>
       <StyledLiveStreamPageContent>
-        <LiveStreamView facebookPage={churchDetails.facebook_page} />
+        <LiveStreamView
+          livestreamProvider={churchDetails.livestream_provider}
+          facebookPage={churchDetails.facebook_page}
+          youtubeChannel={churchDetails.youtube_channel}
+        />
         <Button
           variant="contained"
           size="large"

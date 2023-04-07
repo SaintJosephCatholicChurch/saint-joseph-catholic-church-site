@@ -1,10 +1,26 @@
+import useLiveStreamUrl from './useLiveStreamUrl';
+
 interface LiveStreamIFrameProps {
   width: number;
   height: number;
+  livestreamProvider: 'youtube' | 'facebook';
   facebookPage: string;
+  youtubeChannel: string;
 }
 
-const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps) => {
+const LiveStreamIFrame = ({
+  width,
+  height,
+  livestreamProvider,
+  facebookPage,
+  youtubeChannel
+}: LiveStreamIFrameProps) => {
+  const livestreamUrl = useLiveStreamUrl({ livestreamProvider, facebookPage, youtubeChannel });
+
+  if (livestreamProvider === 'youtube') {
+    return <embed src={livestreamUrl} width={width} height={height} style={{ border: 'none', overflow: 'hidden' }} />;
+  }
+
   return (
     <iframe
       src={`https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F${facebookPage}%2Flive&show_text=false`}

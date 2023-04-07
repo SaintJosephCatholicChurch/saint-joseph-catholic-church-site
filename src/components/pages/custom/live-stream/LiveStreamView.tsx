@@ -10,10 +10,12 @@ const StyledLiveStreamWrapper = styled('div')`
 `;
 
 interface LiveStreamViewProps {
+  livestreamProvider: 'youtube' | 'facebook';
   facebookPage: string;
+  youtubeChannel: string;
 }
 
-const LiveStreamView = ({ facebookPage }: LiveStreamViewProps) => {
+const LiveStreamView = ({ livestreamProvider, facebookPage, youtubeChannel }: LiveStreamViewProps) => {
   const [height, setHeight] = useState(0);
   const [ref, { width }] = useElementSize();
 
@@ -31,7 +33,13 @@ const LiveStreamView = ({ facebookPage }: LiveStreamViewProps) => {
 
   return (
     <StyledLiveStreamWrapper ref={ref} style={{ height }}>
-      <LiveStreamIFrameNoSSR width={width} height={height} facebookPage={facebookPage} />
+      <LiveStreamIFrameNoSSR
+        width={width}
+        height={height}
+        livestreamProvider={livestreamProvider}
+        facebookPage={facebookPage}
+        youtubeChannel={youtubeChannel}
+      />
     </StyledLiveStreamWrapper>
   );
 };

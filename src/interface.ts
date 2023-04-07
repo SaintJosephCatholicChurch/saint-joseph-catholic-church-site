@@ -91,7 +91,9 @@ export interface ChurchDetails {
   readonly email: string;
   readonly additional_emails?: { name: string; email: string }[];
   readonly contacts?: { title: string; name: string }[];
+  readonly livestream_provider: 'youtube' | 'facebook';
   readonly facebook_page: string;
+  readonly youtube_channel: string;
   readonly google_map_location: string;
   readonly online_giving_url: string;
 }

@@ -297,55 +297,8 @@
       "name": "Holy Week (2023)",
       "sections": [
         {
-          "name": "Spy Wednesday",
-          "days": [
-            {
-              "day": "Adoration / Confession",
-              "times": [
-                {
-                  "time": "6:00 PM",
-                  "end_time": "6:45 PM"
-                }
-              ]
-            },
-            {
-              "day": "Mass",
-              "times": [
-                {
-                  "time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Holy Thursday",
           "days": [
-            {
-              "day": "Lauds / Morning Prayer",
-              "times": [
-                {
-                  "time": "8:00 AM"
-                }
-              ]
-            },
-            {
-              "day": "Confession",
-              "times": [
-                {
-                  "time": "4:30 PM",
-                  "end_time": "6:30 PM"
-                }
-              ]
-            },
-            {
-              "day": "Mass of the Lord's Supper",
-              "times": [
-                {
-                  "time": "7:00 PM"
-                }
-              ]
-            },
             {
               "day": "Holy Thursday Night Watch",
               "times": [

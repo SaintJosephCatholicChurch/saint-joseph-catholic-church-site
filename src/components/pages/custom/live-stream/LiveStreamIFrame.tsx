@@ -20,8 +20,8 @@ const LiveStreamIFrame = ({
   if (livestreamProvider === 'youtube') {
     return (
       <iframe
-        width="560"
-        height="315"
+        width={width}
+        height={height}
         src={livestreamUrl}
         title="YouTube video player"
         frameBorder="0"

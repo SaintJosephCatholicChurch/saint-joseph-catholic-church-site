@@ -18,7 +18,17 @@ const LiveStreamIFrame = ({
   const livestreamUrl = useLiveStreamUrl({ livestreamProvider, facebookPage, youtubeChannel });
 
   if (livestreamProvider === 'youtube') {
-    return <embed src={livestreamUrl} width={width} height={height} style={{ border: 'none', overflow: 'hidden' }} />;
+    return (
+      <iframe
+        width="560"
+        height="315"
+        src={livestreamUrl}
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      ></iframe>
+    );
   }
 
   return (

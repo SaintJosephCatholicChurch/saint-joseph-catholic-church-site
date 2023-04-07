@@ -1,4 +1,5 @@
 import FacebookIcon from '@mui/icons-material/Facebook';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 
@@ -32,8 +33,12 @@ const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
         <Button
           variant="contained"
           size="large"
-          startIcon={<FacebookIcon />}
-          href={`https://www.facebook.com/${churchDetails.facebook_page}/live`}
+          startIcon={churchDetails.livestream_provider === 'youtube' ? <YouTubeIcon /> : <FacebookIcon />}
+          href={
+            churchDetails.livestream_provider === 'youtube'
+              ? `https://youtube.com/channel/${churchDetails.youtube_channel}/live`
+              : `https://www.facebook.com/${churchDetails.facebook_page}/live`
+          }
           target="_blank"
           sx={{
             marginTop: '16px',

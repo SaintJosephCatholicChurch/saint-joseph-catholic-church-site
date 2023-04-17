@@ -262,6 +262,19 @@
               ]
             }
           ]
+        },
+        {
+          "name": "",
+          "days": [
+            {
+              "day": "",
+              "times": [
+                {
+                  "note": "Station booklets are available in the Narthex for private devotions"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -281,45 +294,12 @@
               ]
             },
             {
-              "day": "St. Vincent de Paul Applications Accepted on Mondays",
+              "day": "St. Vincent de Paul Applications",
               "times": [
                 {
                   "time": "10:00 AM",
-                  "end_time": "3:00 PM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Holy Week (2023)",
-      "sections": [
-        {
-          "name": "Holy Saturday",
-          "days": [
-            {
-              "day": "Solemn Easter Vigil",
-              "times": [
-                {
-                  "time": "9:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Easter Sunday",
-          "days": [
-            {
-              "day": "Mass",
-              "times": [
-                {
-                  "time": "7:30 AM"
-                },
-                {
-                  "time": "10:00 AM"
+                  "end_time": "3:00 PM",
+                  "note": "Accepted on Mondays"
                 }
               ]
             }

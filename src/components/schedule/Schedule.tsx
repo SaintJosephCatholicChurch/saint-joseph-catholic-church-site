@@ -72,7 +72,7 @@ const StyledHeaderText = styled('h1')(
 
     font-size: 24px;
     line-height: 24px;
-    
+
     ${theme.breakpoints.up('lg')} {
       font-size: 30px;
     }
@@ -218,7 +218,6 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
         {isNotEmpty(liveStreamButton?.url) && isNotEmpty(liveStreamButton?.title) ? (
           <Link key="live-stream-button" href={liveStreamButton.url}>
             <Button
-              href={liveStreamButton.url}
               variant="contained"
               size="large"
               startIcon={<LiveTvIcon />}
@@ -247,7 +246,6 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
         ) : null}
         <Link key="bulletin-button" href="/parish-bulletins">
           <Button
-            href="/parish-bulletins"
             variant="text"
             size="large"
             startIcon={<NewspaperIcon />}

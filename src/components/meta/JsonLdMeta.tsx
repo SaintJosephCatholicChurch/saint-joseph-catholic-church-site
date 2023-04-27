@@ -1,5 +1,5 @@
 import formatISO from 'date-fns/formatISO';
-import Head from 'next/head';
+import Script from 'next/script';
 import { jsonLdScriptProps } from 'react-schemaorg';
 
 import config from '../../lib/config';
@@ -17,20 +17,18 @@ interface JsonLdMetaProps {
 
 const JsonLdMeta = ({ url, title, keywords, date, image, description }: JsonLdMetaProps) => {
   return (
-    <Head>
-      <script
-        {...jsonLdScriptProps<BlogPosting>({
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          mainEntityOfPage: config.base_url.replace(/\/$/g, '') + url,
-          headline: title,
-          keywords: keywords ? keywords.join(',') : undefined,
-          datePublished: date ? formatISO(date) : undefined,
-          image,
-          description
-        })}
-      />
-    </Head>
+    <Script
+      {...jsonLdScriptProps<BlogPosting>({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        mainEntityOfPage: config.base_url.replace(/\/$/g, '') + url,
+        headline: title,
+        keywords: keywords ? keywords.join(',') : undefined,
+        datePublished: date ? formatISO(date) : undefined,
+        image,
+        description
+      })}
+    />
   );
 };
 

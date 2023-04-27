@@ -7,7 +7,7 @@ import LogoSecondaryText from './LogoSecondaryText';
 
 import type { LogoDetails } from '../../interface';
 
-const StyledHeaderLink = styled('a')`
+const StyledHeaderLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,14 +48,12 @@ interface LogoProps {
 
 const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal' }: LogoProps) => {
   return (
-    <Link href="/">
-      <StyledHeaderLink href="/">
-        <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
-          <LogoPrimaryText>{primary}</LogoPrimaryText>
-          <LogoSecondaryText>{secondary}</LogoSecondaryText>
-        </StyledLogoWrapper>
-      </StyledHeaderLink>
-    </Link>
+    <StyledHeaderLink href="/">
+      <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
+        <LogoPrimaryText>{primary}</LogoPrimaryText>
+        <LogoSecondaryText>{secondary}</LogoSecondaryText>
+      </StyledLogoWrapper>
+    </StyledHeaderLink>
   );
 };
 

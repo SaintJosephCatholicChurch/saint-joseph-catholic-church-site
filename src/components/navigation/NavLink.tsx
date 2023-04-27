@@ -22,7 +22,6 @@ const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, on
     <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
       <Button
         ref={ref}
-        href={url}
         sx={{
           color: '#680b12',
           padding: 0,

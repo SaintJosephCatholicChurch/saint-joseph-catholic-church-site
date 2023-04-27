@@ -1,5 +1,3 @@
-import Head from 'next/head';
-
 import HomepageView from '../components/homepage/HomepageView';
 import Layout from '../components/Layout';
 import BasicMeta from '../components/meta/BasicMeta';
@@ -16,9 +14,6 @@ type HomepageProps = SidebarProps;
 const Homepage = ({ ...sidebarProps }: HomepageProps) => {
   return (
     <>
-      <Head>
-        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async />
-      </Head>
       <Layout>
         <BasicMeta url={'/'} />
         <OpenGraphMeta url={'/'} />

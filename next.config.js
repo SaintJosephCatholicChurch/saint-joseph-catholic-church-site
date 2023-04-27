@@ -12,10 +12,6 @@ const withPWA = require('next-pwa')({
   dest: 'public'
 });
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
-});
-
 const removeImports = require('next-remove-imports')();
 
 let config = removeImports(
@@ -41,8 +37,6 @@ let config = removeImports(
 
 if (process.env.NODE_ENV === 'production') {
   config = withPWA(config);
-} else {
-  config = withBundleAnalyzer(config);
 }
 
 module.exports = config;

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MENU_DELAY } from '../../constants';
-import { isEmpty, isNotEmpty } from '../../util/string.util';
+import { isEmpty } from '../../util/string.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
 import { useMediaQueryUp } from '../../util/useMediaQuery';
@@ -255,7 +255,6 @@ const NavItem = ({ item, size }: NavItemProps) => {
     const button = (
       <Button
         ref={buttonRef}
-        href={isNotEmpty(url) ? url : undefined}
         onClick={handleOnClick(item, 'buttonClick')}
         onKeyDown={handleOnKeyDown('keyboardPress')}
         onMouseOver={handleOnMouseOver('button')}

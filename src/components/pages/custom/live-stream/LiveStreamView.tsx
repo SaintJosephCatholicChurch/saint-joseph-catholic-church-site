@@ -8,6 +8,8 @@ const StyledLiveStreamWrapper = styled('div')`
   width: 100%;
   display: flex;
   position: relative;
+  flex-direction: column;
+  align-items: center;
 `;
 
 interface LiveStreamViewProps {

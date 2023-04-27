@@ -129,7 +129,7 @@ const LiveStreamIFrame = ({
         ) : (
           <>
             <Typography key="loading" variant="h5" component="div">
-              Loading
+              Loading Live Stream
             </Typography>
             <CircularProgress key="loading-indicator" size="28px" />
           </>

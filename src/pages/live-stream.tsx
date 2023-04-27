@@ -1,11 +1,7 @@
-import FacebookIcon from '@mui/icons-material/Facebook';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import Button from '@mui/material/Button';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 import PageLayout from '../components/PageLayout';
 import LiveStreamView from '../components/pages/custom/live-stream/LiveStreamView';
-import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../constants';
 import churchDetails from '../lib/church_details';
 import { getSidebarStaticProps } from '../lib/sidebar';
 
@@ -20,8 +16,6 @@ const StyledLiveStreamPageContent = styled('div')`
 type LiveStreamProps = SidebarProps;
 
 const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
-  const theme = useTheme();
-
   return (
     <PageLayout url="/live-stream" title="Live Stream" {...sidebarProps}>
       <StyledLiveStreamPageContent>
@@ -30,37 +24,6 @@ const LiveStream = ({ ...sidebarProps }: LiveStreamProps) => {
           facebookPage={churchDetails.facebook_page}
           youtubeChannel={churchDetails.youtube_channel}
         />
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={churchDetails.livestream_provider === 'youtube' ? <YouTubeIcon /> : <FacebookIcon />}
-          href={
-            churchDetails.livestream_provider === 'youtube'
-              ? `https://youtube.com/channel/${churchDetails.youtube_channel}/live`
-              : `https://www.facebook.com/${churchDetails.facebook_page}/live`
-          }
-          target="_blank"
-          sx={{
-            marginTop: '16px',
-            fontSize: '20px',
-            backgroundColor: '#bc2f3b',
-            '&:hover': {
-              backgroundColor: '#d24c57',
-              color: '#ffffff'
-            },
-            '.MuiButton-startIcon > *:nth-of-type(1)': {
-              fontSize: '24px'
-            },
-            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
-              fontSize: '16px',
-              '.MuiButton-startIcon > *:nth-of-type(1)': {
-                fontSize: '20px'
-              }
-            }
-          }}
-        >
-          View past streams
-        </Button>
       </StyledLiveStreamPageContent>
     </PageLayout>
   );

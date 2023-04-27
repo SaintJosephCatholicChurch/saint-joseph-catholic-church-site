@@ -11,22 +11,35 @@ interface YoutubeLiveResponse {
   url: string;
 }
 
-export default function useLiveStreamUrl({ livestreamProvider, facebookPage, youtubeChannel }: UseLiveStreamUrlProps) {
+export default function useLiveStreamUrl({
+  livestreamProvider,
+  facebookPage,
+  youtubeChannel
+}: UseLiveStreamUrlProps): [boolean, string] {
   const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
 
     const getVideo = async () => {
-      const response = await fetch(
-        `https://api.stjosephchurchbluffton.org/.netlify/functions/live/${livestreamProvider}/${
-          livestreamProvider === 'facebook' ? facebookPage : youtubeChannel
-        }`
-      );
-      const contents = (await response.json()) as YoutubeLiveResponse;
+      try {
+        const response = await fetch(
+          `https://api.stjosephchurchbluffton.org/.netlify/functions/live/${livestreamProvider}/${
+            livestreamProvider === 'facebook' ? facebookPage : youtubeChannel
+          }`
+        );
+        const contents = (await response.json()) as YoutubeLiveResponse;
+
+        if (alive) {
+          setUrl(contents.url);
+        }
+      } catch (e) {
+        console.warn('Loading livestream failed', e);
+      }
 
       if (alive) {
-        setUrl(contents.url);
+        setLoading(false);
       }
     };
 
@@ -37,5 +50,5 @@ export default function useLiveStreamUrl({ livestreamProvider, facebookPage, you
     };
   }, [facebookPage, livestreamProvider, youtubeChannel]);
 
-  return url;
+  return [loading, url];
 }

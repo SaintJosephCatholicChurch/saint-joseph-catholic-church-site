@@ -7,6 +7,7 @@ import useElementSize from '../../../../util/useElementSize';
 const StyledLiveStreamWrapper = styled('div')`
   width: 100%;
   display: flex;
+  position: relative;
 `;
 
 interface LiveStreamViewProps {

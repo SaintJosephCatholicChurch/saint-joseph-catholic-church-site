@@ -45,7 +45,7 @@ const LiveStreamIFrame = ({
   useEffect(() => {
     setTimeout(() => {
       setShouldBeLoaded(true);
-    }, 10000);
+    }, 15000);
   }, []);
 
   const viewMoreButton = useMemo(

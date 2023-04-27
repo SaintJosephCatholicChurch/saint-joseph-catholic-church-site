@@ -33,7 +33,7 @@ const LiveStreamIFrame = ({
 
   return (
     <iframe
-      src={`https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F${facebookPage}%2Flive&show_text=false`}
+      src={livestreamUrl}
       width={width}
       height={height}
       style={{ border: 'none', overflow: 'hidden' }}

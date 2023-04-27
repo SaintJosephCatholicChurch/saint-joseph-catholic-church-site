@@ -15,17 +15,14 @@ export default function useLiveStreamUrl({ livestreamProvider, facebookPage, you
   const [url, setUrl] = useState('');
 
   useEffect(() => {
-    if (livestreamProvider === 'facebook') {
-      setUrl(
-        `https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F${facebookPage}%2Flive&show_text=false`
-      );
-      return;
-    }
-
     let alive = true;
 
-    const getYoutubeVideo = async () => {
-      const response = await fetch(`https://api.stjosephchurchbluffton.org/.netlify/functions/live/${youtubeChannel}`);
+    const getVideo = async () => {
+      const response = await fetch(
+        `https://api.stjosephchurchbluffton.org/.netlify/functions/live/${livestreamProvider}/${
+          livestreamProvider === 'facebook' ? facebookPage : youtubeChannel
+        }`
+      );
       const contents = (await response.json()) as YoutubeLiveResponse;
 
       if (alive) {
@@ -33,7 +30,7 @@ export default function useLiveStreamUrl({ livestreamProvider, facebookPage, you
       }
     };
 
-    getYoutubeVideo();
+    getVideo();
 
     return () => {
       alive = false;

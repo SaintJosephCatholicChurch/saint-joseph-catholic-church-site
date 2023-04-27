@@ -71,10 +71,10 @@ export function fetchPostContent(): PostContent[] {
         data: {
           ...data,
           slug,
-          image: data.image as string | undefined ?? '',
-          tags: data.tags as string[] | undefined ?? []
+          image: (data.image as string | undefined) ?? '',
+          tags: (data.tags as string[] | undefined) ?? []
         } as PostContentData,
-        summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1] : content,
+        summary: summaryMatch && summaryMatch.length >= 2 ? summaryMatch[1].replace(/<img([\w\W]+?)\/>/g, '') : content,
         content
       };
     }

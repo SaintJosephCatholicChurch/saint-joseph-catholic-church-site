@@ -22,13 +22,15 @@ const StyledPostImage = styled(
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    width: 100%;
+    width: ${$size === 'large' ? '160' : '110'}px;
     height: ${$size === 'large' ? '90' : '72'}px;
+    flex-shrink: 0;
 
     ${theme.breakpoints.down('sm')} {
       height: 72px;
+      width: 110px;
     }
-    
+
     ${theme.breakpoints.only('md')} {
       height: 72px;
     }
@@ -60,7 +62,7 @@ const StyledPostTitle = styled(
     ${theme.breakpoints.down('sm')} {
       font-size: 16px;
     }
-    
+
     ${theme.breakpoints.only('md')} {
       font-size: 16px;
     }
@@ -127,8 +129,7 @@ const RecentNewsPost = memo(
       <Link href={`/news/${slug}`}>
         <Button
           sx={{
-            display: isNotEmpty(image) ? 'grid' : 'flex',
-            gridTemplateColumns: `${size === 'large' ? '160' : '110'}px auto`,
+            display: 'flex',
             [theme.breakpoints.down('sm')]: {
               gridTemplateColumns: '110px auto'
             },

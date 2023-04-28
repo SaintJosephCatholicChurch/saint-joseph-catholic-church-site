@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
-import { isNotEmpty } from '../../util/string.util';
+import { isEmpty, isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import TabPanel from '../TabPanel';
 
@@ -78,18 +78,20 @@ const StyledSectionTitle = styled('h3')`
 
 interface StyledSectionsProps {
   $variant: 'normal' | 'compact';
+  $notesOnly: boolean;
 }
 
 const StyledSections = styled(
   'div',
   transientOptions
 )<StyledSectionsProps>(
-  ({ $variant }) => `
-    margin-top: 32px;
+  ({ $variant, $notesOnly }) => `
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 0;
+
+    ${$notesOnly ? 'margin-top: 8px;' : 'margin-top: 32px;'}
 
     ${
       $variant === 'compact'
@@ -103,15 +105,24 @@ const StyledSections = styled(
   `
 );
 
-const StyledDayTimeLine = styled('div')`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: 20px;
-  margin-top: 2px;
-  padding: 5px 0;
-  border-bottom: 1px solid #ccc;
-`;
+interface StyledDayTimeLineProps {
+  $notesOnly: boolean;
+}
+
+const StyledDayTimeLine = styled(
+  'div',
+  transientOptions
+)<StyledDayTimeLineProps>(
+  ({ $notesOnly }) => `
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 20px;
+    margin-top: 2px;
+    padding: 5px 0;
+    ${$notesOnly ? '' : 'border-bottom: 1px solid #ccc;'}
+  `
+);
 
 const StyledDayTimeLineTitle = styled('div')(
   ({ theme }) => `
@@ -191,10 +202,31 @@ const ScheduleTabPanel = memo(
             <StyledTabPanelTitle $variant={variant}>{times.name}</StyledTabPanelTitle>
           </StyledTabPanelTitleWrapper>
           {times.sections?.map((section, sectionIndex) => (
-            <StyledSections key={`section-${sectionIndex}`} $variant={variant}>
+            <StyledSections
+              key={`section-${sectionIndex}`}
+              $variant={variant}
+              $notesOnly={
+                section.days &&
+                section.days.length === 1 &&
+                isEmpty(section.days[0].day) &&
+                section.days[0].times.length === 1 &&
+                isEmpty(section.days[0].times[0].end_time) &&
+                isEmpty(section.days[0].times[0].time) &&
+                isNotEmpty(section.days[0].times[0].note)
+              }
+            >
               {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
               {section.days?.map((day, dayIndex) => (
-                <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
+                <StyledDayTimeLine
+                  key={`section-${sectionIndex}-day-${dayIndex}`}
+                  $notesOnly={
+                    isEmpty(day.day) &&
+                    day.times.length === 1 &&
+                    isEmpty(day.times[0].end_time) &&
+                    isEmpty(day.times[0].time) &&
+                    isNotEmpty(day.times[0].note)
+                  }
+                >
                   <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                   <StyledDayTimeLineTimes>
                     {day.times?.map((time, timeIndex) => (

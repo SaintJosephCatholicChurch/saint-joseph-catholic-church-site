@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import { isNotEmpty } from '../../util/string.util';
+import { isEmpty, isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { Times } from '../../interface';
@@ -35,14 +35,22 @@ const StyledSectionTitle = styled('h3')`
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
 `;
 
-const StyledSections = styled('div')(
-  ({ theme }) => `
+interface StyledSectionsProps {
+  $notesOnly: boolean;
+}
+
+const StyledSections = styled(
+  'div',
+  transientOptions
+)<StyledSectionsProps>(
+  ({ theme, $notesOnly }) => `
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 0;
-    padding: 16px 24px;
     box-sizing: border-box;
+
+    ${$notesOnly ? 'padding: 0 24px 16px;' : 'padding: 16px 24px;'}
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
       padding: 12px 16px;
@@ -50,16 +58,24 @@ const StyledSections = styled('div')(
   `
 );
 
-const StyledDayTimeLine = styled('div')(
-  ({ theme }) => `
+interface StyledDayTimeLineProps {
+  $notesOnly: boolean;
+}
+
+const StyledDayTimeLine = styled(
+  'div',
+  transientOptions
+)<StyledDayTimeLineProps>(
+  ({ theme, $notesOnly }) => `
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     min-height: 20px;
     margin-top: 2px;
     padding: 5px 0;
-    border-bottom: 1px solid #ccc;
     gap: 8px;
+    white-space: break-spaces;
+    ${$notesOnly ? '' : 'border-bottom: 1px solid #ccc;'}
 
     ${theme.breakpoints.down('sm')} {
       padding: 0;
@@ -195,10 +211,30 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         {times.sections?.map((section, sectionIndex) => (
-          <StyledSections key={`mobile-section-${sectionIndex}`}>
+          <StyledSections
+            key={`mobile-section-${sectionIndex}`}
+            $notesOnly={
+              section.days &&
+              section.days.length === 1 &&
+              isEmpty(section.days[0].day) &&
+              section.days[0].times.length === 1 &&
+              isEmpty(section.days[0].times[0].end_time) &&
+              isEmpty(section.days[0].times[0].time) &&
+              isNotEmpty(section.days[0].times[0].note)
+            }
+          >
             {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
             {section.days?.map((day) => (
-              <StyledDayTimeLine key={`mobile-section-${sectionIndex}-day-${day.day}`}>
+              <StyledDayTimeLine
+                key={`mobile-section-${sectionIndex}-day-${day.day}`}
+                $notesOnly={
+                  isEmpty(day.day) &&
+                  day.times.length === 1 &&
+                  isEmpty(day.times[0].end_time) &&
+                  isEmpty(day.times[0].time) &&
+                  isNotEmpty(day.times[0].note)
+                }
+              >
                 <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                 <StyledDayTimeLineTimes>
                   {day.times?.map((time, timeIndex) => (

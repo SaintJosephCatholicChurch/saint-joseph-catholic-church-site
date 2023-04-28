@@ -74,7 +74,6 @@ const StyledDayTimeLine = styled(
     margin-top: 2px;
     padding: 5px 0;
     gap: 8px;
-    white-space: break-spaces;
     ${$notesOnly ? '' : 'border-bottom: 1px solid #ccc;'}
 
     ${theme.breakpoints.down('sm')} {
@@ -164,6 +163,7 @@ const StyledDayTimeLineTimeComment = styled('div')(
     font-size: 13px;
     line-height: 13px;
     color: #757575;
+    white-space: break-spaces;
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;

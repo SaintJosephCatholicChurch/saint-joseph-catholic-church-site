@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=development next dev",
     "export": "cross-env NODE_ENV=production next build && next export -o ./dist",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",
-    "local-cms": "npx @staticcms/proxy-server",
+    "local-cms": "npx @staticcms/proxy-server@1.1.0",
     "redirects": "ts-node ./scripts/generate-redirects.ts",
     "start": "next start",
     "test": "jest"

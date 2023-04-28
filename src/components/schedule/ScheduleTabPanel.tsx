@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
-import { isEmpty, isNotEmpty } from '../../util/string.util';
+import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import TabPanel from '../TabPanel';
 
@@ -78,20 +78,19 @@ const StyledSectionTitle = styled('h3')`
 
 interface StyledSectionsProps {
   $variant: 'normal' | 'compact';
-  $notesOnly: boolean;
 }
 
 const StyledSections = styled(
   'div',
   transientOptions
 )<StyledSectionsProps>(
-  ({ $variant, $notesOnly }) => `
+  ({ $variant }) => `
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 0;
 
-    ${$notesOnly ? 'margin-top: 8px;' : 'margin-top: 32px;'}
+    margin-top: 32px;
 
     ${
       $variant === 'compact'
@@ -105,24 +104,15 @@ const StyledSections = styled(
   `
 );
 
-interface StyledDayTimeLineProps {
-  $notesOnly: boolean;
-}
-
-const StyledDayTimeLine = styled(
-  'div',
-  transientOptions
-)<StyledDayTimeLineProps>(
-  ({ $notesOnly }) => `
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    min-height: 20px;
-    margin-top: 2px;
-    padding: 5px 0;
-    ${$notesOnly ? '' : 'border-bottom: 1px solid #ccc;'}
-  `
-);
+const StyledDayTimeLine = styled('div')`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 20px;
+  margin-top: 2px;
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+`;
 
 const StyledDayTimeLineTitle = styled('div')(
   ({ theme }) => `
@@ -185,6 +175,21 @@ const StyledDayTimeLineTimeComment = styled('div')`
   color: #757575;
 `;
 
+const StyledNote = styled('div')`
+  font-size: 13px;
+  line-height: 13px;
+  color: #757575;
+  padding: 16px 0;
+  white-space: break-spaces;
+  text-align: right;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+`;
+
 interface ScheduleTabPanelProps {
   times: Times;
   value: number;
@@ -201,67 +206,52 @@ const ScheduleTabPanel = memo(
           <StyledTabPanelTitleWrapper>
             <StyledTabPanelTitle $variant={variant}>{times.name}</StyledTabPanelTitle>
           </StyledTabPanelTitleWrapper>
-          {times.sections?.map((section, sectionIndex) => (
-            <StyledSections
-              key={`section-${sectionIndex}`}
-              $variant={variant}
-              $notesOnly={
-                section.days &&
-                section.days.length === 1 &&
-                isEmpty(section.days[0].day) &&
-                section.days[0].times.length === 1 &&
-                isEmpty(section.days[0].times[0].end_time) &&
-                isEmpty(section.days[0].times[0].time) &&
-                isNotEmpty(section.days[0].times[0].note)
-              }
-            >
-              {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
-              {section.days?.map((day, dayIndex) => (
-                <StyledDayTimeLine
-                  key={`section-${sectionIndex}-day-${dayIndex}`}
-                  $notesOnly={
-                    isEmpty(day.day) &&
-                    day.times.length === 1 &&
-                    isEmpty(day.times[0].end_time) &&
-                    isEmpty(day.times[0].time) &&
-                    isNotEmpty(day.times[0].note)
-                  }
-                >
-                  <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
-                  <StyledDayTimeLineTimes>
-                    {day.times?.map((time, timeIndex) => (
-                      <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
-                        <StyledDayTimeLineTimeTimes>
-                          {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
-                        </StyledDayTimeLineTimeTimes>
-                        {isNotEmpty(time.end_time) ? (
-                          <>
-                            <StyledDivider
-                              key={`section-${sectionIndex}-day-${dayIndex}-divider-end-time-${timeIndex}`}
+          {times.sections?.map((section, sectionIndex) => {
+            if ('note' in section) {
+              return <StyledNote key={`section-${sectionIndex}`}>{section.note}</StyledNote>;
+            }
+
+            return (
+              <StyledSections key={`section-${sectionIndex}`} $variant={variant}>
+                {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
+                {section.days?.map((day, dayIndex) => (
+                  <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
+                    <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
+                    <StyledDayTimeLineTimes>
+                      {day.times?.map((time, timeIndex) => (
+                        <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
+                          <StyledDayTimeLineTimeTimes>
+                            {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
+                          </StyledDayTimeLineTimeTimes>
+                          {isNotEmpty(time.end_time) ? (
+                            <>
+                              <StyledDivider
+                                key={`section-${sectionIndex}-day-${dayIndex}-divider-end-time-${timeIndex}`}
+                              >
+                                -
+                              </StyledDivider>
+                              <StyledDayTimeLineTimeTimes
+                                key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
+                              >
+                                {time.end_time}
+                              </StyledDayTimeLineTimeTimes>
+                            </>
+                          ) : null}
+                          {isNotEmpty(time.note) ? (
+                            <StyledDayTimeLineTimeComment
+                              key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}
                             >
-                              -
-                            </StyledDivider>
-                            <StyledDayTimeLineTimeTimes
-                              key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
-                            >
-                              {time.end_time}
-                            </StyledDayTimeLineTimeTimes>
-                          </>
-                        ) : null}
-                        {isNotEmpty(time.note) ? (
-                          <StyledDayTimeLineTimeComment
-                            key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}
-                          >
-                            {time.note}
-                          </StyledDayTimeLineTimeComment>
-                        ) : null}
-                      </StyledDayTimeLineTime>
-                    ))}
-                  </StyledDayTimeLineTimes>
-                </StyledDayTimeLine>
-              ))}
-            </StyledSections>
-          ))}
+                              {time.note}
+                            </StyledDayTimeLineTimeComment>
+                          ) : null}
+                        </StyledDayTimeLineTime>
+                      ))}
+                    </StyledDayTimeLineTimes>
+                  </StyledDayTimeLine>
+                ))}
+              </StyledSections>
+            );
+          })}
         </StyledTabPanelContent>
       </TabPanel>
     );

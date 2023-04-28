@@ -19,9 +19,10 @@ import CollapseSection from '../../../components/layout/CollapseSection';
 import TabPanel from '../../../components/TabPanel';
 import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
+import transientOptions from '../../../util/transientOptions';
 
 import type { MouseEvent } from 'react';
-import type { Times, TimesDay, TimesSection, TimesTime } from '../../../interface';
+import type { Times, TimesDay, TimesNoteSection, TimesSection, TimesTime } from '../../../interface';
 
 const StyledTabPanelContent = styled('div')`
   padding: 16px;
@@ -68,19 +69,28 @@ const StyledDayTimeLines = styled('div')`
   gap: 12px;
 `;
 
-const StyledDayTimeLine = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: 20px;
-  margin-top: 0;
-  padding: 8px 0;
-  margin-left: 30px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #ccc;
-  gap: 16px;
-`;
+interface StyledDayTimeLineProps {
+  $noBorderBottom?: boolean;
+}
+
+const StyledDayTimeLine = styled(
+  'div',
+  transientOptions
+)<StyledDayTimeLineProps>(
+  ({ $noBorderBottom }) => `
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 20px;
+    margin-top: 0;
+    padding: 8px 0;
+    margin-left: 30px;
+    padding-bottom: 16px;
+    gap: 16px;
+    ${$noBorderBottom ? '' : 'border-bottom: 1px solid #ccc;'}
+  `
+);
 
 const StyledDayTimeLineTitleWrapper = styled('div')`
   display: flex;
@@ -151,7 +161,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
   const handleOnDeleteClose = useCallback(() => setDeleting(false), []);
 
   interface SectionId {
-    section: TimesSection;
+    section: TimesSection | TimesNoteSection;
     index: number;
   }
 
@@ -186,8 +196,23 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
     onChange({ sections: newSections });
   }, [onChange, times.sections]);
 
+  const onNoteSectionAdd = useCallback(() => {
+    const newSections = [...times.sections];
+    newSections.push({ note: 'New Note' });
+    onChange({ sections: newSections });
+  }, [onChange, times.sections]);
+
   const onSectionChange = useCallback(
     (section: TimesSection, index: number, data: Partial<TimesSection>) => {
+      const newSections = [...times.sections];
+      newSections[index] = { ...section, ...data };
+      onChange({ sections: newSections });
+    },
+    [onChange, times.sections]
+  );
+
+  const onNoteSectionChange = useCallback(
+    (section: TimesNoteSection, index: number, data: Partial<TimesNoteSection>) => {
       const newSections = [...times.sections];
       newSections[index] = { ...section, ...data };
       onChange({ sections: newSections });
@@ -310,8 +335,35 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
             </Button>
           </StyledTabPanelTitleWrapper>
           {times.sections?.map((section, sectionIndex) => {
-            const handleOnDayLineAdd = onDayLineAdd(section, sectionIndex);
             const onSectionDelete = handleOnSectionDelete({ section, index: sectionIndex });
+            if ('note' in section) {
+              return (
+                <StyledSections key={`section-${sectionIndex}`}>
+                  <StyledDayTimeLine key={`section-${sectionIndex}-note`} $noBorderBottom={true}>
+                    <StyledDayTimeLineTitleWrapper>
+                      <TextField
+                        label="Note"
+                        value={section.note}
+                        size="small"
+                        onChange={(event) => onNoteSectionChange(section, sectionIndex, { note: event.target.value })}
+                        fullWidth
+                        sx={{
+                          input: {
+                            fontSize: '13px',
+                            color: '#757575'
+                          }
+                        }}
+                      />
+                      <IconButton onClick={onSectionDelete} color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledDayTimeLineTitleWrapper>
+                  </StyledDayTimeLine>
+                </StyledSections>
+              );
+            }
+
+            const handleOnDayLineAdd = onDayLineAdd(section, sectionIndex);
             return (
               <StyledSections key={`section-${sectionIndex}`}>
                 <CollapseSection
@@ -490,6 +542,10 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
               <AddIcon />
               <Box>Add Section</Box>
             </Button>
+            <Button onClick={onNoteSectionAdd} sx={{ mt: 2 }}>
+              <AddIcon />
+              <Box>Add Note</Box>
+            </Button>
           </StyledAddButtonWrapper>
         </StyledTabPanelContent>
       </TabPanel>
@@ -522,11 +578,23 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
           aria-describedby="deleting-section-description"
         >
           <DialogTitle id="deleting-section-title">
-            Delete section &quot;{deletingSection.section.name}&quot;?
+            {'note' in deletingSection.section ? (
+              <span key="delete-note">Delete note &quot;{deletingSection.section.note}&quot;?</span>
+            ) : (
+              <span key="delete-section">Delete section &quot;{deletingSection.section.name}&quot;?</span>
+            )}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="deleting-times category-description">
-              Are you sure you want to delete this section &quot;{deletingSection.section.name}&quot;?
+              {'note' in deletingSection.section ? (
+                <span key="delete-note-body">
+                  Are you sure you want to delete this note &quot;{deletingSection.section.note}&quot;?
+                </span>
+              ) : (
+                <span key="delete-section-body">
+                  Are you sure you want to delete this section &quot;{deletingSection.section.name}&quot;?
+                </span>
+              )}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

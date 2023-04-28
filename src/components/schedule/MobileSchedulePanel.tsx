@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import { isEmpty, isNotEmpty } from '../../util/string.util';
+import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { Times } from '../../interface';
@@ -35,22 +35,14 @@ const StyledSectionTitle = styled('h3')`
   font-family: 'Oswald', Helvetica, Arial, sans-serif;
 `;
 
-interface StyledSectionsProps {
-  $notesOnly: boolean;
-}
-
-const StyledSections = styled(
-  'div',
-  transientOptions
-)<StyledSectionsProps>(
-  ({ theme, $notesOnly }) => `
+const StyledSections = styled('div')(
+  ({ theme }) => `
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 0;
     box-sizing: border-box;
-
-    ${$notesOnly ? 'padding: 0 24px 16px;' : 'padding: 16px 24px;'}
+    padding: 16px 24px;
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
       padding: 12px 16px;
@@ -58,15 +50,8 @@ const StyledSections = styled(
   `
 );
 
-interface StyledDayTimeLineProps {
-  $notesOnly: boolean;
-}
-
-const StyledDayTimeLine = styled(
-  'div',
-  transientOptions
-)<StyledDayTimeLineProps>(
-  ({ theme, $notesOnly }) => `
+const StyledDayTimeLine = styled('div')(
+  ({ theme }) => `
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -74,7 +59,7 @@ const StyledDayTimeLine = styled(
     margin-top: 2px;
     padding: 5px 0;
     gap: 8px;
-    ${$notesOnly ? '' : 'border-bottom: 1px solid #ccc;'}
+    border-bottom: 1px solid #ccc;
 
     ${theme.breakpoints.down('sm')} {
       padding: 0;
@@ -91,6 +76,7 @@ const StyledDayTimeLineTitle = styled('div')(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 16px;
+    white-space: nowrap;
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
@@ -161,9 +147,10 @@ const StyledDayTimeLineTimeComment = styled('div')(
     display: flex;
     align-items: center;
     font-size: 13px;
-    line-height: 13px;
+    line-height: 15px;
     color: #757575;
-    white-space: break-spaces;
+    white-space: pre-line;
+    text-align: right;
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
@@ -171,10 +158,28 @@ const StyledDayTimeLineTimeComment = styled('div')(
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
       font-size: 12px;
-      line-height: 12px;
+      line-height: 14px;
     }
   `
 );
+
+const StyledNoteWrapper = styled('div')`
+  padding: 0 24px 16px;
+
+  &:not(:last-child) div {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 16px;
+  }
+`;
+
+const StyledNote = styled('div')`
+  font-size: 13px;
+  line-height: 15px;
+  color: #757575;
+  white-space: pre-line;
+  padding-left: 16px;
+  text-align: right;
+`;
 
 interface MobileScheduleTabPanelProps {
   times: Times;
@@ -210,70 +215,63 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
         {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        {times.sections?.map((section, sectionIndex) => (
-          <StyledSections
-            key={`mobile-section-${sectionIndex}`}
-            $notesOnly={
-              section.days &&
-              section.days.length === 1 &&
-              isEmpty(section.days[0].day) &&
-              section.days[0].times.length === 1 &&
-              isEmpty(section.days[0].times[0].end_time) &&
-              isEmpty(section.days[0].times[0].time) &&
-              isNotEmpty(section.days[0].times[0].note)
-            }
-          >
-            {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
-            {section.days?.map((day) => (
-              <StyledDayTimeLine
-                key={`mobile-section-${sectionIndex}-day-${day.day}`}
-                $notesOnly={
-                  isEmpty(day.day) &&
-                  day.times.length === 1 &&
-                  isEmpty(day.times[0].end_time) &&
-                  isEmpty(day.times[0].time) &&
-                  isNotEmpty(day.times[0].note)
-                }
-              >
-                <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
-                <StyledDayTimeLineTimes>
-                  {day.times?.map((time, timeIndex) => (
-                    <StyledDayTimeLineTimeWrapper
-                      key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
-                    >
-                      <StyledDayTimeLineTime>
-                        <StyledDayTimeLineTimeTimes>
-                          {isNotEmpty(time.time) ? time.time : null}
-                        </StyledDayTimeLineTimeTimes>
-                        {isNotEmpty(time.end_time) ? (
-                          <>
-                            <StyledDivider
-                              key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-${timeIndex}`}
-                            >
-                              -
-                            </StyledDivider>
-                            <StyledDayTimeLineTimeTimes
-                              key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-${timeIndex}`}
-                            >
-                              {time.end_time}
+        {times.sections?.map((section, sectionIndex) => {
+          if ('note' in section) {
+            return (
+              <StyledNoteWrapper key={`section-${sectionIndex}`}>
+                <StyledNote>{section.note}</StyledNote>
+              </StyledNoteWrapper>
+            );
+          }
+
+          return (
+            <StyledSections key={`mobile-section-${sectionIndex}`}>
+              {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
+              {section.days?.map((day) => (
+                <StyledDayTimeLine key={`mobile-section-${sectionIndex}-day-${day.day}`}>
+                  <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
+                  <StyledDayTimeLineTimes>
+                    {day.times?.map((time, timeIndex) => (
+                      <StyledDayTimeLineTimeWrapper
+                        key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
+                      >
+                        {isNotEmpty(time.time) || isNotEmpty(time.end_time) ? (
+                          <StyledDayTimeLineTime>
+                            <StyledDayTimeLineTimeTimes>
+                              {isNotEmpty(time.time) ? time.time : null}
                             </StyledDayTimeLineTimeTimes>
-                          </>
+                            {isNotEmpty(time.end_time) ? (
+                              <>
+                                <StyledDivider
+                                  key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-${timeIndex}`}
+                                >
+                                  -
+                                </StyledDivider>
+                                <StyledDayTimeLineTimeTimes
+                                  key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-${timeIndex}`}
+                                >
+                                  {time.end_time}
+                                </StyledDayTimeLineTimeTimes>
+                              </>
+                            ) : null}
+                          </StyledDayTimeLineTime>
                         ) : null}
-                      </StyledDayTimeLineTime>
-                      {isNotEmpty(time.note) ? (
-                        <StyledDayTimeLineTimeComment
-                          key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
-                        >
-                          {time.note}
-                        </StyledDayTimeLineTimeComment>
-                      ) : null}
-                    </StyledDayTimeLineTimeWrapper>
-                  ))}
-                </StyledDayTimeLineTimes>
-              </StyledDayTimeLine>
-            ))}
-          </StyledSections>
-        ))}
+                        {isNotEmpty(time.note) ? (
+                          <StyledDayTimeLineTimeComment
+                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
+                            dangerouslySetInnerHTML={{
+                              __html: time.note.replaceAll('-', '&#x2011;')
+                            }}
+                          ></StyledDayTimeLineTimeComment>
+                        ) : null}
+                      </StyledDayTimeLineTimeWrapper>
+                    ))}
+                  </StyledDayTimeLineTimes>
+                </StyledDayTimeLine>
+              ))}
+            </StyledSections>
+          );
+        })}
       </Collapse>
     </StyledMobileScheduleTabPanel>
   );

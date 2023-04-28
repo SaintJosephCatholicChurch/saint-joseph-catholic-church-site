@@ -264,17 +264,7 @@
           ]
         },
         {
-          "name": "",
-          "days": [
-            {
-              "day": "",
-              "times": [
-                {
-                  "note": "Station booklets are available in the Narthex for private devotions"
-                }
-              ]
-            }
-          ]
+          "note": "Station booklets are available in the Narthex for private devotions"
         }
       ]
     },

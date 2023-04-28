@@ -69,9 +69,13 @@ export interface TimesSection {
   readonly days?: TimesDay[];
 }
 
+export interface TimesNoteSection {
+  readonly note: string;
+}
+
 export interface Times {
   readonly name: string;
-  readonly sections?: TimesSection[];
+  readonly sections?: (TimesSection | TimesNoteSection)[];
 }
 
 export interface StylesConfig {

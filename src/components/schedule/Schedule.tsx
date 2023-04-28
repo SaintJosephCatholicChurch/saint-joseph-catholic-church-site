@@ -6,21 +6,10 @@ import { styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import {
-  EXTRA_EXTRA_SMALL_BREAKPOINT,
-  TIMES_LINE_MIN_HEIGHT,
-  TIMES_LINE_PADDING_MARGIN_HEIGHT,
-  TIMES_LINE_TIMES_GAP,
-  TIMES_LINE_TIMES_HEIGHT,
-  TIMES_PADDING_HEIGHT,
-  TIMES_SECTION_MARGIN_HEIGHT,
-  TIMES_SECTION_TITLE_HEIGHT,
-  TIMES_TITLE_HEIGHT
-} from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import { isNotEmpty } from '../../util/string.util';
-import { useMediaQueryDown } from '../../util/useMediaQuery';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
@@ -142,70 +131,6 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
     }
   }, [tab, value]);
 
-  const isMobile = useMediaQueryDown('sm');
-  const isSmallScreen = useMediaQueryDown('md');
-  const isMediumScreen = useMediaQueryDown('lg');
-
-  const screenSize = useMemo(() => {
-    if (isMobile) {
-      return 'mobile';
-    }
-
-    if (isSmallScreen) {
-      return 'small';
-    }
-
-    if (isMediumScreen) {
-      return 'medium';
-    }
-
-    return 'large';
-  }, [isMediumScreen, isMobile, isSmallScreen]);
-
-  const tabsHeight = useMemo(() => {
-    if (screenSize === 'mobile') {
-      return 0;
-    }
-
-    return times.reduce((height, timesEntry) => {
-      const linesHeight =
-        timesEntry.sections?.reduce((lineCount, section) => {
-          return (
-            lineCount +
-              section.days?.reduce((tempLineHeight, line) => {
-                const lines = line.times?.length ?? 0;
-                let lineTimesHeight = 0;
-                if (lines > 0) {
-                  lineTimesHeight =
-                    lines * TIMES_LINE_TIMES_HEIGHT(screenSize) +
-                    TIMES_LINE_PADDING_MARGIN_HEIGHT +
-                    (lines - 1) * TIMES_LINE_TIMES_GAP;
-                }
-                return tempLineHeight + Math.max(lineTimesHeight, TIMES_LINE_MIN_HEIGHT);
-              }, 0) ?? 0
-          );
-        }, 0) ?? 0;
-
-      const sectionsWithTitles =
-        timesEntry.sections?.reduce((count, section) => {
-          return count + (isNotEmpty(section.name) ? 1 : 0);
-        }, 0) ?? 0;
-
-      const calculatedHeight =
-        TIMES_TITLE_HEIGHT +
-        TIMES_PADDING_HEIGHT(screenSize) +
-        TIMES_SECTION_MARGIN_HEIGHT * (timesEntry.sections?.length ?? 0) +
-        TIMES_SECTION_TITLE_HEIGHT * sectionsWithTitles +
-        linesHeight;
-
-      if (calculatedHeight > height) {
-        return calculatedHeight;
-      }
-
-      return height;
-    }, 0);
-  }, [screenSize, times]);
-
   return (
     <StyledContainerContents>
       <StyledHeader>
@@ -297,7 +222,6 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
           scrollButtons={false}
           sx={{
             backgroundColor: 'rgba(241, 241, 241, 0.35)',
-            minHeight: tabsHeight > 0 ? tabsHeight : undefined,
             '& .MuiTabs-indicator': {
               backgroundColor: '#8D6D26',
               width: '4px'

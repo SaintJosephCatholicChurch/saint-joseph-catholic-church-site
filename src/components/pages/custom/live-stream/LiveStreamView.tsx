@@ -25,7 +25,7 @@ const LiveStreamView = ({ livestreamProvider, facebookPage, youtubeChannel }: Li
   const [ref, { width }] = useElementSize();
 
   useEffect(() => {
-    setHeight((width / 16) * 9);
+    setHeight(Math.floor((width / 16) * 9));
   }, [width]);
 
   const LiveStreamIFrameNoSSR = useMemo(

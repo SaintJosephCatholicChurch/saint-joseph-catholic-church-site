@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import useElementSize from '../../../../util/useElementSize';
 
+const EXTRA_BUTTON_HEIGHT = 51;
+
 const StyledLiveStreamWrapper = styled('div')`
   width: 100%;
   display: flex;
@@ -17,8 +19,6 @@ interface LiveStreamViewProps {
   facebookPage: string;
   youtubeChannel: string;
 }
-
-const EXTRA_BUTTON_HEIGHT = 51;
 
 const LiveStreamView = ({ livestreamProvider, facebookPage, youtubeChannel }: LiveStreamViewProps) => {
   const [height, setHeight] = useState(0);

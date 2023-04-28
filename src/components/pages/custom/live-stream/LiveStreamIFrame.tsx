@@ -10,7 +10,7 @@ import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../../constants';
 import { isEmpty } from '../../../../util/string.util';
 import useLiveStreamUrl from './useLiveStreamUrl';
 
-const EXTRA_BUTTON_HEIGHT = 51;
+const EXTRA_BUTTON_HEIGHT = 67;
 
 const StyledCircularProgressWrapper = styled('div')`
   position: absolute;

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import useElementSize from '../../../../util/useElementSize';
 
-const EXTRA_BUTTON_HEIGHT = 51;
+const EXTRA_BUTTON_HEIGHT = 67;
 
 const StyledLiveStreamWrapper = styled('div')`
   width: 100%;

@@ -18,12 +18,14 @@ interface LiveStreamViewProps {
   youtubeChannel: string;
 }
 
+const EXTRA_BUTTON_HEIGHT = 51;
+
 const LiveStreamView = ({ livestreamProvider, facebookPage, youtubeChannel }: LiveStreamViewProps) => {
   const [height, setHeight] = useState(0);
   const [ref, { width }] = useElementSize();
 
   useEffect(() => {
-    setHeight(((width / 16) * 9) + 51);
+    setHeight((width / 16) * 9);
   }, [width]);
 
   const LiveStreamIFrameNoSSR = useMemo(
@@ -35,7 +37,7 @@ const LiveStreamView = ({ livestreamProvider, facebookPage, youtubeChannel }: Li
   );
 
   return (
-    <StyledLiveStreamWrapper ref={ref} style={{ height }}>
+    <StyledLiveStreamWrapper ref={ref} style={{ height: height + EXTRA_BUTTON_HEIGHT }}>
       <LiveStreamIFrameNoSSR
         width={width}
         height={height}

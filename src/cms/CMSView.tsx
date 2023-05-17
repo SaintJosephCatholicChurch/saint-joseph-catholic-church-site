@@ -12,7 +12,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect } from 'react';
 
-import 'react-datetime/css/react-datetime.css';
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
 import HomePagePreview from '../components/previews/HomePagePreview';
 import NavigationPreview from '../components/previews/NavigationPreview';
@@ -27,8 +26,7 @@ import EditorPreview from './widgets/editor/EditorPreview';
 import EditorWidget from './widgets/editor/EditorWidget';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-import type { CmsConfig, CmsWidgetPreviewProps } from '@staticcms/core';
-import type { ComponentType } from 'react';
+import '@staticcms/core/dist/main.css';
 
 const CMSView = () => {
   useEffect(() => {
@@ -46,14 +44,10 @@ const CMSView = () => {
       config.local_backend = true;
     }
 
-    cmsApp.init({ config } as { config: CmsConfig });
+    cmsApp.init({ config });
 
     cmsApp.registerWidget('times', ScheduleWidget);
-    cmsApp.registerWidget(
-      'html',
-      EditorWidget,
-      EditorPreview as unknown as ComponentType<CmsWidgetPreviewProps<string>>
-    );
+    cmsApp.registerWidget('html', EditorWidget, EditorPreview);
 
     cmsApp.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
     cmsApp.registerPreviewStyle('/styles/content.module.css');
@@ -65,29 +59,40 @@ const CMSView = () => {
     cmsApp.registerPreviewTemplate('staff', StaffPreview);
     cmsApp.registerPreviewTemplate('menu', NavigationPreview);
 
-    cmsApp.registerIcon('house', <FontAwesomeIcon icon={faHouse} size="lg" />);
-    cmsApp.registerIcon('church', <FontAwesomeIcon icon={faChurch} size="lg" />);
-    cmsApp.registerIcon('tag', <FontAwesomeIcon icon={faTag} size="lg" />);
-    cmsApp.registerIcon('file-lines', <FontAwesomeIcon icon={faFileLines} size="lg" />);
-    cmsApp.registerIcon('gear', <FontAwesomeIcon icon={faGear} size="lg" />);
-    cmsApp.registerIcon('calendar-days', <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
-    cmsApp.registerIcon('clipboard-question', <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
-    cmsApp.registerIcon('newspaper', <FontAwesomeIcon icon={faNewspaper} size="lg" />);
-    cmsApp.registerIcon('circle-question', <FontAwesomeIcon icon={faCircleQuestion} size="lg" />);
+    cmsApp.registerIcon('house', () => <FontAwesomeIcon icon={faHouse} size="lg" />);
+    cmsApp.registerIcon('church', () => <FontAwesomeIcon icon={faChurch} size="lg" />);
+    cmsApp.registerIcon('tag', () => <FontAwesomeIcon icon={faTag} size="lg" />);
+    cmsApp.registerIcon('file-lines', () => <FontAwesomeIcon icon={faFileLines} size="lg" />);
+    cmsApp.registerIcon('gear', () => <FontAwesomeIcon icon={faGear} size="lg" />);
+    cmsApp.registerIcon('calendar-days', () => <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
+    cmsApp.registerIcon('clipboard-question', () => <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
+    cmsApp.registerIcon('newspaper', () => <FontAwesomeIcon icon={faNewspaper} size="lg" />);
+    cmsApp.registerIcon('circle-question', () => <FontAwesomeIcon icon={faCircleQuestion} size="lg" />);
 
-    cmsApp.registerAdditionalLink(
-      'events',
-      'Events (Google Calendar)',
-      'https://calendar.google.com/',
-      'calendar-days'
-    );
-    cmsApp.registerAdditionalLink(
-      'google-drive',
-      'Forms (Google Drive)',
-      'https://drive.google.com/',
-      'clipboard-question'
-    );
-    cmsApp.registerAdditionalLink('help', 'Help', Help, 'circle-question');
+    cmsApp.registerAdditionalLink({
+      id: 'events',
+      title: 'Events (Google Calendar)',
+      data: 'https://calendar.google.com/',
+      options: {
+        icon: 'calendar-days'
+      }
+    });
+    cmsApp.registerAdditionalLink({
+      id: 'google-drive',
+      title: 'Forms (Google Drive)',
+      data: 'https://drive.google.com/',
+      options: {
+        icon: 'clipboard-question'
+      }
+    });
+    cmsApp.registerAdditionalLink({
+      id: 'help',
+      title: 'Help',
+      data: Help,
+      options: {
+        icon: 'circle-question'
+      }
+    });
   }, []);
 
   return (

@@ -1,36 +1,35 @@
-import { Component } from 'react';
+import { useCallback } from 'react';
 
 import EditorControl from './EditorControl';
 
-import type { CmsWidgetControlProps } from '@staticcms/core';
+import type { WidgetControlProps } from '@staticcms/core';
+import type { FC } from 'react';
+import type { HtmlField } from '../../config';
 
-export default class EditorWidget extends Component<CmsWidgetControlProps<string>> {
-  handleOnChange(newValue: string) {
-    const { onChange } = this.props;
-    onChange(newValue);
-  }
+const EditorWidget: FC<WidgetControlProps<string, HtmlField>> = ({ collection, field, entry, value, onChange }) => {
+  const handleOnChange = useCallback(
+    (newValue: string) => {
+      onChange(newValue);
+    },
+    [onChange]
+  );
 
-  shouldComponentUpdate(_nextProps: Readonly<CmsWidgetControlProps<string>>): boolean {
-    return true;
-  }
+  return <EditorControl field={field} value={value} onChange={handleOnChange} />;
+};
+// export default class EditorWidget extends Component<> {
+//   handleOnChange(newValue: string) {
+//     const { onChange } = this.props;
+//     onChange(newValue);
+//   }
 
-  render() {
-    const { field, value } = this.props;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-    const { onOpenMediaLibrary, getAsset, mediaPaths } = this.props as any;
+//   shouldComponentUpdate(_nextProps: Readonly<WidgetControlProps<string>>): boolean {
+//     return true;
+//   }
 
-    return (
-      <EditorControl
-        field={field}
-        value={value}
-        onChange={(newValue) => this.handleOnChange(newValue)}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        onOpenMediaLibrary={onOpenMediaLibrary}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        getAsset={getAsset}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        mediaPaths={mediaPaths}
-      />
-    );
-  }
-}
+//   render() {
+//     const { field, value } = this.props;
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+//     const { onOpenMediaLibrary, getAsset, mediaPaths } = this.props as any;
+
+//   }
+// }

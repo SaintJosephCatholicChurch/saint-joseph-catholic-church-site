@@ -1,39 +1,19 @@
-import type {
-  CmsCollection as NetlifyCmsCollection,
-  CmsCollectionFile as NetlifyCmsCollectionFile,
-  CmsConfig as NetlifyCmsConfig,
-  CmsField as NetlifyCmsField,
-  CmsFieldBase
-} from '@staticcms/core';
+import type { BaseField, Config } from '@staticcms/core';
 
-export interface CmsFieldTimes {
+export interface TimesField extends BaseField {
   widget: 'times';
 }
 
-export interface CmsFieldHtml {
+export interface HtmlField extends BaseField {
   widget: 'html';
+  sanitize_preview?: boolean;
 }
 
-export interface CmsFieldEvents {
+export interface EventsField extends BaseField {
   widget: 'events';
 }
 
-export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml | CmsFieldEvents));
-
-export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
-  fields: CmsField[];
-}
-
-export interface CmsCollection extends Omit<NetlifyCmsCollection, 'files' | 'fields'> {
-  files?: CmsCollectionFile[];
-  fields?: CmsField[];
-}
-
-export interface CmsConfig extends Omit<NetlifyCmsConfig, 'collections'> {
-  collections: CmsCollection[];
-}
-
-const config: CmsConfig = {
+const config: Config<TimesField | HtmlField | EventsField> = {
   backend: {
     name: 'github',
     repo: 'SaintJosephCatholicChurch/saint-joseph-catholic-church-site',
@@ -495,16 +475,18 @@ const config: CmsConfig = {
           widget: 'list',
           summary: '{{fields.tag}}',
           required: false,
-          field: {
-            label: 'Tag',
-            name: 'tag',
-            widget: 'relation',
-            collection: 'tags',
-            file: 'tags',
-            search_fields: ['tags.*.tag'],
-            display_fields: ['tags.*.tag'],
-            value_field: 'tags.*.tag'
-          }
+          fields: [
+            {
+              label: 'Tag',
+              name: 'tag',
+              widget: 'relation',
+              collection: 'tags',
+              file: 'tags',
+              search_fields: ['tags.*.tag'],
+              display_fields: ['tags.*.tag'],
+              value_field: 'tags.*.tag'
+            }
+          ]
         },
         {
           name: 'body',
@@ -624,11 +606,13 @@ const config: CmsConfig = {
               label: 'Site keywords',
               widget: 'list',
               summary: '{{fields.keyword}}',
-              field: {
-                name: 'keyword',
-                label: 'Keyword',
-                widget: 'string'
-              }
+              fields: [
+                {
+                  name: 'keyword',
+                  label: 'Keyword',
+                  widget: 'string'
+                }
+              ]
             },
             {
               name: 'posts_per_page',

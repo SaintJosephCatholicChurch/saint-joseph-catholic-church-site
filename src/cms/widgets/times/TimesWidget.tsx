@@ -1,28 +1,27 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import Immutable from 'immutable';
-import { Component } from 'react';
+import { useCallback } from 'react';
 
 import ScheduleWidget from './TimesWidgetControl';
 
-import type { CmsWidgetControlProps } from '@staticcms/core';
+import type { WidgetControlProps } from '@staticcms/core';
+import type { FC } from 'react';
 import type { Times } from '../../../interface';
+import type { TimesField } from '../../config';
 
-export default class TimesWidget extends Component<CmsWidgetControlProps<Immutable.List<unknown>>> {
-  handleOnChange(times: Times[]) {
-    const { onChange } = this.props;
-    onChange(Immutable.List(times));
-  }
+const TimesWidget: FC<WidgetControlProps<Times[], TimesField>> = ({ value, onChange }) => {
+  const handleOnChange = useCallback(
+    (times: Times[]) => {
+      onChange(times);
+    },
+    [onChange]
+  );
 
-  render() {
-    const { value } = this.props;
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ScheduleWidget times={value} onChange={handleOnChange} />
+    </LocalizationProvider>
+  );
+};
 
-    const plainValue = value.toJS() as Times[];
-
-    return (
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ScheduleWidget times={plainValue} onChange={(times) => this.handleOnChange(times)} />
-      </LocalizationProvider>
-    );
-  }
-}
+export default TimesWidget;

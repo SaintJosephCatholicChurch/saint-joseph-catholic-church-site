@@ -26,6 +26,12 @@ const config: Config<TimesField | HtmlField | EventsField> = {
     clean_accents: true,
     sanitize_replacement: '-'
   },
+  editor: {
+    frame: false
+  },
+  media_library: {
+    folder_support: true
+  },
   collections: [
     {
       name: 'church',
@@ -33,7 +39,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       icon: 'church',
       delete: false,
       editor: {
-        preview: true
+        preview: true,
+        frame: false
       },
       files: [
         {
@@ -177,6 +184,9 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           label: 'Mass & Confession Times',
           file: 'content/times.json',
           description: 'Mass & Confession Times',
+          editor: {
+            size: 'half'
+          },
           fields: [
             {
               name: 'times',
@@ -190,6 +200,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           label: 'Staff',
           file: 'content/staff.json',
           description: 'Parish staff',
+          media_folder: '/public/staff',
+          public_folder: '/staff',
           fields: [
             {
               name: 'staff',
@@ -226,7 +238,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       icon: 'house',
       delete: false,
       editor: {
-        preview: true
+        preview: true,
+        frame: false
       },
       files: [
         {
@@ -396,16 +409,19 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       format: 'json',
       create: true,
       slug: "{{fields.date | date('YYYYMMDD')}}",
+      identifier_field: 'date',
       summary: "{{date | date('MMM DD, YYYY')}} - {{fields.name}}",
+      summary_fields: ['date', 'name', 'pdf'],
       sortable_fields: {
-        fields: ['date'],
+        fields: ['date', 'name', 'pdf'],
         default: {
           field: 'date',
           direction: 'Descending'
         }
       },
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       fields: [
         {
@@ -418,8 +434,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           name: 'date',
           label: 'Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'MMM DD, YYYY',
+          format: 'yyyy-MM-dd',
+          date_format: 'MMM dd, yyyy',
           time_format: false
         },
         {
@@ -441,12 +457,16 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       create: true,
       identifier_field: 'title',
       summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
+      summary_fields: ['title', 'date', 'tags'],
       sortable_fields: {
         fields: ['title', 'date'],
         default: {
           field: 'date',
           direction: 'Descending'
         }
+      },
+      editor: {
+        frame: false
       },
       fields: [
         {
@@ -464,8 +484,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           name: 'date',
           label: 'Publish Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'YYYY-MM-DD',
+          format: 'yyyy-MM-dd',
+          date_format: 'yyyy-MM-dd',
           time_format: false
         },
         {
@@ -506,6 +526,9 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       slug: '{{slug}}',
       identifier_field: 'slug',
       summary: '{{title}}',
+      editor: {
+        frame: false
+      },
       fields: [
         {
           name: 'slug',
@@ -521,8 +544,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           name: 'date',
           label: 'Publish Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'YYYY-MM-DD',
+          format: 'yyyy-MM-dd',
+          date_format: 'yyyy-MM-dd',
           time_format: false
         },
         {
@@ -538,7 +561,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       icon: 'tag',
       delete: false,
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       files: [
         {
@@ -571,7 +595,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       icon: 'gear',
       delete: false,
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       files: [
         {

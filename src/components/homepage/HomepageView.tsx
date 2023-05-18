@@ -105,13 +105,15 @@ interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
   recentPosts: PostContent[];
+  hideSearch?: boolean;
 }
 
 const HomepageView = memo(
   ({
     homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured },
     times,
-    recentPosts
+    recentPosts,
+    hideSearch
   }: HomepageViewProps) => {
     const UpcomingEventsNoSSR = useMemo(
       () =>
@@ -195,7 +197,7 @@ const HomepageView = memo(
             </StyledWidgetSectionContent>
           </Container>
         </StyledNewsAndEventsWrapper>
-        <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} />
+        <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} hideSearch={hideSearch} />
       </StyledHomepageView>
     );
   }

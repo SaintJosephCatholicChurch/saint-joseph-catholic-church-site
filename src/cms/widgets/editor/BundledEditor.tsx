@@ -1,4 +1,5 @@
 /* eslint-disable import/no-unresolved */
+import Box from '@mui/material/Box';
 import { Editor } from '@tinymce/tinymce-react';
 import { useEffect } from 'react';
 
@@ -63,6 +64,7 @@ import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
 
 interface BundleEditorProps extends Partial<IAllProps> {
   onOpenMediaLibrary: (forImage: boolean) => void;
+  theme: 'light' | 'dark';
 }
 
 export default function BundledEditor(props: BundleEditorProps) {
@@ -76,13 +78,22 @@ export default function BundledEditor(props: BundleEditorProps) {
   // note that skin and content_css is disabled to avoid the normal
   // loading process and is instead loaded as a string via content_style
   return (
-    <Editor
-      init={{
-        ...init,
-        skin: false,
-        content_style: [contentCss, contentUiCss, init.content_style || ''].join('\n')
+    <Box
+      sx={{
+        '.tox-tinymce': {
+          borderRadius: 0
+        }
       }}
-      {...rest}
-    />
+    >
+      <Editor
+        init={{
+          ...init,
+          skin: false,
+          promotion: false,
+          content_style: [contentCss, contentUiCss, init.content_style || ''].join('\n')
+        }}
+        {...rest}
+      />
+    </Box>
   );
 }

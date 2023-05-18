@@ -63,9 +63,10 @@ interface FooterProps {
   styles?: StylesConfig;
   churchDetails: ChurchDetails;
   privacyPolicyLink: string;
+  hideSearch?: boolean;
 }
 
-const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
+const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }: FooterProps) => {
   const { search } = useLocation();
   const [query, setQuery] = useState('');
 
@@ -73,7 +74,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
     const params = new URLSearchParams(search);
     setQuery(params.get('q'));
   }, [search]);
-  
+
   return (
     <footer>
       <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
@@ -85,7 +86,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
             </Box>
             <Box>
               <FooterHeader text="Search Our Site" />
-              <SearchBox value={query} />
+              {!hideSearch ? <SearchBox value={query} /> : <div />}
               <ContactDetails churchDetails={churchDetails} />
             </Box>
           </StyledFooterContents>

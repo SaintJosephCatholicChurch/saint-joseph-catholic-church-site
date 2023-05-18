@@ -1,7 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { useGetMediaAsset, useMediaInsert } from '@staticcms/core';
 import { useCallback, useMemo, useRef } from 'react';
-import { v4 as uuid } from 'uuid';
 
 import { IMAGE_EXTENSION_REGEX } from '../../../constants';
 import { doesUrlFileExist } from '../../../util/fetch.util';
@@ -9,7 +8,8 @@ import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
 import BundledEditor from './BundledEditor';
 
-import type { Collection, Entry, MediaPath } from '@staticcms/core';
+import type { MediaPath, WidgetControlProps } from '@staticcms/core';
+import type { FC } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import type { HtmlField } from '../../config';
 
@@ -21,14 +21,6 @@ const StyledEditorControl = styled('div')`
     border-top-left-radius: 0;
   }
 `;
-
-interface EditorControlProps {
-  value: string;
-  collection: Collection<HtmlField>;
-  field: HtmlField;
-  entry: Entry;
-  onChange: (value: string) => void;
-}
 
 function fromEditorToStorage(value: string): string {
   let newValue = value;
@@ -63,10 +55,15 @@ function fromEditorToStorage(value: string): string {
   return newValue;
 }
 
-const EditorControl = ({ collection, field, entry, value = '', onChange }: EditorControlProps) => {
+const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
+  collection,
+  field,
+  entry,
+  value = '',
+  onChange,
+  theme
+}) => {
   const editorRef = useRef<TinyMCEEditor>(null);
-
-  const controlID: string = useMemo(() => uuid(), []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialValue = useMemo(() => value, []);
@@ -137,6 +134,7 @@ const EditorControl = ({ collection, field, entry, value = '', onChange }: Edito
     () => (
       <StyledEditorControl>
         <BundledEditor
+          theme={theme}
           onInit={(_event, editor) => (editorRef.current = editor)}
           initialValue={initialValue}
           onChange={handleOnChange}

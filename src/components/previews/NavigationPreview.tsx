@@ -1,12 +1,11 @@
 import { styled } from '@mui/material/styles';
-import { useMemo } from 'react';
 
 import Logo from '../logo/Logo';
 import GiveButton from '../navigation/GiveButton';
 import NavigationDrawer from '../navigation/NavigationDrawer';
 import NavigationItems from '../navigation/NavigationItems';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/core';
 import type { MenuData } from '../../interface';
 
 const StyledNavigationWrapper = styled('div')`
@@ -36,21 +35,18 @@ const StyledSpacer = styled('div')`
   flex-grow: 1;
 `;
 
-const NavigationPreview = ({ entry }: PreviewTemplateComponentProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = useMemo(() => entry.toJS().data as MenuData, [entry]);
-
+const NavigationPreview: TemplatePreviewComponent<MenuData> = ({ entry }) => {
   return (
     <StyledNavigationWrapper>
       <StyledNavigation>
-        <Logo details={data.logo} size="small" />
+        <Logo details={entry.data.logo} size="small" />
         <StyledSpacer />
-        <NavigationItems menuDetails={data} size="small" />
+        <NavigationItems menuDetails={entry.data} size="small" />
         <StyledSpacer />
-        <GiveButton title={data.online_giving_button_text} onlineGivingUrl="#" size="small" />
+        <GiveButton title={entry.data.online_giving_button_text} onlineGivingUrl="#" size="small" />
       </StyledNavigation>
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-      <NavigationDrawer menuDetails={data} mobileOpen={true} onMobileOpenToggle={() => {}} />
+      <NavigationDrawer menuDetails={entry.data} mobileOpen={true} onMobileOpenToggle={() => {}} />
     </StyledNavigationWrapper>
   );
 };

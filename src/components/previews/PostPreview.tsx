@@ -1,10 +1,11 @@
 import { styled } from '@mui/material/styles';
+import { useMediaAsset } from '@staticcms/core';
 import parseISO from 'date-fns/parseISO';
 import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';
 
-import { TemplatePreviewComponent, useMediaAsset } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/core';
 import type { PostContentData } from '../../interface';
 
 const StyledBlogPostPreview = styled('div')`
@@ -20,25 +21,25 @@ const StyledBlogPostPreviewContent = styled('div')`
   margin-top: 32px;
 `;
 
-const BlogPostPreview: TemplatePreviewComponent<PostContentData> = ({ entry, widgetFor, collection }) => {
+const BlogPostPreview: TemplatePreviewComponent<PostContentData & { body: string }> = ({
+  entry,
+  widgetFor,
+  collection
+}) => {
   const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
   const date = useMemo(() => parseISO(dateString), [dateString]);
 
-  const imageField = useMemo(() => , [])
-  const image = useMediaAsset(entry.data.image, collection, field, entry);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const image = useMemo(() => getAsset(entry.getIn(['data', 'image'])) as { url: string }, [entry, getAsset]);
+  const imageField = useMemo(
+    () => ('fields' in collection ? collection.fields.find((f) => f.name === 'image') : null),
+    [collection]
+  );
+  const image = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (
     <StyledBlogPostPreview>
       <StyledBlogPostPreviewContent>
-        <PostView
-          title={entry.getIn(['data', 'title']) as string}
-          tags={(entry.getIn(['data', 'tags']) as string[]) ?? []}
-          date={date}
-          image={image.url}
-        >
+        <PostView title={entry.data.title} tags={entry.data.tags ?? []} date={date} image={image}>
           {widgetFor('body')}
         </PostView>
       </StyledBlogPostPreviewContent>

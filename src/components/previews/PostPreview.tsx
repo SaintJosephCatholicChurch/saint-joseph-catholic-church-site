@@ -4,7 +4,8 @@ import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import { TemplatePreviewComponent, useMediaAsset } from '@staticcms/core';
+import type { PostContentData } from '../../interface';
 
 const StyledBlogPostPreview = styled('div')`
   display: flex;
@@ -19,10 +20,13 @@ const StyledBlogPostPreviewContent = styled('div')`
   margin-top: 32px;
 `;
 
-const BlogPostPreview = ({ entry, widgetFor, getAsset }: PreviewTemplateComponentProps) => {
-  const dateString = useMemo(() => entry.getIn(['data', 'date']) as string, [entry]);
+const BlogPostPreview: TemplatePreviewComponent<PostContentData> = ({ entry, widgetFor, collection }) => {
+  const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
   const date = useMemo(() => parseISO(dateString), [dateString]);
+
+  const imageField = useMemo(() => , [])
+  const image = useMediaAsset(entry.data.image, collection, field, entry);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const image = useMemo(() => getAsset(entry.getIn(['data', 'image'])) as { url: string }, [entry, getAsset]);
 

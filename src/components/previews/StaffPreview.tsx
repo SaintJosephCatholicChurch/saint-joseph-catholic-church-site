@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import StaffView from '../pages/custom/staff/StaffView';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/core';
 import type { Staff } from '../../interface';
 
 const StyledStaffWrapper = styled('div')`
@@ -19,9 +19,9 @@ const StyledStaffContent = styled('div')`
   width: 100%;
 `;
 
-const StaffPreview = ({ entry }: PreviewTemplateComponentProps) => {
+const StaffPreview: TemplatePreviewComponent<{ staff: Staff[] }> = ({ entry }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const staff = useMemo(() => entry.toJS().data.staff as Staff[], [entry]);
+  const staff = useMemo(() => entry.data.staff, [entry.data.staff]);
 
   return useMemo(
     () => (

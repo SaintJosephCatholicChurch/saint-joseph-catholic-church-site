@@ -107,6 +107,19 @@
               ]
             }
           ]
+        },
+        {
+          "name": "Special Mass Time",
+          "days": [
+            {
+              "day": "Memorial Day (Monday, May 29)",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -264,7 +277,7 @@
           ]
         },
         {
-          "note": "Station booklets are available in the Narthex for private devotions"
+          "note": "Station booklets are also available in the Narthex for use in private devotions throughout the year"
         }
       ]
     },
@@ -292,6 +305,15 @@
                   "note": "Accepted on Mondays"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "Memorial Day (Monday, May 29)",
+          "days": [
+            {
+              "day": "Parish Office is closed on memorial day",
+              "times": []
             }
           ]
         }

@@ -109,13 +109,14 @@
           ]
         },
         {
-          "name": "Special Mass Time",
+          "name": "Eucharistic Processions (June 11, 2023)",
           "days": [
             {
-              "day": "Memorial Day (Monday, May 29)",
+              "day": "Corpus Christ Procession",
               "times": [
                 {
-                  "time": "8:00 AM"
+                  "time": "11:20 AM",
+                  "note": "After 10 AM Mass"
                 }
               ]
             }

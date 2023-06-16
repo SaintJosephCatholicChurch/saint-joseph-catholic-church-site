@@ -64,6 +64,8 @@ const StyledDayTimeLine = styled('div')(
     ${theme.breakpoints.down('sm')} {
       padding: 0;
       padding-top: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
   `
 );
@@ -80,6 +82,7 @@ const StyledDayTimeLineTitle = styled('div')(
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
+      flex-grow: 1;
     }
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {

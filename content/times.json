@@ -109,14 +109,14 @@
           ]
         },
         {
-          "name": "Eucharistic Processions (June 11, 2023)",
+          "name": "Mass on July 4th",
           "days": [
             {
-              "day": "Corpus Christ Procession",
+              "day": "Tuesday, July 4th",
               "times": [
                 {
-                  "time": "11:20 AM",
-                  "note": "After 10 AM Mass"
+                  "time": "9:00 AM",
+                  "note": ""
                 }
               ]
             }

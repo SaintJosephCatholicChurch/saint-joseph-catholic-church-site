@@ -45,7 +45,6 @@ const LiveStreamIFrame = ({
 
   const [shouldBeLoaded, setShouldBeLoaded] = useState(false);
   const [takingAwhile, setTakingAwhile] = useState(false);
-  console.log('shouldBeLoaded', shouldBeLoaded);
   const [loading, livestreamUrl] = useLiveStreamUrl({ livestreamProvider, facebookPage, youtubeChannel });
 
   useEffect(() => {

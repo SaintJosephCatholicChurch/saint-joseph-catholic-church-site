@@ -110,20 +110,6 @@
               ]
             }
           ]
-        },
-        {
-          "name": "Mass on July 4th",
-          "days": [
-            {
-              "day": "Tuesday, July 4th",
-              "times": [
-                {
-                  "time": "9:00 AM",
-                  "note": ""
-                }
-              ]
-            }
-          ]
         }
       ]
     },

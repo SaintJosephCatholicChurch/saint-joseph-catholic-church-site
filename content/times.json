@@ -52,6 +52,9 @@
                 {
                   "time": "7:30 AM",
                   "end_time": ""
+                },
+                {
+                  "note": "No Adoration or Confession on August 2, 2023"
                 }
               ]
             },
@@ -62,6 +65,9 @@
                   "time": "7:00 PM",
                   "end_time": "",
                   "note": ""
+                },
+                {
+                  "note": "Adoration and Confession from 6:00 - 7:00 PM"
                 }
               ]
             },
@@ -89,6 +95,9 @@
                 {
                   "time": "8:00 AM",
                   "end_time": ""
+                },
+                {
+                  "note": "Confession from 8:30 - 9:00 AM"
                 }
               ]
             }

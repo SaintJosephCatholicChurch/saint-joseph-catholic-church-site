@@ -30,13 +30,12 @@ const StyledContactForm = styled(
     gap: 20px;
     width: 100%;
 
-    ${
-      $submitted
-        ? `
+    ${$submitted
+      ? `
           opacity: 0.3;
           pointer-events: none;
         `
-        : ''
+      : ''
     }
   `
 );
@@ -63,14 +62,13 @@ const StyledSubmittedMessage = styled(
     bottom: 0;
     font-size: 24px;
 
-    ${
-      !$submitted
-        ? `
+    ${!$submitted
+      ? `
           visibility: hidden;
           height: 0;
           width: 0;
         `
-        : ''
+      : ''
     }
   `
 );
@@ -89,6 +87,7 @@ interface AskFormBody {
 
 const AskForm = () => {
   const [contactFormData, setContactFormData] = useState<Partial<AskFormBody>>({});
+  const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const valid = useMemo(() => {
     if (isNotEmpty(contactFormData.name) && isNotEmpty(contactFormData.email) && isNotEmpty(contactFormData.comment)) {
@@ -113,6 +112,8 @@ const AskForm = () => {
           return;
         }
 
+        setInProgress(true);
+
         try {
           await fetch(CONTACT_URL, {
             method: 'POST',
@@ -129,6 +130,8 @@ const AskForm = () => {
           });
         } catch (error) {
           console.error('There was an error', error);
+          setInProgress(false);
+          return;
         }
 
         setSubmitted(true);
@@ -160,6 +163,7 @@ const AskForm = () => {
             required
             size="small"
             onChange={(event) => onChange({ name: event.target.value })}
+            disabled={inProgress}
           />
           <TextField
             name="email"
@@ -170,6 +174,7 @@ const AskForm = () => {
             required
             size="small"
             onChange={(event) => onChange({ email: event.target.value })}
+            disabled={inProgress}
           />
         </StyledFirstRow>
         <TextField
@@ -182,11 +187,12 @@ const AskForm = () => {
           required
           size="small"
           onChange={(event) => onChange({ comment: event.target.value })}
+          disabled={inProgress}
         />
         <Button
           type="submit"
           variant="contained"
-          disabled={!valid}
+          disabled={!valid || inProgress}
           sx={{
             width: '150px',
             backgroundColor: '#bf303c',

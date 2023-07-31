@@ -34,13 +34,12 @@ const StyledContactForm = styled(
     gap: 20px;
     width: 100%;
 
-    ${
-      $submitted
-        ? `
+    ${$submitted
+      ? `
           opacity: 0.3;
           pointer-events: none;
         `
-        : ''
+      : ''
     }
   `
 );
@@ -67,14 +66,13 @@ const StyledSubmittedMessage = styled(
     bottom: 0;
     font-size: 24px;
 
-    ${
-      !$submitted
-        ? `
+    ${!$submitted
+      ? `
           visibility: hidden;
           height: 0;
           width: 0;
         `
-        : ''
+      : ''
     }
   `
 );
@@ -92,6 +90,7 @@ interface ContactFormProps {
 
 const ContactForm = ({ disableForm = false }: ContactFormProps) => {
   const [contactFormData, setContactFormData] = useState<Partial<ContactBody>>({ subject: 'Comment / Question' });
+  const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const valid = useMemo(() => {
     if (isNotEmpty(contactFormData.name) && isNotEmpty(contactFormData.email) && isNotEmpty(contactFormData.comment)) {
@@ -116,6 +115,8 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           return;
         }
 
+        setInProgress(true);
+
         try {
           await fetch(CONTACT_URL, {
             method: 'POST',
@@ -132,6 +133,8 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           });
         } catch (error) {
           console.error('There was an error', error);
+          setInProgress(false);
+          return;
         }
 
         setSubmitted(true);
@@ -162,7 +165,7 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           required
           size="small"
           onChange={(event) => onChange({ name: event.target.value })}
-          disabled={disableForm}
+          disabled={disableForm || inProgress}
         />
         <TextField
           name="email"
@@ -173,9 +176,9 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           required
           size="small"
           onChange={(event) => onChange({ email: event.target.value })}
-          disabled={disableForm}
+          disabled={disableForm || inProgress}
         />
-        <FormControl fullWidth required size="small" disabled={disableForm}>
+        <FormControl fullWidth required size="small" disabled={disableForm || inProgress}>
           <InputLabel id="subject-select-label">Subject</InputLabel>
           <Select
             name="subject"
@@ -200,12 +203,12 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           required
           size="small"
           onChange={(event) => onChange({ comment: event.target.value })}
-          disabled={disableForm}
+          disabled={disableForm || inProgress}
         />
         <Button
           type="submit"
           variant="contained"
-          disabled={disableForm || !valid}
+          disabled={disableForm || !valid || inProgress}
           sx={{
             width: '150px',
             backgroundColor: '#bf303c',

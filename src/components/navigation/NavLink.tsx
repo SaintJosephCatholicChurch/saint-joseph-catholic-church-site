@@ -28,7 +28,8 @@ const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, on
           textTransform: 'none',
           '&:hover': {
             color: '#2e2e2e'
-          }
+          },
+          width: '100%'
         }}
         onClick={onClick}
         onKeyDown={onKeyDown}

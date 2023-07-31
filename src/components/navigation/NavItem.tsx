@@ -8,7 +8,6 @@ import { MENU_DELAY } from '../../constants';
 import { isEmpty } from '../../util/string.util';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
-import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import NavItemPopup from './NavItemPopup';
 
@@ -47,7 +46,6 @@ function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
 
 export interface HoverState {
   keyboardPress: boolean;
-  buttonClick: boolean;
   button: boolean;
   menu: boolean;
   icon: boolean;
@@ -67,7 +65,6 @@ const NavItem = ({ item, size }: NavItemProps) => {
   const [keyboardSelectedIndex, setKeyboardSelectedIndex] = useState(-1);
   const [open, setOpen] = useState<HoverState>({
     keyboardPress: false,
-    buttonClick: false,
     button: false,
     menu: false,
     icon: false,
@@ -97,7 +94,6 @@ const NavItem = ({ item, size }: NavItemProps) => {
   const handleClose = useCallback(() => {
     setOpen({
       keyboardPress: false,
-      buttonClick: false,
       button: false,
       menu: false,
       icon: false,
@@ -106,18 +102,18 @@ const NavItem = ({ item, size }: NavItemProps) => {
     setKeyboardSelectedIndex(-1);
   }, []);
 
-  const isLargeScreen = useMediaQueryUp('lg');
-
   const isOpen = useMemo(
     () =>
-      open.keyboardPress || (!isLargeScreen && open.buttonClick) || open.button || open.menu || open.icon || open.text,
-    [isLargeScreen, open.button, open.buttonClick, open.icon, open.keyboardPress, open.menu, open.text]
+      open.keyboardPress || open.button || open.menu || open.icon || open.text,
+    [open.button, open.icon, open.keyboardPress, open.menu, open.text]
   );
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
 
   const handleOnKeyDown = useCallback(
     (type: keyof HoverState) => (event: KeyboardEvent<HTMLButtonElement>) => {
       if (event.key === 'Enter') {
+        event.stopPropagation();
+        event.preventDefault();
         setOpen({
           ...open,
           [type]: !open[type]
@@ -126,6 +122,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
       }
 
       if (event.key === 'ArrowDown') {
+        event.stopPropagation();
+        event.preventDefault();
         if (!isOpen) {
           setOpen({
             ...open,
@@ -142,6 +140,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
       }
 
       if (event.key === 'Tab' && !event.shiftKey && isOpen) {
+        event.stopPropagation();
+        event.preventDefault();
         setKeyboardSelectedIndex(0);
       }
     },
@@ -151,6 +151,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
   const handleMenuLinkKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
       if (event.key === 'ArrowDown') {
+        event.stopPropagation();
+        event.preventDefault();
         if (!isOpen) {
           return;
         }
@@ -167,6 +169,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
       }
 
       if (event.key === 'ArrowUp') {
+        event.stopPropagation();
+        event.preventDefault();
         if (!isOpen) {
           return;
         }
@@ -185,6 +189,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
       }
 
       if (event.key === 'Tab') {
+        event.stopPropagation();
+        event.preventDefault();
         if (!isOpen) {
           return;
         }
@@ -221,14 +227,14 @@ const NavItem = ({ item, size }: NavItemProps) => {
 
   const handleOnClick = useCallback(
     (link: MenuItem | MenuLink, type: keyof HoverState) => (_event: MouseEvent) => {
-      if (isMenuItem(link) && (isLargeScreen || !open[type])) {
+      if (isMenuItem(link) && !open[type]) {
         handleOnMouseOver(type)();
         return;
       }
 
       handleClose();
     },
-    [handleClose, handleOnMouseOver, isLargeScreen, open]
+    [handleClose, handleOnMouseOver, open]
   );
 
   const url = useMemo(() => {
@@ -255,10 +261,11 @@ const NavItem = ({ item, size }: NavItemProps) => {
     const button = (
       <Button
         ref={buttonRef}
-        onClick={handleOnClick(item, 'buttonClick')}
+        onClick={handleOnClick(item, 'button')}
         onKeyDown={handleOnKeyDown('keyboardPress')}
         onMouseOver={handleOnMouseOver('button')}
         onMouseOut={handleOnMouseOut('button')}
+        tabIndex={isEmpty(url) ? 0 : -1}
         size="large"
         sx={{
           padding: '12px 18px 14px',
@@ -272,12 +279,12 @@ const NavItem = ({ item, size }: NavItemProps) => {
           color: selected ? '#ffffff' : '#fde7a5',
           ...(debouncedIsOpen
             ? {
-                color: '#ffffff',
-                backgroundColor: '#d34f5a',
-                '.menu-item-underline': {
-                  width: '90%'
-                }
+              color: '#ffffff',
+              backgroundColor: '#d34f5a',
+              '.menu-item-underline': {
+                width: '90%'
               }
+            }
             : {}),
           '&:hover': {
             color: '#ffffff',
@@ -288,8 +295,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
           },
           ...(size
             ? {
-                padding: '12px 12px 14px'
-              }
+              padding: '12px 12px 14px'
+            }
             : {}),
           [theme.breakpoints.down('lg')]: {
             padding: '12px 12px 14px'

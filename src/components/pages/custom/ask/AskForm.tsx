@@ -73,11 +73,15 @@ const StyledSubmittedMessage = styled(
   `
 );
 
-const StyledFirstRow = styled('div')`
+const StyledFirstRow = styled('div')(({ theme }) => `
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
-`;
+
+  ${theme.breakpoints.down('md')} {
+    grid-template-columns: 1fr;
+  }
+`);
 
 interface AskFormBody {
   name: string;

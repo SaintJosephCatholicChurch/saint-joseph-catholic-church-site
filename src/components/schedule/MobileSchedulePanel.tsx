@@ -58,7 +58,7 @@ const StyledDayTimeLine = styled('div')(
     min-height: 20px;
     margin-top: 2px;
     padding: 5px 0;
-    gap: 8px;
+    gap: 0;
     border-bottom: 1px solid #ccc;
 
     ${theme.breakpoints.down('sm')} {
@@ -78,7 +78,7 @@ const StyledDayTimeLineTitle = styled('div')(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 16px;
-    white-space: nowrap;
+    white-space: pre-line;
 
     ${theme.breakpoints.down('sm')} {
       margin-bottom: 5px;
@@ -99,7 +99,7 @@ const StyledDayTimeLineTimes = styled('div')(
     gap: 4px;
 
     ${theme.breakpoints.down('sm')} {
-      gap: 12px;
+      gap: 8px;
       flex-wrap: nowrap;
       white-space: nowrap;
     }
@@ -148,6 +148,7 @@ const StyledDivider = styled('div')`
 const StyledDayTimeLineTimeComment = styled('div')(
   ({ theme }) => `
     display: flex;
+    justify-content: end;
     align-items: center;
     font-size: 13px;
     line-height: 15px;
@@ -233,8 +234,53 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
               {section.days?.map((day) => (
                 <StyledDayTimeLine key={`mobile-section-${sectionIndex}-day-${day.day}`}>
                   <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
-                  <StyledDayTimeLineTimes>
-                    {day.times?.map((time, timeIndex) => (
+                  {day.times?.length > 0 ? (
+                    <StyledDayTimeLineTimes sx={{ marginLeft: '8px', marginBottom: '5px' }}>
+                      <StyledDayTimeLineTimeWrapper
+                        key={`mobile-section-${sectionIndex}-day-${day.day}-times-0-first`}
+                      >
+                        {isNotEmpty(day.times[0].time) || isNotEmpty(day.times[0].end_time) ? (
+                          <StyledDayTimeLineTime>
+                            <StyledDayTimeLineTimeTimes>
+                              {isNotEmpty(day.times[0].time) ? day.times[0].time : null}
+                            </StyledDayTimeLineTimeTimes>
+                            {isNotEmpty(day.times[0].end_time) ? (
+                              <>
+                                <StyledDivider
+                                  key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-0-first`}
+                                >
+                                  -
+                                </StyledDivider>
+                                <StyledDayTimeLineTimeTimes
+                                  key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-0-first`}
+                                >
+                                  {day.times[0].end_time}
+                                </StyledDayTimeLineTimeTimes>
+                              </>
+                            ) : null}
+                          </StyledDayTimeLineTime>
+                        ) : (
+                          <StyledDayTimeLineTimeComment
+                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-first`}
+                            dangerouslySetInnerHTML={{
+                              __html: day.times[0].note.replaceAll('-', '&#x2011;')
+                            }}
+                          ></StyledDayTimeLineTimeComment>
+                        )}
+                      </StyledDayTimeLineTimeWrapper>
+                    </StyledDayTimeLineTimes>
+                  ) : null}
+                  <StyledDayTimeLineTimes sx={{ width: '100%' }}>
+                    {day.times?.map((time, timeIndex) => timeIndex === 0 ? (
+                      (isNotEmpty(time.time) || isNotEmpty(time.end_time)) && isNotEmpty(time.note) ? (
+                        <StyledDayTimeLineTimeComment
+                          key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
+                          dangerouslySetInnerHTML={{
+                            __html: time.note.replaceAll('-', '&#x2011;')
+                          }}
+                        ></StyledDayTimeLineTimeComment>
+                      ) : null
+                    ) : (
                       <StyledDayTimeLineTimeWrapper
                         key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
                       >

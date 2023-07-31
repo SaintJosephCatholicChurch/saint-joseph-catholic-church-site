@@ -119,6 +119,7 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
         try {
           await fetch(CONTACT_URL, {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
               'Content-Type': 'application/json'
             },

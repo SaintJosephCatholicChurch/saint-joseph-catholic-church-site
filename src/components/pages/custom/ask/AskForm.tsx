@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 
+import { CONTACT_URL } from '../../../../constants';
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
 
@@ -112,31 +113,19 @@ const AskForm = () => {
           return;
         }
 
-        const details = {
-          'entry.587912721': contactFormData.name,
-          'entry.753781836': contactFormData.email,
-          'entry.1761517368': contactFormData.comment
-        };
-
-        const formBody = [];
-        for (const property in details) {
-          const encodedKey = encodeURIComponent(property);
-          const encodedValue = encodeURIComponent(details[property as keyof typeof details]);
-          formBody.push(encodedKey + '=' + encodedValue);
-        }
-
         try {
-          await fetch(
-            'https://docs.google.com/forms/u/0/d/e/1FAIpQLSdLJbgvWisrUipyI8C6GGR9eez9xIA2-KvP-tkxfolAs7Nt1g/formResponse',
-            {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-              },
-              body: formBody.join('&')
-            }
-          );
+          await fetch(CONTACT_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: contactFormData.name,
+              email: contactFormData.email,
+              subject: 'Did You Know? Question Submission',
+              comment: contactFormData.comment
+            })
+          });
         } catch (error) {
           console.error('There was an error', error);
         }

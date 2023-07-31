@@ -81,12 +81,6 @@ const CMSView = () => {
       'https://calendar.google.com/',
       'calendar-days'
     );
-    cmsApp.registerAdditionalLink(
-      'google-drive',
-      'Forms (Google Drive)',
-      'https://drive.google.com/',
-      'clipboard-question'
-    );
     cmsApp.registerAdditionalLink('help', 'Help', Help, 'circle-question');
   }, []);
 

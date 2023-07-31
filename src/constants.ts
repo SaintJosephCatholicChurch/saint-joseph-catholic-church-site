@@ -109,3 +109,5 @@ export const REDIRECTS = {
   '/young-adult-gathering': '/news/young-adult-gathering',
   '/young-adult-group': '/news/young-adult-group'
 };
+
+export const CONTACT_URL = 'https://api.stjosephchurchbluffton.org/.netlify/functions/contact';

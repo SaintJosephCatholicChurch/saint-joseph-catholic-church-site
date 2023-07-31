@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 
+import { CONTACT_URL } from '../../../../constants';
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
 
@@ -115,32 +116,19 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           return;
         }
 
-        const details = {
-          'entry.1684511342': contactFormData.name,
-          'entry.1405174963': contactFormData.email,
-          'entry.1496222327': contactFormData.subject,
-          'entry.1923336410': contactFormData.comment
-        };
-
-        const formBody = [];
-        for (const property in details) {
-          const encodedKey = encodeURIComponent(property);
-          const encodedValue = encodeURIComponent(details[property as keyof typeof details]);
-          formBody.push(encodedKey + '=' + encodedValue);
-        }
-
         try {
-          await fetch(
-            'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeD0sH95rRB3Wld-gstqjV6FJfAa5W6y1RuDBWbuJO0BLEoxg/formResponse',
-            {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-              },
-              body: formBody.join('&')
-            }
-          );
+          await fetch(CONTACT_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: contactFormData.name,
+              email: contactFormData.email,
+              subject: contactFormData.subject,
+              comment: contactFormData.comment
+            })
+          });
         } catch (error) {
           console.error('There was an error', error);
         }

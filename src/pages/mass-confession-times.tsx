@@ -15,7 +15,7 @@ const StyledTimes = styled('div')(
     flex-direction: column;
     gap: 72px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -34,7 +34,7 @@ const MassConfessionTimes = ({ ...sidebarProps }: MassConfessionTimesProps) => {
         disablePadding
         sx={{
           width: '100%',
-          [theme.breakpoints.up('md')]: {
+          [theme.breakpoints.up('md').replace("@media", "@container page")]: {
             display: 'none'
           }
         }}

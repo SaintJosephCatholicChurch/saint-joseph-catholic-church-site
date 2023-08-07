@@ -1,6 +1,6 @@
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
 
@@ -23,8 +23,6 @@ interface NavigationDrawerProps {
 }
 
 const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
-  const theme = useTheme();
-
   const iOS = useMemo(() => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent), []);
 
   const drawer = useMemo(
@@ -42,7 +40,13 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
     [menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
-  const container = useMemo(() => (typeof window !== 'undefined' ? window.document.body : undefined), []);
+  const container = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    return window.document.body;
+  }, []);
 
   return (
     <SwipeableDrawer
@@ -57,10 +61,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
         keepMounted: true // Better open performance on mobile.
       }}
       sx={{
-        display: 'none',
-        [theme.breakpoints.down('md')]: {
-          display: 'block'
-        },
+        display: 'block',
         width: '80%',
         maxWidth: DRAWER_WIDTH,
         '& .MuiBackdrop-root': {

@@ -24,7 +24,7 @@ const StyledSchedule = styled(
     justify-content: center;
 
     padding-top: 40px;
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       padding-top: 24px;
     }
   `

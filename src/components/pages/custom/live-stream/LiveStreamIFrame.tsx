@@ -81,7 +81,7 @@ const LiveStreamIFrame = ({
           '.MuiButton-startIcon > *:nth-of-type(1)': {
             fontSize: '24px'
           },
-          [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+          [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
             fontSize: '16px',
             '.MuiButton-startIcon > *:nth-of-type(1)': {
               fontSize: '20px'
@@ -122,7 +122,7 @@ const LiveStreamIFrame = ({
             '.MuiButton-startIcon > *:nth-of-type(1)': {
               fontSize: '24px'
             },
-            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
               fontSize: '16px',
               '.MuiButton-startIcon > *:nth-of-type(1)': {
                 fontSize: '20px'
@@ -146,7 +146,7 @@ const LiveStreamIFrame = ({
               color: '#bf303c',
               textAlign: 'center',
               paddingBottom: '12px',
-              [theme.breakpoints.down('sm')]: {
+              [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
                 fontSize: '16px',
                 paddingBottom: '8px'
               }

@@ -94,6 +94,11 @@ const CMSView = () => {
         #__next {
           display: none;
         }
+
+        a:active,
+        a:hover {
+          color: unset;
+        }
       `}</style>
     </div>
   );

@@ -21,7 +21,7 @@ const StyledTabPanelContent = styled(
     ${!$disablePadding ? 'padding: 50px;' : ''}
     box-sizing: border-box;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       padding: 36px;
     }
 
@@ -62,7 +62,7 @@ const StyledTabPanelTitle = styled(
     font-size: 24px;
     line-height: 24px;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       font-size: 30px;
     }
   `
@@ -124,7 +124,7 @@ const StyledDayTimeLineTitle = styled('div')(
     font-size: 17px;
     line-height: 21px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       font-size: 15px;
       line-height: 18px;
     }
@@ -149,7 +149,7 @@ const StyledDayTimeLineTimeTimes = styled('div')(
     text-transform: uppercase;
 
     font-size: 15px;
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       font-size: 14px;
       line-height: 16px;
     }
@@ -161,7 +161,7 @@ const StyledDivider = styled('div')(
     color: #aaa;
 
     font-size: 15px;
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       font-size: 13px;
     }
   `

@@ -64,7 +64,7 @@ const StyledCarouselView = styled('div')(
         height: 16px;
       }
 
-      ${theme.breakpoints.down('md')} {
+      ${theme.breakpoints.down('md').replace("@media", "@container page")} {
         display: none;
       }
     }
@@ -73,13 +73,13 @@ const StyledCarouselView = styled('div')(
     max-width: calc(65vh * 2.25);
 
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg')} {
+    ${theme.breakpoints.between('md', 'lg').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md')} {
+    ${theme.breakpoints.between('sm', 'md').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `

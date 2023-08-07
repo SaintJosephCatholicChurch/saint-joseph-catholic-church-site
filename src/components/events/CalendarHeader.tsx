@@ -34,7 +34,7 @@ const StyledCalendarHeader = styled('div')(
     margin-bottom: 16px;
     padding: 0;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       justify-content: center;
       margin-bottom: 0;
       padding: 0 24px;
@@ -48,7 +48,7 @@ const StyledCalendarHeaderLeft = styled('div')(
     gap: 4px;
     align-items: center;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -62,7 +62,7 @@ const StyledCalendarMobileSubHeader = styled('div')(
     justify-content: space-between;
     width: 100%;
 
-    ${theme.breakpoints.up('sm')} {
+    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -79,7 +79,7 @@ const StyledTitle = styled('h2')(
     margin: 0;
     margin-left: 16px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       margin-left: 0;
       font-size: 18px;
     }
@@ -88,7 +88,7 @@ const StyledTitle = styled('h2')(
 
 const StyledSubHeader = styled('div')(
   ({ theme }) => `
-    ${theme.breakpoints.up('sm')} {
+    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -102,7 +102,7 @@ const StyledViewSelectWrapper = styled('div')(
     align-items: center;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       position: absolute;
       right: 24px;
       top: 0;
@@ -144,7 +144,7 @@ const StyledDatePicker = styled('div')(
       color: #fff;
     }
 
-    ${theme.breakpoints.up('sm')} {
+    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -156,7 +156,7 @@ const StyledMobileDateTitleWrapper = styled('div')(
     align-items: center;
     margin-top: 16px;
 
-    ${theme.breakpoints.up('sm')} {
+    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -249,7 +249,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
       '&:hover': {
         backgroundColor: '#cd3744'
       },
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
         p: '4px 4px'
       }
     }),
@@ -295,7 +295,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
           >
             <Select labelId="view-select-label" id="view-select" value={view} onChange={handleViewChange} size="small">
               <MenuItem value="dayGridMonth">Month</MenuItem>
-              <MenuItem value="timeGridWeek" sx={{ [theme.breakpoints.down('sm')]: { display: 'none' } }}>
+              <MenuItem value="timeGridWeek" sx={{ [theme.breakpoints.down('sm').replace("@media", "@container page")]: { display: 'none' } }}>
                 Week
               </MenuItem>
               <MenuItem value="listDay">Day</MenuItem>

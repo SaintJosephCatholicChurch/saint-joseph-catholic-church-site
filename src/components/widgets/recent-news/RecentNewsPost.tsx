@@ -26,12 +26,12 @@ const StyledPostImage = styled(
     height: ${$size === 'large' ? '90' : '72'}px;
     flex-shrink: 0;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       height: 72px;
       width: 110px;
     }
 
-    ${theme.breakpoints.only('md')} {
+    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
       height: 72px;
     }
 
@@ -59,11 +59,11 @@ const StyledPostTitle = styled(
     margin: 0;
     font-size: ${$size === 'large' ? '18' : '16'}px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       font-size: 16px;
     }
 
-    ${theme.breakpoints.only('md')} {
+    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
       font-size: 16px;
     }
 
@@ -95,11 +95,11 @@ const StyledPostSummary = styled(
       margin: 0;
     }
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       font-size: 15px;
     }
 
-    ${theme.breakpoints.only('md')} {
+    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
       font-size: 15px;
     }
   `
@@ -130,10 +130,10 @@ const RecentNewsPost = memo(
         <Button
           sx={{
             display: 'flex',
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
               gridTemplateColumns: '110px auto'
             },
-            [theme.breakpoints.only('md')]: {
+            [theme.breakpoints.only('md').replace("@media", "@container page")]: {
               gridTemplateColumns: '110px auto'
             },
             gap: '8px',

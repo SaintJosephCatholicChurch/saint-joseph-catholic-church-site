@@ -20,19 +20,19 @@ const StyledCopyright = styled('div')(
     line-height: 18px;
     gap: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       flex-direction: column;
       font-size: 12px;
       padding-top: 8px;
       padding-bottom: 8px;
     }
-    
-    ${theme.breakpoints.up('md')} {
+
+    ${theme.breakpoints.up('md').replace("@media", "@container page")} {
       font-size: 14px;
       height: 44px;
     }
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       gap: 4px;
     }
   `
@@ -44,7 +44,7 @@ const StyledCopyrightText = styled('div')(
     gap: 8px;
     align-items: center;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       flex-direction: column;
       gap: 0;
     }

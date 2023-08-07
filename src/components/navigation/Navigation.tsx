@@ -1,16 +1,22 @@
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 
-import churchDetails from '../../lib/church_details';
-import menuDetails from '../../lib/menu';
 import NavigationBar from './NavigationBar';
 import NavigationDrawer from './NavigationDrawer';
+
+import type { ChurchDetails, MenuData } from '@/interface';
+import type { FC } from 'react';
 
 const StyledNavigation = styled('div')`
   display: flex;
 `;
 
-const Navigation = () => {
+interface NavigationProps {
+  churchDetails: ChurchDetails;
+  menuDetails: MenuData;
+}
+
+const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {

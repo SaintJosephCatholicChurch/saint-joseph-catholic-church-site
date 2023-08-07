@@ -23,15 +23,18 @@ const StyledContent = styled('main')`
   }
 
   ul {
-    color: #313d3e;
+    list-style: disc;
     padding-left: 40px;
     margin: 0;
   }
 
   li {
-    color: #313d3e;
     margin: 0;
     line-height: 1.5;
+  }
+
+  strong {
+    font-weight: bold;
   }
 
   a {
@@ -46,13 +49,15 @@ const StyledContent = styled('main')`
   h2 {
     font-size: 36px;
     font-weight: 700;
-    margin: 24px 0 0;
+    margin: 24px 0 4px;
+    line-height: 40px;
   }
 
   h3 {
     font-size: 24px;
     font-weight: 500;
-    margin: 16px 0 0;
+    margin: 16px 0 2px;
+    line-height: 28px;
   }
 
   h4,
@@ -408,8 +413,6 @@ const HelpContent = () => {
       </ul>
       <HelpHeading variant="h2">Events (Google Calendar)</HelpHeading>
       <p>This is an external link leading to Google Calendar</p>
-      <HelpHeading variant="h2">Forms (Google Drive)</HelpHeading>
-      <p>This is an external link leading to Google Drive</p>
     </StyledContent>
   );
 };

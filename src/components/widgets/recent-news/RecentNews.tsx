@@ -13,7 +13,7 @@ const StyledRecentNews = styled('div')(
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       gap: 12px;
     }
   `
@@ -41,7 +41,7 @@ const StyledViewCalendarLink = styled(StyledLink)(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
     margin-top: 8px;
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       margin-top: 12px;
       font-size: 16px;
     }

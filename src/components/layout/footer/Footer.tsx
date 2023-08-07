@@ -31,12 +31,12 @@ const StyledFooterContainerWrapper = styled(
     justify-content: center;
     padding-bottom: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       padding-top: 16px;
       padding-bottom: 24px;
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up('md').replace("@media", "@container page")} {
       padding-top: 40px;
     }
   `
@@ -46,13 +46,13 @@ const StyledFooterContents = styled('div')(
   ({ theme }) => `
     display: grid;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       grid-template-columns: 1fr;
       p: 3,
       gap: 2
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up('md').replace("@media", "@container page")} {
       grid-template-columns: 2fr 1fr;
       gap: 48px;
     }

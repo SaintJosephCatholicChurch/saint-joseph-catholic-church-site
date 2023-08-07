@@ -14,17 +14,17 @@ import type { Slide } from '../../interface';
 const StyledCarouselSlide = styled('div')(
   ({ theme }) => `
     position: relative;
-    
+
     width: 100%;
 
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg')} {
+    ${theme.breakpoints.between('md', 'lg').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md')} {
+    ${theme.breakpoints.between('sm', 'md').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -47,15 +47,15 @@ const StyledImage = styled(
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
-  
+
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg')} {
+    ${theme.breakpoints.between('md', 'lg').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md')} {
+    ${theme.breakpoints.between('sm', 'md').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -92,7 +92,7 @@ const StyledTitle = styled(
     flex-direction: column;
     align-items: center;
     text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
-    
+
     scale: 1;
     ${
       $active
@@ -102,12 +102,12 @@ const StyledTitle = styled(
         `
         : ''
     }
-  
+
     font-size: 64px;
-    ${theme.breakpoints.only('md')} {
+    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
       font-size: 64px;
     }
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       font-size: 32px;
     }
   `

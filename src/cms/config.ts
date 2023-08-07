@@ -250,9 +250,10 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           fields: [
             {
               name: 'slides',
-              label: 'Slides',
-              label_singular: 'Slide',
+              label: 'Pictures',
+              label_singular: 'Picture',
               widget: 'list',
+              collapsed: true,
               fields: [
                 {
                   name: 'image',
@@ -276,6 +277,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               name: 'live_stream_button',
               label: 'Live Stream Button',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',
@@ -293,6 +295,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               name: 'schedule_section',
               label: 'Scehdule Section',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',
@@ -310,6 +313,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               name: 'daily_readings',
               label: 'Daily Readings',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',

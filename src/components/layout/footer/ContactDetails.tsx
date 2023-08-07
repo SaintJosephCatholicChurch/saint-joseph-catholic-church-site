@@ -20,11 +20,11 @@ export const StyledChurchDetailsLinkWrapper = styled('div')(
   ({ theme }) => `
     display: flex;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       justify-content: center;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       justify-content: left;
     }
   `
@@ -39,19 +39,19 @@ export const StyledChurchDetailsLink = styled('a')(
     font-size: 16px;
     line-height: 22px;
     font-weight: bold;
-    word-break: break-word;
+    whitespace: no-wrap;
 
     &:hover {
       color: #822129;
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down('md')} {
-      justify-content: center;
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+      justify-content: flex-start;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
-      justify-content: left;
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+      justify-content: flex-start;
     }
   `
 );
@@ -63,12 +63,12 @@ export const StyledAddress = styled('div')(
     gap: 4px;
     margin-bottom: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       text-align: center;
       margin-bottom: 16px;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       margin-bottom: 24px;
     }
   `

@@ -50,7 +50,7 @@ const StyledViewCalendarLink = styled(StyledLink)(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
     margin-top: 8px;
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       margin-top: 16px;
     }
   `

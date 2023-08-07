@@ -298,10 +298,10 @@ const NavItem = ({ item, size }: NavItemProps) => {
               padding: '12px 12px 14px'
             }
             : {}),
-          [theme.breakpoints.down('lg')]: {
+          [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
             padding: '12px 12px 14px'
           },
-          [theme.breakpoints.between('md', 1000)]: {
+          [theme.breakpoints.between('md', 1000).replace("@media", "@container page")]: {
             fontSize: '16px',
             padding: '12px 6px 14px'
           }

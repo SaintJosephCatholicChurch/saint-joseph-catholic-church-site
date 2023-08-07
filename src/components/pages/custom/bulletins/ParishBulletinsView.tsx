@@ -46,7 +46,7 @@ const StyledParishBulletinsViewWrapper = styled(
     width: 100%;
     margin: 0;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       width: ${$width}px;
       margin: 0 auto;
     }
@@ -60,7 +60,7 @@ const StyledParishBulletinsView = styled('div')(
     margin-top: 16px;
 
     grid-template-columns: ${BUTTON_WIDTH}px 1fr;
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       grid-template-columns: 1fr;
     }
   `
@@ -75,7 +75,7 @@ const StyledSelectWrapper = styled('div')(
     margin-bottom: 24px;
     width: 100%;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -96,11 +96,11 @@ const StyledPDFViewerWrapper = styled(
     box-sizing: border-box;
 
     border: 1px solid #e8e5e1;
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       border: none;
     }
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       width: ${$width}px;
       &:hover .pdf-pagination {
         visibility: visible;
@@ -137,7 +137,7 @@ const StyledPDFViewerContent = styled(
     height: auto;
     width: 100%;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       min-height: ${$height}px;
       width: ${$width}px;
       &:hover .pdf-pagination {
@@ -157,7 +157,7 @@ const StyledPaginationContainer = styled('div')(
   ({ theme }) => `
     display: none;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       width: 100%;
       display: flex;
       align-items: center;
@@ -232,7 +232,7 @@ const StyledNavigationButtonWrapper = styled(
   ({ theme, $align }) => `
     display: none;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       position: absolute;
       top: 0;
       ${$align}: 0;
@@ -290,7 +290,7 @@ const StyledSlidableAreaWrapper = styled(
     overflow: auto;
     height: auto;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       overflow: hidden;
       height: ${$height}px;
     }
@@ -311,12 +311,12 @@ const StyledSlidableArea = styled(
     left: 0;
     transition: left 333ms ease-out;
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       position: absolute;
       left: -${$width * $index}px;
     }
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       flex-direction: column;
     }
   `
@@ -324,7 +324,7 @@ const StyledSlidableArea = styled(
 
 const StyledImage = styled('img')(
   ({ theme }) => `
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       width: 100%;
       height: auto;
     }
@@ -442,7 +442,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
         <Box
           sx={{
             backgroundColor: '#e8e5e1',
-            [theme.breakpoints.down('lg')]: {
+            [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
               display: 'none'
             }
           }}

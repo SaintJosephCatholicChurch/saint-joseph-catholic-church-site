@@ -44,7 +44,7 @@ const StyledSections = styled('div')(
     box-sizing: border-box;
     padding: 16px 24px;
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       padding: 12px 16px;
     }
   `
@@ -54,19 +54,14 @@ const StyledDayTimeLine = styled('div')(
   ({ theme }) => `
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
     min-height: 20px;
     margin-top: 2px;
-    padding: 5px 0;
     gap: 0;
     border-bottom: 1px solid #ccc;
-
-    ${theme.breakpoints.down('sm')} {
-      padding: 0;
-      padding-top: 5px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+    padding: 0;
+    padding-top: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   `
 );
 
@@ -79,13 +74,13 @@ const StyledDayTimeLineTitle = styled('div')(
     font-size: 14px;
     line-height: 16px;
     white-space: pre-line;
+    flex-grow: 1;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       margin-bottom: 5px;
-      flex-grow: 1;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 12px;
       line-height: 14px;
     }
@@ -98,7 +93,7 @@ const StyledDayTimeLineTimes = styled('div')(
     flex-direction: column;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       gap: 8px;
       flex-wrap: nowrap;
       white-space: nowrap;
@@ -113,7 +108,7 @@ const StyledDayTimeLineTimeWrapper = styled('div')(
     justify-content: flex-end;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       flex-direction: column;
       align-items: flex-end;
     }
@@ -133,7 +128,7 @@ const StyledDayTimeLineTimeTimes = styled('div')(
     font-size: 14px;
     line-height: 16px;
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 12px;
       line-height: 14px;
     }
@@ -156,11 +151,11 @@ const StyledDayTimeLineTimeComment = styled('div')(
     white-space: pre-line;
     text-align: right;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       margin-bottom: 5px;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 12px;
       line-height: 14px;
     }

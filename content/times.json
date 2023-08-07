@@ -34,7 +34,7 @@
           ]
         },
         {
-          "name": "Weekday Mass (Schedule for July 31 - August 5, 2023)",
+          "name": "Weekday Mass",
           "days": [
             {
               "day": "Monday",
@@ -50,11 +50,11 @@
               "day": "Tuesday",
               "times": [
                 {
-                  "time": "7:30 AM",
+                  "time": "",
                   "end_time": ""
                 },
                 {
-                  "note": "No Adoration or Confession on August 2, 2023"
+                  "note": "Adoration from 7:00 - 8:00 AM;  Confession from 8:30 - 9:00 AM"
                 }
               ]
             },

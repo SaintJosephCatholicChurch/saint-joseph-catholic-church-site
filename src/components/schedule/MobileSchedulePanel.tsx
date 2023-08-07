@@ -263,7 +263,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                           <StyledDayTimeLineTimeComment
                             key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-first`}
                             dangerouslySetInnerHTML={{
-                              __html: day.times[0].note.replaceAll('-', '&#x2011;')
+                              __html: day.times[0].note?.replaceAll('-', '&#x2011;')
                             }}
                           ></StyledDayTimeLineTimeComment>
                         )}
@@ -276,7 +276,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                         <StyledDayTimeLineTimeComment
                           key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
                           dangerouslySetInnerHTML={{
-                            __html: time.note.replaceAll('-', '&#x2011;')
+                            __html: time.note?.replaceAll('-', '&#x2011;')
                           }}
                         ></StyledDayTimeLineTimeComment>
                       ) : null
@@ -309,7 +309,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                           <StyledDayTimeLineTimeComment
                             key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
                             dangerouslySetInnerHTML={{
-                              __html: time.note.replaceAll('-', '&#x2011;')
+                              __html: time.note?.replaceAll('-', '&#x2011;')
                             }}
                           ></StyledDayTimeLineTimeComment>
                         ) : null}

@@ -40,7 +40,7 @@
               "day": "Monday",
               "times": [
                 {
-                  "note": "No Mass",
+                  "note": "No Public Mass",
                   "time": "",
                   "end_time": ""
                 }
@@ -50,8 +50,11 @@
               "day": "Tuesday",
               "times": [
                 {
-                  "time": "8:00 AM",
-                  "end_time": ""
+                  "note": "",
+                  "time": "8:00 AM"
+                },
+                {
+                  "note": "Adoration from 7:00 - 8:00 AM;  Confession from 8:30 - 9:00 AM"
                 }
               ]
             },
@@ -60,7 +63,11 @@
               "times": [
                 {
                   "time": "7:00 PM",
-                  "end_time": ""
+                  "end_time": "",
+                  "note": ""
+                },
+                {
+                  "note": "Adoration and Confession from 6:00 - 7:00 PM"
                 }
               ]
             },
@@ -88,6 +95,9 @@
                 {
                   "time": "8:00 AM",
                   "end_time": ""
+                },
+                {
+                  "note": "Confession from 8:30 - 9:00 AM"
                 }
               ]
             }
@@ -103,6 +113,9 @@
                   "time": "6:00 PM",
                   "note": "Ordinary Form",
                   "end_time": ""
+                },
+                {
+                  "note": "No First Friday  6 PM Mass in August 2023"
                 }
               ]
             }
@@ -264,7 +277,7 @@
           ]
         },
         {
-          "note": "Station booklets are available in the Narthex for private devotions"
+          "note": "Station booklets are also available in the Narthex for use in private devotions throughout the year"
         }
       ]
     },
@@ -292,6 +305,15 @@
                   "note": "Accepted on Mondays"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "Fourth of July Holiday",
+          "days": [
+            {
+              "day": "Parish Office is closed on Monday, July 3rd, and Tuesday, July 4th.",
+              "times": []
             }
           ]
         }

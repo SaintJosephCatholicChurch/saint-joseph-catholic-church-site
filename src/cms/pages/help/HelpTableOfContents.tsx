@@ -55,7 +55,6 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
     }
 
     const callback: IntersectionObserverCallback = (headings) => {
-      console.log('intersected headings', headings);
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         map[headingElement.target.id] = headingElement;
         return map;
@@ -72,7 +71,6 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
 
       // If there is only one visible heading, this is our "active" heading
       if (visibleHeadings.length === 1) {
-        console.log('just one, setting active id', visibleHeadings[0].target, visibleHeadings[0].target.id);
         setActiveId(visibleHeadings[0].target.id);
         // If there is more than one visible heading,
         // choose the one that is closest to the top of the page
@@ -81,7 +79,6 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
           getIndexFromId(a.target.id) > getIndexFromId(b.target.id) ? 1 : -1
         );
 
-        console.log('more than one, setting active id', sortedVisibleHeadings[0].target, sortedVisibleHeadings[0].target.id);
         setActiveId(sortedVisibleHeadings[0].target.id);
       }
     };

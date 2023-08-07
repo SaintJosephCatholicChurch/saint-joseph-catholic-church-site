@@ -73,14 +73,6 @@ const CMSView = () => {
       }
     });
     CMS.registerAdditionalLink({
-      id: 'google-drive',
-      title: 'Forms (Google Drive)',
-      data: 'https://drive.google.com/',
-      options: {
-        icon: 'clipboard-question'
-      }
-    });
-    CMS.registerAdditionalLink({
       id: 'help',
       title: 'Help',
       data: Help,

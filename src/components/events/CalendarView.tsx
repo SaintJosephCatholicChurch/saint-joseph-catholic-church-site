@@ -22,7 +22,7 @@ import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
 
 const StyledCalendarWrapper = styled('div')(
   ({ theme }) => `
-    ${theme.breakpoints.up('sm')} {
+    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
       padding: 0 24px;
     }
 

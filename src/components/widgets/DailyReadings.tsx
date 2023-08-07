@@ -19,7 +19,7 @@ const StyledDailyReadings = styled(
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
+    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm').replace("@media", "@container page")} {
       gap: 12px;
     }
   `
@@ -61,7 +61,7 @@ const StyledDailyReading = styled(
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
+    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm').replace("@media", "@container page")} {
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
@@ -79,7 +79,7 @@ const StyledDailyReadingTitle = styled('h5')(
     margin-right: -8px;
     white-space: nowrap;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       font-size: 18px;
     }
   `
@@ -94,7 +94,7 @@ const StyledDailyReadingDescription = styled('div')(
     margin-left: 16px;
     white-space: nowrap;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       font-size: 18px;
     }
   `

@@ -16,7 +16,7 @@ const StyledSidebar = styled('div')(
     display: flex;
     flex-direction: column;
     gap: 32px;
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       display: none;
     }
   `

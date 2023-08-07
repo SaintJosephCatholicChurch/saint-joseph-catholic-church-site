@@ -21,11 +21,11 @@ const StyledContainer = styled(
     box-sizing: border-box;
     ${!$disablePadding ? 'padding: 0 24px;' : ''}
 
-    ${theme.breakpoints.only('md')} {
+    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
       ${!$disablePadding ? 'padding: 0 32px;' : ''}
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       ${!$disablePadding ? 'padding: 0 12px;' : ''}
     }
   `

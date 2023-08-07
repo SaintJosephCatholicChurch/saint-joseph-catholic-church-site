@@ -16,24 +16,26 @@ const StyledHeaderSecondaryText = styled('h2')(
     text-transform: uppercase;
     font-size: 18px;
     line-height: 22px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-weight: bold;
 
     &::first-letter {
       font-size: 22px;
     }
 
-    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 16px;
       line-height: 19px;
-    
+
       &::first-letter {
         font-size: 19px;
       }
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 14px;
       line-height: 16px;
-    
+
       &::first-letter {
         font-size: 16px;
       }

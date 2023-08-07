@@ -78,7 +78,7 @@ const StyledFirstRow = styled('div')(({ theme }) => `
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
 
-  ${theme.breakpoints.down('md')} {
+  ${theme.breakpoints.down('md').replace("@media", "@container page")} {
     grid-template-columns: 1fr;
   }
 `);

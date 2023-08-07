@@ -17,24 +17,26 @@ const StyledHeaderPrimaryText = styled('h1')(
     text-transform: uppercase;
     font-size: 36px;
     line-height: 43px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-weight: bold;
 
     &::first-letter {
       font-size: 43px;
     }
 
-    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 26px;
       line-height: 36px;
-  
+
       &::first-letter {
         font-size: 36px;
       }
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
       font-size: 22px;
       line-height: 28px;
-  
+
       &::first-letter {
         font-size: 28px;
       }

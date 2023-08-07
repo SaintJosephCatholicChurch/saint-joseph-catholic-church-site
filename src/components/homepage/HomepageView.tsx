@@ -32,7 +32,7 @@ const StyledSectionWrapper = styled('div')`
 
 const StyledReadingsAndPageSectionWrapper = styled(StyledSectionWrapper)(
   ({ theme }) => `
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       padding: 16px 0;
     }
   `
@@ -42,11 +42,11 @@ const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   ({ theme }) => `
     padding-bottom: 32px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       padding-bottom: 40px;
     }
 
-    ${theme.breakpoints.up('lg')} {
+    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
       padding-bottom: 48px;
     }
   `
@@ -59,11 +59,11 @@ const StyledWidgetSectionContent = styled('div')(
     gap: 64px;
     width: 100%;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       gap: 48px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       grid-template-columns: minmax(0, 1fr);
     }
   `
@@ -105,13 +105,15 @@ interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
   recentPosts: PostContent[];
+  hideSearch?: boolean;
 }
 
 const HomepageView = memo(
   ({
     homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured },
     times,
-    recentPosts
+    recentPosts,
+    hideSearch
   }: HomepageViewProps) => {
     const UpcomingEventsNoSSR = useMemo(
       () =>
@@ -195,7 +197,7 @@ const HomepageView = memo(
             </StyledWidgetSectionContent>
           </Container>
         </StyledNewsAndEventsWrapper>
-        <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} />
+        <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} hideSearch={hideSearch} />
       </StyledHomepageView>
     );
   }

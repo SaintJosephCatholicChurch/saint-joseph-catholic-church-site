@@ -33,11 +33,11 @@ const StyledPageContentsWrapper = styled('div')(
     width: 100%;
     margin-top: 98px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       padding-top: 0
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up('md').replace("@media", "@container page")} {
       padding-top: 48px
     }
   `
@@ -57,11 +57,11 @@ const StyledPageContents = styled(
     width: 100%;
     grid-template-columns: ${$hideSidebar ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       gap: 24px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       grid-template-columns: 1fr;
     }
   `
@@ -79,7 +79,6 @@ interface PageViewProps {
   dailyReadings?: DailyReadings;
   hideSidebar?: boolean;
   hideSearch?: boolean;
-  disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
   fullWidth?: boolean;
@@ -93,7 +92,6 @@ const PageView = ({
   hideHeader = false,
   hideSidebar = false,
   hideSearch,
-  disableTitleMargin = false,
   disableBottomMargin = false,
   disablePadding = false,
   fullWidth = false
@@ -103,7 +101,7 @@ const PageView = ({
       <StyledPageContentsWrapper>
         <StyledPageContents $hideSidebar={hideSidebar}>
           <StyledPageBody>
-            {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
+            {!hideHeader ? <PageTitle title={title} /> : null}
             {children}
           </StyledPageBody>
           {!hideSidebar ? (
@@ -112,7 +110,7 @@ const PageView = ({
         </StyledPageContents>
       </StyledPageContentsWrapper>
     ),
-    [children, dailyReadings, disableTitleMargin, hideHeader, hideSearch, hideSidebar, recentPosts, title]
+    [children, dailyReadings, hideHeader, hideSearch, hideSidebar, recentPosts, title]
   );
 
   return (

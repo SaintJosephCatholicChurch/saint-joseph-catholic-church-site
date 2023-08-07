@@ -15,7 +15,7 @@ import type { MenuData } from '../../interface';
 const StyledMobileSpacer = styled('div')(
   ({ theme }) => `
     flex-grow: 1;
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up('md').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -29,7 +29,7 @@ const StyledGiveButtonOffset = styled('div')(
   ({ theme }) => `
     width: 0;
 
-    ${theme.breakpoints.up(1524)} {
+    ${theme.breakpoints.up(1524).replace("@media", "@container page")} {
       width: 162px;
     }
   `
@@ -64,15 +64,15 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
           width: '100%',
           boxSizing: 'border-box',
           height: 70,
-          [theme.breakpoints.down('lg')]: {
+          [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
             pl: 1,
             pr: 1.5
           },
-          [theme.breakpoints.down('md')]: {
+          [theme.breakpoints.down('md').replace("@media", "@container page")]: {
             pl: 3,
             pr: 0
           },
-          [theme.breakpoints.up('lg')]: {
+          [theme.breakpoints.up('lg').replace("@media", "@container page")]: {
             transition: 'height 250ms ease',
             height: trigger ? 64 : 92,
             maxWidth: MAX_APP_WIDTH
@@ -86,10 +86,10 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
           onClick={onMobileOpenToggle}
           sx={{
             display: 'none',
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('md').replace("@media", "@container page")]: {
               display: 'block'
             },
-            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
               width: '32px',
               height: '32px',
               padding: '0',

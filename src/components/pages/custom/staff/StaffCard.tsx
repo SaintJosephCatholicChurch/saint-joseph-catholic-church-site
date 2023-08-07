@@ -21,7 +21,7 @@ const StaffCard = ({ staffMember }: StaffCardProps) => {
     <Card
       sx={{
         width: STAFF_DEFAULT_CARD_SIZE,
-        [theme.breakpoints.down(customBreakpoint)]: {
+        [theme.breakpoints.down(customBreakpoint).replace("@media", "@container page")]: {
           width: '100%'
         }
       }}
@@ -30,7 +30,7 @@ const StaffCard = ({ staffMember }: StaffCardProps) => {
         component="img"
         sx={{
           height: STAFF_DEFAULT_CARD_SIZE,
-          [theme.breakpoints.down(customBreakpoint)]: {
+          [theme.breakpoints.down(customBreakpoint).replace("@media", "@container page")]: {
             height: '80vw'
           }
         }}

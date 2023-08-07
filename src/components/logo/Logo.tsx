@@ -33,7 +33,7 @@ const StyledLogoWrapper = styled(
     transition: all 250ms ease;
 
     transform: ${$size === 'small' || $trigger ? 'scale(0.75)' : 'scale(1)'};
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       transform: ${$responsive ? 'scale(0.75)' : 'scale(1)'};
     }
   `

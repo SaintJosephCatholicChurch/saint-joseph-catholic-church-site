@@ -25,7 +25,6 @@ interface PageProps {
   hideHeader?: boolean;
   hideSidebar?: boolean;
   hideSearch?: boolean;
-  disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
   fullWidth?: boolean;
@@ -43,7 +42,6 @@ const PageLayout = ({
   hideHeader,
   hideSidebar,
   hideSearch,
-  disableTitleMargin,
   disableBottomMargin,
   disablePadding,
   fullWidth,
@@ -72,7 +70,6 @@ const PageLayout = ({
         hideSidebar={hideSidebar}
         hideSearch={hideSearch}
         disablePadding={disablePadding}
-        disableTitleMargin={disableTitleMargin}
         disableBottomMargin={disableBottomMargin}
         fullWidth={fullWidth}
         recentPosts={recentPosts}

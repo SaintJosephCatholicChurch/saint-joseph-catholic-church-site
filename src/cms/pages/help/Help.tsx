@@ -9,8 +9,7 @@ const StyledOuterWrapper = styled('div')`
 `;
 
 const StyledWrapper = styled('div')`
-  width: calc(100% - 300px);
-  margin-left: 300px;
+  width: 100%;
   display: flex;
   gap: 16px;
   position: absolute;

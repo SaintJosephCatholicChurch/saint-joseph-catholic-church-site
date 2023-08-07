@@ -27,7 +27,7 @@ const StyledTitleWrapper = styled('div')(
     flex-direction: column;
     gap: 4px;
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       margin-bottom: 8px;
     }
   `
@@ -50,7 +50,7 @@ const StyledDateTime = styled('div')(
     gap: 8px;
     font-size: 14px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       flex-direction: column;
     }
   `
@@ -64,7 +64,7 @@ const StyledDateTimeSeparator = styled('div')(
   ({ theme }) => `
     font-weight: 700;
 
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       display: none;
     }
   `
@@ -109,7 +109,7 @@ const CalendarEventModalContent = ({ title, date, time, location, description }:
             fontSize="small"
             sx={{
               height: '30px',
-              [theme.breakpoints.down('md')]: {
+              [theme.breakpoints.down('md').replace("@media", "@container page")]: {
                 height: 'initial'
               }
             }}

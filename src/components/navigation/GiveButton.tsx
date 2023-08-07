@@ -15,7 +15,7 @@ interface GiveButtonProps {
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
   ({ theme }) => `
     width: 24px;
-    ${theme.breakpoints.down('sm')} {
+    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
       width: 16px;
     }
   `
@@ -58,20 +58,20 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
               width: 130
             }
           : {}),
-        [theme.breakpoints.up('lg')]: {
+        [theme.breakpoints.up('lg').replace("@media", "@container page")]: {
           transition: 'height 250ms ease',
           height: trigger ? 64 : 92
         },
-        [theme.breakpoints.down('lg')]: {
+        [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
           padding: '1px 24px 0',
           width: 120
         },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
           width: 100,
           gridTemplateColumns: '16px auto',
           gap: '6px'
         },
-        [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+        [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
           padding: '1px 16px 0'
         }
       }}

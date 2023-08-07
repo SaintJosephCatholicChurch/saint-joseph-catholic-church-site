@@ -1,5 +1,5 @@
 import tags from '../../content/meta/tags.json';
 
 export function listTags(): string[] {
-  return tags.tags.map(({ tag }) => tag);
+  return tags.tags;
 }

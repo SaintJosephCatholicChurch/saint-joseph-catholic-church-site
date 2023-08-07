@@ -9,11 +9,11 @@ const StyledDesktopNavItems = styled('div')(
     display: flex;
     gap: 8px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       gap: 4px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
       display: none;
     }
   `

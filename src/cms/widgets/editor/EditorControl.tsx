@@ -1,16 +1,17 @@
 import { styled } from '@mui/material/styles';
-import { Map } from 'immutable';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { v4 as uuid } from 'uuid';
+import { useGetMediaAsset, useMediaInsert } from '@staticcms/core';
+import { useCallback, useMemo, useRef } from 'react';
 
 import { IMAGE_EXTENSION_REGEX } from '../../../constants';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
-import { isEmpty, isNotEmpty } from '../../../util/string.util';
-import { getFieldAsset } from '../../util/asset.util';
+import { isNotEmpty } from '../../../util/string.util';
 import BundledEditor from './BundledEditor';
 
+import type { MediaPath, WidgetControlProps } from '@staticcms/core';
+import type { FC } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
+import type { HtmlField } from '../../config';
 
 const StyledEditorControl = styled('div')`
   width: 100%;
@@ -20,23 +21,6 @@ const StyledEditorControl = styled('div')`
     border-top-left-radius: 0;
   }
 `;
-
-interface EditorControlProps {
-  value: string;
-  field: Map<string, any>;
-  onChange: (value: string) => void;
-  onOpenMediaLibrary: (options: {
-    controlID: string;
-    forImage: boolean;
-    privateUpload: any;
-    allowMultiple: boolean;
-    field: Map<string, any>;
-    value?: any[];
-    config?: any;
-  }) => void;
-  getAsset: (path: string, field: Map<string, any>) => string;
-  mediaPaths: Map<string, any>;
-}
 
 function fromEditorToStorage(value: string): string {
   let newValue = value;
@@ -71,17 +55,15 @@ function fromEditorToStorage(value: string): string {
   return newValue;
 }
 
-const EditorControl = ({
+const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
+  collection,
   field,
+  entry,
   value = '',
   onChange,
-  onOpenMediaLibrary,
-  getAsset,
-  mediaPaths
-}: EditorControlProps) => {
+  theme
+}) => {
   const editorRef = useRef<TinyMCEEditor>(null);
-
-  const controlID: string = useMemo(() => uuid(), []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialValue = useMemo(() => value, []);
@@ -92,28 +74,13 @@ const EditorControl = ({
     }
   }, [onChange]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const mediaLibraryFieldOptions = field.get('media_library', Map());
-  const handleOpenMedialLibrary = useCallback(
-    (forImage: boolean) => {
-      onOpenMediaLibrary({
-        controlID,
-        forImage,
-        privateUpload: field.get('private') as boolean,
-        allowMultiple: false,
-        field,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        config: mediaLibraryFieldOptions.get('config')
-      });
-    },
-    [controlID, field, mediaLibraryFieldOptions, onOpenMediaLibrary]
-  );
+  const getAsset = useGetMediaAsset(collection, field, entry);
 
   const getMedia = useCallback(
     async (path: string) => {
       const { type, exists } = await doesUrlFileExist(path);
       if (!exists) {
-        const asset = getFieldAsset(field, getAsset)(path);
+        const asset = await getAsset(path);
         if (isNotNullish(asset)) {
           return {
             type: IMAGE_EXTENSION_REGEX.test(path) ? 'image' : 'file',
@@ -125,30 +92,25 @@ const EditorControl = ({
 
       return { url: path, type, exists };
     },
-    [field, getAsset]
+    [getAsset]
   );
 
-  const mediaPath = mediaPaths.get(controlID) as string;
-  useEffect(() => {
-    if (isEmpty(mediaPath)) {
-      return;
-    }
-
-    const addMedia = async () => {
-      const { type, exists, url } = await getMedia(mediaPath);
+  const addMedia = useCallback(
+    async (newValue: MediaPath<string>) => {
+      const { url, type, exists } = await getMedia(newValue.path);
       let content: string | undefined;
       if (type.startsWith('image')) {
         if (exists) {
-          content = `<img src="${mediaPath}" />`;
+          content = `<img src="${newValue.path}" />`;
         } else {
-          content = `<img data-asset="${mediaPath}" src="${url}" />`;
+          content = `<img data-asset="${newValue.path}" src="${url}" />`;
         }
       } else {
-        const name = mediaPath.split('/').pop();
+        const name = newValue.path.split('/').pop();
         if (exists) {
-          content = `<a target="_blank" href="${mediaPath}">${name}</a>`;
+          content = `<a target="_blank" href="${newValue.path}">${name}</a>`;
         } else {
-          content = `<a data-asset="${mediaPath}" target="_blank" href="${url}">${name}</a>`;
+          content = `<a data-asset="${newValue.path}" target="_blank" href="${url}">${name}</a>`;
         }
       }
 
@@ -157,16 +119,22 @@ const EditorControl = ({
         editorRef.current.selection.setContent(content);
         onChange(editorRef.current.getContent());
       }
-    };
+    },
+    [getMedia, onChange]
+  );
 
-    addMedia();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field, mediaPath]);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const handleOpenMedialLibrary = useMediaInsert(
+    undefined,
+    { collection, field, insertOptions: { chooseUrl: true } },
+    addMedia
+  );
 
   return useMemo(
     () => (
       <StyledEditorControl>
         <BundledEditor
+          theme={theme}
           onInit={(_event, editor) => (editorRef.current = editor)}
           initialValue={initialValue}
           onChange={handleOnChange}
@@ -348,7 +316,7 @@ const EditorControl = ({
               ]
             }
           }}
-          onOpenMediaLibrary={handleOpenMedialLibrary}
+          onOpenMediaLibrary={(forImage) => handleOpenMedialLibrary(undefined, { forImage })}
         />
       </StyledEditorControl>
     ),

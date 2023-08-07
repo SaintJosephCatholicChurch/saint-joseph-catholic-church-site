@@ -20,7 +20,7 @@ const StyledFeaturedPageWrapper = styled(
     ${
       $hideOnMobile
         ? `
-      ${theme.breakpoints.down('sm')} {
+      ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
         display: none;
       }
     `
@@ -30,7 +30,7 @@ const StyledFeaturedPageWrapper = styled(
     ${
       $hideOnNonMobile
         ? `
-      ${theme.breakpoints.up('sm')} {
+      ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
         display: none;
       }
     `
@@ -59,7 +59,7 @@ const StyledSummary = styled('div')(
     color: #343434;
     font-weight: 500;
 
-    ${theme.breakpoints.down('lg')} {
+    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
       font-size: 18px;
     }
   `
@@ -108,7 +108,7 @@ const FeaturedPage = memo(
               padding: '0 8px 8px',
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
-              [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
+              [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm').replace("@media", "@container page")]: {
                 gap: '12px'
               }
             }}

@@ -661,7 +661,8 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           file: 'content/menu.json',
           description: 'Site menu and logo',
           editor: {
-            preview: true
+            preview: true,
+            frame: false
           },
           fields: [
             {

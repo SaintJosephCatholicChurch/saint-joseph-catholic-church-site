@@ -14,11 +14,12 @@ const StyledNavigationWrapper = styled('div')`
   font-weight: 200;
   font-size: 16px;
   position: relative;
+  min-height: 500px
 `;
 
 const NavigationPreview: TemplatePreviewComponent<MenuData> = ({ entry }) => {
   return (
-    <StyledNavigationWrapper>
+    <StyledNavigationWrapper id="drawer-container">
       <Navigation menuDetails={entry.data} churchDetails={churchDetails} />
     </StyledNavigationWrapper>
   );

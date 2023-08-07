@@ -44,7 +44,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <StyledLayout>
+      <StyledLayout id="drawer-container">
         <Head>
           <meta charSet="utf-8" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

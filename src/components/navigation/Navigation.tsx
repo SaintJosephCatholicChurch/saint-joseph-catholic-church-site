@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useCallback, useMemo, useState } from 'react';
 
 import NavigationBar from './NavigationBar';
-import NavigationDrawer from './NavigationDrawer';
 
 import type { ChurchDetails, MenuData } from '@/interface';
 import type { FC } from 'react';
@@ -23,6 +23,14 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails }) => {
     setMobileOpen(!mobileOpen);
   }, [mobileOpen]);
 
+  const NavigationDrawerNoSSR = useMemo(
+    () =>
+      dynamic(() => import('./NavigationDrawer'), {
+        ssr: false
+      }),
+    []
+  );
+
   return (
     <StyledNavigation>
       <NavigationBar
@@ -31,7 +39,7 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails }) => {
         onlineGivingUrl={churchDetails.online_giving_url}
         onMobileOpenToggle={handleDrawerToggle}
       />
-      <NavigationDrawer menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} />
+      <NavigationDrawerNoSSR menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} />
     </StyledNavigation>
   );
 };

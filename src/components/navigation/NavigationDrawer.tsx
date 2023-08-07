@@ -1,8 +1,8 @@
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
@@ -23,6 +23,8 @@ interface NavigationDrawerProps {
 }
 
 const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
+  const theme = useTheme();
+
   const iOS = useMemo(() => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent), []);
 
   const drawer = useMemo(
@@ -40,28 +42,35 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
     [menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
-  const container = useMemo(() => {
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+
+  useLayoutEffect(() => {
     if (typeof window === 'undefined') {
-      return undefined;
+      return;
     }
 
-    return window.document.body;
+    const drawerContainer = window.document.getElementById('drawer-container');
+
+    setContainer(drawerContainer ? drawerContainer : window.document.body);
   }, []);
 
-  return (
+  return container ? (
     <SwipeableDrawer
       disableBackdropTransition={!iOS}
       disableDiscovery={iOS}
-      container={container}
       variant="temporary"
       open={mobileOpen}
       onOpen={onMobileOpenToggle}
       onClose={onMobileOpenToggle}
       ModalProps={{
-        keepMounted: true // Better open performance on mobile.
+        keepMounted: true, // Better open performance on mobile.
+        container
       }}
       sx={{
-        display: 'block',
+        display: 'none',
+        [theme.breakpoints.down('md').replace("@media", "@container page")]: {
+          display: 'block'
+        },
         width: '80%',
         maxWidth: DRAWER_WIDTH,
         '& .MuiBackdrop-root': {
@@ -77,7 +86,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
     >
       {drawer}
     </SwipeableDrawer>
-  );
+  ) : null;
 };
 
 export default NavigationDrawer;

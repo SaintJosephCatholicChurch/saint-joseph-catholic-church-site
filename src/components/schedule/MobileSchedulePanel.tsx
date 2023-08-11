@@ -99,7 +99,8 @@ const StyledDayTimeLineTimes = styled('div')(
     gap: 4px;
 
     ${theme.breakpoints.down('sm')} {
-      gap: 8px;
+      gap: 6px;
+      margin-bottom: 5px;
       flex-wrap: nowrap;
       white-space: nowrap;
     }
@@ -155,10 +156,6 @@ const StyledDayTimeLineTimeComment = styled('div')(
     color: #757575;
     white-space: pre-line;
     text-align: right;
-
-    ${theme.breakpoints.down('sm')} {
-      margin-bottom: 5px;
-    }
 
     ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
       font-size: 12px;

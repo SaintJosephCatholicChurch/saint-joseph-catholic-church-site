@@ -6,10 +6,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MENU_DELAY } from '../../constants';
 import { isEmpty } from '../../util/string.util';
+import useClickOutside from '../../util/useClickOutside';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
 import useLocation from '../../util/useLocation';
-import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 import NavItemPopup from './NavItemPopup';
+import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 
 import type { KeyboardEvent, MouseEvent } from 'react';
 import type { MenuItem, MenuLink } from '../../interface';
@@ -44,14 +45,6 @@ function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
   return Boolean('menu_links' in link && link.menu_links?.length);
 }
 
-export interface HoverState {
-  keyboardPress: boolean;
-  button: boolean;
-  menu: boolean;
-  icon: boolean;
-  text: boolean;
-}
-
 interface NavItemProps {
   item: MenuItem;
   size?: 'small' | 'normal';
@@ -60,64 +53,49 @@ interface NavItemProps {
 const NavItem = ({ item, size }: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
+  const wrapperRef = useRef<HTMLDivElement>();
   const buttonRef = useRef<HTMLButtonElement>();
   const activeMenuItemRef = useRef<HTMLButtonElement>();
   const [keyboardSelectedIndex, setKeyboardSelectedIndex] = useState(-1);
-  const [open, setOpen] = useState<HoverState>({
-    keyboardPress: false,
-    button: false,
-    menu: false,
-    icon: false,
-    text: false
-  });
+  const [open, setOpen] = useState(false);
 
-  const handleOnMouseOver = useCallback(
-    (type: keyof HoverState) => () => {
-      setOpen({
-        ...open,
-        [type]: true
-      });
-    },
-    [open]
-  );
-
-  const handleOnMouseOut = useCallback(
-    (type: keyof HoverState) => () => {
-      setOpen({
-        ...open,
-        [type]: false
-      });
-    },
-    [open]
-  );
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
 
   const handleClose = useCallback(() => {
-    setOpen({
-      keyboardPress: false,
-      button: false,
-      menu: false,
-      icon: false,
-      text: false
-    });
+    setOpen(false);
     setKeyboardSelectedIndex(-1);
   }, []);
 
+  const handleOnMouseOver = useCallback(
+    () => {
+      handleOpen();
+    },
+    [handleOpen]
+  );
+
+  const handleOnMouseOut = useCallback(
+    () => {
+      handleClose();
+    },
+    [handleClose]
+  );
+
+  useClickOutside(wrapperRef, handleClose);
+
   const isOpen = useMemo(
-    () =>
-      open.keyboardPress || open.button || open.menu || open.icon || open.text,
-    [open.button, open.icon, open.keyboardPress, open.menu, open.text]
+    () => open,
+    [open]
   );
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
 
   const handleOnKeyDown = useCallback(
-    (type: keyof HoverState) => (event: KeyboardEvent<HTMLButtonElement>) => {
+    (event: KeyboardEvent<HTMLButtonElement>) => {
       if (event.key === 'Enter') {
         event.stopPropagation();
         event.preventDefault();
-        setOpen({
-          ...open,
-          [type]: !open[type]
-        });
+        setOpen(!open);
         return;
       }
 
@@ -125,10 +103,7 @@ const NavItem = ({ item, size }: NavItemProps) => {
         event.stopPropagation();
         event.preventDefault();
         if (!isOpen) {
-          setOpen({
-            ...open,
-            [type]: true
-          });
+          setOpen(true);
           return;
         }
 
@@ -226,15 +201,15 @@ const NavItem = ({ item, size }: NavItemProps) => {
   }, [debouncedIsOpen, handleClose]);
 
   const handleOnClick = useCallback(
-    (link: MenuItem | MenuLink, type: keyof HoverState) => (_event: MouseEvent) => {
-      if (isMenuItem(link) && !open[type]) {
-        handleOnMouseOver(type)();
+    (link: MenuItem | MenuLink) => (_event: MouseEvent) => {
+      if (isMenuItem(link) && !open) {
+        handleOpen();
         return;
       }
 
       handleClose();
     },
-    [handleClose, handleOnMouseOver, open]
+    [handleClose, handleOpen, open]
   );
 
   const url = useMemo(() => {
@@ -261,10 +236,8 @@ const NavItem = ({ item, size }: NavItemProps) => {
     const button = (
       <Button
         ref={buttonRef}
-        onClick={handleOnClick(item, 'button')}
-        onKeyDown={handleOnKeyDown('keyboardPress')}
-        onMouseOver={handleOnMouseOver('button')}
-        onMouseOut={handleOnMouseOut('button')}
+        onClick={handleOnClick(item)}
+        onKeyDown={handleOnKeyDown}
         tabIndex={isEmpty(url) ? 0 : -1}
         size="large"
         sx={{
@@ -307,14 +280,12 @@ const NavItem = ({ item, size }: NavItemProps) => {
           }
         }}
       >
-        <StyledButtonTitle onMouseOver={handleOnMouseOver('text')} onMouseOut={handleOnMouseOut('text')}>
+        <StyledButtonTitle>
           {item.title}
         </StyledButtonTitle>
         {item.menu_links?.length ? (
           <ExpandMoreIcon
             fontSize="small"
-            onMouseOver={handleOnMouseOver('icon')}
-            onMouseOut={handleOnMouseOut('icon')}
             sx={{
               top: '2px',
               position: 'relative',
@@ -342,8 +313,6 @@ const NavItem = ({ item, size }: NavItemProps) => {
     debouncedIsOpen,
     handleOnClick,
     handleOnKeyDown,
-    handleOnMouseOut,
-    handleOnMouseOver,
     item,
     selected,
     size,
@@ -351,15 +320,17 @@ const NavItem = ({ item, size }: NavItemProps) => {
     url
   ]);
 
+  if (item.title === 'Parish') {
+    console.log('open', open);
+  }
+
   return (
-    <StyledNavItem>
+    <StyledNavItem ref={wrapperRef} onMouseOver={handleOnMouseOver} onMouseOut={handleOnMouseOut}>
       {wrappedLink}
       {item.menu_links?.length && debouncedIsOpen ? (
         <NavItemPopup
           item={item}
           onClick={handleOnClick}
-          onMouseOver={handleOnMouseOver}
-          onMouseOut={handleOnMouseOut}
           onKeyDown={handleMenuLinkKeyDown}
           activeMenuItemRef={activeMenuItemRef}
           keyboardSelectedIndex={keyboardSelectedIndex}

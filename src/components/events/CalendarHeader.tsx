@@ -228,15 +228,17 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
   }, [api, date, isSmallScreen]);
 
   const [monthOnlyTitle, longTitle] = useMemo(() => {
-    if (/^[a-z]+ [0-9]{4}$/gi.test(title)) {
-      return [title, title];
-    }
-
     if (isEmpty(title)) {
       return [title, title];
     }
 
+    if (/^[a-z]+ [0-9]{4}$/gi.test(title) || title.includes('–') || title.includes('-')) {
+      return [title, title];
+    }
+
     const date = parse(title, 'MMMM d, yyyy', new Date());
+
+    console.log('date', date, 'title', title)
 
     return [format(date, 'MMMM yyyy'), formatAsUtc(date, 'EEEE, MMMM d, yyyy')];
   }, [title]);

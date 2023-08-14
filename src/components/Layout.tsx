@@ -10,7 +10,6 @@ import ScrollTop from './navigation/ScrollTop';
 
 const StyledLayout = styled('div')(
   ({ theme }) => `
-    container: page / inline-size;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -26,6 +25,7 @@ const StyledLayout = styled('div')(
 
 const StyledMain = styled('main')(
   ({ theme }) => `
+    container: page / inline-size;
     display: flex;
     flex-direction: column;
     justify-content: center;

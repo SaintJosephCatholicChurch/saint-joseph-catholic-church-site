@@ -318,6 +318,39 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Holy Day Times",
+      "sections": [
+        {
+          "name": "Solemnity of the Assumption",
+          "days": [
+            {
+              "day": "Monday, Aug. 14 - Vigil Mass",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Tuesday, Aug. 15",
+              "times": [
+                {
+                  "time": "7:00 AM",
+                  "note": ""
+                },
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

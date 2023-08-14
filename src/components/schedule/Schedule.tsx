@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
@@ -31,7 +32,7 @@ const StyledHeader = styled('div')(
     gap: 8px;
     margin-bottom: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 24px;
     }
   `
@@ -44,7 +45,7 @@ const StyledHeaderPreText = styled('h1')(
     margin-top: 24px;
 
     font-size: 28px;
-    ${theme.breakpoints.up('lg')} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       font-size: 28px;
     }
   `
@@ -62,11 +63,11 @@ const StyledHeaderText = styled('h1')(
     font-size: 24px;
     line-height: 24px;
 
-    ${theme.breakpoints.up('lg')} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       font-size: 30px;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 20px;
       line-height: 20px;
     }
@@ -83,7 +84,7 @@ const StyledTabsWrapper = styled('div')(
     display: grid;
     grid-template-columns: 2fr 5fr;
     width: 100%;
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       visibility: hidden;
       width: 0;
       height: 0;
@@ -157,7 +158,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
                 '.MuiButton-startIcon > *:nth-of-type(1)': {
                   fontSize: '24px'
                 },
-                [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+                [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
                   fontSize: '16px',
                   '.MuiButton-startIcon > *:nth-of-type(1)': {
                     fontSize: '20px'
@@ -184,7 +185,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
               '.MuiButton-startIcon > *:nth-of-type(1)': {
                 fontSize: '22px'
               },
-              [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+              [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
                 fontSize: '14px',
                 '.MuiButton-startIcon > *:nth-of-type(1)': {
                   fontSize: '18px'
@@ -203,7 +204,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
         disablePadding
         sx={{
           width: '100%',
-          [theme.breakpoints.up('md')]: {
+          [getContainerQuery(theme.breakpoints.up('md'))]: {
             display: 'none'
           }
         }}
@@ -247,7 +248,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
                 fontSize: '18px',
                 padding: '16px',
                 minHeight: '100px',
-                [theme.breakpoints.up('lg')]: {
+                [getContainerQuery(theme.breakpoints.up('lg'))]: {
                   fontSize: '24px',
                   padding: '32px',
                   minHeight: '124px'

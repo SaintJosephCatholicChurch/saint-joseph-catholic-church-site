@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 
+import getContainerQuery from '../../../util/container.util';
 import transientOptions from '../../../util/transientOptions';
 import useLocation from '../../../util/useLocation';
 import SearchBox from '../../SearchBox';
@@ -31,12 +32,12 @@ const StyledFooterContainerWrapper = styled(
     justify-content: center;
     padding-bottom: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       padding-top: 16px;
       padding-bottom: 24px;
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${getContainerQuery(theme.breakpoints.up('md'))} {
       padding-top: 40px;
     }
   `
@@ -46,13 +47,13 @@ const StyledFooterContents = styled('div')(
   ({ theme }) => `
     display: grid;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: 1fr;
       p: 3,
       gap: 2
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${getContainerQuery(theme.breakpoints.up('md'))} {
       grid-template-columns: 2fr 1fr;
       gap: 48px;
     }
@@ -63,9 +64,10 @@ interface FooterProps {
   styles?: StylesConfig;
   churchDetails: ChurchDetails;
   privacyPolicyLink: string;
+  hideSearch?: boolean;
 }
 
-const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
+const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }: FooterProps) => {
   const { search } = useLocation();
   const [query, setQuery] = useState('');
 
@@ -73,7 +75,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
     const params = new URLSearchParams(search);
     setQuery(params.get('q'));
   }, [search]);
-  
+
   return (
     <footer>
       <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
@@ -85,7 +87,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink }: FooterProps) => {
             </Box>
             <Box>
               <FooterHeader text="Search Our Site" />
-              <SearchBox value={query} />
+              {!hideSearch ? <SearchBox value={query} /> : <div />}
               <ContactDetails churchDetails={churchDetails} />
             </Box>
           </StyledFooterContents>

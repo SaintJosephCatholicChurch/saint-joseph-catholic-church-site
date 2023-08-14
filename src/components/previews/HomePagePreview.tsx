@@ -4,17 +4,20 @@ import { useMemo } from 'react';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
 
-import type { PreviewTemplateComponentProps } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/core';
 import type { HomePageData, PostContent } from '../../interface';
 
 const StyledHomepagePreview = styled('div')`
+  container: page / inline-size;
+  font-family: Open Sans,Roboto,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+  background-color: #f5f4f3;
+  color: #222;
+  font-weight: 200;
+  font-size: 16px;
   margin-top: -64px;
 `;
 
-const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = useMemo(() => entry.toJS().data as HomePageData, [entry]);
-
+const PagePreview: TemplatePreviewComponent<HomePageData> = ({ entry }) => {
   const mockRecentPosts: PostContent[] = useMemo(
     () => [
       {
@@ -72,10 +75,10 @@ const PagePreview = ({ entry }: PreviewTemplateComponentProps) => {
   return useMemo(
     () => (
       <StyledHomepagePreview>
-        <HomepageView homePageData={data} times={times} recentPosts={mockRecentPosts} />
+        <HomepageView homePageData={entry.data} times={times} recentPosts={mockRecentPosts} hideSearch />
       </StyledHomepagePreview>
     ),
-    [data, mockRecentPosts]
+    [entry.data, mockRecentPosts]
   );
 };
 export default PagePreview;

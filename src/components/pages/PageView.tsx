@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
@@ -33,11 +34,11 @@ const StyledPageContentsWrapper = styled('div')(
     width: 100%;
     margin-top: 98px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       padding-top: 0
     }
 
-    ${theme.breakpoints.up('md')} {
+    ${getContainerQuery(theme.breakpoints.up('md'))} {
       padding-top: 48px
     }
   `
@@ -57,11 +58,11 @@ const StyledPageContents = styled(
     width: 100%;
     grid-template-columns: ${$hideSidebar ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 24px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: 1fr;
     }
   `
@@ -79,7 +80,6 @@ interface PageViewProps {
   dailyReadings?: DailyReadings;
   hideSidebar?: boolean;
   hideSearch?: boolean;
-  disableTitleMargin?: boolean;
   disableBottomMargin?: boolean;
   disablePadding?: boolean;
   fullWidth?: boolean;
@@ -93,7 +93,6 @@ const PageView = ({
   hideHeader = false,
   hideSidebar = false,
   hideSearch,
-  disableTitleMargin = false,
   disableBottomMargin = false,
   disablePadding = false,
   fullWidth = false
@@ -103,7 +102,7 @@ const PageView = ({
       <StyledPageContentsWrapper>
         <StyledPageContents $hideSidebar={hideSidebar}>
           <StyledPageBody>
-            {!hideHeader ? <PageTitle title={title} disableMargin={disableTitleMargin} /> : null}
+            {!hideHeader ? <PageTitle title={title} /> : null}
             {children}
           </StyledPageBody>
           {!hideSidebar ? (
@@ -112,7 +111,7 @@ const PageView = ({
         </StyledPageContents>
       </StyledPageContentsWrapper>
     ),
-    [children, dailyReadings, disableTitleMargin, hideHeader, hideSearch, hideSidebar, recentPosts, title]
+    [children, dailyReadings, hideHeader, hideSearch, hideSidebar, recentPosts, title]
   );
 
   return (

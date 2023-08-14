@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
+import getContainerQuery from '../..//util/container.util';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
 
 const StyledHeaderPrimaryTextWrapper = styled('div')`
@@ -17,24 +18,26 @@ const StyledHeaderPrimaryText = styled('h1')(
     text-transform: uppercase;
     font-size: 36px;
     line-height: 43px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-weight: bold;
 
     &::first-letter {
       font-size: 43px;
     }
 
-    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT)} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
       font-size: 26px;
       line-height: 36px;
-  
+
       &::first-letter {
         font-size: 36px;
       }
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 22px;
       line-height: 28px;
-  
+
       &::first-letter {
         font-size: 28px;
       }

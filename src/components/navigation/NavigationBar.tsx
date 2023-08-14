@@ -6,6 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import Logo from '../logo/Logo';
 import GiveButton from './GiveButton';
 import NavigationItems from './NavigationItems';
@@ -40,9 +41,10 @@ interface NavigationBarProps {
   onlineGivingTitle: string;
   onlineGivingUrl: string;
   onMobileOpenToggle: () => void;
+  inCMS: boolean;
 }
 
-const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobileOpenToggle }: NavigationBarProps) => {
+const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobileOpenToggle, inCMS }: NavigationBarProps) => {
   const theme = useTheme();
   const trigger = useScrollTrigger({ disableHysteresis: true });
 
@@ -64,15 +66,15 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
           width: '100%',
           boxSizing: 'border-box',
           height: 70,
-          [theme.breakpoints.down('lg')]: {
+          [getContainerQuery(theme.breakpoints.down('lg'), inCMS)]: {
             pl: 1,
             pr: 1.5
           },
-          [theme.breakpoints.down('md')]: {
+          [getContainerQuery(theme.breakpoints.down('md'), inCMS)]: {
             pl: 3,
             pr: 0
           },
-          [theme.breakpoints.up('lg')]: {
+          [getContainerQuery(theme.breakpoints.up('lg'), inCMS)]: {
             transition: 'height 250ms ease',
             height: trigger ? 64 : 92,
             maxWidth: MAX_APP_WIDTH
@@ -86,10 +88,10 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
           onClick={onMobileOpenToggle}
           sx={{
             display: 'none',
-            [theme.breakpoints.down('md')]: {
+            [getContainerQuery(theme.breakpoints.down('md'), inCMS)]: {
               display: 'block'
             },
-            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+            [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT), inCMS)]: {
               width: '32px',
               height: '32px',
               padding: '0',
@@ -105,10 +107,10 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
         <StyledMobileSpacer />
         <Logo details={menuDetails.logo} trigger={trigger} />
         <StyledDesktopSpacer />
-        <NavigationItems menuDetails={menuDetails} />
+        <NavigationItems menuDetails={menuDetails} inCMS={inCMS} />
       </Toolbar>
       <StyledDesktopSpacer />
-      <GiveButton title={onlineGivingTitle} onlineGivingUrl={onlineGivingUrl} />
+      <GiveButton title={onlineGivingTitle} onlineGivingUrl={onlineGivingUrl} inCMS={inCMS} />
     </AppBar>
   );
 };

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { memo, useMemo } from 'react';
 
 import { FeaturedPage } from '../../interface';
+import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 
@@ -17,24 +18,22 @@ const StyledFeaturedPageWrapper = styled(
   transientOptions
 )<StyledFeaturedPageWrapperProps>(
   ({ $hideOnMobile, $hideOnNonMobile, theme }) => `
-    ${
-      $hideOnMobile
-        ? `
-      ${theme.breakpoints.down('sm')} {
+    ${$hideOnMobile
+      ? `
+      ${getContainerQuery(theme.breakpoints.down('sm'))} {
         display: none;
       }
     `
-        : ''
+      : ''
     }
 
-    ${
-      $hideOnNonMobile
-        ? `
-      ${theme.breakpoints.up('sm')} {
+    ${$hideOnNonMobile
+      ? `
+      ${getContainerQuery(theme.breakpoints.up('sm'))} {
         display: none;
       }
     `
-        : ''
+      : ''
     }
   `
 );
@@ -59,7 +58,7 @@ const StyledSummary = styled('div')(
     color: #343434;
     font-weight: 500;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       font-size: 18px;
     }
   `
@@ -108,7 +107,7 @@ const FeaturedPage = memo(
               padding: '0 8px 8px',
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
-              [theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm')]: {
+              [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
                 gap: '12px'
               }
             }}

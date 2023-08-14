@@ -10,6 +10,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import useIsomorphicLayoutEffect from '../../util/useIsomorphicLayoutEffect';
 import { useMediaQueryDown, useMediaQueryUp } from '../../util/useMediaQuery';
 import CalendarEventDialog from './CalendarEventDialog';
@@ -22,7 +23,7 @@ import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
 
 const StyledCalendarWrapper = styled('div')(
   ({ theme }) => `
-    ${theme.breakpoints.up('sm')} {
+    ${getContainerQuery(theme.breakpoints.up('sm'))} {
       padding: 0 24px;
     }
 

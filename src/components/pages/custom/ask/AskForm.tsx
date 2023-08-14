@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 
 import { CONTACT_URL } from '../../../../constants';
+import getContainerQuery from '../../../../util/container.util';
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
 
@@ -78,7 +79,7 @@ const StyledFirstRow = styled('div')(({ theme }) => `
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
 
-  ${theme.breakpoints.down('md')} {
+  ${getContainerQuery(theme.breakpoints.down('md'))} {
     grid-template-columns: 1fr;
   }
 `);

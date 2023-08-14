@@ -5,11 +5,13 @@ import { styled, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 
 interface GiveButtonProps {
   title: string;
   onlineGivingUrl: string;
   size?: 'small' | 'normal';
+  inCMS: boolean;
 }
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
@@ -21,7 +23,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
   `
 );
 
-const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps) => {
+const GiveButton = ({ title, onlineGivingUrl, size = 'normal', inCMS }: GiveButtonProps) => {
   const theme = useTheme();
   const trigger = useScrollTrigger({ disableHysteresis: true });
 
@@ -54,9 +56,9 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
         },
         ...(size === 'small'
           ? {
-              padding: '1px 24px 0',
-              width: 130
-            }
+            padding: '1px 24px 0',
+            width: 130
+          }
           : {}),
         [theme.breakpoints.up('lg')]: {
           transition: 'height 250ms ease',
@@ -71,7 +73,7 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal' }: GiveButtonProps
           gridTemplateColumns: '16px auto',
           gap: '6px'
         },
-        [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)]: {
+        [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT), inCMS)]: {
           padding: '1px 16px 0'
         }
       }}

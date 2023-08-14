@@ -6,9 +6,10 @@ import { styled } from '@mui/material/styles';
 
 import Container from '../../../../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
-import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
 import PageTitle from '../../../../components/pages/PageTitle';
+import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
 import homePageData from '../../../../lib/homepage';
+import getContainerQuery from '../../../../util/container.util';
 
 import type { ChurchDetails } from '../../../../interface';
 
@@ -33,12 +34,12 @@ const StyledContactContent = styled('div')(
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     justify-self: center;
     width: 100%;
     gap: 40px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: 1fr;
     }
   `
@@ -74,15 +75,15 @@ const StyledMap = styled('iframe')(
     width: 100%;
     height: 600px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       height: 500px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       height: 400px;
     }
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: 200px;
     }
   `
@@ -90,38 +91,27 @@ const StyledMap = styled('iframe')(
 
 const StyledChurchDetailSection = styled('div')(
   ({ theme }) => `
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
     margin-top: 16px;
     margin-bottom: 16px;
 
-    ${theme.breakpoints.down('md')} {
-      gap: 24px;
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 `
-);
-
-const StyledChurchDetail = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    ${theme.breakpoints.down('md')} {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-  `
 );
 
 const StyledChurchDetailTitle = styled('div')`
   font-weight: 700;
 `;
 
-const StyledChurchDetailContent = styled('div')``;
+const StyledChurchDetailContent = styled('div')`
+  whitespace: no-wrap;
+`;
 
 const StyledAddress = styled('div')`
   display: flex;
@@ -160,45 +150,41 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                   </Box>
                 </StyledAddress>
                 <StyledChurchDetailSection>
-                  <StyledChurchDetail>
-                    <StyledChurchDetailTitle>Church Phone</StyledChurchDetailTitle>
-                    <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
-                      <PhoneEnabledIcon fontSize="small" />
-                      {churchDetails.phone}
-                    </StyledChurchDetailsLink>
-                  </StyledChurchDetail>
+                  <StyledChurchDetailTitle>Church Phone</StyledChurchDetailTitle>
+                  <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
+                    <PhoneEnabledIcon fontSize="small" />
+                    {churchDetails.phone}
+                  </StyledChurchDetailsLink>
                   {churchDetails.additional_phones?.map((phone, index) => (
-                    <StyledChurchDetail key={`additional-phone-${index}`}>
-                      <StyledChurchDetailTitle>{phone.name}:</StyledChurchDetailTitle>
-                      <StyledChurchDetailsLink href={`tel:${phone.phone}`}>
+                    <>
+                      <StyledChurchDetailTitle key={`additional-phone-${index}-title`}>{phone.name}:</StyledChurchDetailTitle>
+                      <StyledChurchDetailsLink key={`additional-phone-${index}-link`} href={`tel:${phone.phone}`}>
                         <PhoneEnabledIcon fontSize="small" />
                         {phone.phone}
                       </StyledChurchDetailsLink>
-                    </StyledChurchDetail>
+                    </>
                   ))}
-                  <StyledChurchDetail>
-                    <StyledChurchDetailTitle>Church Email</StyledChurchDetailTitle>
-                    <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
-                      <EmailIcon fontSize="small" />
-                      {churchDetails.email}
-                    </StyledChurchDetailsLink>
-                  </StyledChurchDetail>
+                  <StyledChurchDetailTitle>Church Email</StyledChurchDetailTitle>
+                  <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
+                    <EmailIcon fontSize="small" />
+                    {churchDetails.email}
+                  </StyledChurchDetailsLink>
                   {churchDetails.additional_emails?.map((email, index) => (
-                    <StyledChurchDetail key={`additional-email-${index}`}>
-                      <StyledChurchDetailTitle>{email.name}</StyledChurchDetailTitle>
-                      <StyledChurchDetailsLink href={`mailto:${email.email}`}>
+                    <>
+                      <StyledChurchDetailTitle key={`additional-email-${index}-title`}>{email.name}</StyledChurchDetailTitle>
+                      <StyledChurchDetailsLink key={`additional-email-${index}-link`} href={`mailto:${email.email}`}>
                         <EmailIcon fontSize="small" />
                         {email.email}
                       </StyledChurchDetailsLink>
-                    </StyledChurchDetail>
+                    </>
                   ))}
                 </StyledChurchDetailSection>
                 <StyledChurchDetailSection>
                   {churchDetails.contacts?.map((contact, index) => (
-                    <StyledChurchDetail key={`contact-${index}`}>
-                      <StyledChurchDetailTitle>{contact.title}</StyledChurchDetailTitle>
-                      <StyledChurchDetailContent>{contact.name}</StyledChurchDetailContent>
-                    </StyledChurchDetail>
+                    <>
+                      <StyledChurchDetailTitle key={`contact-${index}-title`}>{contact.title}</StyledChurchDetailTitle>
+                      <StyledChurchDetailContent key={`contact-${index}-link`}>{contact.name}</StyledChurchDetailContent>
+                    </>
                   ))}
                 </StyledChurchDetailSection>
                 <StyledSocialLinks>

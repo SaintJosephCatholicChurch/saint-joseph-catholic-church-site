@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import TabPanel from '../TabPanel';
@@ -21,7 +22,7 @@ const StyledTabPanelContent = styled(
     ${!$disablePadding ? 'padding: 50px;' : ''}
     box-sizing: border-box;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       padding: 36px;
     }
 
@@ -50,19 +51,18 @@ const StyledTabPanelTitle = styled(
     margin: 0;
     text-transform: uppercase;
 
-    ${
-      $variant === 'normal'
-        ? `
+    ${$variant === 'normal'
+      ? `
           padding-bottom: 16px;
           border-bottom: 2px solid #ddd;
         `
-        : ''
+      : ''
     }
 
     font-size: 24px;
     line-height: 24px;
 
-    ${theme.breakpoints.up('lg')} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       font-size: 30px;
     }
   `
@@ -92,14 +92,13 @@ const StyledSections = styled(
 
     margin-top: 32px;
 
-    ${
-      $variant === 'compact'
-        ? `
+    ${$variant === 'compact'
+      ? `
           &:nth-of-type(2) {
             margin-top: 24px;
           }
         `
-        : ''
+      : ''
     }
   `
 );
@@ -124,7 +123,7 @@ const StyledDayTimeLineTitle = styled('div')(
     font-size: 17px;
     line-height: 21px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 15px;
       line-height: 18px;
     }
@@ -149,7 +148,7 @@ const StyledDayTimeLineTimeTimes = styled('div')(
     text-transform: uppercase;
 
     font-size: 15px;
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 14px;
       line-height: 16px;
     }
@@ -161,7 +160,7 @@ const StyledDivider = styled('div')(
     color: #aaa;
 
     font-size: 15px;
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 13px;
     }
   `

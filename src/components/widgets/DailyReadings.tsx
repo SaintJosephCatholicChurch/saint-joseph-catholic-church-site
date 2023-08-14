@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
@@ -19,7 +20,7 @@ const StyledDailyReadings = styled(
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
+    ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
       gap: 12px;
     }
   `
@@ -61,7 +62,7 @@ const StyledDailyReading = styled(
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm')} {
+    ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
@@ -79,7 +80,7 @@ const StyledDailyReadingTitle = styled('h5')(
     margin-right: -8px;
     white-space: nowrap;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       font-size: 18px;
     }
   `
@@ -94,7 +95,7 @@ const StyledDailyReadingDescription = styled('div')(
     margin-left: 16px;
     white-space: nowrap;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       font-size: 18px;
     }
   `

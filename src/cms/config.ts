@@ -1,39 +1,19 @@
-import type {
-  CmsCollection as NetlifyCmsCollection,
-  CmsCollectionFile as NetlifyCmsCollectionFile,
-  CmsConfig as NetlifyCmsConfig,
-  CmsField as NetlifyCmsField,
-  CmsFieldBase
-} from '@staticcms/core';
+import type { BaseField, Config } from '@staticcms/core';
 
-export interface CmsFieldTimes {
+export interface TimesField extends BaseField {
   widget: 'times';
 }
 
-export interface CmsFieldHtml {
+export interface HtmlField extends BaseField {
   widget: 'html';
+  sanitize_preview?: boolean;
 }
 
-export interface CmsFieldEvents {
+export interface EventsField extends BaseField {
   widget: 'events';
 }
 
-export type CmsField = NetlifyCmsField | (CmsFieldBase & (CmsFieldTimes | CmsFieldHtml | CmsFieldEvents));
-
-export interface CmsCollectionFile extends Omit<NetlifyCmsCollectionFile, 'fields'> {
-  fields: CmsField[];
-}
-
-export interface CmsCollection extends Omit<NetlifyCmsCollection, 'files' | 'fields'> {
-  files?: CmsCollectionFile[];
-  fields?: CmsField[];
-}
-
-export interface CmsConfig extends Omit<NetlifyCmsConfig, 'collections'> {
-  collections: CmsCollection[];
-}
-
-const config: CmsConfig = {
+const config: Config<TimesField | HtmlField | EventsField> = {
   backend: {
     name: 'github',
     repo: 'SaintJosephCatholicChurch/saint-joseph-catholic-church-site',
@@ -46,6 +26,13 @@ const config: CmsConfig = {
     clean_accents: true,
     sanitize_replacement: '-'
   },
+  editor: {
+    preview: true,
+    frame: false
+  },
+  media_library: {
+    folder_support: true
+  },
   collections: [
     {
       name: 'church',
@@ -53,7 +40,8 @@ const config: CmsConfig = {
       icon: 'church',
       delete: false,
       editor: {
-        preview: true
+        preview: true,
+        frame: false
       },
       files: [
         {
@@ -197,6 +185,11 @@ const config: CmsConfig = {
           label: 'Mass & Confession Times',
           file: 'content/times.json',
           description: 'Mass & Confession Times',
+          editor: {
+            size: 'half',
+            preview: true,
+            frame: false
+          },
           fields: [
             {
               name: 'times',
@@ -210,6 +203,8 @@ const config: CmsConfig = {
           label: 'Staff',
           file: 'content/staff.json',
           description: 'Parish staff',
+          media_folder: '/public/staff',
+          public_folder: '/staff',
           fields: [
             {
               name: 'staff',
@@ -246,7 +241,8 @@ const config: CmsConfig = {
       icon: 'house',
       delete: false,
       editor: {
-        preview: true
+        preview: true,
+        frame: false
       },
       files: [
         {
@@ -257,9 +253,10 @@ const config: CmsConfig = {
           fields: [
             {
               name: 'slides',
-              label: 'Slides',
-              label_singular: 'Slide',
+              label: 'Pictures',
+              label_singular: 'Picture',
               widget: 'list',
+              collapsed: true,
               fields: [
                 {
                   name: 'image',
@@ -283,6 +280,7 @@ const config: CmsConfig = {
               name: 'live_stream_button',
               label: 'Live Stream Button',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',
@@ -300,6 +298,7 @@ const config: CmsConfig = {
               name: 'schedule_section',
               label: 'Scehdule Section',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',
@@ -317,6 +316,7 @@ const config: CmsConfig = {
               name: 'daily_readings',
               label: 'Daily Readings',
               widget: 'object',
+              collapsed: true,
               fields: [
                 {
                   name: 'title',
@@ -416,16 +416,19 @@ const config: CmsConfig = {
       format: 'json',
       create: true,
       slug: "{{fields.date | date('YYYYMMDD')}}",
+      identifier_field: 'date',
       summary: "{{date | date('MMM DD, YYYY')}} - {{fields.name}}",
+      summary_fields: ['date', 'name', 'pdf'],
       sortable_fields: {
-        fields: ['date'],
+        fields: ['date', 'name', 'pdf'],
         default: {
           field: 'date',
           direction: 'Descending'
         }
       },
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       fields: [
         {
@@ -438,8 +441,8 @@ const config: CmsConfig = {
           name: 'date',
           label: 'Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'MMM DD, YYYY',
+          format: 'yyyy-MM-dd',
+          date_format: 'MMM dd, yyyy',
           time_format: false
         },
         {
@@ -461,12 +464,17 @@ const config: CmsConfig = {
       create: true,
       identifier_field: 'title',
       summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
+      summary_fields: ['title', 'date', 'tags'],
       sortable_fields: {
         fields: ['title', 'date'],
         default: {
           field: 'date',
           direction: 'Descending'
         }
+      },
+      editor: {
+        preview: true,
+        frame: false
       },
       fields: [
         {
@@ -484,8 +492,8 @@ const config: CmsConfig = {
           name: 'date',
           label: 'Publish Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'YYYY-MM-DD',
+          format: 'yyyy-MM-dd',
+          date_format: 'yyyy-MM-dd',
           time_format: false
         },
         {
@@ -495,16 +503,18 @@ const config: CmsConfig = {
           widget: 'list',
           summary: '{{fields.tag}}',
           required: false,
-          field: {
-            label: 'Tag',
-            name: 'tag',
-            widget: 'relation',
-            collection: 'tags',
-            file: 'tags',
-            search_fields: ['tags.*.tag'],
-            display_fields: ['tags.*.tag'],
-            value_field: 'tags.*.tag'
-          }
+          fields: [
+            {
+              label: 'Tag',
+              name: 'tag',
+              widget: 'relation',
+              collection: 'tags',
+              file: 'tags',
+              search_fields: ['tags.*.tag'],
+              display_fields: ['tags.*.tag'],
+              value_field: 'tags.*.tag'
+            }
+          ]
         },
         {
           name: 'body',
@@ -524,6 +534,10 @@ const config: CmsConfig = {
       slug: '{{slug}}',
       identifier_field: 'slug',
       summary: '{{title}}',
+      editor: {
+        preview: true,
+        frame: false
+      },
       fields: [
         {
           name: 'slug',
@@ -539,8 +553,8 @@ const config: CmsConfig = {
           name: 'date',
           label: 'Publish Date',
           widget: 'datetime',
-          format: 'YYYY-MM-DD',
-          date_format: 'YYYY-MM-DD',
+          format: 'yyyy-MM-dd',
+          date_format: 'yyyy-MM-dd',
           time_format: false
         },
         {
@@ -556,7 +570,8 @@ const config: CmsConfig = {
       icon: 'tag',
       delete: false,
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       files: [
         {
@@ -589,7 +604,8 @@ const config: CmsConfig = {
       icon: 'gear',
       delete: false,
       editor: {
-        preview: false
+        preview: false,
+        frame: false
       },
       files: [
         {
@@ -624,11 +640,13 @@ const config: CmsConfig = {
               label: 'Site keywords',
               widget: 'list',
               summary: '{{fields.keyword}}',
-              field: {
-                name: 'keyword',
-                label: 'Keyword',
-                widget: 'string'
-              }
+              fields: [
+                {
+                  name: 'keyword',
+                  label: 'Keyword',
+                  widget: 'string'
+                }
+              ]
             },
             {
               name: 'posts_per_page',
@@ -648,7 +666,8 @@ const config: CmsConfig = {
           file: 'content/menu.json',
           description: 'Site menu and logo',
           editor: {
-            preview: true
+            preview: true,
+            frame: false
           },
           fields: [
             {

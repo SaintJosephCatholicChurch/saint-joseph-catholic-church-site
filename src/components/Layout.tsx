@@ -3,9 +3,11 @@ import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
 import Head from 'next/head';
 
+import churchDetails from '../lib/church_details';
+import menuDetails from '../lib/menu';
+import getContainerQuery from '../util/container.util';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
-import churchDetails from '../lib/church_details';
 
 const StyledLayout = styled('div')(
   ({ theme }) => `
@@ -16,7 +18,7 @@ const StyledLayout = styled('div')(
     width: 100%;
     overflow-x: hidden;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       flex: 1 0 auto;
     }
   `
@@ -24,12 +26,13 @@ const StyledLayout = styled('div')(
 
 const StyledMain = styled('main')(
   ({ theme }) => `
+    container: page / inline-size;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       flex: 1 0 auto;
     }
   `
@@ -42,7 +45,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <StyledLayout>
+      <StyledLayout id="drawer-container">
         <Head>
           <meta charSet="utf-8" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -58,7 +61,7 @@ const Layout = ({ children }: LayoutProps) => {
           <meta name="description" content={churchDetails.name} />
         </Head>
         <div id="back-to-top-anchor" />
-        <Navigation />
+        <Navigation churchDetails={churchDetails} menuDetails={menuDetails} />
         <StyledMain>{children}</StyledMain>
         <ScrollTop>
           <Fab size="small" aria-label="scroll back to top">

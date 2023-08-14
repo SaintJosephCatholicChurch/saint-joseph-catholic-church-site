@@ -9,6 +9,7 @@ import {
   CAROUSEL_MAX_HEIGHT_MD,
   CAROUSEL_MAX_HEIGHT_SM
 } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import CarouselSlide from './CarouselSlide';
 
@@ -64,7 +65,7 @@ const StyledCarouselView = styled('div')(
         height: 16px;
       }
 
-      ${theme.breakpoints.down('md')} {
+      ${getContainerQuery(theme.breakpoints.down('md'))} {
         display: none;
       }
     }
@@ -73,13 +74,13 @@ const StyledCarouselView = styled('div')(
     max-width: calc(65vh * 2.25);
 
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg')} {
+    ${getContainerQuery(theme.breakpoints.between('md', 'lg'))} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md')} {
+    ${getContainerQuery(theme.breakpoints.between('sm', 'md'))} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `

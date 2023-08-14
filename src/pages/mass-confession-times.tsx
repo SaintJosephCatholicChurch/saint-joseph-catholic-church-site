@@ -6,6 +6,7 @@ import MobileScheduleTabPanel from '../components/schedule/MobileSchedulePanel';
 import ScheduleTabPanel from '../components/schedule/ScheduleTabPanel';
 import { getSidebarStaticProps } from '../lib/sidebar';
 import times from '../lib/times';
+import getContainerQuery from '../util/container.util';
 
 import type { SidebarProps } from '../lib/sidebar';
 
@@ -15,7 +16,7 @@ const StyledTimes = styled('div')(
     flex-direction: column;
     gap: 72px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       display: none;
     }
   `
@@ -34,7 +35,7 @@ const MassConfessionTimes = ({ ...sidebarProps }: MassConfessionTimesProps) => {
         disablePadding
         sx={{
           width: '100%',
-          [theme.breakpoints.up('md')]: {
+          [getContainerQuery(theme.breakpoints.up('md'))]: {
             display: 'none'
           }
         }}

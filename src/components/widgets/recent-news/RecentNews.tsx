@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
 
+import getContainerQuery from '../../../util/container.util';
 import { StyledLink } from '../../common/StyledLink';
 import RecentNewsPost from './RecentNewsPost';
 
@@ -13,7 +14,7 @@ const StyledRecentNews = styled('div')(
     flex-direction: column;
     gap: 8px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 12px;
     }
   `
@@ -41,7 +42,7 @@ const StyledViewCalendarLink = styled(StyledLink)(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
     margin-top: 8px;
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       margin-top: 12px;
       font-size: 16px;
     }

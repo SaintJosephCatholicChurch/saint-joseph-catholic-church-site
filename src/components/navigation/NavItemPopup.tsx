@@ -8,7 +8,6 @@ import NavLink from './NavLink';
 
 import type { KeyboardEvent, MouseEvent, MutableRefObject } from 'react';
 import type { MenuItem, MenuLink } from '../../interface';
-import type { HoverState } from './NavItem';
 
 const BUFFER = 5;
 const SCROLL_BAR_OFFSET = 15;
@@ -26,7 +25,6 @@ const StyledPopUpMenu = styled(
     display: flex;
     flex-direction: column;
     background: #f2f2f2;
-    box-shadow: 2px 2px 2px 0 rgb(0 0 0 / 3%);
     top: 52px;
     left: ${$offsetX}px;
     z-index: 900;
@@ -36,10 +34,8 @@ const StyledPopUpMenu = styled(
 
 interface NavItemPopupProps {
   item: MenuItem;
-  onClick: (link: MenuItem | MenuLink, type: keyof HoverState) => (_event: MouseEvent) => void;
+  onClick: (link: MenuItem | MenuLink) => (_event: MouseEvent) => void;
   onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
-  onMouseOver: (type: keyof HoverState) => () => void;
-  onMouseOut: (type: keyof HoverState) => () => void;
   activeMenuItemRef: MutableRefObject<HTMLButtonElement>;
   keyboardSelectedIndex: number;
 }
@@ -48,8 +44,6 @@ const NavItemPopup = ({
   item,
   onClick,
   onKeyDown,
-  onMouseOut,
-  onMouseOver,
   activeMenuItemRef,
   keyboardSelectedIndex
 }: NavItemPopupProps) => {
@@ -69,13 +63,13 @@ const NavItemPopup = ({
   }, [width, windowWidth, x]);
 
   return (
-    <StyledPopUpMenu $offsetX={offsetX} ref={ref} onMouseOver={onMouseOver('menu')} onMouseOut={onMouseOut('menu')}>
+    <StyledPopUpMenu $offsetX={offsetX} sx={{ boxShadow: 3 }} ref={ref}>
       {item.menu_links.map((link, index) => (
         <NavLink
           ref={index === keyboardSelectedIndex ? activeMenuItemRef : undefined}
           key={`menu-${item.title}-link-${link.title}`}
           link={link}
-          onClick={onClick(link, 'menu')}
+          onClick={onClick(link)}
           onKeyDown={onKeyDown}
         />
       ))}

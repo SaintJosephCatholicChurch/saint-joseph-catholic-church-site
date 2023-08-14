@@ -307,15 +307,6 @@
               ]
             }
           ]
-        },
-        {
-          "name": "Fourth of July Holiday",
-          "days": [
-            {
-              "day": "Parish Office is closed on Monday, July 3rd, and Tuesday, July 4th.",
-              "times": []
-            }
-          ]
         }
       ]
     },

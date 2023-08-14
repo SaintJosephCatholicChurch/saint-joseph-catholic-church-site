@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { ReactNode } from 'react';
@@ -26,20 +27,18 @@ const StyledHeader = styled(
   `
 );
 
-interface StyledTitleProps {
-  $disableMargin: boolean;
-}
-
 const StyledTitle = styled(
-  'h1',
-  transientOptions
-)<StyledTitleProps>(
-  ({ $disableMargin, theme }) => `
+  'h1'
+)(
+  ({ theme }) => `
     padding: 0;
-    margin: ${$disableMargin ? '0' : '16px 0'};
+    margin: 8px 0;
     color: #333;
+    font-size: 2em;
+    font-family: Oswald,Helvetica,Arial,sans-serif;
+    font-weight: bold;
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       font-size: 24px;
     }
   `
@@ -47,14 +46,13 @@ const StyledTitle = styled(
 
 interface PostTitleProps {
   title: ReactNode;
-  disableMargin?: boolean;
   enableMarginTop?: boolean;
 }
 
-const PostTitle = memo(({ title, enableMarginTop = false, disableMargin = false }: PostTitleProps) => {
+const PostTitle = memo(({ title, enableMarginTop = false }: PostTitleProps) => {
   return (
     <StyledHeader $enableMarginTop={enableMarginTop}>
-      <StyledTitle $disableMargin={disableMargin}>{title}</StyledTitle>
+      <StyledTitle>{title}</StyledTitle>
     </StyledHeader>
   );
 });

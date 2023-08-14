@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 import churchDetails from '../../../lib/church_details';
+import getContainerQuery from '../../../util/container.util';
 
 const StyledCopyright = styled('div')(
   ({ theme }) => `
@@ -20,19 +21,19 @@ const StyledCopyright = styled('div')(
     line-height: 18px;
     gap: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       flex-direction: column;
       font-size: 12px;
       padding-top: 8px;
       padding-bottom: 8px;
     }
-    
-    ${theme.breakpoints.up('md')} {
+
+    ${getContainerQuery(theme.breakpoints.up('md'))} {
       font-size: 14px;
       height: 44px;
     }
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       gap: 4px;
     }
   `
@@ -44,7 +45,7 @@ const StyledCopyrightText = styled('div')(
     gap: 8px;
     align-items: center;
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       flex-direction: column;
       gap: 0;
     }

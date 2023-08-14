@@ -2,8 +2,9 @@ import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 
@@ -20,9 +21,10 @@ interface NavigationDrawerProps {
   menuDetails: MenuData;
   mobileOpen: boolean;
   onMobileOpenToggle: () => void;
+  inCMS: boolean;
 }
 
-const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
+const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }: NavigationDrawerProps) => {
   const theme = useTheme();
 
   const iOS = useMemo(() => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent), []);
@@ -42,23 +44,33 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
     [menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
-  const container = useMemo(() => (typeof window !== 'undefined' ? window.document.body : undefined), []);
+  const [container, setContainer] = useState<HTMLElement | null>(null);
 
-  return (
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const drawerContainer = window.document.getElementById('drawer-container');
+
+    setContainer(drawerContainer ? drawerContainer : window.document.body);
+  }, []);
+
+  return container ? (
     <SwipeableDrawer
       disableBackdropTransition={!iOS}
       disableDiscovery={iOS}
-      container={container}
       variant="temporary"
       open={mobileOpen}
       onOpen={onMobileOpenToggle}
       onClose={onMobileOpenToggle}
       ModalProps={{
-        keepMounted: true // Better open performance on mobile.
+        keepMounted: true, // Better open performance on mobile.
+        container
       }}
       sx={{
         display: 'none',
-        [theme.breakpoints.down('md')]: {
+        [getContainerQuery(theme.breakpoints.down('md'), inCMS)]: {
           display: 'block'
         },
         width: '80%',
@@ -76,7 +88,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
     >
       {drawer}
     </SwipeableDrawer>
-  );
+  ) : null;
 };
 
 export default NavigationDrawer;

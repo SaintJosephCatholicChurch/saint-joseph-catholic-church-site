@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../constants';
+import getContainerQuery from '../../../util/container.util';
 
 import type { ChurchDetails } from '../../../interface';
 
@@ -20,11 +21,11 @@ export const StyledChurchDetailsLinkWrapper = styled('div')(
   ({ theme }) => `
     display: flex;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       justify-content: center;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       justify-content: left;
     }
   `
@@ -39,19 +40,19 @@ export const StyledChurchDetailsLink = styled('a')(
     font-size: 16px;
     line-height: 22px;
     font-weight: bold;
-    word-break: break-word;
+    whitespace: no-wrap;
 
     &:hover {
       color: #822129;
       text-decoration: underline;
     }
 
-    ${theme.breakpoints.down('md')} {
-      justify-content: center;
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      justify-content: flex-start;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
-      justify-content: left;
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
+      justify-content: flex-start;
     }
   `
 );
@@ -63,12 +64,12 @@ export const StyledAddress = styled('div')(
     gap: 4px;
     margin-bottom: 8px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       text-align: center;
       margin-bottom: 16px;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT)} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       margin-bottom: 24px;
     }
   `

@@ -1,21 +1,36 @@
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useCallback, useMemo, useState } from 'react';
 
-import churchDetails from '../../lib/church_details';
-import menuDetails from '../../lib/menu';
 import NavigationBar from './NavigationBar';
-import NavigationDrawer from './NavigationDrawer';
+
+import type { ChurchDetails, MenuData } from '@/interface';
+import type { FC } from 'react';
 
 const StyledNavigation = styled('div')`
   display: flex;
 `;
 
-const Navigation = () => {
+interface NavigationProps {
+  churchDetails: ChurchDetails;
+  menuDetails: MenuData;
+  inCMS?: boolean;
+}
+
+const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = false }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
   }, [mobileOpen]);
+
+  const NavigationDrawerNoSSR = useMemo(
+    () =>
+      dynamic(() => import('./NavigationDrawer'), {
+        ssr: false
+      }),
+    []
+  );
 
   return (
     <StyledNavigation>
@@ -24,8 +39,9 @@ const Navigation = () => {
         onlineGivingTitle={menuDetails.online_giving_button_text}
         onlineGivingUrl={churchDetails.online_giving_url}
         onMobileOpenToggle={handleDrawerToggle}
+        inCMS={inCMS}
       />
-      <NavigationDrawer menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} />
+      <NavigationDrawerNoSSR menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} inCMS={inCMS} />
     </StyledNavigation>
   );
 };

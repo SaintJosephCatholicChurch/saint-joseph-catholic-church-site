@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import LogoPrimaryText from './LogoPrimaryText';
 import LogoSecondaryText from './LogoSecondaryText';
@@ -33,7 +34,7 @@ const StyledLogoWrapper = styled(
     transition: all 250ms ease;
 
     transform: ${$size === 'small' || $trigger ? 'scale(0.75)' : 'scale(1)'};
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       transform: ${$responsive ? 'scale(0.75)' : 'scale(1)'};
     }
   `

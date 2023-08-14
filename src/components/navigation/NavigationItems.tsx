@@ -1,19 +1,25 @@
 import { styled } from '@mui/material/styles';
 
+import getContainerQuery from '../../util/container.util';
+import transientOptions from '../../util/transientOptions';
 import NavItem from './NavItem';
 
 import type { MenuData } from '../../interface';
 
-const StyledDesktopNavItems = styled('div')(
-  ({ theme }) => `
+interface StyledDesktopNavItemsProps {
+  $inCMS: boolean;
+}
+
+const StyledDesktopNavItems = styled('div', transientOptions)<StyledDesktopNavItemsProps>(
+  ({ theme, $inCMS }) => `
     display: flex;
     gap: 8px;
 
-    ${theme.breakpoints.down('lg')} {
+    ${getContainerQuery(theme.breakpoints.down('lg'), $inCMS)} {
       gap: 4px;
     }
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'), $inCMS)} {
       display: none;
     }
   `
@@ -22,13 +28,14 @@ const StyledDesktopNavItems = styled('div')(
 interface NavigationItemsProps {
   menuDetails: MenuData;
   size?: 'small' | 'normal';
+  inCMS: boolean;
 }
 
-const NavigationItems = ({ menuDetails, size }: NavigationItemsProps) => {
+const NavigationItems = ({ menuDetails, size, inCMS }: NavigationItemsProps) => {
   return (
-    <StyledDesktopNavItems>
+    <StyledDesktopNavItems $inCMS={inCMS}>
       {menuDetails.menu_items.map((item) => (
-        <NavItem key={`nav-item-${item.title}`} item={item} size={size} />
+        <NavItem key={`nav-item-${item.title}`} item={item} size={size} inCMS={inCMS} />
       ))}
     </StyledDesktopNavItems>
   );

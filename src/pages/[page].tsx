@@ -24,7 +24,6 @@ const Page = ({ title, dateString, slug, description = '', content, ...sidebarPr
       title={title}
       pageDetails={{ date: parseISO(dateString) }}
       description={description}
-      disableTitleMargin
       {...sidebarProps}
     >
       <PageContentView>

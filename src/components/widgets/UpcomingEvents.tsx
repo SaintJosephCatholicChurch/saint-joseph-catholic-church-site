@@ -9,6 +9,7 @@ import { addMonths } from 'date-fns';
 import Link from 'next/link';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import { useMediaQueryUp } from '../../util/useMediaQuery';
 import { StyledLink } from '../common/StyledLink';
 import CalendarEventDialog from '../events/CalendarEventDialog';
@@ -50,7 +51,7 @@ const StyledViewCalendarLink = styled(StyledLink)(
     font-family: 'Oswald', Helvetica, Arial, sans-serif;
 
     margin-top: 8px;
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       margin-top: 16px;
     }
   `

@@ -3,6 +3,8 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import NotesIcon from '@mui/icons-material/Notes';
 import { styled, useTheme } from '@mui/material/styles';
 
+import getContainerQuery from '../../util/container.util';
+
 const StyledContentWrapper = styled('div')`
   padding: 16px 28px 24px 16px;
 `;
@@ -27,7 +29,7 @@ const StyledTitleWrapper = styled('div')(
     flex-direction: column;
     gap: 4px;
 
-    ${theme.breakpoints.down('md')} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       margin-bottom: 8px;
     }
   `
@@ -50,7 +52,7 @@ const StyledDateTime = styled('div')(
     gap: 8px;
     font-size: 14px;
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       flex-direction: column;
     }
   `
@@ -64,7 +66,7 @@ const StyledDateTimeSeparator = styled('div')(
   ({ theme }) => `
     font-weight: 700;
 
-    ${theme.breakpoints.down('sm')} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       display: none;
     }
   `
@@ -109,7 +111,7 @@ const CalendarEventModalContent = ({ title, date, time, location, description }:
             fontSize="small"
             sx={{
               height: '30px',
-              [theme.breakpoints.down('md')]: {
+              [getContainerQuery(theme.breakpoints.down('md'))]: {
                 height: 'initial'
               }
             }}

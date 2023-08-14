@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList } from 'react-window';
 
+import getContainerQuery from '../../../../util/container.util';
 import { isNotNullish } from '../../../../util/null.util';
 import transientOptions from '../../../../util/transientOptions';
 import useWindowSize from '../../../../util/useWindowSize';
@@ -46,7 +47,7 @@ const StyledParishBulletinsViewWrapper = styled(
     width: 100%;
     margin: 0;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       width: ${$width}px;
       margin: 0 auto;
     }
@@ -60,7 +61,7 @@ const StyledParishBulletinsView = styled('div')(
     margin-top: 16px;
 
     grid-template-columns: ${BUTTON_WIDTH}px 1fr;
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       grid-template-columns: 1fr;
     }
   `
@@ -75,7 +76,7 @@ const StyledSelectWrapper = styled('div')(
     margin-bottom: 24px;
     width: 100%;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       display: none;
     }
   `
@@ -96,11 +97,11 @@ const StyledPDFViewerWrapper = styled(
     box-sizing: border-box;
 
     border: 1px solid #e8e5e1;
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       border: none;
     }
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       width: ${$width}px;
       &:hover .pdf-pagination {
         visibility: visible;
@@ -137,7 +138,7 @@ const StyledPDFViewerContent = styled(
     height: auto;
     width: 100%;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       min-height: ${$height}px;
       width: ${$width}px;
       &:hover .pdf-pagination {
@@ -157,7 +158,7 @@ const StyledPaginationContainer = styled('div')(
   ({ theme }) => `
     display: none;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       width: 100%;
       display: flex;
       align-items: center;
@@ -232,7 +233,7 @@ const StyledNavigationButtonWrapper = styled(
   ({ theme, $align }) => `
     display: none;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       position: absolute;
       top: 0;
       ${$align}: 0;
@@ -290,7 +291,7 @@ const StyledSlidableAreaWrapper = styled(
     overflow: auto;
     height: auto;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       overflow: hidden;
       height: ${$height}px;
     }
@@ -311,12 +312,12 @@ const StyledSlidableArea = styled(
     left: 0;
     transition: left 333ms ease-out;
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       position: absolute;
       left: -${$width * $index}px;
     }
 
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       flex-direction: column;
     }
   `
@@ -324,7 +325,7 @@ const StyledSlidableArea = styled(
 
 const StyledImage = styled('img')(
   ({ theme }) => `
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       width: 100%;
       height: auto;
     }
@@ -442,7 +443,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
         <Box
           sx={{
             backgroundColor: '#e8e5e1',
-            [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
+            [getContainerQuery(theme.breakpoints.down('lg'))]: {
               display: 'none'
             }
           }}

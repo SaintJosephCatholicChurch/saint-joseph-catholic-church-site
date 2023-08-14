@@ -15,6 +15,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import { formatAsUtc } from '../../util/date.util';
 import { isEmpty } from '../../util/string.util';
 import PageTitle from '../pages/PageTitle';
@@ -34,7 +35,7 @@ const StyledCalendarHeader = styled('div')(
     margin-bottom: 16px;
     padding: 0;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       justify-content: center;
       margin-bottom: 0;
       padding: 0 24px;
@@ -48,7 +49,7 @@ const StyledCalendarHeaderLeft = styled('div')(
     gap: 4px;
     align-items: center;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       display: none;
     }
   `
@@ -62,7 +63,7 @@ const StyledCalendarMobileSubHeader = styled('div')(
     justify-content: space-between;
     width: 100%;
 
-    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('sm'))} {
       display: none;
     }
   `
@@ -79,7 +80,7 @@ const StyledTitle = styled('h2')(
     margin: 0;
     margin-left: 16px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       margin-left: 0;
       font-size: 18px;
     }
@@ -88,7 +89,7 @@ const StyledTitle = styled('h2')(
 
 const StyledSubHeader = styled('div')(
   ({ theme }) => `
-    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('sm'))} {
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -102,7 +103,7 @@ const StyledViewSelectWrapper = styled('div')(
     align-items: center;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       position: absolute;
       right: 24px;
       top: 0;
@@ -144,7 +145,7 @@ const StyledDatePicker = styled('div')(
       color: #fff;
     }
 
-    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('sm'))} {
       display: none;
     }
   `
@@ -156,7 +157,7 @@ const StyledMobileDateTitleWrapper = styled('div')(
     align-items: center;
     margin-top: 16px;
 
-    ${theme.breakpoints.up('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('sm'))} {
       display: none;
     }
   `
@@ -251,7 +252,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
       '&:hover': {
         backgroundColor: '#cd3744'
       },
-      [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
+      [getContainerQuery(theme.breakpoints.down('sm'))]: {
         p: '4px 4px'
       }
     }),
@@ -297,7 +298,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
           >
             <Select labelId="view-select-label" id="view-select" value={view} onChange={handleViewChange} size="small">
               <MenuItem value="dayGridMonth">Month</MenuItem>
-              <MenuItem value="timeGridWeek" sx={{ [theme.breakpoints.down('sm').replace("@media", "@container page")]: { display: 'none' } }}>
+              <MenuItem value="timeGridWeek" sx={{ [getContainerQuery(theme.breakpoints.down('sm'))]: { display: 'none' } }}>
                 Week
               </MenuItem>
               <MenuItem value="listDay">Day</MenuItem>

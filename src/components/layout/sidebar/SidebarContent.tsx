@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { useLayoutEffect, useState } from 'react';
 
 import { SMALL_BREAKPOINT } from '../../../constants';
+import getContainerQuery from '../../../util/container.util';
 import useWindowSize from '../../../util/useWindowSize';
 import SearchBox from '../../SearchBox';
 import DailyReadings from '../../widgets/DailyReadings';
@@ -16,7 +17,7 @@ const StyledSidebar = styled('div')(
     display: flex;
     flex-direction: column;
     gap: 32px;
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       display: none;
     }
   `

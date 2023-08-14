@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 import { STAFF_CARD_GAP_SIZE, STAFF_DEFAULT_CARD_SIZE, STAFF_GLOBAL_PADDING } from '../../../../constants';
+import getContainerQuery from '../../../../util/container.util';
 
 import type { Staff } from '../../../../interface';
 
@@ -21,7 +22,7 @@ const StaffCard = ({ staffMember }: StaffCardProps) => {
     <Card
       sx={{
         width: STAFF_DEFAULT_CARD_SIZE,
-        [theme.breakpoints.down(customBreakpoint).replace("@media", "@container page")]: {
+        [getContainerQuery(theme.breakpoints.down(customBreakpoint))]: {
           width: '100%'
         }
       }}
@@ -30,7 +31,7 @@ const StaffCard = ({ staffMember }: StaffCardProps) => {
         component="img"
         sx={{
           height: STAFF_DEFAULT_CARD_SIZE,
-          [theme.breakpoints.down(customBreakpoint).replace("@media", "@container page")]: {
+          [getContainerQuery(theme.breakpoints.down(customBreakpoint))]: {
             height: '80vw'
           }
         }}

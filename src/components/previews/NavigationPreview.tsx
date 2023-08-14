@@ -20,7 +20,7 @@ const StyledNavigationWrapper = styled('div')`
 const NavigationPreview: TemplatePreviewComponent<MenuData> = ({ entry }) => {
   return (
     <StyledNavigationWrapper id="drawer-container">
-      <Navigation menuDetails={entry.data} churchDetails={churchDetails} />
+      <Navigation menuDetails={entry.data} churchDetails={churchDetails} inCMS />
     </StyledNavigationWrapper>
   );
 };

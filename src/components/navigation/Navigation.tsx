@@ -14,9 +14,10 @@ const StyledNavigation = styled('div')`
 interface NavigationProps {
   churchDetails: ChurchDetails;
   menuDetails: MenuData;
+  inCMS?: boolean;
 }
 
-const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails }) => {
+const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = false }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -38,8 +39,9 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails }) => {
         onlineGivingTitle={menuDetails.online_giving_button_text}
         onlineGivingUrl={churchDetails.online_giving_url}
         onMobileOpenToggle={handleDrawerToggle}
+        inCMS={inCMS}
       />
-      <NavigationDrawerNoSSR menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} />
+      <NavigationDrawerNoSSR menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} inCMS={inCMS} />
     </StyledNavigation>
   );
 };

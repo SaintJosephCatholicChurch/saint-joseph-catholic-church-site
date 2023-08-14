@@ -7,6 +7,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { useEffect, useMemo, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../../constants';
+import getContainerQuery from '../../../../util/container.util';
 import { isEmpty } from '../../../../util/string.util';
 import useLiveStreamUrl from './useLiveStreamUrl';
 
@@ -81,7 +82,7 @@ const LiveStreamIFrame = ({
           '.MuiButton-startIcon > *:nth-of-type(1)': {
             fontSize: '24px'
           },
-          [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
+          [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
             fontSize: '16px',
             '.MuiButton-startIcon > *:nth-of-type(1)': {
               fontSize: '20px'
@@ -122,7 +123,7 @@ const LiveStreamIFrame = ({
             '.MuiButton-startIcon > *:nth-of-type(1)': {
               fontSize: '24px'
             },
-            [theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")]: {
+            [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
               fontSize: '16px',
               '.MuiButton-startIcon > *:nth-of-type(1)': {
                 fontSize: '20px'
@@ -146,7 +147,7 @@ const LiveStreamIFrame = ({
               color: '#bf303c',
               textAlign: 'center',
               paddingBottom: '12px',
-              [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
+              [getContainerQuery(theme.breakpoints.down('sm'))]: {
                 fontSize: '16px',
                 paddingBottom: '8px'
               }

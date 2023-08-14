@@ -8,7 +8,6 @@ import NavLink from './NavLink';
 
 import type { KeyboardEvent, MouseEvent, MutableRefObject } from 'react';
 import type { MenuItem, MenuLink } from '../../interface';
-import type { HoverState } from './NavItem';
 
 const BUFFER = 5;
 const SCROLL_BAR_OFFSET = 15;
@@ -35,7 +34,7 @@ const StyledPopUpMenu = styled(
 
 interface NavItemPopupProps {
   item: MenuItem;
-  onClick: (link: MenuItem | MenuLink, type: keyof HoverState) => (_event: MouseEvent) => void;
+  onClick: (link: MenuItem | MenuLink) => (_event: MouseEvent) => void;
   onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
   activeMenuItemRef: MutableRefObject<HTMLButtonElement>;
   keyboardSelectedIndex: number;
@@ -70,7 +69,7 @@ const NavItemPopup = ({
           ref={index === keyboardSelectedIndex ? activeMenuItemRef : undefined}
           key={`menu-${item.title}-link-${link.title}`}
           link={link}
-          onClick={onClick(link, 'menu')}
+          onClick={onClick(link)}
           onKeyDown={onKeyDown}
         />
       ))}

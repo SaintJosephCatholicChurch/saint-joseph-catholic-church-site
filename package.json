@@ -33,7 +33,7 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.11.12",
     "@mui/x-date-pickers": "5.0.0-beta.7",
-    "@staticcms/core": "3.0.0",
+    "@staticcms/core": "3.0.1",
     "@svgr/webpack": "6.3.1",
     "@tinymce/tinymce-react": "4.2.0",
     "@types/react-window": "1.8.5",

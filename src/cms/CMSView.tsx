@@ -44,7 +44,7 @@ const CMSView = () => {
     CMS.registerWidget('times', ScheduleWidget);
     CMS.registerWidget('html', EditorControl, EditorPreview);
 
-    CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
+    CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@400;500;600&family=Oswald:wght@200;300;400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Ubuntu+Mono:wght@400;700&family=Ubuntu:wght@300;400;500&display=swap');
     CMS.registerPreviewStyle('/styles/content.module.css');
     CMS.registerPreviewTemplate('news', PostPreview);
     CMS.registerPreviewTemplate('pages', PagePreview);

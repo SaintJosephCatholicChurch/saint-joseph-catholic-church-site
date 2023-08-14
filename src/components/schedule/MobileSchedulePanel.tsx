@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 
@@ -44,26 +45,24 @@ const StyledSections = styled('div')(
     box-sizing: border-box;
     padding: 16px 24px;
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       padding: 12px 16px;
     }
   `
 );
 
-const StyledDayTimeLine = styled('div')(
-  ({ theme }) => `
-    display: flex;
-    align-items: flex-start;
-    min-height: 20px;
-    margin-top: 2px;
-    gap: 0;
-    border-bottom: 1px solid #ccc;
-    padding: 0;
-    padding-top: 5px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  `
-);
+const StyledDayTimeLine = styled('div')`
+  display: flex;
+  align-items: flex-start;
+  min-height: 20px;
+  margin-top: 2px;
+  gap: 0;
+  border-bottom: 1px solid #ccc;
+  padding: 0;
+  padding-top: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+`;
 
 const StyledDayTimeLineTitle = styled('div')(
   ({ theme }) => `
@@ -76,11 +75,11 @@ const StyledDayTimeLineTitle = styled('div')(
     white-space: pre-line;
     flex-grow: 1;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       margin-bottom: 5px;
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 12px;
       line-height: 14px;
     }
@@ -93,7 +92,7 @@ const StyledDayTimeLineTimes = styled('div')(
     flex-direction: column;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       gap: 6px;
       margin-bottom: 5px;
       flex-wrap: nowrap;
@@ -109,7 +108,7 @@ const StyledDayTimeLineTimeWrapper = styled('div')(
     justify-content: flex-end;
     gap: 4px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       flex-direction: column;
       align-items: flex-end;
     }
@@ -129,7 +128,7 @@ const StyledDayTimeLineTimeTimes = styled('div')(
     font-size: 14px;
     line-height: 16px;
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 12px;
       line-height: 14px;
     }
@@ -152,7 +151,7 @@ const StyledDayTimeLineTimeComment = styled('div')(
     white-space: pre-line;
     text-align: right;
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 12px;
       line-height: 14px;
     }

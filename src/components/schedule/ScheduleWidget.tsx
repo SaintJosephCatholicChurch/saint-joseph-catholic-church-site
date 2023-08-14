@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
@@ -24,7 +25,7 @@ const StyledSchedule = styled(
     justify-content: center;
 
     padding-top: 40px;
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       padding-top: 24px;
     }
   `

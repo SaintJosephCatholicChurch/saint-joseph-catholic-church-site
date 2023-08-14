@@ -7,10 +7,11 @@ import {
   CAROUSEL_MAX_HEIGHT_MD,
   CAROUSEL_MAX_HEIGHT_SM
 } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
-import type { Slide } from '../../interface';
 
+import type { Slide } from '../../interface';
 const StyledCarouselSlide = styled('div')(
   ({ theme }) => `
     position: relative;
@@ -18,13 +19,13 @@ const StyledCarouselSlide = styled('div')(
     width: 100%;
 
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.between('md', 'lg'))} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.between('sm', 'md'))} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -49,13 +50,13 @@ const StyledImage = styled(
     width: 100%;
 
     height: 65vh;
-    ${theme.breakpoints.between('md', 'lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.between('md', 'lg'))} {
       height: ${CAROUSEL_MAX_HEIGHT_LG}px;
     }
-    ${theme.breakpoints.between('sm', 'md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.between('sm', 'md'))} {
       height: ${CAROUSEL_MAX_HEIGHT_MD}px;
     }
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: ${CAROUSEL_MAX_HEIGHT_SM}px;
     }
   `
@@ -94,20 +95,19 @@ const StyledTitle = styled(
     text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
 
     scale: 1;
-    ${
-      $active
-        ? `
+    ${$active
+      ? `
           transition: scale ${CAROUSEL_DURATION / 1000}s linear;
           scale: 1.1;
         `
-        : ''
+      : ''
     }
 
     font-size: 64px;
-    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
       font-size: 64px;
     }
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 32px;
     }
   `

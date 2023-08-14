@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import churchDetails from '../lib/church_details';
 import menuDetails from '../lib/menu';
+import getContainerQuery from '../util/container.util';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 
@@ -17,7 +18,7 @@ const StyledLayout = styled('div')(
     width: 100%;
     overflow-x: hidden;
 
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       flex: 1 0 auto;
     }
   `
@@ -31,7 +32,7 @@ const StyledMain = styled('main')(
     justify-content: center;
     min-height: 100vh;
 
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       flex: 1 0 auto;
     }
   `

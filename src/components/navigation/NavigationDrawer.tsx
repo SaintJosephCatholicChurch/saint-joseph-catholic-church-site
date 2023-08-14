@@ -4,6 +4,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useLayoutEffect, useMemo, useState } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 
@@ -20,9 +21,10 @@ interface NavigationDrawerProps {
   menuDetails: MenuData;
   mobileOpen: boolean;
   onMobileOpenToggle: () => void;
+  inCMS: boolean;
 }
 
-const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: NavigationDrawerProps) => {
+const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }: NavigationDrawerProps) => {
   const theme = useTheme();
 
   const iOS = useMemo(() => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent), []);
@@ -68,7 +70,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle }: Navig
       }}
       sx={{
         display: 'none',
-        [theme.breakpoints.down('md').replace("@media", "@container page")]: {
+        [getContainerQuery(theme.breakpoints.down('md'), inCMS)]: {
           display: 'block'
         },
         width: '80%',

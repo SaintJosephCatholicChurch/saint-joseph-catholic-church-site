@@ -27,6 +27,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
     sanitize_replacement: '-'
   },
   editor: {
+    preview: true,
     frame: false
   },
   media_library: {
@@ -185,7 +186,9 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           file: 'content/times.json',
           description: 'Mass & Confession Times',
           editor: {
-            size: 'half'
+            size: 'half',
+            preview: true,
+            frame: false
           },
           fields: [
             {
@@ -470,6 +473,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
         }
       },
       editor: {
+        preview: true,
         frame: false
       },
       fields: [
@@ -531,6 +535,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       identifier_field: 'slug',
       summary: '{{title}}',
       editor: {
+        preview: true,
         frame: false
       },
       fields: [

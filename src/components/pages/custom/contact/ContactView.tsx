@@ -6,9 +6,10 @@ import { styled } from '@mui/material/styles';
 
 import Container from '../../../../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
-import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
 import PageTitle from '../../../../components/pages/PageTitle';
+import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
 import homePageData from '../../../../lib/homepage';
+import getContainerQuery from '../../../../util/container.util';
 
 import type { ChurchDetails } from '../../../../interface';
 
@@ -38,7 +39,7 @@ const StyledContactContent = styled('div')(
     width: 100%;
     gap: 40px;
 
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: 1fr;
     }
   `
@@ -74,15 +75,15 @@ const StyledMap = styled('iframe')(
     width: 100%;
     height: 600px;
 
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       height: 500px;
     }
 
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       height: 400px;
     }
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: 200px;
     }
   `
@@ -96,7 +97,7 @@ const StyledChurchDetailSection = styled('div')(
     margin-top: 16px;
     margin-bottom: 16px;
 
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;

@@ -3,6 +3,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
 
+import getContainerQuery from '../../../util/container.util';
 import { isNotEmpty } from '../../../util/string.util';
 import transientOptions from '../../../util/transientOptions';
 
@@ -26,12 +27,12 @@ const StyledPostImage = styled(
     height: ${$size === 'large' ? '90' : '72'}px;
     flex-shrink: 0;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       height: 72px;
       width: 110px;
     }
 
-    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
       height: 72px;
     }
 
@@ -45,6 +46,7 @@ const StyledPostDetails = styled('div')`
   gap: 4px;
   width: 100%;
   overflow: hidden;
+  color: #4f4f4f;
 `;
 
 interface StyledPostTitleProps {
@@ -59,11 +61,11 @@ const StyledPostTitle = styled(
     margin: 0;
     font-size: ${$size === 'large' ? '18' : '16'}px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       font-size: 16px;
     }
 
-    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
       font-size: 16px;
     }
 
@@ -89,18 +91,21 @@ const StyledPostSummary = styled(
     font-size: ${$size === 'large' ? '16' : '15'}px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;,
+    -webkit-box-orient: vertical;
+    line-height: 18.4px;
 
     & > p {
       margin: 0;
     }
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       font-size: 15px;
+      line-height: 17.25px;
     }
 
-    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
       font-size: 15px;
+      line-height: 17.25px;
     }
   `
 );
@@ -130,10 +135,10 @@ const RecentNewsPost = memo(
         <Button
           sx={{
             display: 'flex',
-            [theme.breakpoints.down('sm').replace("@media", "@container page")]: {
+            [getContainerQuery(theme.breakpoints.down('sm'))]: {
               gridTemplateColumns: '110px auto'
             },
-            [theme.breakpoints.only('md').replace("@media", "@container page")]: {
+            [getContainerQuery(theme.breakpoints.only('md'))]: {
               gridTemplateColumns: '110px auto'
             },
             gap: '8px',

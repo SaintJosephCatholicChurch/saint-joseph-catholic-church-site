@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MENU_DELAY } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import { isEmpty } from '../../util/string.util';
 import useClickOutside from '../../util/useClickOutside';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
@@ -48,9 +49,10 @@ function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
 interface NavItemProps {
   item: MenuItem;
   size?: 'small' | 'normal';
+  inCMS: boolean;
 }
 
-const NavItem = ({ item, size }: NavItemProps) => {
+const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
   const wrapperRef = useRef<HTMLDivElement>();
@@ -271,10 +273,10 @@ const NavItem = ({ item, size }: NavItemProps) => {
               padding: '12px 12px 14px'
             }
             : {}),
-          [theme.breakpoints.down('lg').replace("@media", "@container page")]: {
+          [getContainerQuery(theme.breakpoints.down('lg'), inCMS)]: {
             padding: '12px 12px 14px'
           },
-          [theme.breakpoints.between('md', 1000).replace("@media", "@container page")]: {
+          [getContainerQuery(theme.breakpoints.between('md', 1000), inCMS)]: {
             fontSize: '16px',
             padding: '12px 6px 14px'
           }
@@ -309,16 +311,7 @@ const NavItem = ({ item, size }: NavItemProps) => {
         {button}
       </Link>
     );
-  }, [
-    debouncedIsOpen,
-    handleOnClick,
-    handleOnKeyDown,
-    item,
-    selected,
-    size,
-    theme.breakpoints,
-    url
-  ]);
+  }, [debouncedIsOpen, handleOnClick, handleOnKeyDown, inCMS, item, selected, size, theme.breakpoints, url]);
 
   if (item.title === 'Parish') {
     console.log('open', open);

@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
+import getContainerQuery from '../..//util/container.util';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
 
 const StyledHeaderPrimaryTextWrapper = styled('div')`
@@ -24,7 +25,7 @@ const StyledHeaderPrimaryText = styled('h1')(
       font-size: 43px;
     }
 
-    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
       font-size: 26px;
       line-height: 36px;
 
@@ -33,7 +34,7 @@ const StyledHeaderPrimaryText = styled('h1')(
       }
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 22px;
       line-height: 28px;
 

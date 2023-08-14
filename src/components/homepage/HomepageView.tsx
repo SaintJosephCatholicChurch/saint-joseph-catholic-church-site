@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo } from 'react';
 
 import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
@@ -32,7 +33,7 @@ const StyledSectionWrapper = styled('div')`
 
 const StyledReadingsAndPageSectionWrapper = styled(StyledSectionWrapper)(
   ({ theme }) => `
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       padding: 16px 0;
     }
   `
@@ -42,11 +43,11 @@ const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   ({ theme }) => `
     padding-bottom: 32px;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       padding-bottom: 40px;
     }
 
-    ${theme.breakpoints.up('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       padding-bottom: 48px;
     }
   `
@@ -59,11 +60,11 @@ const StyledWidgetSectionContent = styled('div')(
     gap: 64px;
     width: 100%;
 
-    ${theme.breakpoints.down('lg').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 48px;
     }
 
-    ${theme.breakpoints.down('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: minmax(0, 1fr);
     }
   `

@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 
 const StyledHeaderSecondaryTextWrapper = styled('div')`
   display: flex;
@@ -23,7 +24,7 @@ const StyledHeaderSecondaryText = styled('h2')(
       font-size: 22px;
     }
 
-    ${theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
       font-size: 16px;
       line-height: 19px;
 
@@ -32,7 +33,7 @@ const StyledHeaderSecondaryText = styled('h2')(
       }
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 14px;
       line-height: 16px;
 

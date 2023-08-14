@@ -577,7 +577,10 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
           aria-labelledby="deleting-section-title"
           aria-describedby="deleting-section-description"
         >
-          <DialogTitle id="deleting-section-title">
+          <DialogTitle
+            id="deleting-section-title"
+            className="text-gray-800 dark:text-white"
+          >
             {'note' in deletingSection.section ? (
               <span key="delete-note">Delete note &quot;{deletingSection.section.note}&quot;?</span>
             ) : (
@@ -585,7 +588,10 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
             )}
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="deleting-times category-description">
+            <DialogContentText
+              id="deleting-times category-description"
+              className="text-gray-800 dark:text-white"
+            >
               {'note' in deletingSection.section ? (
                 <span key="delete-note-body">
                   Are you sure you want to delete this note &quot;{deletingSection.section.note}&quot;?

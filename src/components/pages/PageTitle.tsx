@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { ReactNode } from 'react';
@@ -37,7 +38,7 @@ const StyledTitle = styled(
     font-family: Oswald,Helvetica,Arial,sans-serif;
     font-weight: bold;
 
-    ${theme.breakpoints.down('sm').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down('sm'))} {
       font-size: 24px;
     }
   `

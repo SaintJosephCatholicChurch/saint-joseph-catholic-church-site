@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
+import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { ReactNode } from 'react';
@@ -21,11 +22,11 @@ const StyledContainer = styled(
     box-sizing: border-box;
     ${!$disablePadding ? 'padding: 0 24px;' : ''}
 
-    ${theme.breakpoints.only('md').replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
       ${!$disablePadding ? 'padding: 0 32px;' : ''}
     }
 
-    ${theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT).replace("@media", "@container page")} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       ${!$disablePadding ? 'padding: 0 12px;' : ''}
     }
   `

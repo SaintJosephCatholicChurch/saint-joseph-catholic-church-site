@@ -1,5 +1,6 @@
 import Popover from '@mui/material/Popover';
 
+import useModalContainer from '../../util/useModalContainer';
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';
@@ -20,6 +21,8 @@ const CalendarEventPopover = ({ eventInfo, open, onClose }: CalendarEventPopover
     Boolean(eventInfo?.event.allDay)
   );
 
+  const container = useModalContainer();
+
   return (
     <Popover
       open={open}
@@ -33,6 +36,7 @@ const CalendarEventPopover = ({ eventInfo, open, onClose }: CalendarEventPopover
         horizontal: 'left'
       }}
       onClose={onClose}
+      container={container}
       disableRestoreFocus
     >
       <CalendarEventModalContent

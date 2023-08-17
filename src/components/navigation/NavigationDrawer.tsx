@@ -2,9 +2,10 @@ import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import getContainerQuery from '../../util/container.util';
+import useModalContainer from '../../util/useModalContainer';
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 
@@ -44,17 +45,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }
     [inCMS, menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
-  const [container, setContainer] = useState<HTMLElement | null>(null);
-
-  useLayoutEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const drawerContainer = window.document.getElementById('drawer-container');
-
-    setContainer(drawerContainer ? drawerContainer : window.document.body);
-  }, []);
+  const container = useModalContainer();
 
   return container ? (
     <SwipeableDrawer

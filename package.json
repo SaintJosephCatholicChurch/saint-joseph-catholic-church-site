@@ -1,6 +1,6 @@
 {
   "name": "saint-joseph-catholic-church-site",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "build-analyze": "cross-env ANALYZE=true next build",
@@ -45,9 +45,8 @@
     "immutable": "3.7.6",
     "is-hotkey": "0.2.0",
     "js-yaml": "4.1.0",
-    "next": "13.4.2",
+    "next": "13.4.17",
     "next-pwa": "5.6.0",
-    "next-transpile-modules": "10.0.0",
     "normalize.css": "8.0.1",
     "pdf.js-extract": "0.2.0",
     "raw-loader": "4.0.2",
@@ -64,7 +63,7 @@
   },
   "devDependencies": {
     "@emotion/eslint-plugin": "11.10.0",
-    "@next/eslint-plugin-next": "12.3.1",
+    "@next/eslint-plugin-next": "13.4.17",
     "@npmcli/git": "3.0.2",
     "@types/jest": "28.1.7",
     "@types/js-yaml": "4.0.5",

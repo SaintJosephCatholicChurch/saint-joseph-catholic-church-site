@@ -1,11 +1,5 @@
 /** @type {import('next').NextConfig} */
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/daygrid',
-  '@fullcalendar/react',
-  '@fullcalendar/timegrid',
-  '@fullcalendar/list'
-]);
+const env = process.env.NODE_ENV || 'development';
 
 const withPWA = require('next-pwa')({
   publicExcludes: ['!bulletins/**/*'],
@@ -14,28 +8,39 @@ const withPWA = require('next-pwa')({
 
 const removeImports = require('next-remove-imports')();
 
-let config = removeImports(
-  withTM({
-    pageExtensions: ['tsx'],
-    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-      config.module.rules.push(
-        ...[
-          {
-            test: /\.yml$/,
-            use: 'yaml-loader'
-          },
-          {
-            test: /\.svg$/,
-            use: '@svgr/webpack'
-          }
-        ]
-      );
-      return config;
-    }
-  })
-);
+let config = removeImports({
+  pageExtensions: ['tsx'],
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.module.rules.push(
+      ...[
+        {
+          test: /\.yml$/,
+          use: 'yaml-loader'
+        },
+        {
+          test: /\.svg$/,
+          use: '@svgr/webpack'
+        }
+      ]
+    );
+    return config;
+  },
+  transpilePackages: [
+    '@fullcalendar/common',
+    '@fullcalendar/daygrid',
+    '@fullcalendar/react',
+    '@fullcalendar/timegrid',
+    '@fullcalendar/list'
+  ],
+  eslint: {
+    ignoreDuringBuilds: env === 'production'
+  },
+  typescript: {
+    ignoreBuildErrors: env === 'production'
+  }
+});
 
-if (process.env.NODE_ENV === 'production') {
+if (env === 'production') {
   config = withPWA(config);
 }
 

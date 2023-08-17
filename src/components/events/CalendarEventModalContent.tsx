@@ -29,7 +29,7 @@ const StyledTitleWrapper = styled('div')(
     flex-direction: column;
     gap: 4px;
 
-    ${getContainerQuery(theme.breakpoints.down('md'))} {
+    ${theme.breakpoints.down('md')} {
       margin-bottom: 8px;
     }
   `
@@ -52,7 +52,7 @@ const StyledDateTime = styled('div')(
     gap: 8px;
     font-size: 14px;
 
-    ${getContainerQuery(theme.breakpoints.down('sm'))} {
+    ${theme.breakpoints.down('sm')} {
       flex-direction: column;
     }
   `
@@ -66,7 +66,7 @@ const StyledDateTimeSeparator = styled('div')(
   ({ theme }) => `
     font-weight: 700;
 
-    ${getContainerQuery(theme.breakpoints.down('sm'))} {
+    ${theme.breakpoints.down('sm')} {
       display: none;
     }
   `

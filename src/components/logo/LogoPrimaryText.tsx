@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT, LARGE_BREAKPOINT, SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
@@ -30,21 +30,21 @@ const StyledHeaderPrimaryText = styled('h1', transientOptions)<StyledHeaderPrima
       font-size: 43px;
     }
 
-    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT), $inCMS)} {
-      font-size: 26px;
-      line-height: 36px;
+    ${getContainerQuery(theme.breakpoints.down(LARGE_BREAKPOINT), $inCMS)} {
+      font-size: 24px;
+      line-height: 32px;
 
       &::first-letter {
-        font-size: 36px;
+        font-size: 30px;
       }
     }
 
     ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT), $inCMS)} {
-      font-size: 22px;
-      line-height: 28px;
+      font-size: 20px;
+      line-height: 26px;
 
       &::first-letter {
-        font-size: 28px;
+        font-size: 26px;
       }
     }
   `

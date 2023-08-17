@@ -70,26 +70,17 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
     setKeyboardSelectedIndex(-1);
   }, []);
 
-  const handleOnMouseOver = useCallback(
-    () => {
-      handleOpen();
-    },
-    [handleOpen]
-  );
+  const handleOnMouseOver = useCallback(() => {
+    handleOpen();
+  }, [handleOpen]);
 
-  const handleOnMouseOut = useCallback(
-    () => {
-      handleClose();
-    },
-    [handleClose]
-  );
+  const handleOnMouseOut = useCallback(() => {
+    handleClose();
+  }, [handleClose]);
 
   useClickOutside(wrapperRef, handleClose);
 
-  const isOpen = useMemo(
-    () => open,
-    [open]
-  );
+  const isOpen = useMemo(() => open, [open]);
   const debouncedIsOpen = useDebouncedToggleOff(isOpen, MENU_DELAY);
 
   const handleOnKeyDown = useCallback(
@@ -254,12 +245,12 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
           color: selected ? '#ffffff' : '#fde7a5',
           ...(debouncedIsOpen
             ? {
-              color: '#ffffff',
-              backgroundColor: '#d34f5a',
-              '.menu-item-underline': {
-                width: '90%'
+                color: '#ffffff',
+                backgroundColor: '#d34f5a',
+                '.menu-item-underline': {
+                  width: '90%'
+                }
               }
-            }
             : {}),
           '&:hover': {
             color: '#ffffff',
@@ -270,8 +261,8 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
           },
           ...(size
             ? {
-              padding: '12px 12px 14px'
-            }
+                padding: '12px 12px 14px'
+              }
             : {}),
           [getContainerQuery(theme.breakpoints.down('lg'), inCMS)]: {
             padding: '12px 12px 14px'
@@ -282,9 +273,7 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
           }
         }}
       >
-        <StyledButtonTitle>
-          {item.title}
-        </StyledButtonTitle>
+        <StyledButtonTitle>{item.title}</StyledButtonTitle>
         {item.menu_links?.length ? (
           <ExpandMoreIcon
             fontSize="small"

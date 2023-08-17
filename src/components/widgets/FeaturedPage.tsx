@@ -18,22 +18,24 @@ const StyledFeaturedPageWrapper = styled(
   transientOptions
 )<StyledFeaturedPageWrapperProps>(
   ({ $hideOnMobile, $hideOnNonMobile, theme }) => `
-    ${$hideOnMobile
-      ? `
+    ${
+      $hideOnMobile
+        ? `
       ${getContainerQuery(theme.breakpoints.down('sm'))} {
         display: none;
       }
     `
-      : ''
+        : ''
     }
 
-    ${$hideOnNonMobile
-      ? `
+    ${
+      $hideOnNonMobile
+        ? `
       ${getContainerQuery(theme.breakpoints.up('sm'))} {
         display: none;
       }
     `
-      : ''
+        : ''
     }
   `
 );

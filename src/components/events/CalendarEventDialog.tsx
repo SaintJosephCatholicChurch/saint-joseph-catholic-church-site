@@ -49,13 +49,17 @@ const CalendarEventDialog = ({ eventInfo, open, onClose }: CalendarEventDialogPr
         }
       }}
     >
-      <AppBar sx={{
-        backgroundColor: '#bc2f3b',
-        position: 'relative'
-      }}>
-        <Toolbar sx={{
-          paddingRight: '0px!important'
-        }}>
+      <AppBar
+        sx={{
+          backgroundColor: '#bc2f3b',
+          position: 'relative'
+        }}
+      >
+        <Toolbar
+          sx={{
+            paddingRight: '0px!important'
+          }}
+        >
           <Typography sx={{ flex: 1, p: '4px 0' }} variant="h6" component="div">
             {title}
           </Typography>
@@ -70,7 +74,7 @@ const CalendarEventDialog = ({ eventInfo, open, onClose }: CalendarEventDialogPr
         location={eventInfo?.event.extendedProps.location as string | undefined}
         description={eventInfo?.event.extendedProps.description as string | undefined}
       />
-    </Dialog >
+    </Dialog>
   );
 };
 

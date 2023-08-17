@@ -84,7 +84,7 @@ function useStorageToEditor(input: string, collection: Collection<HtmlField>, fi
 }
 
 const EditorPreview = ({ value, field, collection, entry }: WidgetPreviewProps<string, HtmlField>) => {
-  const sanitizedHtml = field?.sanitize_preview ?? false ? DOMPurify.sanitize(value) as string : value;
+  const sanitizedHtml = field?.sanitize_preview ?? false ? (DOMPurify.sanitize(value) as string) : value;
   const html = useStorageToEditor(sanitizedHtml, collection, field, entry);
 
   return useMemo(

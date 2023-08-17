@@ -227,9 +227,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                   <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                   {day.times?.length > 0 ? (
                     <StyledDayTimeLineTimes sx={{ marginLeft: '8px', marginBottom: '5px' }}>
-                      <StyledDayTimeLineTimeWrapper
-                        key={`mobile-section-${sectionIndex}-day-${day.day}-times-0-first`}
-                      >
+                      <StyledDayTimeLineTimeWrapper key={`mobile-section-${sectionIndex}-day-${day.day}-times-0-first`}>
                         {isNotEmpty(day.times[0].time) || isNotEmpty(day.times[0].end_time) ? (
                           <StyledDayTimeLineTime>
                             <StyledDayTimeLineTimeTimes>
@@ -262,50 +260,52 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                     </StyledDayTimeLineTimes>
                   ) : null}
                   <StyledDayTimeLineTimes sx={{ width: '100%' }}>
-                    {day.times?.map((time, timeIndex) => timeIndex === 0 ? (
-                      (isNotEmpty(time.time) || isNotEmpty(time.end_time)) && isNotEmpty(time.note) ? (
-                        <StyledDayTimeLineTimeComment
-                          key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
-                          dangerouslySetInnerHTML={{
-                            __html: time.note?.replaceAll('-', '&#x2011;')
-                          }}
-                        ></StyledDayTimeLineTimeComment>
-                      ) : null
-                    ) : (
-                      <StyledDayTimeLineTimeWrapper
-                        key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
-                      >
-                        {isNotEmpty(time.time) || isNotEmpty(time.end_time) ? (
-                          <StyledDayTimeLineTime>
-                            <StyledDayTimeLineTimeTimes>
-                              {isNotEmpty(time.time) ? time.time : null}
-                            </StyledDayTimeLineTimeTimes>
-                            {isNotEmpty(time.end_time) ? (
-                              <>
-                                <StyledDivider
-                                  key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-${timeIndex}`}
-                                >
-                                  -
-                                </StyledDivider>
-                                <StyledDayTimeLineTimeTimes
-                                  key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-${timeIndex}`}
-                                >
-                                  {time.end_time}
-                                </StyledDayTimeLineTimeTimes>
-                              </>
-                            ) : null}
-                          </StyledDayTimeLineTime>
-                        ) : null}
-                        {isNotEmpty(time.note) ? (
+                    {day.times?.map((time, timeIndex) =>
+                      timeIndex === 0 ? (
+                        (isNotEmpty(time.time) || isNotEmpty(time.end_time)) && isNotEmpty(time.note) ? (
                           <StyledDayTimeLineTimeComment
-                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
+                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
                             dangerouslySetInnerHTML={{
                               __html: time.note?.replaceAll('-', '&#x2011;')
                             }}
                           ></StyledDayTimeLineTimeComment>
-                        ) : null}
-                      </StyledDayTimeLineTimeWrapper>
-                    ))}
+                        ) : null
+                      ) : (
+                        <StyledDayTimeLineTimeWrapper
+                          key={`mobile-section-${sectionIndex}-day-${day.day}-times-${timeIndex}`}
+                        >
+                          {isNotEmpty(time.time) || isNotEmpty(time.end_time) ? (
+                            <StyledDayTimeLineTime>
+                              <StyledDayTimeLineTimeTimes>
+                                {isNotEmpty(time.time) ? time.time : null}
+                              </StyledDayTimeLineTimeTimes>
+                              {isNotEmpty(time.end_time) ? (
+                                <>
+                                  <StyledDivider
+                                    key={`mobile-section-${sectionIndex}-day-${day.day}-divider-end-time-${timeIndex}`}
+                                  >
+                                    -
+                                  </StyledDivider>
+                                  <StyledDayTimeLineTimeTimes
+                                    key={`mobile-section-${sectionIndex}-day-${day.day}-end-time-${timeIndex}`}
+                                  >
+                                    {time.end_time}
+                                  </StyledDayTimeLineTimeTimes>
+                                </>
+                              ) : null}
+                            </StyledDayTimeLineTime>
+                          ) : null}
+                          {isNotEmpty(time.note) ? (
+                            <StyledDayTimeLineTimeComment
+                              key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
+                              dangerouslySetInnerHTML={{
+                                __html: time.note?.replaceAll('-', '&#x2011;')
+                              }}
+                            ></StyledDayTimeLineTimeComment>
+                          ) : null}
+                        </StyledDayTimeLineTimeWrapper>
+                      )
+                    )}
                   </StyledDayTimeLineTimes>
                 </StyledDayTimeLine>
               ))}

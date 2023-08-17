@@ -51,12 +51,13 @@ const StyledTabPanelTitle = styled(
     margin: 0;
     text-transform: uppercase;
 
-    ${$variant === 'normal'
-      ? `
+    ${
+      $variant === 'normal'
+        ? `
           padding-bottom: 16px;
           border-bottom: 2px solid #ddd;
         `
-      : ''
+        : ''
     }
 
     font-size: 24px;
@@ -92,13 +93,14 @@ const StyledSections = styled(
 
     margin-top: 32px;
 
-    ${$variant === 'compact'
-      ? `
+    ${
+      $variant === 'compact'
+        ? `
           &:nth-of-type(2) {
             margin-top: 24px;
           }
         `
-      : ''
+        : ''
     }
   `
 );

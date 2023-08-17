@@ -56,9 +56,9 @@ const GiveButton = ({ title, onlineGivingUrl, size = 'normal', inCMS }: GiveButt
         },
         ...(size === 'small'
           ? {
-            padding: '1px 24px 0',
-            width: 130
-          }
+              padding: '1px 24px 0',
+              width: 130
+            }
           : {}),
         [theme.breakpoints.up('lg')]: {
           transition: 'height 250ms ease',

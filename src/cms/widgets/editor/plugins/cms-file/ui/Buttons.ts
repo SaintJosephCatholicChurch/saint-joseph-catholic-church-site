@@ -1,4 +1,3 @@
-
 import type { Editor } from 'tinymce';
 import type { CmsFunctions } from '../interface';
 

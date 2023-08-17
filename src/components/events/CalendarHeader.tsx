@@ -298,7 +298,10 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
           >
             <Select labelId="view-select-label" id="view-select" value={view} onChange={handleViewChange} size="small">
               <MenuItem value="dayGridMonth">Month</MenuItem>
-              <MenuItem value="timeGridWeek" sx={{ [getContainerQuery(theme.breakpoints.down('sm'))]: { display: 'none' } }}>
+              <MenuItem
+                value="timeGridWeek"
+                sx={{ [getContainerQuery(theme.breakpoints.down('sm'))]: { display: 'none' } }}
+              >
                 Week
               </MenuItem>
               <MenuItem value="listDay">Day</MenuItem>

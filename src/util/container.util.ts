@@ -3,5 +3,5 @@ export default function getContainerQuery(query: string, inCMS = true) {
     return query;
   }
 
-  return query.replace("@media", "@container page");
+  return query.replace('@media', '@container page');
 }

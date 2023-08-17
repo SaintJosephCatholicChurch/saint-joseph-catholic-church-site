@@ -41,7 +41,12 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = f
         onMobileOpenToggle={handleDrawerToggle}
         inCMS={inCMS}
       />
-      <NavigationDrawerNoSSR menuDetails={menuDetails} mobileOpen={mobileOpen} onMobileOpenToggle={handleDrawerToggle} inCMS={inCMS} />
+      <NavigationDrawerNoSSR
+        menuDetails={menuDetails}
+        mobileOpen={mobileOpen}
+        onMobileOpenToggle={handleDrawerToggle}
+        inCMS={inCMS}
+      />
     </StyledNavigation>
   );
 };

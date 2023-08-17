@@ -10,7 +10,10 @@ interface StyledDesktopNavItemsProps {
   $inCMS: boolean;
 }
 
-const StyledDesktopNavItems = styled('div', transientOptions)<StyledDesktopNavItemsProps>(
+const StyledDesktopNavItems = styled(
+  'div',
+  transientOptions
+)<StyledDesktopNavItemsProps>(
   ({ theme, $inCMS }) => `
     display: flex;
     gap: 8px;

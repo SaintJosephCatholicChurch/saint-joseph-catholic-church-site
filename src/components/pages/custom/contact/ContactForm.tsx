@@ -34,12 +34,13 @@ const StyledContactForm = styled(
     gap: 20px;
     width: 100%;
 
-    ${$submitted
-      ? `
+    ${
+      $submitted
+        ? `
           opacity: 0.3;
           pointer-events: none;
         `
-      : ''
+        : ''
     }
   `
 );
@@ -66,13 +67,14 @@ const StyledSubmittedMessage = styled(
     bottom: 0;
     font-size: 24px;
 
-    ${!$submitted
-      ? `
+    ${
+      !$submitted
+        ? `
           visibility: hidden;
           height: 0;
           width: 0;
         `
-      : ''
+        : ''
     }
   `
 );

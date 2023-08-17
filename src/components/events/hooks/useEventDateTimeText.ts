@@ -8,7 +8,11 @@ import { useMemo } from 'react';
 
 import { isNullish } from '../../../util/null.util';
 
-export default function useEventDateTimeText(start: Date | null | undefined, end: Date | null | undefined, allDay: boolean): [string, string | undefined] {
+export default function useEventDateTimeText(
+  start: Date | null | undefined,
+  end: Date | null | undefined,
+  allDay: boolean
+): [string, string | undefined] {
   return useMemo(() => {
     if (isNullish(start)) {
       return ['', undefined];

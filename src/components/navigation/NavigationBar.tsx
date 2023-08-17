@@ -44,7 +44,13 @@ interface NavigationBarProps {
   inCMS: boolean;
 }
 
-const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobileOpenToggle, inCMS }: NavigationBarProps) => {
+const NavigationBar = ({
+  menuDetails,
+  onlineGivingTitle,
+  onlineGivingUrl,
+  onMobileOpenToggle,
+  inCMS
+}: NavigationBarProps) => {
   const theme = useTheme();
   const trigger = useScrollTrigger({ disableHysteresis: true });
 

@@ -18,7 +18,11 @@ export function fetchBulletins(): Bulletin[] {
   }
 
   const fileNames = readdirSync(pagesDirectory).filter((it) => it.endsWith('.json'));
-  fileNames.sort((a, b) => parseISO(b.replace('.json', '').toUpperCase()).getTime() - parseISO(a.replace('.json', '').toUpperCase()).getTime());
+  fileNames.sort(
+    (a, b) =>
+      parseISO(b.replace('.json', '').toUpperCase()).getTime() -
+      parseISO(a.replace('.json', '').toUpperCase()).getTime()
+  );
 
   bulletinCache = fileNames
     .filter((it) => it.endsWith('.json'))

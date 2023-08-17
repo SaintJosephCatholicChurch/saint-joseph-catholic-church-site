@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export default function useDebounce<T>(value: T, delay: number) {
   // State and setters for debounced value
@@ -58,4 +58,3 @@ export function useDebouncedToggleOff(value: boolean, delay: number) {
 export function useDebouncedToggleOn(value: boolean, delay: number) {
   return !useDebouncedToggleOff(!value, delay);
 }
-

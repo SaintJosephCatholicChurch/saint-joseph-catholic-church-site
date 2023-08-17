@@ -31,12 +31,13 @@ const StyledContactForm = styled(
     gap: 20px;
     width: 100%;
 
-    ${$submitted
-      ? `
+    ${
+      $submitted
+        ? `
           opacity: 0.3;
           pointer-events: none;
         `
-      : ''
+        : ''
     }
   `
 );
@@ -63,18 +64,20 @@ const StyledSubmittedMessage = styled(
     bottom: 0;
     font-size: 24px;
 
-    ${!$submitted
-      ? `
+    ${
+      !$submitted
+        ? `
           visibility: hidden;
           height: 0;
           width: 0;
         `
-      : ''
+        : ''
     }
   `
 );
 
-const StyledFirstRow = styled('div')(({ theme }) => `
+const StyledFirstRow = styled('div')(
+  ({ theme }) => `
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
@@ -82,7 +85,8 @@ const StyledFirstRow = styled('div')(({ theme }) => `
   ${getContainerQuery(theme.breakpoints.down('md'))} {
     grid-template-columns: 1fr;
   }
-`);
+`
+);
 
 interface AskFormBody {
   name: string;

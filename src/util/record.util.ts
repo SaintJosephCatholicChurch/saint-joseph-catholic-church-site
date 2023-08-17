@@ -13,8 +13,11 @@ export function mapRecord<V, O>(
     return undefined;
   }
 
-  return Object.keys(input).reduce((map, key) => {
-    map[key] = converter(input[key]);
-    return map;
-  }, {} as Record<string, O>);
+  return Object.keys(input).reduce(
+    (map, key) => {
+      map[key] = converter(input[key]);
+      return map;
+    },
+    {} as Record<string, O>
+  );
 }

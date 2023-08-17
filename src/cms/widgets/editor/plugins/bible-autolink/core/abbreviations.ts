@@ -367,13 +367,16 @@ export const bibleAbbreviations: Record<string, string[]> = {
   revelation: ['rev', 're', 'the revelation']
 };
 
-export const abbreviationsToUJSCCBBook = Object.keys(bibleAbbreviations).reduce((result, book) => {
-  const abbreviations = bibleAbbreviations[book];
-  for (const abbreviation of abbreviations) {
-    result[abbreviation] = book;
-  }
-  return result;
-}, {} as Record<string, string>);
+export const abbreviationsToUJSCCBBook = Object.keys(bibleAbbreviations).reduce(
+  (result, book) => {
+    const abbreviations = bibleAbbreviations[book];
+    for (const abbreviation of abbreviations) {
+      result[abbreviation] = book;
+    }
+    return result;
+  },
+  {} as Record<string, string>
+);
 
 const bibleBooksAbbreviationRegexString = `(${Object.keys(abbreviationsToUJSCCBBook).join('|')})`;
 

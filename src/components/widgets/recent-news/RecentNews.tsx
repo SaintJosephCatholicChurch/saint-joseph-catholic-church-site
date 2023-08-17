@@ -59,9 +59,7 @@ const RecentNews = memo(({ posts, size }: RecentNewsProps) => {
     <StyledRecentNews>
       <StyledRecentNewsTitle>Recent News</StyledRecentNewsTitle>
       <StyledPosts>
-        {posts?.map((post, index) => (
-          <RecentNewsPost key={`recent-news-${index}`} post={post} size={size} />
-        ))}
+        {posts?.map((post, index) => <RecentNewsPost key={`recent-news-${index}`} post={post} size={size} />)}
       </StyledPosts>
       <Link href="/news">
         <StyledViewCalendarLink>View More News</StyledViewCalendarLink>

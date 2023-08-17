@@ -27,9 +27,7 @@ const StyledHeader = styled(
   `
 );
 
-const StyledTitle = styled(
-  'h1'
-)(
+const StyledTitle = styled('h1')(
   ({ theme }) => `
     padding: 0;
     margin: 8px 0;

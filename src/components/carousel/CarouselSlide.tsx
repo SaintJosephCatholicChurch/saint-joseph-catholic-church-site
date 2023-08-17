@@ -10,7 +10,6 @@ import {
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
-
 import type { Slide } from '../../interface';
 const StyledCarouselSlide = styled('div')(
   ({ theme }) => `
@@ -95,12 +94,13 @@ const StyledTitle = styled(
     text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
 
     scale: 1;
-    ${$active
-      ? `
+    ${
+      $active
+        ? `
           transition: scale ${CAROUSEL_DURATION / 1000}s linear;
           scale: 1.1;
         `
-      : ''
+        : ''
     }
 
     font-size: 64px;

@@ -157,7 +157,9 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_phones?.map((phone, index) => (
                     <>
-                      <StyledChurchDetailTitle key={`additional-phone-${index}-title`}>{phone.name}:</StyledChurchDetailTitle>
+                      <StyledChurchDetailTitle key={`additional-phone-${index}-title`}>
+                        {phone.name}:
+                      </StyledChurchDetailTitle>
                       <StyledChurchDetailsLink key={`additional-phone-${index}-link`} href={`tel:${phone.phone}`}>
                         <PhoneEnabledIcon fontSize="small" />
                         {phone.phone}
@@ -171,7 +173,9 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_emails?.map((email, index) => (
                     <>
-                      <StyledChurchDetailTitle key={`additional-email-${index}-title`}>{email.name}</StyledChurchDetailTitle>
+                      <StyledChurchDetailTitle key={`additional-email-${index}-title`}>
+                        {email.name}
+                      </StyledChurchDetailTitle>
                       <StyledChurchDetailsLink key={`additional-email-${index}-link`} href={`mailto:${email.email}`}>
                         <EmailIcon fontSize="small" />
                         {email.email}
@@ -183,7 +187,9 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                   {churchDetails.contacts?.map((contact, index) => (
                     <>
                       <StyledChurchDetailTitle key={`contact-${index}-title`}>{contact.title}</StyledChurchDetailTitle>
-                      <StyledChurchDetailContent key={`contact-${index}-link`}>{contact.name}</StyledChurchDetailContent>
+                      <StyledChurchDetailContent key={`contact-${index}-link`}>
+                        {contact.name}
+                      </StyledChurchDetailContent>
                     </>
                   ))}
                 </StyledChurchDetailSection>

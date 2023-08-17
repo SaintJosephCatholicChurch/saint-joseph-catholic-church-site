@@ -196,7 +196,9 @@ const StyledFloatingPagination = styled('div')`
   letter-spacing: 0.02857em;
   text-transform: uppercase;
   min-height: auto;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+  transition:
+    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 24px;
   padding: 0 8px;
@@ -206,7 +208,10 @@ const StyledFloatingPagination = styled('div')`
   z-index: 1050;
   color: rgba(0, 0, 0, 0.87);
   background-color: #e0e0e0;
-  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%);
+  box-shadow:
+    0px 3px 5px -1px rgb(0 0 0 / 20%),
+    0px 6px 10px 0px rgb(0 0 0 / 14%),
+    0px 1px 18px 0px rgb(0 0 0 / 12%);
 
   .MuiPaginationItem-page.Mui-selected {
     background-color: #bc2f3b;

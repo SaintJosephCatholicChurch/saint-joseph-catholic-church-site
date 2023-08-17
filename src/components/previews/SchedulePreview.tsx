@@ -10,7 +10,17 @@ import type { Times } from '../../interface';
 
 const StyledScheduleWrapper = styled('div')`
   container: page / inline-size;
-  font-family: Open Sans,Roboto,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+  font-family:
+    Open Sans,
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Oxygen-Sans,
+    Ubuntu,
+    Cantarell,
+    Helvetica Neue,
+    sans-serif;
   background-color: #f5f4f3;
   color: #222;
   font-weight: 200;

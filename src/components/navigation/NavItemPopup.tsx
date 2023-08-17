@@ -40,13 +40,7 @@ interface NavItemPopupProps {
   keyboardSelectedIndex: number;
 }
 
-const NavItemPopup = ({
-  item,
-  onClick,
-  onKeyDown,
-  activeMenuItemRef,
-  keyboardSelectedIndex
-}: NavItemPopupProps) => {
+const NavItemPopup = ({ item, onClick, onKeyDown, activeMenuItemRef, keyboardSelectedIndex }: NavItemPopupProps) => {
   const { width: windowWidth } = useWindowSize();
   const [ref, { width, x }] = useElementSize();
 

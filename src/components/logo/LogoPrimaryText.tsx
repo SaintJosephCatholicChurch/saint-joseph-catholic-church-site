@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT, LARGE_BREAKPOINT, SMALL_BREAKPOINT } from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, LARGE_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
@@ -14,7 +14,10 @@ interface StyledHeaderPrimaryTextProps {
   $inCMS: boolean;
 }
 
-const StyledHeaderPrimaryText = styled('h1', transientOptions)<StyledHeaderPrimaryTextProps>(
+const StyledHeaderPrimaryText = styled(
+  'h1',
+  transientOptions
+)<StyledHeaderPrimaryTextProps>(
   ({ theme, $inCMS }) => `
     color: #ffffff;
     margin: 0;
@@ -61,7 +64,9 @@ const LogoPrimaryText = ({ children, inCMS }: LogoPrimaryTextProps) => {
   return (
     <StyledHeaderPrimaryTextWrapper>
       {words?.map((word) => (
-        <StyledHeaderPrimaryText key={`header-primary-text-${word}`} $inCMS={inCMS}>{word}</StyledHeaderPrimaryText>
+        <StyledHeaderPrimaryText key={`header-primary-text-${word}`} $inCMS={inCMS}>
+          {word}
+        </StyledHeaderPrimaryText>
       ))}
     </StyledHeaderPrimaryTextWrapper>
   );

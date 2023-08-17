@@ -19,39 +19,38 @@ const StyledHeaderLink = styled(Link)`
 
 interface LogoWrapperProps {
   $trigger: boolean;
-  $responsive: boolean;
   $size: 'small' | 'normal';
+  $inCMS: boolean;
 }
 
 const StyledLogoWrapper = styled(
   'div',
   transientOptions
 )<LogoWrapperProps>(
-  ({ theme, $trigger, $responsive, $size }) => `
+  ({ theme, $trigger, $size, $inCMS }) => `
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: all 250ms ease;
 
     transform: ${$size === 'small' || $trigger ? 'scale(0.75)' : 'scale(1)'};
-    ${getContainerQuery(theme.breakpoints.down('lg'))} {
-      transform: ${$responsive ? 'scale(0.75)' : 'scale(1)'};
+    ${getContainerQuery(theme.breakpoints.down('lg'), $inCMS)} {
+      transform: scale(1);
     }
   `
 );
 
 interface LogoProps {
   trigger?: boolean;
-  responsive?: boolean;
   size?: 'small' | 'normal';
   details: LogoDetails;
   inCMS: boolean;
 }
 
-const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal', inCMS }: LogoProps) => {
+const Logo = ({ trigger = false, details: { primary, secondary }, size = 'normal', inCMS }: LogoProps) => {
   return (
     <StyledHeaderLink href="/">
-      <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
+      <StyledLogoWrapper $trigger={trigger} $size={size} $inCMS={inCMS}>
         <LogoPrimaryText inCMS={inCMS}>{primary}</LogoPrimaryText>
         <LogoSecondaryText inCMS={inCMS}>{secondary}</LogoSecondaryText>
       </StyledLogoWrapper>

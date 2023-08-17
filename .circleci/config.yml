@@ -14,7 +14,7 @@ jobs:
             - nextjs-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm install --no-save --legacy-peer-deps
+          command: npm install --no-save
       - run:
           name: Process Bulletins
           command: npm run bulletins-ci

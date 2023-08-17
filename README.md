@@ -11,7 +11,7 @@ Run `npm run build`
 
 ## Local Development
 
-1. Install dependencies: `npm install --legacy-peer-deps`
+1. Install dependencies: `npm install`
 2. Start local authication service for cms `npm run local-cms`
 3. Start dev build `npm run dev`
 

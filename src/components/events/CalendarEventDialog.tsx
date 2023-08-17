@@ -7,12 +7,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { forwardRef } from 'react';
 
+import useModalContainer from '../../util/useModalContainer';
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';
 
-import type { TransitionProps } from '@mui/material/transitions';
 import type { EventClickArg } from '@fullcalendar/react';
+import type { TransitionProps } from '@mui/material/transitions';
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -37,12 +38,15 @@ const CalendarEventDialog = ({ eventInfo, open, onClose }: CalendarEventDialogPr
     Boolean(eventInfo?.event.allDay)
   );
 
+  const container = useModalContainer();
+
   return (
     <Dialog
       fullScreen
       open={open}
       onClose={onClose}
       TransitionComponent={Transition}
+      container={container}
       sx={{
         '.MuiToolbar-root': {
           backgroundColor: '#bc2f3b'

@@ -23,8 +23,6 @@ const CalendarEventPopover = ({ eventInfo, open, onClose }: CalendarEventPopover
 
   const container = useModalContainer();
 
-  console.log('container', container);
-
   return (
     <Popover
       open={open}

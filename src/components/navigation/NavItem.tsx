@@ -313,10 +313,6 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
     );
   }, [debouncedIsOpen, handleOnClick, handleOnKeyDown, inCMS, item, selected, size, theme.breakpoints, url]);
 
-  if (item.title === 'Parish') {
-    console.log('open', open);
-  }
-
   return (
     <StyledNavItem ref={wrapperRef} onMouseOver={handleOnMouseOver} onMouseOut={handleOnMouseOut}>
       {wrappedLink}

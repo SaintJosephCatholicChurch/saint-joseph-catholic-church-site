@@ -32,7 +32,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }
   const drawer = useMemo(
     () => (
       <StyledDrawerContents onClick={onMobileOpenToggle}>
-        <Logo details={menuDetails.logo} responsive={false} />
+        <Logo details={menuDetails.logo} responsive={false} inCMS={inCMS} />
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List>
           {menuDetails.menu_items.map((item) => (
@@ -41,7 +41,7 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }
         </List>
       </StyledDrawerContents>
     ),
-    [menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
+    [inCMS, menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
   const [container, setContainer] = useState<HTMLElement | null>(null);

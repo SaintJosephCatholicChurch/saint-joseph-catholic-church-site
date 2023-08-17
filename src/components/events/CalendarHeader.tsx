@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
-import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
 import addWeeks from 'date-fns/addWeeks';
@@ -62,6 +62,7 @@ const StyledCalendarMobileSubHeader = styled('div')(
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    margin-top: 8px;
 
     ${getContainerQuery(theme.breakpoints.up('sm'))} {
       display: none;
@@ -239,8 +240,6 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
 
     const date = parse(title, 'MMMM d, yyyy', new Date());
 
-    console.log('date', date, 'title', title)
-
     return [format(date, 'MMMM yyyy'), formatAsUtc(date, 'EEEE, MMMM d, yyyy')];
   }, [title]);
 
@@ -313,11 +312,12 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
             <StyledCalendarMobileButtonWrapper>{nextPreviousButtons}</StyledCalendarMobileButtonWrapper>
           </StyledCalendarMobileSubHeader>
           <StyledDatePicker>
-            <CalendarPicker
-              date={date}
+            <DateCalendar
+              value={date}
               onChange={(newDate) => {
                 setDate(newDate);
               }}
+              sx={{ width: '280px' }}
             />
           </StyledDatePicker>
         </>

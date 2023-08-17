@@ -45,14 +45,15 @@ interface LogoProps {
   responsive?: boolean;
   size?: 'small' | 'normal';
   details: LogoDetails;
+  inCMS: boolean;
 }
 
-const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal' }: LogoProps) => {
+const Logo = ({ trigger = false, responsive = true, details: { primary, secondary }, size = 'normal', inCMS }: LogoProps) => {
   return (
     <StyledHeaderLink href="/">
       <StyledLogoWrapper $trigger={trigger} $responsive={responsive} $size={size}>
-        <LogoPrimaryText>{primary}</LogoPrimaryText>
-        <LogoSecondaryText>{secondary}</LogoSecondaryText>
+        <LogoPrimaryText inCMS={inCMS}>{primary}</LogoPrimaryText>
+        <LogoSecondaryText inCMS={inCMS}>{secondary}</LogoSecondaryText>
       </StyledLogoWrapper>
     </StyledHeaderLink>
   );

@@ -1,16 +1,21 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import getContainerQuery from '../..//util/container.util';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, EXTRA_SMALL_BREAKPOINT } from '../../constants';
+import getContainerQuery from '../../util/container.util';
+import transientOptions from '../../util/transientOptions';
 
 const StyledHeaderPrimaryTextWrapper = styled('div')`
   display: flex;
   gap: 10px;
 `;
 
-const StyledHeaderPrimaryText = styled('h1')(
-  ({ theme }) => `
+interface StyledHeaderPrimaryTextProps {
+  $inCMS: boolean;
+}
+
+const StyledHeaderPrimaryText = styled('h1', transientOptions)<StyledHeaderPrimaryTextProps>(
+  ({ theme, $inCMS }) => `
     color: #ffffff;
     margin: 0;
     letter-spacing: 1.5px;
@@ -25,7 +30,7 @@ const StyledHeaderPrimaryText = styled('h1')(
       font-size: 43px;
     }
 
-    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT), $inCMS)} {
       font-size: 26px;
       line-height: 36px;
 
@@ -34,7 +39,7 @@ const StyledHeaderPrimaryText = styled('h1')(
       }
     }
 
-    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT), $inCMS)} {
       font-size: 22px;
       line-height: 28px;
 
@@ -47,15 +52,16 @@ const StyledHeaderPrimaryText = styled('h1')(
 
 interface LogoPrimaryTextProps {
   children: string;
+  inCMS: boolean;
 }
 
-const LogoPrimaryText = ({ children }: LogoPrimaryTextProps) => {
+const LogoPrimaryText = ({ children, inCMS }: LogoPrimaryTextProps) => {
   const words = useMemo(() => children.split(' '), [children]);
 
   return (
     <StyledHeaderPrimaryTextWrapper>
       {words?.map((word) => (
-        <StyledHeaderPrimaryText key={`header-primary-text-${word}`}>{word}</StyledHeaderPrimaryText>
+        <StyledHeaderPrimaryText key={`header-primary-text-${word}`} $inCMS={inCMS}>{word}</StyledHeaderPrimaryText>
       ))}
     </StyledHeaderPrimaryTextWrapper>
   );

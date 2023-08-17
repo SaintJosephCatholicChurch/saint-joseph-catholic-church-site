@@ -105,7 +105,7 @@ const NavigationBar = ({ menuDetails, onlineGivingTitle, onlineGivingUrl, onMobi
           <MenuIcon fontSize="large" />
         </IconButton>
         <StyledMobileSpacer />
-        <Logo details={menuDetails.logo} trigger={trigger} />
+        <Logo details={menuDetails.logo} trigger={trigger} inCMS={inCMS} />
         <StyledDesktopSpacer />
         <NavigationItems menuDetails={menuDetails} inCMS={inCMS} />
       </Toolbar>

@@ -45,7 +45,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <StyledLayout id="drawer-container">
+      <StyledLayout>
         <Head>
           <meta charSet="utf-8" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -62,7 +62,7 @@ const Layout = ({ children }: LayoutProps) => {
         </Head>
         <div id="back-to-top-anchor" />
         <Navigation churchDetails={churchDetails} menuDetails={menuDetails} />
-        <StyledMain>{children}</StyledMain>
+        <StyledMain id="drawer-container">{children}</StyledMain>
         <ScrollTop>
           <Fab size="small" aria-label="scroll back to top">
             <KeyboardArrowUpIcon />

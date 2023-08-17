@@ -136,14 +136,15 @@ const StyledDatePicker = styled('div')(
       color: #222;
     }
 
-    .MuiPickersDay-root.Mui-selected {
+    .MuiPickersDay-root.Mui-selected,
+    .MuiPickersDay-root.Mui-selected:hover,
+    .MuiPickersDay-root.Mui-selected:focus {
       background-color: #bc2f3b;
       color: #fff;
     }
 
-    .MuiPickersDay-root.Mui-selected:hover {
-      background-color: #bc2f3b;
-      color: #fff;
+    .MuiPickersDay-root:focus {
+      background-color: rgba(188,47,59,0.12);
     }
 
     ${getContainerQuery(theme.breakpoints.up('sm'))} {

@@ -25,17 +25,18 @@
   ],
   "featured": [
     {
-      "type": "featured_page",
-      "image": "/files/did-you-know-banner.webp",
-      "summary": "",
-      "page": "did-you-know|Did You Know?"
-    },
-    {
       "type": "featured_link",
       "title": "Hiring - Engagement Director",
       "summary": "We have begun the search for an Engagement Director.\n\nThis is a flexible part-time (hourly) position that will work directly with the priest in areas of outreach, youth and young adult ministry, and evangelization. Please see the attached posting for more information.",
       "image": "/files/engagement-director-hiring.webp",
       "url": "/files/engagement-director.jpg"
+    },
+    {
+      "type": "featured_link",
+      "title": "Pastoral Guidance for School-Aged Families",
+      "url": "blob:https://www.stjosephchurchbluffton.org/4c55469c-653f-42f9-95d0-889f76e5286f",
+      "summary": "Fr. David's explanatory letter regarding Lifewise Academy for all school-aged parish families.",
+      "image": "/files/explanatory-letter.webp"
     }
   ],
   "daily_readings_background": "/files/scripture-background.webp",

@@ -311,31 +311,16 @@
       ]
     },
     {
-      "name": "Holy Day Times",
+      "name": "Labor Day",
       "sections": [
         {
-          "name": "Solemnity of the Assumption",
+          "name": "Labor Day",
           "days": [
             {
-              "day": "Monday, Aug. 14 - Vigil Mass",
+              "day": "Monday, Sept. 4",
               "times": [
                 {
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "day": "Tuesday, Aug. 15",
-              "times": [
-                {
-                  "time": "7:00 AM",
-                  "note": ""
-                },
-                {
-                  "time": "12:00 PM"
-                },
-                {
-                  "time": "7:00 PM"
+                  "time": "9:00 AM"
                 }
               ]
             }

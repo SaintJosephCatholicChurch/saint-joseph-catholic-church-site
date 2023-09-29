@@ -285,14 +285,24 @@
       "name": "Parish Office Hours",
       "sections": [
         {
-          "name": "",
+          "name": "Parish Office Hours (Oct. 2 - 24, 2023)",
           "days": [
             {
-              "day": "Monday - Friday",
+              "day": "Monday, Wednesday, & Friday",
               "times": [
                 {
                   "time": "9:00 AM",
-                  "end_time": "4:00 PM"
+                  "end_time": "1:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Tuesday & Thursday",
+              "times": [
+                {
+                  "time": "12:00 PM",
+                  "end_time": "4:00 PM",
+                  "note": "Accepted on Mondays"
                 }
               ]
             },
@@ -301,26 +311,7 @@
               "times": [
                 {
                   "time": "10:00 AM",
-                  "end_time": "3:00 PM",
-                  "note": "Accepted on Mondays"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Labor Day",
-      "sections": [
-        {
-          "name": "Labor Day",
-          "days": [
-            {
-              "day": "Monday, Sept. 4",
-              "times": [
-                {
-                  "time": "9:00 AM"
+                  "end_time": "10:00 PM"
                 }
               ]
             }

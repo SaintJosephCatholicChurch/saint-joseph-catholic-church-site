@@ -302,7 +302,7 @@
                 {
                   "time": "12:00 PM",
                   "end_time": "4:00 PM",
-                  "note": "Accepted on Mondays"
+                  "note": ""
                 }
               ]
             },
@@ -311,7 +311,8 @@
               "times": [
                 {
                   "time": "10:00 AM",
-                  "end_time": "10:00 PM"
+                  "end_time": "10:00 PM",
+                  "note": "Accepted on Mondays"
                 }
               ]
             }

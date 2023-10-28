@@ -204,7 +204,7 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "6:00 PM",
-                  "note": ""
+                  "note": "Adoration ends at 4 PM on November 4, 2023"
                 }
               ]
             },
@@ -313,6 +313,64 @@
                   "time": "10:00 AM",
                   "end_time": "1:00 PM",
                   "note": "Accepted on Mondays"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Holy Day Masses",
+      "sections": [
+        {
+          "name": "Solemnity of All Saints",
+          "days": [
+            {
+              "day": "Vigil Mass - Tuesday, Oct. 31",
+              "times": [
+                {
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "day": "Mass - Wednesday, Nov. 1",
+              "times": [
+                {
+                  "time": "7:00 AM"
+                },
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "6:00 PM",
+                  "note": ""
+                },
+                {
+                  "note": "All Saints Day Party in Social Hall after Mass"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Commemoration of All Soulss",
+          "days": [
+            {
+              "day": "Mass",
+              "times": [
+                {
+                  "time": "8:00 AM"
+                },
+                {
+                  "time": "12:00 PM"
+                },
+                {
+                  "time": "6:00 PM"
+                },
+                {
+                  "note": "6:00 PM Mass at St. Joseph Catholic Cemetery (3500 IN-124, Bluffton)"
                 }
               ]
             }

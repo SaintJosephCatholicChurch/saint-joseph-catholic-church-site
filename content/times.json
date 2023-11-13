@@ -321,56 +321,48 @@
       ]
     },
     {
-      "name": "Holy Day Masses",
+      "name": "Christmas Mass Times",
       "sections": [
         {
-          "name": "Solemnity of All Saints",
+          "name": "Christmas Eve - Sunday, Dec. 24th",
           "days": [
             {
-              "day": "Vigil Mass - Tuesday, Oct. 31",
+              "day": "Vigil Mass (Children's Choir)",
               "times": [
                 {
-                  "time": "7:00 PM"
+                  "time": "4:00 PM"
                 }
               ]
             },
             {
-              "day": "Mass - Wednesday, Nov. 1",
+              "day": "Vigil Mass (Choir)",
               "times": [
                 {
-                  "time": "7:00 AM"
-                },
-                {
-                  "time": "12:00 PM"
-                },
-                {
                   "time": "6:00 PM",
-                  "note": ""
-                },
-                {
-                  "note": "All Saints Day Party in Social Hall after Mass"
+                  "note": "Christmas Carols Starts at 5:30 PM"
                 }
               ]
             }
           ]
         },
         {
-          "name": "Commemoration of All Soulss",
+          "name": "Christmas Day - Monday, Dec. 25th",
           "days": [
             {
-              "day": "Mass",
+              "day": "Midnight Mass",
               "times": [
                 {
-                  "time": "8:00 AM"
-                },
+                  "time": "12:00 AM",
+                  "note": "Mass By Candlelight"
+                }
+              ]
+            },
+            {
+              "day": "Mass During the Day",
+              "times": [
                 {
-                  "time": "12:00 PM"
-                },
-                {
-                  "time": "6:00 PM"
-                },
-                {
-                  "note": "6:00 PM Mass at St. Joseph Catholic Cemetery (3500 IN-124, Bluffton)"
+                  "time": "9:00 AM",
+                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)"
                 }
               ]
             }

@@ -12,6 +12,7 @@ const withPWA = withPWAFn({
 const removeImports = removeImportsFn();
 
 let config = removeImports({
+  output: 'export',
   pageExtensions: ['tsx'],
   webpack: (config) => {
     config.module.rules.push(

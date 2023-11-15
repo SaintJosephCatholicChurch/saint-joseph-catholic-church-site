@@ -20,7 +20,7 @@ jobs:
           command: npm run bulletins-ci
       - run:
           name: NextJS Build
-          command: npm run export
+          command: npm run build
       - save_cache:
           key: nextjs-cache-{{ checksum "package-lock.json" }}
           when: on_success
@@ -30,7 +30,7 @@ jobs:
             - ./dist
       - run:
           name: Deploy to Netlify
-          command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./dist
+          command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./out
 
 workflows:
   build-deploy:

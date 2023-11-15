@@ -32,6 +32,29 @@ const StyledSearchQueryTitle = styled('h2')`
   margin-bottom: 32px;
 `;
 
+function getLongestMatch(entry: SearchableEntry, escapedQuery: string) {
+  let biggestMatch = '';
+  let m: RegExpExecArray;
+
+  const regex = new RegExp(
+    `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapedQuery
+      .split(' ')
+      .join('|')}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+    'ig'
+  );
+
+  do {
+    m = regex.exec(entry.content);
+    if (m && m.length > 0) {
+      if (biggestMatch.length < m[0].length) {
+        biggestMatch = m[0];
+      }
+    }
+  } while (m);
+
+  return biggestMatch;
+}
+
 interface SearchProps {
   searchableEntries: SearchableEntry[];
 }
@@ -71,15 +94,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
               if (match && match.length >= 1) {
                 summary = `...${match[0].trim()}...`;
               } else {
-                const match = new RegExp(
-                  `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapedQuery
-                    .split(' ')
-                    .join('|')}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
-                  'ig'
-                ).exec(entry.content);
-                if (match && match.length >= 1) {
-                  summary = `...${match[0].trim()}...`;
-                }
+                summary = `...${getLongestMatch(entry, escapedQuery)}...`;
               }
             }
 

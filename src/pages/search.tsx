@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import { useEffect, useState } from 'react';
+import escapeRegExp from 'lodash/escapeRegExp';
+import { useEffect, useMemo, useState } from 'react';
 
 import PageLayout from '../components/PageLayout';
 import SearchResult from '../components/search/SearchResult';
@@ -44,7 +45,9 @@ const Search = ({ searchableEntries }: SearchProps) => {
     setQuery(params.get('q'));
   }, [search]);
 
-  const searchResults = useSearchScores(query, searchableEntries);
+  const escapedQuery = useMemo(() => escapeRegExp(query), [query]);
+
+  const searchResults = useSearchScores(escapedQuery, searchableEntries);
 
   return (
     <PageLayout url="/search" title="Search" hideSearch>
@@ -62,14 +65,14 @@ const Search = ({ searchableEntries }: SearchProps) => {
             let { summary, showSummary = true } = entry;
             if (!summary && showSummary) {
               const match = new RegExp(
-                `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
+                `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapedQuery}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                 'ig'
               ).exec(entry.content);
               if (match && match.length >= 1) {
                 summary = `...${match[0].trim()}...`;
               } else {
                 const match = new RegExp(
-                  `(?:[\\s]+[^\\s]+){0,10}[\\s]*${query
+                  `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapedQuery
                     .split(' ')
                     .join('|')}(?![^<>]*(([/"']|]]|\b)>))[\\s]*(?:[^\\s]+\\s){0,25}`,
                   'ig'
@@ -81,7 +84,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
             }
 
             summary = summary?.replace(
-              new RegExp(`(${query.split(' ').join('|')})(?![^<>]*(([/"']|]]|\b)>))`, 'ig'),
+              new RegExp(`(${escapedQuery.split(' ').join('|')})(?![^<>]*(([/"']|]]|\b)>))`, 'ig'),
               `<strong style="color: #000">$1</strong>`
             );
 

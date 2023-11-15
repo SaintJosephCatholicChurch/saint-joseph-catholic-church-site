@@ -7,7 +7,7 @@ import { formatAsUtc } from '../../../util/date.util';
 import useEventTitle from '../hooks/useEventTitle';
 
 import type { MouseEvent } from 'react';
-import type { EventRenderRange } from '@fullcalendar/react';
+import type { EventRenderRange } from '@fullcalendar/core';
 
 const StyledMobileEvent = styled('div')`
   display: grid;

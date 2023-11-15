@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { formatAsUtc } from '../../../util/date.util';
 import useEventTitle from '../hooks/useEventTitle';
 
-import type { EventRenderRange } from '@fullcalendar/react';
+import type { EventRenderRange } from '@fullcalendar/core';
 import type { MouseEvent } from 'react';
 
 const StyledUpcomingEvent = styled('div')`

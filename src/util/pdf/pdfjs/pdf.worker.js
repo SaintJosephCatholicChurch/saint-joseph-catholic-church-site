@@ -4377,10 +4377,10 @@
           return value == POLYFILL
             ? true
             : value == NATIVE
-            ? false
-            : isCallable(detection)
-            ? fails(detection)
-            : !!detection;
+              ? false
+              : isCallable(detection)
+                ? fails(detection)
+                : !!detection;
         };
         var normalize = (isForced.normalize = function (string) {
           return String(string).replace(replacement, '.').toLowerCase();
@@ -4688,10 +4688,10 @@
           return that === undefined
             ? fn
             : NATIVE_BIND
-            ? bind(fn, that)
-            : function () {
-                return fn.apply(that, arguments);
-              };
+              ? bind(fn, that)
+              : function () {
+                  return fn.apply(that, arguments);
+                };
         };
 
         /***/
@@ -4771,14 +4771,14 @@
               return it === undefined
                 ? 'Undefined'
                 : it === null
-                ? 'Null'
-                : typeof (tag = tryGet((O = Object(it)), TO_STRING_TAG)) == 'string'
-                ? tag
-                : CORRECT_ARGUMENTS
-                ? classofRaw(O)
-                : (result = classofRaw(O)) == 'Object' && isCallable(O.callee)
-                ? 'Arguments'
-                : result;
+                  ? 'Null'
+                  : typeof (tag = tryGet((O = Object(it)), TO_STRING_TAG)) == 'string'
+                    ? tag
+                    : CORRECT_ARGUMENTS
+                      ? classofRaw(O)
+                      : (result = classofRaw(O)) == 'Object' && isCallable(O.callee)
+                        ? 'Arguments'
+                        : result;
             };
 
         /***/
@@ -6323,8 +6323,8 @@
                 ? charAt(S, position)
                 : first
               : CONVERT_TO_STRING
-              ? stringSlice(S, position, position + 2)
-              : ((first - 0xd800) << 10) + (second - 0xdc00) + 0x10000;
+                ? stringSlice(S, position, position + 2)
+                : ((first - 0xd800) << 10) + (second - 0xdc00) + 0x10000;
           };
         };
         module.exports = {
@@ -6408,21 +6408,21 @@
                     return this;
                   }
                 : KEY == 'delete'
-                ? function (key) {
-                    return IS_WEAK && !isObject(key) ? false : uncurriedNativeMethod(this, key === 0 ? 0 : key);
-                  }
-                : KEY == 'get'
-                ? function get(key) {
-                    return IS_WEAK && !isObject(key) ? undefined : uncurriedNativeMethod(this, key === 0 ? 0 : key);
-                  }
-                : KEY == 'has'
-                ? function has(key) {
-                    return IS_WEAK && !isObject(key) ? false : uncurriedNativeMethod(this, key === 0 ? 0 : key);
-                  }
-                : function set(key, value) {
-                    uncurriedNativeMethod(this, key === 0 ? 0 : key, value);
-                    return this;
-                  }
+                  ? function (key) {
+                      return IS_WEAK && !isObject(key) ? false : uncurriedNativeMethod(this, key === 0 ? 0 : key);
+                    }
+                  : KEY == 'get'
+                    ? function get(key) {
+                        return IS_WEAK && !isObject(key) ? undefined : uncurriedNativeMethod(this, key === 0 ? 0 : key);
+                      }
+                    : KEY == 'has'
+                      ? function has(key) {
+                          return IS_WEAK && !isObject(key) ? false : uncurriedNativeMethod(this, key === 0 ? 0 : key);
+                        }
+                      : function set(key, value) {
+                          uncurriedNativeMethod(this, key === 0 ? 0 : key, value);
+                          return this;
+                        }
             );
           };
           var REPLACE = isForced(
@@ -42803,16 +42803,16 @@
                                 _context.t1 === 0
                                   ? 29
                                   : _context.t1 === 1
-                                  ? 35
-                                  : _context.t1 === 2
-                                  ? 41
-                                  : _context.t1 === 3
-                                  ? 46
-                                  : _context.t1 === 4
-                                  ? 53
-                                  : _context.t1 === 5
-                                  ? 58
-                                  : 65;
+                                    ? 35
+                                    : _context.t1 === 2
+                                      ? 41
+                                      : _context.t1 === 3
+                                        ? 46
+                                        : _context.t1 === 4
+                                          ? 53
+                                          : _context.t1 === 5
+                                            ? 58
+                                            : 65;
                               break;
 
                             case 29:
@@ -43221,18 +43221,18 @@
                             _context3.t0 === 'endcmap'
                               ? 16
                               : _context3.t0 === 'usecmap'
-                              ? 17
-                              : _context3.t0 === 'begincodespacerange'
-                              ? 19
-                              : _context3.t0 === 'beginbfchar'
-                              ? 21
-                              : _context3.t0 === 'begincidchar'
-                              ? 23
-                              : _context3.t0 === 'beginbfrange'
-                              ? 25
-                              : _context3.t0 === 'begincidrange'
-                              ? 27
-                              : 29;
+                                ? 17
+                                : _context3.t0 === 'begincodespacerange'
+                                  ? 19
+                                  : _context3.t0 === 'beginbfchar'
+                                    ? 21
+                                    : _context3.t0 === 'begincidchar'
+                                      ? 23
+                                      : _context3.t0 === 'beginbfrange'
+                                        ? 25
+                                        : _context3.t0 === 'begincidrange'
+                                          ? 27
+                                          : 29;
                           break;
 
                         case 16:

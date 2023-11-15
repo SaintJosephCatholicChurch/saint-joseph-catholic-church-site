@@ -20,7 +20,7 @@ import { formatAsUtc } from '../../util/date.util';
 import { isEmpty } from '../../util/string.util';
 import PageTitle from '../pages/PageTitle';
 
-import type { CalendarApi } from '@fullcalendar/react';
+import type { CalendarApi } from '@fullcalendar/core';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { SxProps, Theme } from '@mui/material/styles';
 

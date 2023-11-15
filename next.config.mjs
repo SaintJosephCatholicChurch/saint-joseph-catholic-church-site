@@ -1,16 +1,19 @@
 /** @type {import('next').NextConfig} */
 const env = process.env.NODE_ENV || 'development';
 
-const withPWA = require('next-pwa')({
+import withPWAFn from '@ducanh2912/next-pwa';
+import removeImportsFn from 'next-remove-imports';
+
+const withPWA = withPWAFn({
   publicExcludes: ['!bulletins/**/*'],
   dest: 'public'
 });
 
-const removeImports = require('next-remove-imports')();
+const removeImports = removeImportsFn();
 
 let config = removeImports({
   pageExtensions: ['tsx'],
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config) => {
     config.module.rules.push(
       ...[
         {
@@ -25,13 +28,6 @@ let config = removeImports({
     );
     return config;
   },
-  transpilePackages: [
-    '@fullcalendar/common',
-    '@fullcalendar/daygrid',
-    '@fullcalendar/react',
-    '@fullcalendar/timegrid',
-    '@fullcalendar/list'
-  ],
   eslint: {
     ignoreDuringBuilds: env === 'production'
   },
@@ -44,4 +40,4 @@ if (env === 'production') {
   config = withPWA(config);
 }
 
-module.exports = config;
+export default config;

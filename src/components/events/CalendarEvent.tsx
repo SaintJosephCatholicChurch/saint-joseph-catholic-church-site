@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 
 import useEventTitle from './hooks/useEventTitle';
 
-import type { EventContentArg } from '@fullcalendar/react';
+import type { EventContentArg } from '@fullcalendar/core';
 
 const StyleEvent = styled('div')`
   padding: 4px 8px;

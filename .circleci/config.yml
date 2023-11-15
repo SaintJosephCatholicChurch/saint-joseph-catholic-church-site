@@ -11,18 +11,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - nextjs-cache-{{ checksum "package-lock.json" }}
+            - nextjs-cache-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: npm install --no-save
+          command: yarn install --frozen-lockfile
       - run:
           name: Process Bulletins
-          command: npm run bulletins-ci
+          command: yarn bulletins-ci
       - run:
           name: NextJS Build
-          command: npm run export
+          command: yarn export
       - save_cache:
-          key: nextjs-cache-{{ checksum "package-lock.json" }}
+          key: nextjs-cache-{{ checksum "yarn.lock" }}
           when: on_success
           paths:
             - ./node_modules

@@ -12,7 +12,7 @@ import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';
 
-import type { EventClickArg } from '@fullcalendar/react';
+import type { EventClickArg } from '@fullcalendar/core';
 import type { TransitionProps } from '@mui/material/transitions';
 
 const Transition = forwardRef(function Transition(

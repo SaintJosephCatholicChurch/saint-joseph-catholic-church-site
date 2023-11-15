@@ -51,7 +51,7 @@ export function fetchPageContent(): PageContent[] {
     return pageCache;
   }
 
-  const allPagesData = fetchPageMatter().map(({ fileName, fullPath, matterResult: { data, content } }) => {
+  const allPagesData = fetchPageMatter().map(({ fileName: _filename, fullPath, matterResult: { data, content } }) => {
     // TODO Auto generate slugs
     // const slug = fileName.replace(/\.mdx$/, '');
     // Validate slug string

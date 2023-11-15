@@ -19,7 +19,7 @@ import CalendarEventRenderer from './CalendarEventRenderer';
 import CalendarHeader from './CalendarHeader';
 import createMobileListViewPlugin from './mobile-view/MobileListViewPlugin';
 
-import type { CalendarApi, EventClickArg } from '@fullcalendar/react';
+import type { CalendarApi, EventClickArg } from '@fullcalendar/core';
 
 const StyledCalendarWrapper = styled('div')(
   ({ theme }) => `

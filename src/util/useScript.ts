@@ -18,7 +18,7 @@ export const useScript = <T = unknown>(
     script.src = url;
     script.async = true;
     script.onload = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
       setLib({ [name]: window[name as any] as unknown as T });
       setLoaded(true);
     };

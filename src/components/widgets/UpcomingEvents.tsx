@@ -17,7 +17,7 @@ import CalendarEventPopover from '../events/CalendarEventPopover';
 import CalendarEventRenderer from '../events/CalendarEventRenderer';
 import createUpcomingListViewPlugin from '../events/upcoming/UpcomingEventsPlugin';
 
-import type { EventClickArg } from '@fullcalendar/react';
+import type { EventClickArg } from '@fullcalendar/core';
 
 const StyledUpcomingEvents = styled('div')`
   display: flex;

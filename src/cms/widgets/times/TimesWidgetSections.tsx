@@ -17,7 +17,6 @@ import type { TimesNoteSection, TimesSection } from '../../../interface';
 const StyledSectionTimeLines = styled('div')`
   display: flex;
   flex-direction: column;
-  gap: 12px;
 `;
 
 const StyledAddButtonWrapper = styled('div')`

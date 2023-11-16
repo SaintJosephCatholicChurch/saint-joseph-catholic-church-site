@@ -1,9 +1,9 @@
 import { useSortable } from '@dnd-kit/sortable';
-import Tab from '@mui/material/Tab';
 import { CSS } from '@dnd-kit/utilities';
-import { useCallback, useMemo } from 'react';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { styled, useTheme } from '@mui/material/styles';
+import Tab from '@mui/material/Tab';
+import { styled } from '@mui/material/styles';
+import { useCallback, useMemo } from 'react';
 
 import type { Times } from '@/interface';
 import type { FC } from 'react';
@@ -16,9 +16,12 @@ const StyledTabLabel = styled('div')`
   padding-left: 16px;
 `;
 
-const StyledDragHandle = styled('div')`
-  cursor: grab;
-`;
+const StyledDragHandle = styled('div')(
+  ({ theme }) => `
+    cursor: grab;
+    color: ${theme.palette.text.secondary};
+  `
+);
 
 function a11yProps(index: number) {
   return {
@@ -45,15 +48,13 @@ const SortableTab: FC<SortableTabProps> = ({ timeSchedule, index, onClick }) => 
     [transform, transition]
   );
 
-  const theme = useTheme();
-
   const handleClick = useCallback(() => {
     onClick(index);
   }, [index, onClick]);
 
   return (
     <StyledTabLabel ref={setNodeRef} style={style} {...attributes}>
-      <StyledDragHandle ref={setActivatorNodeRef} {...listeners} style={{ color: theme.palette.text.primary }}>
+      <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
         <DragHandleIcon />
       </StyledDragHandle>
       <Tab

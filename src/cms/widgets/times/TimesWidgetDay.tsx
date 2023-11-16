@@ -46,7 +46,7 @@ const StyledDayTimeLineTitleWrapper = styled('div')`
   display: flex;
   gap: 8px;
   width: 100%;
-  padding-right: 48px;
+  padding-right: 32px;
   box-sizing: border-box;
   align-items: center;
 `;

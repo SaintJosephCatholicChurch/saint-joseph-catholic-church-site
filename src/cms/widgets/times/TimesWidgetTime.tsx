@@ -28,6 +28,7 @@ const StyledDayTimeLineTime = styled('div')`
   align-items: baseline;
   justify-content: flex-end;
   gap: 16px;
+  padding-right: 64px;
 `;
 
 const StyledDayTimeLineTimeTimesWrapper = styled('div')`

@@ -415,9 +415,9 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       extension: 'json',
       format: 'json',
       create: true,
-      slug: "{{fields.date | date('YYYYMMDD')}}",
+      slug: "{{fields.date | date('yyyyMMdd')}}",
       identifier_field: 'date',
-      summary: "{{date | date('MMM DD, YYYY')}} - {{fields.name}}",
+      summary: "{{date | date('MMM dd, yyyy')}} - {{fields.name}}",
       summary_fields: ['date', 'name', 'pdf'],
       sortable_fields: {
         fields: ['date', 'name', 'pdf'],
@@ -463,7 +463,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
       format: 'frontmatter',
       create: true,
       identifier_field: 'title',
-      summary: "{{title}} ({{date | date('MMM DD, YYYY')}})",
+      summary: "{{title}} ({{date | date('MMM dd, yyyy')}})",
       summary_fields: ['title', 'date', 'tags'],
       sortable_fields: {
         fields: ['title', 'date'],

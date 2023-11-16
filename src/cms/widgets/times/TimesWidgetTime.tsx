@@ -1,4 +1,7 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,12 +10,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '../../../util/string.util';
 
@@ -30,6 +33,7 @@ const StyledDayTimeLineTime = styled('div')`
 const StyledDayTimeLineTimeTimesWrapper = styled('div')`
   display: flex;
   gap: 8px;
+  align-items: center;
 `;
 
 const StyledDayTimeLineTimeCommentWrapper = styled('div')`
@@ -50,6 +54,13 @@ const StyledDeletingTimeDetails = styled('div')`
 const StyledDeletingTimeDetailsNote = styled('div')`
   font-size: 12px;
 `;
+
+const StyledDragHandle = styled('div')(
+  ({ theme }) => `
+    cursor: grab;
+    color: ${theme.palette.text.secondary};
+  `
+);
 
 export interface TimesWidgetTimeProps {
   time: TimesTime;
@@ -73,9 +84,20 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
     [onChange, time]
   );
 
+  const sortableProps = useMemo(() => ({ id: time.id }), [time]);
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable(sortableProps);
+
+  const style = useMemo(
+    () => ({
+      transform: CSS.Transform.toString(transform),
+      transition
+    }),
+    [transform, transition]
+  );
+
   return (
-    <>
-      <StyledDayTimeLineTime key={`section-day-time-${time.id}`}>
+    <div key={`section-day-time-${time.id}`} ref={setNodeRef} style={style} {...attributes}>
+      <StyledDayTimeLineTime>
         <StyledDayTimeLineTimeTimesWrapper>
           <TimePicker
             label="Start Time"
@@ -127,6 +149,9 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
           <IconButton onClick={handleDelete} color="error">
             <DeleteIcon />
           </IconButton>
+          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+            <DragHandleIcon />
+          </StyledDragHandle>
         </StyledDayTimeLineTimeTimesWrapper>
         <StyledDayTimeLineTimeCommentWrapper>
           <TextField
@@ -184,7 +209,7 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
           </DialogActions>
         </Dialog>
       ) : null}
-    </>
+    </div>
   );
 };
 

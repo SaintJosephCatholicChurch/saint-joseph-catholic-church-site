@@ -8,7 +8,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import transientOptions from '../../../util/transientOptions';
 import TimesWidgetTimes from './TimesWidgetTimes';
@@ -45,7 +48,15 @@ const StyledDayTimeLineTitleWrapper = styled('div')`
   width: 100%;
   padding-right: 48px;
   box-sizing: border-box;
+  align-items: center;
 `;
+
+const StyledDragHandle = styled('div')(
+  ({ theme }) => `
+    cursor: grab;
+    color: ${theme.palette.text.secondary};
+  `
+);
 
 export interface TimesWidgetDayProps {
   day: TimesDay;
@@ -69,9 +80,20 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
     [onChange, day]
   );
 
+  const sortableProps = useMemo(() => ({ id: day.id }), [day]);
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable(sortableProps);
+
+  const style = useMemo(
+    () => ({
+      transform: CSS.Transform.toString(transform),
+      transition
+    }),
+    [transform, transition]
+  );
+
   return (
-    <>
-      <StyledDayTimeLine key={`section-day-${day.id}`}>
+    <div key={`section-day-${day.id}`} ref={setNodeRef} style={style} {...attributes}>
+      <StyledDayTimeLine>
         <StyledDayTimeLineTitleWrapper>
           <TextField
             label="Day / Line Title"
@@ -91,6 +113,9 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
           <IconButton onClick={handleDelete} color="error">
             <DeleteIcon />
           </IconButton>
+          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+            <DragHandleIcon />
+          </StyledDragHandle>
         </StyledDayTimeLineTitleWrapper>
         <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
       </StyledDayTimeLine>
@@ -118,7 +143,7 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
           </DialogActions>
         </Dialog>
       ) : null}
-    </>
+    </div>
   );
 };
 

@@ -12,9 +12,11 @@
                 {
                   "end_time": "",
                   "time": "5:00 PM",
-                  "note": "Rosary at 4:35 PM"
+                  "note": "Rosary at 4:35 PM",
+                  "id": "b8168f22-98d5-48fd-8b2f-6bc6b830b499"
                 }
-              ]
+              ],
+              "id": "25705afe-5200-495d-820b-8bdf8aa91e09"
             },
             {
               "day": "Sunday",
@@ -22,16 +24,20 @@
                 {
                   "time": "7:30 AM",
                   "note": "Rosary at 7:10 AM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "de1c02c1-c4de-4d9e-8e40-34360a5398f4"
                 },
                 {
                   "time": "10:00 AM",
                   "note": "Rosary at 9:40 AM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
                 }
-              ]
+              ],
+              "id": "0ccf4552-f32b-4b3a-84cf-acc120c3182f"
             }
-          ]
+          ],
+          "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
           "name": "Weekday Mass",
@@ -42,21 +48,26 @@
                 {
                   "note": "No Public Mass",
                   "time": "",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "a7392c84-9d2b-458a-bad2-d33a6ef39217"
                 }
-              ]
+              ],
+              "id": "72ea0383-b76d-42a1-8aa4-7c4d6ac88123"
             },
             {
               "day": "Tuesday",
               "times": [
                 {
                   "note": "",
-                  "time": "8:00 AM"
+                  "time": "8:00 AM",
+                  "id": "42ae1116-87eb-4299-868f-a53975ff440c"
                 },
                 {
-                  "note": "Adoration from 7:00 - 8:00 AM;  Confession from 8:30 - 9:00 AM"
+                  "note": "Adoration from 7:00 - 8:00 AM;  Confession from 8:30 - 9:00 AM",
+                  "id": "7570bc61-12f2-4352-9217-0d9ff4109dd5"
                 }
-              ]
+              ],
+              "id": "10f1dbd5-185f-41ba-8507-3ba1d966c382"
             },
             {
               "day": "Wednesday",
@@ -64,44 +75,55 @@
                 {
                   "time": "7:00 PM",
                   "end_time": "",
-                  "note": ""
+                  "note": "",
+                  "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe"
                 },
                 {
-                  "note": "Adoration and Confession from 6:00 - 7:00 PM"
+                  "note": "Adoration and Confession from 6:00 - 7:00 PM",
+                  "id": "65a42201-52f6-4baa-b36a-18c37f1ff6db"
                 }
-              ]
+              ],
+              "id": "0c3df9c5-a93e-4b8a-ac6b-1029788d311b"
             },
             {
               "day": "Thursday",
               "times": [
                 {
                   "time": "8:00 AM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7"
                 }
-              ]
+              ],
+              "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"
             },
             {
               "day": "Friday",
               "times": [
                 {
                   "time": "8:30 AM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "08e04d04-53e4-4f2b-8733-625ab18f4cf2"
                 }
-              ]
+              ],
+              "id": "3ac7fa94-de8f-42f0-a2b9-acd8ed080bdd"
             },
             {
               "day": "Saturday",
               "times": [
                 {
                   "time": "8:00 AM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "95518a16-b6e6-46e8-ad0b-1221309d268b"
                 },
                 {
-                  "note": "Confession from 8:30 - 9:00 AM"
+                  "note": "Confession from 8:30 - 9:00 AM",
+                  "id": "d09da0fe-9d62-4903-a85c-4d1d96bf5e46"
                 }
-              ]
+              ],
+              "id": "de1b2401-9326-4916-953e-7888bc4a6626"
             }
-          ]
+          ],
+          "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
         },
         {
           "name": "Mass (Ad Orientum)",
@@ -112,16 +134,21 @@
                 {
                   "time": "6:00 PM",
                   "note": "Ordinary Form",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "4ff1ed83-1d56-4d8e-85a0-1b46d2ec57f4"
                 },
                 {
-                  "note": "No First Friday  6 PM Mass in November 2023"
+                  "note": "No First Friday  6 PM Mass in November 2023",
+                  "id": "57f07cb5-b560-4225-ac4c-3d4475b14416"
                 }
-              ]
+              ],
+              "id": "c012ddb3-7d02-40fe-b0a5-6f314778b42e"
             }
-          ]
+          ],
+          "id": "eef6384c-c450-470c-a13c-05c97f500551"
         }
-      ]
+      ],
+      "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
       "name": "Confession Times",
@@ -134,9 +161,11 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "9:00 AM",
-                  "note": "After morning Mass"
+                  "note": "After morning Mass",
+                  "id": "20a93fa5-6b5d-405b-af4e-2506a08f36c6"
                 }
-              ]
+              ],
+              "id": "9779ef44-7be6-41e2-b640-d4fad6cd5472"
             },
             {
               "day": "Wednesday",
@@ -144,9 +173,11 @@
                 {
                   "time": "6:00 PM",
                   "end_time": "6:45 PM",
-                  "note": "Before evening Mass"
+                  "note": "Before evening Mass",
+                  "id": "c7a7ea72-81f9-4b11-9133-4028d1be9222"
                 }
-              ]
+              ],
+              "id": "a90edd64-999f-4eb3-96a8-0e7a0337a3f0"
             },
             {
               "day": "Saturday",
@@ -154,16 +185,20 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "9:00 AM",
-                  "note": "After morning Mass"
+                  "note": "After morning Mass",
+                  "id": "abcbb182-b044-4474-beac-e3ae8597da0a"
                 },
                 {
                   "time": "4:00 PM",
                   "end_time": "4:45 PM",
-                  "note": "Before evening Mass"
+                  "note": "Before evening Mass",
+                  "id": "1cdcf249-bda5-474b-aa65-e4280621a04f"
                 }
-              ]
+              ],
+              "id": "2cd58927-472e-45f8-8096-752c61f35b8a"
             }
-          ]
+          ],
+          "id": "136e6ddc-5d44-4b6e-b299-561bf12245e9"
         },
         {
           "days": [
@@ -172,11 +207,14 @@
               "times": [
                 {
                   "time": "5:00 PM",
-                  "end_time": "5:45 PM"
+                  "end_time": "5:45 PM",
+                  "id": "07790f18-da0a-4a62-b73f-666bfa6e3dc1"
                 }
-              ]
+              ],
+              "id": "00539d07-e2b5-4912-b0a0-bc000732ad60"
             }
-          ]
+          ],
+          "id": "f1277211-fd36-4e15-9ee6-f7fc130cfaf3"
         },
         {
           "name": "",
@@ -185,13 +223,17 @@
               "day": "By Appointment",
               "times": [
                 {
-                  "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380"
+                  "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380",
+                  "id": "e021347c-becd-4177-8c8d-6efeeae3a6c8"
                 }
-              ]
+              ],
+              "id": "2520b858-1dc4-4d36-8814-88d17ff301a6"
             }
-          ]
+          ],
+          "id": "77375739-2d82-419f-83a4-bbd824666ee9"
         }
-      ]
+      ],
+      "id": "d407d4c2-6889-4556-9136-9acd14c31738"
     },
     {
       "name": "Adoration Times",
@@ -204,21 +246,26 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "6:00 PM",
-                  "note": "Adoration ends at 4 PM on November 4, 2023"
+                  "note": "Adoration ends at 4 PM on November 4, 2023",
+                  "id": "7c497806-a7cf-43d8-8c30-6484caefe690"
                 }
-              ]
+              ],
+              "id": "adad7054-644d-4639-8ca9-58d687ca4b3c"
             },
             {
               "day": "Litany of the Eucharist/Benediction",
               "times": [
                 {
                   "time": "5:45 PM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "75e2ceb2-e43d-463a-8768-81e9d7d3789a"
                 }
-              ]
+              ],
+              "id": "0819157d-b241-42a1-9438-3ed3af4dfc58"
             }
           ],
-          "name": "First Friday of Each Month"
+          "name": "First Friday of Each Month",
+          "id": "5e1dffbb-6a56-4edb-b1e9-058ed83f4dfa"
         },
         {
           "name": "Every Tuesday Morning",
@@ -228,11 +275,14 @@
               "times": [
                 {
                   "time": "7:00 AM",
-                  "end_time": "8:00 AM"
+                  "end_time": "8:00 AM",
+                  "id": "13b63717-abe5-4e4b-bc20-a0054c655d37"
                 }
-              ]
+              ],
+              "id": "23877ba8-70d0-461f-9366-53de91b0aaf5"
             }
-          ]
+          ],
+          "id": "8f6f09c4-ec9b-40b0-b95d-4b663f86b182"
         },
         {
           "name": "Every Wednesday Evening",
@@ -242,22 +292,28 @@
               "times": [
                 {
                   "time": "6:00 PM",
-                  "end_time": "7:00 PM"
+                  "end_time": "7:00 PM",
+                  "id": "5a0a3f4f-2e31-42bc-b30c-d1e7c0a1ab67"
                 }
-              ]
+              ],
+              "id": "c10420cd-0469-4368-ae06-aea182971b2c"
             },
             {
               "day": "Litany of the Eucharist/Benediction",
               "times": [
                 {
                   "time": "6:45 PM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "b4e938c4-34f6-476f-9dfd-30da43371b70"
                 }
-              ]
+              ],
+              "id": "4c94397b-d636-47f4-b3f2-1ae6af069f74"
             }
-          ]
+          ],
+          "id": "ad882541-b819-427d-a707-e1ff712d7fc3"
         }
-      ]
+      ],
+      "id": "92ac4474-522a-4b8c-9139-72634ebfec2d"
     },
     {
       "name": "Stations of the Cross",
@@ -270,16 +326,21 @@
               "times": [
                 {
                   "time": "7:00 PM",
-                  "end_time": ""
+                  "end_time": "",
+                  "id": "215d613d-c764-450c-ba57-233d84dc42a0"
                 }
-              ]
+              ],
+              "id": "df9230fd-c281-4fe1-a611-b5aa562fc1d1"
             }
-          ]
+          ],
+          "id": "401c3a04-037c-4ed4-a4f8-447a9f67f736"
         },
         {
-          "note": "Station booklets are also available in the Narthex for use in private devotions throughout the year"
+          "note": "Station booklets are also available in the Narthex for use in private devotions throughout the year",
+          "id": "f58cbd0d-6a2c-4572-8f8c-42cd76bfce62"
         }
-      ]
+      ],
+      "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
     },
     {
       "name": "Parish Office Hours",
@@ -292,9 +353,11 @@
               "times": [
                 {
                   "time": "9:00 AM",
-                  "end_time": "1:00 PM"
+                  "end_time": "1:00 PM",
+                  "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f"
                 }
-              ]
+              ],
+              "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
             },
             {
               "day": "Tuesday & Thursday",
@@ -302,9 +365,11 @@
                 {
                   "time": "12:00 PM",
                   "end_time": "4:00 PM",
-                  "note": ""
+                  "note": "",
+                  "id": "90945a52-3def-4dfd-ab37-108985e1c59e"
                 }
-              ]
+              ],
+              "id": "826d901f-0ade-4c9a-a447-b6436b34a8bc"
             },
             {
               "day": "St. Vincent de Paul Applications",
@@ -312,13 +377,17 @@
                 {
                   "time": "10:00 AM",
                   "end_time": "1:00 PM",
-                  "note": "Accepted on Mondays"
+                  "note": "Accepted on Mondays",
+                  "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
                 }
-              ]
+              ],
+              "id": "5a2febf5-4141-42e3-a995-dfcbcd7d3852"
             }
-          ]
+          ],
+          "id": "da122c19-c24a-40f1-9bd3-fe1f55daab62"
         }
-      ]
+      ],
+      "id": "f56ca711-880b-4497-812b-b92ca5603457"
     },
     {
       "name": "Christmas Mass Times",
@@ -330,20 +399,25 @@
               "day": "Vigil Mass (Children's Choir)",
               "times": [
                 {
-                  "time": "4:00 PM"
+                  "time": "4:00 PM",
+                  "id": "79fd6ef4-abf3-4f83-8d9c-5cf6162a84e3"
                 }
-              ]
+              ],
+              "id": "a99e9b9a-c4e4-4d33-a953-b2e7835471b3"
             },
             {
               "day": "Vigil Mass (Choir)",
               "times": [
                 {
                   "time": "6:00 PM",
-                  "note": "Christmas Carols Starts at 5:30 PM"
+                  "note": "Christmas Carols Starts at 5:30 PM",
+                  "id": "f938d382-67df-4f5a-9e6a-99dd20c92c81"
                 }
-              ]
+              ],
+              "id": "cfd1b581-eff6-4b73-a62a-f6108b9f591d"
             }
-          ]
+          ],
+          "id": "b6f7e676-e601-4fb2-b759-99869f6af087"
         },
         {
           "name": "Christmas Day - Monday, Dec. 25th",
@@ -353,22 +427,28 @@
               "times": [
                 {
                   "time": "12:00 AM",
-                  "note": "Mass By Candlelight"
+                  "note": "Mass By Candlelight",
+                  "id": "4f2fe01d-574f-4531-83f9-5b291459ed87"
                 }
-              ]
+              ],
+              "id": "7e7bc69d-d2eb-4eab-b3cc-1f7ab0f683dd"
             },
             {
               "day": "Mass During the Day",
               "times": [
                 {
                   "time": "9:00 AM",
-                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)"
+                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)",
+                  "id": "418262da-10de-4078-81f2-9923ebbe3bf4"
                 }
-              ]
+              ],
+              "id": "c0404e80-7ba3-476e-a564-4df3387ea151"
             }
-          ]
+          ],
+          "id": "699b283d-3ae5-43a6-a26e-29a6ac956880"
         }
-      ]
+      ],
+      "id": "c879ad93-915e-4579-9486-76c1ac9f1c76"
     }
   ]
 }

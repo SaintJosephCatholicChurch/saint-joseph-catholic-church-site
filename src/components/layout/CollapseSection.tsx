@@ -13,11 +13,12 @@ const StyledArrowIconWrapper = styled(
   'div',
   transientOptions
 )<StyledArrowIconWrapperProps>(
-  ({ $collapsed }) => `
+  ({ $collapsed, theme }) => `
     transition: transform 333ms ease-out;
     transform: rotate(${$collapsed ? '-90deg' : '0deg'});
     width: 24px;
     height: 24px;
+    color: ${theme.palette.text.primary};
   `
 );
 

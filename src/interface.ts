@@ -54,26 +54,31 @@ export interface Slide {
 }
 
 export interface TimesTime {
+  readonly id: string | undefined;
   readonly time?: string;
   readonly end_time?: string;
   readonly note?: string;
 }
 
 export interface TimesDay {
+  readonly id: string | undefined;
   readonly day: string;
   readonly times?: TimesTime[];
 }
 
 export interface TimesSection {
+  readonly id: string | undefined;
   readonly name: string;
   readonly days?: TimesDay[];
 }
 
 export interface TimesNoteSection {
+  readonly id: string | undefined;
   readonly note: string;
 }
 
 export interface Times {
+  readonly id: string | undefined;
   readonly name: string;
   readonly sections?: (TimesSection | TimesNoteSection)[];
 }

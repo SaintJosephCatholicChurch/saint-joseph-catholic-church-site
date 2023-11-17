@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
 
-import type { CollectionWithDefaults, Entry, WidgetPreviewProps } from '@staticcms/core';
+import type { Collection, Entry, WidgetPreviewProps } from '@staticcms/core';
 import type { HtmlField } from '../../config';
 
 async function fromStorageToEditor(
@@ -58,7 +58,7 @@ async function fromStorageToEditor(
 
 function useStorageToEditor(
   input: string,
-  collection: CollectionWithDefaults<HtmlField>,
+  collection: Collection<HtmlField>,
   field: HtmlField,
   entry: Entry
 ) {

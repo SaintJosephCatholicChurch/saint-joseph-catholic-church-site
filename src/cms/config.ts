@@ -228,7 +228,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   label: 'Picture',
                   widget: 'image',
                   media_folder: '/public/staff',
-                  public_folder: '/staff'
+                  public_folder: '/staff',
+                  media_library: {
+                    max_file_size: 10240000,
+                    folder_support: true
+                  },
                 }
               ]
             }
@@ -262,7 +266,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                 {
                   name: 'image',
                   label: 'Image',
-                  widget: 'image'
+                  widget: 'image',
+                  media_library: {
+                    max_file_size: 10240000,
+                    folder_support: true
+                  },
                 },
                 {
                   name: 'title',
@@ -309,7 +317,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                 {
                   name: 'schedule_background',
                   label: 'Schedule Background',
-                  widget: 'image'
+                  widget: 'image',
+                  media_library: {
+                    max_file_size: 10240000,
+                    folder_support: true
+                  },
                 }
               ]
             },
@@ -332,7 +344,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                 {
                   name: 'daily_readings_background',
                   label: 'Background',
-                  widget: 'image'
+                  widget: 'image',
+                  media_library: {
+                    max_file_size: 10240000,
+                    folder_support: true
+                  },
                 }
               ]
             },
@@ -352,7 +368,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       name: 'image',
                       label: 'Image',
                       widget: 'image',
-                      required: false
+                      required: false,
+                      media_library: {
+                        max_file_size: 10240000,
+                        folder_support: true
+                      },
                     },
                     {
                       name: 'page',
@@ -381,7 +401,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       name: 'image',
                       label: 'Image',
                       widget: 'image',
-                      required: false
+                      required: false,
+                      media_library: {
+                        max_file_size: 10240000,
+                        folder_support: true
+                      },
                     },
                     {
                       name: 'title',
@@ -451,7 +475,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           label: 'PDF',
           widget: 'file',
           media_folder: '/public/bulletins',
-          public_folder: '/bulletins'
+          public_folder: '/bulletins',
+          media_library: {
+            max_file_size: 10240000,
+            folder_support: true
+          },
         }
       ]
     },
@@ -487,7 +515,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           name: 'image',
           label: 'Image',
           widget: 'image',
-          required: false
+          required: false,
+          media_library: {
+            max_file_size: 10240000,
+            folder_support: true
+          },
         },
         {
           name: 'date',
@@ -634,7 +666,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
             {
               name: 'site_image',
               label: 'Site Image',
-              widget: 'image'
+              widget: 'image',
+              media_library: {
+                max_file_size: 10240000,
+                folder_support: true
+              },
             },
             {
               name: 'site_keywords',
@@ -764,7 +800,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
             {
               name: 'footer_background',
               label: 'Footer background',
-              widget: 'image'
+              widget: 'image',
+              media_library: {
+                max_file_size: 10240000,
+                folder_support: true
+              },
             }
           ]
         }

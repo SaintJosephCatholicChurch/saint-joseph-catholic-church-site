@@ -31,6 +31,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
     frame: false
   },
   media_library: {
+    max_file_size: 10240000,
     folder_support: true
   },
   collections: [

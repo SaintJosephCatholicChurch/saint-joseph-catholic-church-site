@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { doesUrlFileExist } from '../../../util/fetch.util';
 import { isNotNullish } from '../../../util/null.util';
 
-import type { Collection, Entry, WidgetPreviewProps } from '@staticcms/core';
+import type { CollectionWithDefaults, Entry, WidgetPreviewProps } from '@staticcms/core';
 import type { HtmlField } from '../../config';
 
 async function fromStorageToEditor(
@@ -56,7 +56,12 @@ async function fromStorageToEditor(
   return { result: newValue, cache };
 }
 
-function useStorageToEditor(input: string, collection: Collection<HtmlField>, field: HtmlField, entry: Entry) {
+function useStorageToEditor(
+  input: string,
+  collection: CollectionWithDefaults<HtmlField>,
+  field: HtmlField,
+  entry: Entry
+) {
   const [html, setHtml] = useState<string>('');
   const [fileCheckCache, setFileCheckCache] = useState<Record<string, boolean>>({});
 
@@ -84,7 +89,7 @@ function useStorageToEditor(input: string, collection: Collection<HtmlField>, fi
 }
 
 const EditorPreview = ({ value, field, collection, entry }: WidgetPreviewProps<string, HtmlField>) => {
-  const sanitizedHtml = field?.sanitize_preview ?? false ? (DOMPurify.sanitize(value) as string) : value;
+  const sanitizedHtml = field?.sanitize_preview ?? false ? DOMPurify.sanitize(value) : value;
   const html = useStorageToEditor(sanitizedHtml, collection, field, entry);
 
   return useMemo(

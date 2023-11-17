@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { Entry, TemplatePreviewComponent } from '@staticcms/core';
 import type { PostContentData } from '../../interface';
 
 const StyledBlogPostPreview = styled('div')`
@@ -50,7 +50,7 @@ const BlogPostPreview: TemplatePreviewComponent<PostContentData & { body: string
     () => ('fields' in collection ? collection.fields.find((f) => f.name === 'image') : null),
     [collection]
   );
-  const image = useMediaAsset(entry.data.image, collection, imageField, entry);
+  const image = useMediaAsset(entry.data.image, collection, imageField, entry as unknown as Entry);
 
   return (
     <StyledBlogPostPreview>

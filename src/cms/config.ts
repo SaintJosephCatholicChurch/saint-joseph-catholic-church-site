@@ -32,7 +32,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
   },
   media_library: {
     max_file_size: 10240000,
-    folder_support: true
+    folder_support: false
   },
   collections: [
     {
@@ -231,7 +231,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   public_folder: '/staff',
                   media_library: {
                     max_file_size: 10240000,
-                    folder_support: true
+                    folder_support: false
                   },
                 }
               ]
@@ -269,7 +269,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   widget: 'image',
                   media_library: {
                     max_file_size: 10240000,
-                    folder_support: true
+                    folder_support: false
                   },
                 },
                 {
@@ -320,7 +320,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   widget: 'image',
                   media_library: {
                     max_file_size: 10240000,
-                    folder_support: true
+                    folder_support: false
                   },
                 }
               ]
@@ -347,7 +347,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   widget: 'image',
                   media_library: {
                     max_file_size: 10240000,
-                    folder_support: true
+                    folder_support: false
                   },
                 }
               ]
@@ -371,7 +371,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       required: false,
                       media_library: {
                         max_file_size: 10240000,
-                        folder_support: true
+                        folder_support: false
                       },
                     },
                     {
@@ -404,7 +404,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       required: false,
                       media_library: {
                         max_file_size: 10240000,
-                        folder_support: true
+                        folder_support: false
                       },
                     },
                     {
@@ -478,7 +478,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           public_folder: '/bulletins',
           media_library: {
             max_file_size: 10240000,
-            folder_support: true
+            folder_support: false
           },
         }
       ]
@@ -518,7 +518,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           required: false,
           media_library: {
             max_file_size: 10240000,
-            folder_support: true
+            folder_support: false
           },
         },
         {
@@ -669,7 +669,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               widget: 'image',
               media_library: {
                 max_file_size: 10240000,
-                folder_support: true
+                folder_support: false
               },
             },
             {
@@ -803,7 +803,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               widget: 'image',
               media_library: {
                 max_file_size: 10240000,
-                folder_support: true
+                folder_support: false
               },
             }
           ]

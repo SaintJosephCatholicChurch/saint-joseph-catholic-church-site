@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, LARGE_BREAKPOINT } from '../../constants';
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 
 const StyledHeaderSecondaryTextWrapper = styled('div')`
   display: flex;

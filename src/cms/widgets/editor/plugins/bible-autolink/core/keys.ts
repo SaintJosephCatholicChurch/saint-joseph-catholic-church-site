@@ -1,7 +1,7 @@
 import { Fun, Obj, Type, Unicode } from '@ephox/katamari';
 import tinymce from 'tinymce';
 
-import { isNotEmpty } from '../../../../../../util/string.util';
+import { isNotEmpty } from '@/util/string.util';
 import * as Options from '../api/options';
 import { abbreviationsToUJSCCBBook } from './abbreviations';
 import { findBookAndChapter, findChar, freefallRtl, isNonBiblbeVerseCharacter, isPunctuation, isSpace } from './utils';

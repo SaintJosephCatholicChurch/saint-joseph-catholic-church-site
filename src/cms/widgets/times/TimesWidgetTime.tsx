@@ -17,7 +17,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { useCallback, useMemo, useState } from 'react';
 
-import { isNotEmpty } from '../../../util/string.util';
+import { isNotEmpty } from '@/util/string.util';
 
 import type { FC } from 'react';
 import type { TimesTime } from '../../../interface';
@@ -28,19 +28,40 @@ const StyledDayTimeLineTime = styled('div')`
   align-items: baseline;
   justify-content: flex-end;
   gap: 16px;
-  padding-right: 64px;
+  padding-right: 72px;
 `;
 
-const StyledDayTimeLineTimeTimesWrapper = styled('div')`
+const StyledTimesAndActionsWrapper = styled('div')`
   display: flex;
   gap: 8px;
   align-items: center;
+  width: 100%;
+`;
+
+const StyledDayTimeLineTimeTimesWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    ${theme.breakpoints.down('md')} {
+      flex-direction: column
+    }
+  `
+);
+
+const StyledActionButtons = styled('div')`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
 `;
 
 const StyledDayTimeLineTimeCommentWrapper = styled('div')`
   display: flex;
   gap: 8px;
   padding-left: 40px;
+  padding-right: 80px;
   width: 100%;
   box-sizing: border-box;
 `;
@@ -99,61 +120,65 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
   return (
     <div key={`section-day-time-${time.id}`} ref={setNodeRef} style={style} {...attributes}>
       <StyledDayTimeLineTime>
-        <StyledDayTimeLineTimeTimesWrapper>
-          <TimePicker
-            label="Start Time"
-            value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
-            onChange={(newValue) => {
-              let newDate = '';
-              try {
-                if (newValue) {
-                  newDate = format(newValue, 'h:mm a');
+        <StyledTimesAndActionsWrapper>
+          <StyledDayTimeLineTimeTimesWrapper>
+            <TimePicker
+              label="Start Time"
+              value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
+              onChange={(newValue) => {
+                let newDate = '';
+                try {
+                  if (newValue) {
+                    newDate = format(newValue, 'h:mm a');
+                  }
+                } catch (e) {
+                  console.error(e);
                 }
-              } catch (e) {
-                console.error(e);
-              }
-              handleChange({ time: newDate });
-            }}
-            slotProps={{
-              textField: {
-                size: 'small',
-                sx: { fontSize: '15px' }
-              }
-            }}
-            format="h:mm a"
-            ampm
-          />
-          <TimePicker
-            key={`section-day-time-${time.id}-end-time`}
-            label="End Time"
-            value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
-            onChange={(newValue) => {
-              let newDate = '';
-              try {
-                if (newValue) {
-                  newDate = format(newValue, 'h:mm a');
+                handleChange({ time: newDate });
+              }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { fontSize: '15px', flexGrow: 1 }
                 }
-              } catch (e) {
-                console.error(e);
-              }
-              handleChange({ end_time: newDate });
-            }}
-            slotProps={{
-              textField: {
-                size: 'small',
-                sx: { fontSize: '15px' }
-              }
-            }}
-            format="h:mm a"
-            ampm
-          />
-          <IconButton onClick={handleDelete} color="error">
-            <DeleteIcon />
-          </IconButton>
-          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-            <DragHandleIcon />
-          </StyledDragHandle>
-        </StyledDayTimeLineTimeTimesWrapper>
+              }}
+              format="h:mm a"
+              ampm
+            />
+            <TimePicker
+              key={`section-day-time-${time.id}-end-time`}
+              label="End Time"
+              value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
+              onChange={(newValue) => {
+                let newDate = '';
+                try {
+                  if (newValue) {
+                    newDate = format(newValue, 'h:mm a');
+                  }
+                } catch (e) {
+                  console.error(e);
+                }
+                handleChange({ end_time: newDate });
+              }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { fontSize: '15px', flexGrow: 1 }
+                }
+              }}
+              format="h:mm a"
+              ampm
+            />
+          </StyledDayTimeLineTimeTimesWrapper>
+          <StyledActionButtons>
+            <IconButton onClick={handleDelete} color="error">
+              <DeleteIcon />
+            </IconButton>
+            <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+              <DragHandleIcon />
+            </StyledDragHandle>
+          </StyledActionButtons>
+        </StyledTimesAndActionsWrapper>
         <StyledDayTimeLineTimeCommentWrapper>
           <TextField
             label="Notes"

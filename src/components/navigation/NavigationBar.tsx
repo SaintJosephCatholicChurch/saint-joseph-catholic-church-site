@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
-import getContainerQuery from '../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 import Logo from '../logo/Logo';
 import GiveButton from './GiveButton';
 import NavigationItems from './NavigationItems';

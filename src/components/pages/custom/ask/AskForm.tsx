@@ -5,9 +5,9 @@ import TextField from '@mui/material/TextField';
 import { useCallback, useMemo, useState } from 'react';
 
 import { CONTACT_URL } from '../../../../constants';
-import getContainerQuery from '../../../../util/container.util';
-import { isNotEmpty } from '../../../../util/string.util';
-import transientOptions from '../../../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import { isNotEmpty } from '@/util/string.util';
+import transientOptions from '@/util/transientOptions';
 
 import type { FormEventHandler } from 'react';
 

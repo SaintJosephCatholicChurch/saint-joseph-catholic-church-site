@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { arrayMoveImmutable } from '../../../util/array.util';
+import { arrayMoveImmutable } from '@/util/array.util';
 import TimesWidgetTime from './TimesWidgetTime';
 
 import type { DragEndEvent } from '@dnd-kit/core';
@@ -18,7 +18,8 @@ const StyledDayTimeLineTimes = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-left: 40px;
+  padding-left: 40px;
+  width: 100%;
 `;
 
 interface TimesWidgetTimesProps {

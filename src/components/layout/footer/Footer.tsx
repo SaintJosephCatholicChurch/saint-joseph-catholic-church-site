@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 
-import getContainerQuery from '../../../util/container.util';
-import transientOptions from '../../../util/transientOptions';
-import useLocation from '../../../util/useLocation';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
+import useLocation from '@/util/useLocation';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';
 import ContactDetails from './ContactDetails';

@@ -15,9 +15,9 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import { formatAsUtc } from '../../util/date.util';
-import { isEmpty } from '../../util/string.util';
+import getContainerQuery from '@/util/container.util';
+import { formatAsUtc } from '@/util/date.util';
+import { isEmpty } from '@/util/string.util';
 import PageTitle from '../pages/PageTitle';
 
 import type { CalendarApi } from '@fullcalendar/core';

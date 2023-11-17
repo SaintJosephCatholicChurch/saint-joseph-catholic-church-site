@@ -1,6 +1,6 @@
 import Popover from '@mui/material/Popover';
 
-import useModalContainer from '../../util/useModalContainer';
+import useModalContainer from '@/util/useModalContainer';
 import CalendarEventModalContent from './CalendarEventModalContent';
 import useEventDateTimeText from './hooks/useEventDateTimeText';
 import useEventTitle from './hooks/useEventTitle';

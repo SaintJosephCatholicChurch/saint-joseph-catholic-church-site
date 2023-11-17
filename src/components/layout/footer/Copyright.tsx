@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 import churchDetails from '../../../lib/church_details';
-import getContainerQuery from '../../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 const StyledCopyright = styled('div')(
   ({ theme }) => `

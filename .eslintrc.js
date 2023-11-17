@@ -1,11 +1,16 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: './'
+  },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'prettier',
     'plugin:import/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:@next/next/recommended'
   ],
   env: {
@@ -74,12 +79,13 @@ module.exports = {
       }
     ]
   },
-  plugins: ['babel', '@emotion', 'unicorn', 'react-hooks', '@typescript-eslint'],
+  plugins: ['babel', '@emotion', 'unicorn', 'react-hooks', '@typescript-eslint', 'import'],
   settings: {
     react: {
       version: 'detect'
     },
     'import/resolver': {
+      typescript: {},
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       }
@@ -131,7 +137,7 @@ module.exports = {
         '@typescript-eslint/require-await': 'error',
         '@typescript-eslint/restrict-plus-operands': 'error',
         '@typescript-eslint/restrict-template-expressions': 'error',
-        '@typescript-eslint/unbound-method': 'error',
+        '@typescript-eslint/unbound-method': 'error'
       }
     },
     {

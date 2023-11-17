@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MENU_DELAY } from '../../constants';
-import getContainerQuery from '../../util/container.util';
-import { isEmpty } from '../../util/string.util';
-import useClickOutside from '../../util/useClickOutside';
-import { useDebouncedToggleOff } from '../../util/useDebounce';
-import useLocation from '../../util/useLocation';
+import getContainerQuery from '@/util/container.util';
+import { isEmpty } from '@/util/string.util';
+import useClickOutside from '@/util/useClickOutside';
+import { useDebouncedToggleOff } from '@/util/useDebounce';
+import useLocation from '@/util/useLocation';
 import NavItemPopup from './NavItemPopup';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 

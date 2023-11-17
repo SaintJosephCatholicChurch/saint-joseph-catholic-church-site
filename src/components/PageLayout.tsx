@@ -1,6 +1,6 @@
 import churchDetails from '../lib/church_details';
 import config from '../lib/config';
-import { isNotEmpty } from '../util/string.util';
+import { isNotEmpty } from '@/util/string.util';
 import Layout from './Layout';
 import Footer from './layout/footer/Footer';
 import BasicMeta from './meta/BasicMeta';

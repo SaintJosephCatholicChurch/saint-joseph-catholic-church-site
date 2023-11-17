@@ -4,12 +4,12 @@ import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-import Container from '../../../../components/layout/Container';
-import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
-import PageTitle from '../../../../components/pages/PageTitle';
-import ContactForm from '../../../../components/pages/custom/contact/ContactForm';
+import Container from '@/components/layout/Container';
+import { StyledChurchDetailsLink, StyledContactDetails } from '@/components/layout/footer/ContactDetails';
+import PageTitle from '@/components/pages/PageTitle';
+import ContactForm from '@/components/pages/custom/contact/ContactForm';
 import homePageData from '../../../../lib/homepage';
-import getContainerQuery from '../../../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 import type { ChurchDetails } from '../../../../interface';
 

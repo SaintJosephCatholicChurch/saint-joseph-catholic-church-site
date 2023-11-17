@@ -4,8 +4,8 @@ import { memo, useCallback, useMemo } from 'react';
 
 import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';

@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 
-import ScheduleTabChangeEvent from '../../util/events/ScheduleTabChangeEvent';
-import { useWindowEvent } from '../../util/window.util';
+import ScheduleTabChangeEvent from '@/util/events/ScheduleTabChangeEvent';
+import { useWindowEvent } from '@/util/window.util';
 import ScheduleWidget from '../schedule/ScheduleWidget';
 
 import type { TemplatePreviewComponent } from '@staticcms/core';

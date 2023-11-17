@@ -3,9 +3,9 @@ import { useGetMediaAsset, useMediaInsert } from '@staticcms/core';
 import { useCallback, useMemo, useRef } from 'react';
 
 import { IMAGE_EXTENSION_REGEX } from '../../../constants';
-import { doesUrlFileExist } from '../../../util/fetch.util';
-import { isNotNullish } from '../../../util/null.util';
-import { isNotEmpty } from '../../../util/string.util';
+import { doesUrlFileExist } from '@/util/fetch.util';
+import { isNotNullish } from '@/util/null.util';
+import { isNotEmpty } from '@/util/string.util';
 import BundledEditor from './BundledEditor';
 
 import type { MediaPath, WidgetControlProps } from '@staticcms/core';

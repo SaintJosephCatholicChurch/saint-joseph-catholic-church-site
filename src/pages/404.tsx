@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import PageLayout from '../components/PageLayout';
-import PageContentView from '../components/pages/PageContentView';
-import SearchBox from '../components/SearchBox';
+import PageLayout from '@/components/PageLayout';
+import PageContentView from '@/components/pages/PageContentView';
+import SearchBox from '@/components/SearchBox';
 import { REDIRECTS } from '../constants';
 import { getSidebarProps } from '../lib/sidebar';
 

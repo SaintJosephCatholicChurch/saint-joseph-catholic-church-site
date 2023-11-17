@@ -1,7 +1,7 @@
-import PageLayout from '../../components/PageLayout';
-import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
+import PageLayout from '@/components/PageLayout';
+import ParishBulletinsView from '@/components/pages/custom/bulletins/ParishBulletinsView';
 import { fetchBulletinMetaData, fetchBulletins } from '../../lib/bulletins';
-import { isNotNullish } from '../../util/null.util';
+import { isNotNullish } from '@/util/null.util';
 
 import type { GetStaticProps } from 'next/types';
 import type { Bulletin, BulletinPDFData } from '../../interface';

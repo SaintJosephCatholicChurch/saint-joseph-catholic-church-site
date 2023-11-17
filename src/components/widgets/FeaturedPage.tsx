@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { memo, useMemo } from 'react';
 
 import { FeaturedPage } from '../../interface';
-import getContainerQuery from '../../util/container.util';
-import { isEmpty, isNotEmpty } from '../../util/string.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import { isEmpty, isNotEmpty } from '@/util/string.util';
+import transientOptions from '@/util/transientOptions';
 
 interface StyledFeaturedPageWrapperProps {
   $hideOnMobile: boolean;

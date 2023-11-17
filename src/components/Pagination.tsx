@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
-import { useMediaQueryDown } from '../util/useMediaQuery';
+import { useMediaQueryDown } from '@/util/useMediaQuery';
 
 import type { ChangeEvent } from 'react';
 

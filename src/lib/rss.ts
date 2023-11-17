@@ -1,6 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 
-import { isEmpty } from '../util/string.util';
+import { isEmpty } from '@/util/string.util';
 
 export const DAILY_READINGS_RSS = 'https://api.stjosephchurchbluffton.org/.netlify/functions/readings';
 

@@ -1,9 +1,9 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import transientOptions from '../../util/transientOptions';
-import useElementSize from '../../util/useElementSize';
-import useWindowSize from '../../util/useWindowSize';
+import transientOptions from '@/util/transientOptions';
+import useElementSize from '@/util/useElementSize';
+import useWindowSize from '@/util/useWindowSize';
 import NavLink from './NavLink';
 
 import type { KeyboardEvent, MouseEvent, MutableRefObject } from 'react';

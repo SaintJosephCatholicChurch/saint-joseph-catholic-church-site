@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { memo } from 'react';
 
 import { FeaturedLink } from '../../interface';
-import getContainerQuery from '../../util/container.util';
-import { isEmpty, isNotEmpty } from '../../util/string.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import { isEmpty, isNotEmpty } from '@/util/string.util';
+import transientOptions from '@/util/transientOptions';
 
 interface StyledFeaturedLinkWrapperProps {
   $hideOnMobile: boolean;

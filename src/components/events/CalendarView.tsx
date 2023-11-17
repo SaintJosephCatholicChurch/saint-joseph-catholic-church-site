@@ -10,9 +10,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import useIsomorphicLayoutEffect from '../../util/useIsomorphicLayoutEffect';
-import { useMediaQueryDown, useMediaQueryUp } from '../../util/useMediaQuery';
+import getContainerQuery from '@/util/container.util';
+import useIsomorphicLayoutEffect from '@/util/useIsomorphicLayoutEffect';
+import { useMediaQueryDown, useMediaQueryUp } from '@/util/useMediaQuery';
 import CalendarEventDialog from './CalendarEventDialog';
 import CalendarEventPopover from './CalendarEventPopover';
 import CalendarEventRenderer from './CalendarEventRenderer';

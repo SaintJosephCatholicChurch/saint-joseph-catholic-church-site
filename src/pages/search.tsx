@@ -4,18 +4,18 @@ import parseISO from 'date-fns/parseISO';
 import escapeRegExp from 'lodash/escapeRegExp';
 import { useEffect, useMemo, useState } from 'react';
 
-import PageLayout from '../components/PageLayout';
-import SearchResult from '../components/search/SearchResult';
-import SearchBox from '../components/SearchBox';
+import PageLayout from '@/components/PageLayout';
+import SearchResult from '@/components/search/SearchResult';
+import SearchBox from '@/components/SearchBox';
 import { BULLETIN, NEWS, PAGE, SEARCH_RESULTS_TO_SHOW } from '../constants';
 import { fetchBulletinsMetaData } from '../lib/bulletins';
 import churchDetails from '../lib/church_details';
 import { fetchPageContent } from '../lib/pages';
 import { fetchPostContent } from '../lib/posts';
 import staff from '../lib/staff';
-import { useSearchScores } from '../util/search.util';
-import { isNotEmpty } from '../util/string.util';
-import useLocation from '../util/useLocation';
+import { useSearchScores } from '@/util/search.util';
+import { isNotEmpty } from '@/util/string.util';
+import useLocation from '@/util/useLocation';
 
 import type { GetStaticProps } from 'next/types';
 import type { SearchableEntry } from '../interface';

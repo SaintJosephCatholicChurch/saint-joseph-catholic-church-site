@@ -5,7 +5,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import getContainerQuery from '../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 interface GiveButtonProps {
   title: string;

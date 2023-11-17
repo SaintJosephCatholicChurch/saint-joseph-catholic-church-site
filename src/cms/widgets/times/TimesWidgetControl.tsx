@@ -8,12 +8,13 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import Container from '../../../components/layout/Container';
-import { arrayMoveImmutable } from '../../../util/array.util';
-import ScheduleTabChangeEvent from '../../../util/events/ScheduleTabChangeEvent';
-import { useWindowEvent } from '../../../util/window.util';
+import Container from '@/components/layout/Container';
+import { arrayMoveImmutable } from '@/util/array.util';
+import ScheduleTabChangeEvent from '@/util/events/ScheduleTabChangeEvent';
+import { useWindowEvent } from '@/util/window.util';
 import SortableCategoryTab from './SortableCategoryTab';
 import ScheduleTabPanel from './TimesWidgetTabPanelWidget';
+import { useMediaQueryDown } from '@/util/useMediaQuery';
 
 import type { DragEndEvent } from '@dnd-kit/core';
 import type { Times } from '../../../interface';
@@ -79,7 +80,7 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
 
   const handleDataChange = useCallback(
     (timesValue: Times, index: number) => (newData: Partial<Times>) => {
-      console.log('handleDataChange', timesValue, index)
+      console.log('handleDataChange', timesValue, index);
       const newTimes = [...internalValue];
       newTimes[index] = { ...timesValue, ...newData };
       setInternalValue(newTimes);
@@ -124,6 +125,8 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
     [onChange, internalValue]
   );
 
+  const isSmallScreen = useMediaQueryDown('md');
+
   return (
     <StyledScheduleWidget>
       <Container disablePadding>
@@ -131,10 +134,10 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
           <DndContext onDragEnd={handleDragEnd}>
             <SortableContext items={internalValue}>
               <Tabs
-                orientation="vertical"
+                orientation={isSmallScreen ? 'horizontal' : 'vertical'}
                 variant="standard"
                 value={value}
-                aria-label="Vertical tabs example"
+                aria-label="category tabs"
                 scrollButtons={false}
                 sx={{
                   backgroundColor: 'rgba(241, 241, 241, 0.75)',

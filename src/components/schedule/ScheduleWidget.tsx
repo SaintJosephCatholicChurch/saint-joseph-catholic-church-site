@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
 

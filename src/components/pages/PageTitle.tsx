@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 
 import type { ReactNode } from 'react';
 

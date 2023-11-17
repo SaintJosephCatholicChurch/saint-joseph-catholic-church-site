@@ -9,8 +9,8 @@ import {
   CAROUSEL_MAX_HEIGHT_MD,
   CAROUSEL_MAX_HEIGHT_SM
 } from '../../constants';
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 import CarouselSlide from './CarouselSlide';
 
 import type { ScheduleSection, Slide } from '../../interface';

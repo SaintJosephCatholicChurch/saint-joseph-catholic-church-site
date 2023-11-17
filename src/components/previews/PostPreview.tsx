@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { Entry, FileOrImageField, TemplatePreviewComponent } from '@staticcms/core';
 import type { PostContentData } from '../../interface';
 
 const StyledBlogPostPreview = styled('div')`
@@ -37,11 +37,9 @@ const StyledBlogPostPreviewContent = styled('div')`
   margin-top: 32px;
 `;
 
-const BlogPostPreview: TemplatePreviewComponent<PostContentData & { body: string }> = ({
-  entry,
-  widgetFor,
-  collection
-}) => {
+type BlogPostData = PostContentData & { body: string };
+
+const BlogPostPreview: TemplatePreviewComponent<BlogPostData> = ({ entry, widgetFor, collection }) => {
   const dateString = useMemo(() => entry.data.date, [entry.data.date]);
 
   const date = useMemo(() => parseISO(dateString), [dateString]);
@@ -49,7 +47,7 @@ const BlogPostPreview: TemplatePreviewComponent<PostContentData & { body: string
   const imageField = useMemo(
     () => ('fields' in collection ? collection.fields.find((f) => f.name === 'image') : null),
     [collection]
-  );
+  ) as FileOrImageField;
   const image = useMediaAsset(entry.data.image, collection, imageField, entry);
 
   return (

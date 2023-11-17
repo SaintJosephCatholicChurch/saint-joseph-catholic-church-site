@@ -3,7 +3,7 @@ import format from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import { memo } from 'react';
 
-import transientOptions from '../../util/transientOptions';
+import transientOptions from '@/util/transientOptions';
 
 interface StyledDateProps {
   $disableMargin: boolean;

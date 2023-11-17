@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 
-import transientOptions from '../util/transientOptions';
+import transientOptions from '@/util/transientOptions';
 
 import type { ReactNode } from 'react';
 

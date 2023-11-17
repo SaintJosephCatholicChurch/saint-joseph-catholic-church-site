@@ -1,7 +1,7 @@
 import parseISO from 'date-fns/parseISO';
 
-import PageLayout from '../components/PageLayout';
-import PageContentView from '../components/pages/PageContentView';
+import PageLayout from '@/components/PageLayout';
+import PageContentView from '@/components/pages/PageContentView';
 import { fetchPageContent } from '../lib/pages';
 import { getSidebarProps } from '../lib/sidebar';
 

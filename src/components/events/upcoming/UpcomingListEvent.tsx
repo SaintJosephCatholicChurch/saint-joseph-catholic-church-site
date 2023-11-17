@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import format from 'date-fns/format';
 import { useMemo } from 'react';
 
-import { formatAsUtc } from '../../../util/date.util';
+import { formatAsUtc } from '@/util/date.util';
 import useEventTitle from '../hooks/useEventTitle';
 
 import type { EventRenderRange } from '@fullcalendar/core';

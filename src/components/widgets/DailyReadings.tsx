@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 

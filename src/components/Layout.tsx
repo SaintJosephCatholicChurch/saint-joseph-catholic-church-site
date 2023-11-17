@@ -5,7 +5,7 @@ import Head from 'next/head';
 
 import churchDetails from '../lib/church_details';
 import menuDetails from '../lib/menu';
-import getContainerQuery from '../util/container.util';
+import getContainerQuery from '@/util/container.util';
 import Navigation from './navigation/Navigation';
 import ScrollTop from './navigation/ScrollTop';
 

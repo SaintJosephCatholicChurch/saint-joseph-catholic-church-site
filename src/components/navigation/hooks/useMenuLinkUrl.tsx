@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { isNotEmpty } from '../../../util/string.util';
+import { isNotEmpty } from '@/util/string.util';
 
 import type { MenuLink } from '../../../interface';
 

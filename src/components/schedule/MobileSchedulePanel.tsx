@@ -7,9 +7,9 @@ import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import getContainerQuery from '../../util/container.util';
-import { isNotEmpty } from '../../util/string.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import { isNotEmpty } from '@/util/string.util';
+import transientOptions from '@/util/transientOptions';
 
 import type { Times } from '../../interface';
 

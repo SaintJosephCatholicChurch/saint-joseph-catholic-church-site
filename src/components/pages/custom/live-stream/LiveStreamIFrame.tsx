@@ -7,8 +7,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import { useEffect, useMemo, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../../constants';
-import getContainerQuery from '../../../../util/container.util';
-import { isEmpty } from '../../../../util/string.util';
+import getContainerQuery from '@/util/container.util';
+import { isEmpty } from '@/util/string.util';
 import useLiveStreamUrl from './useLiveStreamUrl';
 
 const EXTRA_BUTTON_HEIGHT = 67;

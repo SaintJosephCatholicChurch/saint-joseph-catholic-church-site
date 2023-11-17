@@ -4,8 +4,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { useMemo } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import useModalContainer from '../../util/useModalContainer';
+import getContainerQuery from '@/util/container.util';
+import useModalContainer from '@/util/useModalContainer';
 import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 

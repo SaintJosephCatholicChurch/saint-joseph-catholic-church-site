@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 
-import transientOptions from '../../../util/transientOptions';
+import transientOptions from '@/util/transientOptions';
 import TimesWidgetTimes from './TimesWidgetTimes';
 
 import type { FC } from 'react';

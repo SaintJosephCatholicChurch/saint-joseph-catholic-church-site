@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
-import PageLayout from '../components/PageLayout';
-import LiveStreamView from '../components/pages/custom/live-stream/LiveStreamView';
+import PageLayout from '@/components/PageLayout';
+import LiveStreamView from '@/components/pages/custom/live-stream/LiveStreamView';
 import churchDetails from '../lib/church_details';
 import { getSidebarStaticProps } from '../lib/sidebar';
 

@@ -5,7 +5,7 @@ import parseISO from 'date-fns/parseISO';
 import Link from 'next/link';
 import { memo, useEffect, useMemo, useState } from 'react';
 
-import { isNotEmpty } from '../../util/string.util';
+import { isNotEmpty } from '@/util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';
 import PostDateAuthorLine from './PostDateAuthorLine';

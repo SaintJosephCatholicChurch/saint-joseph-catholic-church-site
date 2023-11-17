@@ -5,11 +5,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
-import TabPanel from '../../../components/TabPanel';
+import TabPanel from '@/components/TabPanel';
+import { useMediaQueryDown } from '@/util/useMediaQuery';
 import TimesWidgetSections from './TimesWidgetSections';
 
 import type { Times } from '../../../interface';
@@ -29,7 +31,8 @@ const StyledTabPanelContent = styled('div')`
 const StyledTabPanelTitleWrapper = styled('div')`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
 `;
 
 interface ScheduleTabPanelProps {
@@ -49,6 +52,8 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
   }, [onDelete]);
   const handleOnDeleteClose = useCallback(() => setDeleting(false), []);
 
+  const isSmallScreen = useMediaQueryDown('md');
+
   return (
     <>
       <TabPanel value={value} index={index}>
@@ -60,25 +65,33 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
               size="small"
               onChange={(event) => onChange({ name: event.target.value })}
               sx={{
+                flexGrow: 1,
                 input: {
                   fontSize: '20px',
                   fontWeight: '500',
                   color: '#333',
-                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
+                  fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                  flexGrow: 1
                 }
               }}
             />
-            <Button
-              variant="outlined"
-              aria-label="delete recipe"
-              color="error"
-              onClick={handleOnDelete}
-              title="Delete recipe"
-              size="small"
-            >
-              <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-              Delete
-            </Button>
+            {isSmallScreen ? (
+              <IconButton aria-label="delete category" color="error" onClick={handleOnDelete} title="Delete category">
+                <DeleteIcon />
+              </IconButton>
+            ) : (
+              <Button
+                variant="outlined"
+                aria-label="delete category"
+                color="error"
+                onClick={handleOnDelete}
+                title="Delete category"
+                size="small"
+              >
+                <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
+                Delete
+              </Button>
+            )}
           </StyledTabPanelTitleWrapper>
           <TimesWidgetSections sections={times.sections} onChange={(sections) => onChange({ sections })} />
         </StyledTabPanelContent>

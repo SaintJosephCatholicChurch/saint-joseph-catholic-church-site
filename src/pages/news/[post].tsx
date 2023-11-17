@@ -1,8 +1,8 @@
 import parseISO from 'date-fns/parseISO';
 import { useMemo } from 'react';
 
-import PageLayout from '../../components/PageLayout';
-import PostView from '../../components/posts/PostView';
+import PageLayout from '@/components/PageLayout';
+import PostView from '@/components/posts/PostView';
 import { fetchPostContent } from '../../lib/posts';
 import { getSidebarProps } from '../../lib/sidebar';
 

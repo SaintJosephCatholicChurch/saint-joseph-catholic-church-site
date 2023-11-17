@@ -2,10 +2,10 @@ import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
-import { StyledLink } from '../../../components/common/StyledLink';
-import PageLayout from '../../../components/PageLayout';
-import PageTitle from '../../../components/pages/PageTitle';
-import TagPostList from '../../../components/TagPostList';
+import { StyledLink } from '@/components/common/StyledLink';
+import PageLayout from '@/components/PageLayout';
+import PageTitle from '@/components/pages/PageTitle';
+import TagPostList from '@/components/TagPostList';
 import config from '../../../lib/config';
 import { countPosts, listPostContent } from '../../../lib/posts';
 import { listTags } from '../../../lib/tags';

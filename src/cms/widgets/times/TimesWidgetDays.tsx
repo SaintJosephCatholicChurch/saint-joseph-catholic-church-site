@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { arrayMoveImmutable } from '../../../util/array.util';
+import { arrayMoveImmutable } from '@/util/array.util';
 import TimesWidgetDay from './TimesWidgetDay';
 
 import type { DragEndEvent } from '@dnd-kit/core';

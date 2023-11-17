@@ -1,12 +1,12 @@
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
 
-import PageLayout from '../components/PageLayout';
-import MobileScheduleTabPanel from '../components/schedule/MobileSchedulePanel';
-import ScheduleTabPanel from '../components/schedule/ScheduleTabPanel';
+import PageLayout from '@/components/PageLayout';
+import MobileScheduleTabPanel from '@/components/schedule/MobileSchedulePanel';
+import ScheduleTabPanel from '@/components/schedule/ScheduleTabPanel';
 import { getSidebarStaticProps } from '../lib/sidebar';
 import times from '../lib/times';
-import getContainerQuery from '../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 import type { SidebarProps } from '../lib/sidebar';
 

@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
 
-import getContainerQuery from '../../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 import { StyledLink } from '../../common/StyledLink';
 import RecentNewsPost from './RecentNewsPost';
 

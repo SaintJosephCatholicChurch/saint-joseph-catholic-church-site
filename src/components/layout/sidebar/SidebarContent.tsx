@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { useLayoutEffect, useState } from 'react';
 
 import { SMALL_BREAKPOINT } from '../../../constants';
-import getContainerQuery from '../../../util/container.util';
-import useWindowSize from '../../../util/useWindowSize';
+import getContainerQuery from '@/util/container.util';
+import useWindowSize from '@/util/useWindowSize';
 import SearchBox from '../../SearchBox';
 import DailyReadings from '../../widgets/DailyReadings';
 import RecentNews from '../../widgets/recent-news/RecentNews';

@@ -1,5 +1,5 @@
-import PageLayout from '../components/PageLayout';
-import StaffView from '../components/pages/custom/staff/StaffView';
+import PageLayout from '@/components/PageLayout';
+import StaffView from '@/components/pages/custom/staff/StaffView';
 import { getSidebarStaticProps } from '../lib/sidebar';
 import staff from '../lib/staff';
 

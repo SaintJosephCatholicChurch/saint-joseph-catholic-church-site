@@ -2,8 +2,8 @@ import parseISO from 'date-fns/parseISO';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-import { getFormattedBulletinTitle } from '../components/pages/custom/bulletins/util';
-import { isNullish } from '../util/null.util';
+import { getFormattedBulletinTitle } from '@/components/pages/custom/bulletins/util';
+import { isNullish } from '@/util/null.util';
 
 import type { Bulletin, BulletinPDFData } from '../interface';
 

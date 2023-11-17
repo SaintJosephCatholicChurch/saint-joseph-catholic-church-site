@@ -1,5 +1,5 @@
-import PageLayout from '../components/PageLayout';
-import ContactView from '../components/pages/custom/contact/ContactView';
+import PageLayout from '@/components/PageLayout';
+import ContactView from '@/components/pages/custom/contact/ContactView';
 import churchDetails from '../lib/church_details';
 
 const Contact = () => {

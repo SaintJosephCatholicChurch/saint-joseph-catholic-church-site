@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { isNullish } from '../../../util/null.util';
+import { isNullish } from '@/util/null.util';
 
 export default function useEventTitle(title?: string | undefined | null): string {
   return useMemo(() => {

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import 'normalize.css';
 import '../../public/styles/global.css';
-import { disableReactDevTools } from '../util/devtools.util';
+import { disableReactDevTools } from '@/util/devtools.util';
 
 import type { AppProps } from 'next/app';
 

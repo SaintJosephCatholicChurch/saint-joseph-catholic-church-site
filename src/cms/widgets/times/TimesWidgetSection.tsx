@@ -13,8 +13,8 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 
-import CollapseSection from '../../../components/layout/CollapseSection';
-import transientOptions from '../../../util/transientOptions';
+import CollapseSection from '@/components/layout/CollapseSection';
+import transientOptions from '@/util/transientOptions';
 import TimesWidgetDays from './TimesWidgetDays';
 
 import type { MouseEvent } from 'react';

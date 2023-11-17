@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import { formatAsUtc } from '../../../util/date.util';
+import { formatAsUtc } from '@/util/date.util';
 import useEventTitle from '../hooks/useEventTitle';
 
 import type { MouseEvent } from 'react';

@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
-import getContainerQuery from '../../util/container.util';
-import { isNotEmpty } from '../../util/string.util';
+import getContainerQuery from '@/util/container.util';
+import { isNotEmpty } from '@/util/string.util';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
@@ -219,7 +219,7 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
           variant="fullWidth"
           value={value}
           onChange={handleChange}
-          aria-label="Vertical tabs example"
+          aria-label="schedule tabs"
           scrollButtons={false}
           sx={{
             backgroundColor: 'rgba(241, 241, 241, 0.35)',

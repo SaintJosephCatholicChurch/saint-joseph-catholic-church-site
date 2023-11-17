@@ -1,5 +1,5 @@
-import PageLayout from '../../../components/PageLayout';
-import PostList from '../../../components/posts/PostList';
+import PageLayout from '@/components/PageLayout';
+import PostList from '@/components/posts/PostList';
 import config from '../../../lib/config';
 import homepageData from '../../../lib/homepage';
 import { countPosts, listPostContent } from '../../../lib/posts';

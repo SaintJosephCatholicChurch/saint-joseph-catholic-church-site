@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 import { STAFF_CARD_GAP_SIZE, STAFF_DEFAULT_CARD_SIZE, STAFF_GLOBAL_PADDING } from '../../../../constants';
-import getContainerQuery from '../../../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 import type { Staff } from '../../../../interface';
 

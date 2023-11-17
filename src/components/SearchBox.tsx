@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import { useRouter } from 'next/router';
 import { memo, useCallback, useEffect, useState } from 'react';
 
-import { isEmpty } from '../util/string.util';
-import { useMediaQueryDown } from '../util/useMediaQuery';
+import { isEmpty } from '@/util/string.util';
+import { useMediaQueryDown } from '@/util/useMediaQuery';
 
 const StyledSearchBox = styled('div')`
   display: flex;

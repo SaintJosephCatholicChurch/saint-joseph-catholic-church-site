@@ -3,9 +3,9 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
 
-import getContainerQuery from '../../../util/container.util';
-import { isNotEmpty } from '../../../util/string.util';
-import transientOptions from '../../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import { isNotEmpty } from '@/util/string.util';
+import transientOptions from '@/util/transientOptions';
 
 import type { PostContent } from '../../../interface';
 

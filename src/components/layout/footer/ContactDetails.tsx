@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../constants';
-import getContainerQuery from '../../../util/container.util';
+import getContainerQuery from '@/util/container.util';
 
 import type { ChurchDetails } from '../../../interface';
 

@@ -2,8 +2,8 @@ import { useGetMediaAsset } from '@staticcms/core';
 import DOMPurify from 'dompurify';
 import { useEffect, useMemo, useState } from 'react';
 
-import { doesUrlFileExist } from '../../../util/fetch.util';
-import { isNotNullish } from '../../../util/null.util';
+import { doesUrlFileExist } from '@/util/fetch.util';
+import { isNotNullish } from '@/util/null.util';
 
 import type { Collection, Entry, WidgetPreviewProps } from '@staticcms/core';
 import type { HtmlField } from '../../config';

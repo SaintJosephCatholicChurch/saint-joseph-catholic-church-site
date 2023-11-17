@@ -9,8 +9,8 @@ import { addMonths } from 'date-fns';
 import Link from 'next/link';
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import { useMediaQueryUp } from '../../util/useMediaQuery';
+import getContainerQuery from '@/util/container.util';
+import { useMediaQueryUp } from '@/util/useMediaQuery';
 import { StyledLink } from '../common/StyledLink';
 import CalendarEventDialog from '../events/CalendarEventDialog';
 import CalendarEventPopover from '../events/CalendarEventPopover';

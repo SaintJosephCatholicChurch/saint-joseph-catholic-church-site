@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
-import getContainerQuery from '../../util/container.util';
-import transientOptions from '../../util/transientOptions';
+import getContainerQuery from '@/util/container.util';
+import transientOptions from '@/util/transientOptions';
 import Container from '../layout/Container';
 import Sidebar from '../layout/sidebar/Sidebar';
 import PageTitle from './PageTitle';

@@ -1,8 +1,8 @@
-import HomepageView from '../components/homepage/HomepageView';
-import Layout from '../components/Layout';
-import BasicMeta from '../components/meta/BasicMeta';
-import OpenGraphMeta from '../components/meta/OpenGraphMeta';
-import TwitterCardMeta from '../components/meta/TwitterCardMeta';
+import HomepageView from '@/components/homepage/HomepageView';
+import Layout from '@/components/Layout';
+import BasicMeta from '@/components/meta/BasicMeta';
+import OpenGraphMeta from '@/components/meta/OpenGraphMeta';
+import TwitterCardMeta from '@/components/meta/TwitterCardMeta';
 import homePageData from '../lib/homepage';
 import { getSidebarStaticProps } from '../lib/sidebar';
 import times from '../lib/times';

@@ -3,7 +3,7 @@ import Collapse from '@mui/material/Collapse';
 import { styled } from '@mui/material/styles';
 import { memo, useCallback, useMemo, useState } from 'react';
 
-import transientOptions from '../../util/transientOptions';
+import transientOptions from '@/util/transientOptions';
 
 interface StyledArrowIconWrapperProps {
   $collapsed: boolean;

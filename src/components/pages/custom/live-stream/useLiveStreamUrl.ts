@@ -43,7 +43,7 @@ export default function useLiveStreamUrl({
       }
     };
 
-    getVideo();
+    getVideo().catch((e) => console.error(e));
 
     return () => {
       alive = false;

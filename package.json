@@ -32,7 +32,7 @@
     "@fortawesome/react-fontawesome": "0.2.0",
     "@fullcalendar/core": "6.1.9",
     "@fullcalendar/daygrid": "6.1.9",
-    "@fullcalendar/google-calendar": "6.1.9",
+    "@fullcalendar/google-calendar": "6.1.10",
     "@fullcalendar/list": "6.1.9",
     "@fullcalendar/react": "6.1.9",
     "@fullcalendar/timegrid": "6.1.9",

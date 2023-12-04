@@ -100,8 +100,6 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
       const oldIndex = internalValue.findIndex((t) => t.id === active.id);
       const newIndex = internalValue.findIndex((t) => t.id === over.id);
 
-      console.log('[SECTIONS] oldIndex', oldIndex, 'active.id', active.id, 'newIndex', newIndex, 'over.id', over.id);
-
       // Update value
       const newTimes = arrayMoveImmutable(internalValue, oldIndex, newIndex);
       setInternalValue(newTimes);

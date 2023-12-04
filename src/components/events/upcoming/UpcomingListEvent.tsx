@@ -85,6 +85,8 @@ const UpcomingListEvent = ({ segment, onClick }: UpcomingListEventProps) => {
       return 'All Day';
     }
 
+    console.log(segment);
+
     if (segment.isStart) {
       return formatAsUtc(segment.range.start, 'h:mmaaa');
     }

@@ -79,7 +79,6 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
 
   const handleDataChange = useCallback(
     (timesValue: Times, index: number) => (newData: Partial<Times>) => {
-      console.log('handleDataChange', timesValue, index)
       const newTimes = [...internalValue];
       newTimes[index] = { ...timesValue, ...newData };
       setInternalValue(newTimes);
@@ -113,8 +112,6 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
 
       const oldIndex = internalValue.findIndex((t) => t.id === active.id);
       const newIndex = internalValue.findIndex((t) => t.id === over.id);
-
-      console.log('oldIndex', oldIndex, 'active.id', active.id, 'newIndex', newIndex, 'over.id', over.id);
 
       // Update value
       const newTimes = arrayMoveImmutable(internalValue, oldIndex, newIndex);

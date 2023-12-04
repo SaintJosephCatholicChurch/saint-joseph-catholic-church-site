@@ -29,7 +29,7 @@ const MobileListView =
   ) => {
     const api = calendarRef.current?.getApi();
 
-    const segs = sliceEvents(props, true);
+    const segs = sliceEvents(props, false);
 
     const getEventById: (eventId: string) => EventImpl | undefined = (eventId) => {
       return api?.getEvents().find((event) => (event as EventImpl)._def.defId === eventId) as EventImpl | undefined;

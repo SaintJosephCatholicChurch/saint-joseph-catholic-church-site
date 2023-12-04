@@ -705,13 +705,13 @@
 
         function info(msg) {
           if (verbosity >= VerbosityLevel.INFOS) {
-            console.log('Info: '.concat(msg));
+            console.info('Info: '.concat(msg));
           }
         }
 
         function warn(msg) {
           if (verbosity >= VerbosityLevel.WARNINGS) {
-            console.log('Warning: '.concat(msg));
+            console.warn('Warning: '.concat(msg));
           }
         }
 
@@ -10943,7 +10943,7 @@
         }
 
         function deprecated(details) {
-          console.log('Deprecated API usage: ' + details);
+          console.warn('Deprecated API usage: ' + details);
         }
 
         var pdfDateStringRegex;

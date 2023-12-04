@@ -138,7 +138,7 @@
                   "id": "4ff1ed83-1d56-4d8e-85a0-1b46d2ec57f4"
                 },
                 {
-                  "note": "No First Friday  6 PM Mass in November 2023",
+                  "note": "No First Friday  6 PM Mass in December 2023",
                   "id": "57f07cb5-b560-4225-ac4c-3d4475b14416"
                 }
               ],
@@ -241,30 +241,53 @@
         {
           "days": [
             {
-              "day": "After morning Mass",
+              "day": "Monday, November 27, 2023",
               "times": [
                 {
-                  "time": "8:30 AM",
-                  "end_time": "6:00 PM",
-                  "note": "Adoration ends at 4 PM on November 4, 2023",
+                  "time": "7:00 PM",
+                  "end_time": "",
+                  "note": "Mass at 7 PM; Adoration begins after Mass",
                   "id": "7c497806-a7cf-43d8-8c30-6484caefe690"
                 }
               ],
               "id": "adad7054-644d-4639-8ca9-58d687ca4b3c"
             },
             {
-              "day": "Litany of the Eucharist/Benediction",
+              "day": "Tuesday, November 28, 2023",
               "times": [
                 {
-                  "time": "5:45 PM",
+                  "time": "",
                   "end_time": "",
-                  "id": "75e2ceb2-e43d-463a-8768-81e9d7d3789a"
+                  "id": "75e2ceb2-e43d-463a-8768-81e9d7d3789a",
+                  "note": "8:00 AM - Mass"
+                },
+                {
+                  "id": "865b726c-dd8d-406b-824e-e87926f323f3",
+                  "note": "6:30 PM - Sung Vespers"
+                },
+                {
+                  "id": "345956cd-312b-4740-851c-e37af0351c53",
+                  "note": "7:00 PM - Eucharistic Speaker"
                 }
               ],
               "id": "0819157d-b241-42a1-9438-3ed3af4dfc58"
+            },
+            {
+              "id": "ba9b0359-9791-4315-a78c-52a869bc1547",
+              "day": "Wednesday, November 29, 2023",
+              "times": [
+                {
+                  "id": "84155e25-d1a1-4d55-8109-bbdc1b172ec7",
+                  "note": "6:45 PM - Benediction"
+                },
+                {
+                  "id": "f240f4dc-4c2c-4d22-9570-4181109d20f8",
+                  "note": "7:00 PM - Mass"
+                }
+              ]
             }
           ],
-          "name": "First Friday of Each Month",
+          "name": "Forty Hours Devotion (2023)",
           "id": "5e1dffbb-6a56-4edb-b1e9-058ed83f4dfa"
         },
         {
@@ -311,6 +334,22 @@
             }
           ],
           "id": "ad882541-b819-427d-a707-e1ff712d7fc3"
+        },
+        {
+          "id": "f2451d77-7d02-4807-94ea-bd9f4af4c9d1",
+          "name": "First Friday of Each Month (Cancelled for December 2023)",
+          "days": [
+            {
+              "id": "970d3fad-87de-46c0-b660-6a22d37acd70",
+              "day": "After morning Mass",
+              "times": [
+                {
+                  "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
+                  "note": "Note: Due to Forty Hours Devotion, there is no First Friday Adoration in December 2023."
+                }
+              ]
+            }
+          ]
         }
       ],
       "id": "92ac4474-522a-4b8c-9139-72634ebfec2d"
@@ -390,7 +429,7 @@
       "id": "f56ca711-880b-4497-812b-b92ca5603457"
     },
     {
-      "name": "Christmas Mass Times",
+      "name": "Holy Day and Christmas",
       "sections": [
         {
           "name": "Christmas Eve - Sunday, Dec. 24th",
@@ -446,6 +485,41 @@
             }
           ],
           "id": "699b283d-3ae5-43a6-a26e-29a6ac956880"
+        },
+        {
+          "id": "c3a9cbfe-5a18-4ba9-9930-2ea76677bb23",
+          "name": "Holy Day - Immaculate Conception",
+          "days": [
+            {
+              "id": "8d5ba761-c90e-4984-a7de-7f99c087c2b9",
+              "day": "Thursday, December 7, 2023",
+              "times": [
+                {
+                  "id": "b3439f12-c2dc-424b-a538-8df6bcfb9edc",
+                  "time": "7:00 PM",
+                  "note": "Vigil Mass"
+                }
+              ]
+            },
+            {
+              "id": "6e152838-1549-4ef7-a167-fd0a7aeadbf4",
+              "day": "Friday, December 8, 2023",
+              "times": [
+                {
+                  "id": "b9b309f9-2e07-49fb-ad04-440744b61b6a",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "691d598b-4d85-43cc-82f9-961af242ec4c",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "c248bd25-bf13-4b51-83a8-45c4edd5cb9b",
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
         }
       ],
       "id": "c879ad93-915e-4579-9486-76c1ac9f1c76"

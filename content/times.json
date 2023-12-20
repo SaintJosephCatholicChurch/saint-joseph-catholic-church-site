@@ -151,6 +151,67 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "name": "Christmas Schedule",
+      "sections": [
+        {
+          "name": "Christmas Eve - Sunday, Dec. 24th",
+          "days": [
+            {
+              "day": "Vigil Mass (Children's Choir)",
+              "times": [
+                {
+                  "time": "4:00 PM",
+                  "id": "79fd6ef4-abf3-4f83-8d9c-5cf6162a84e3"
+                }
+              ],
+              "id": "a99e9b9a-c4e4-4d33-a953-b2e7835471b3"
+            },
+            {
+              "day": "Vigil Mass (Choir)",
+              "times": [
+                {
+                  "time": "6:00 PM",
+                  "note": "Christmas Carols Starts at 5:30 PM",
+                  "id": "f938d382-67df-4f5a-9e6a-99dd20c92c81"
+                }
+              ],
+              "id": "cfd1b581-eff6-4b73-a62a-f6108b9f591d"
+            }
+          ],
+          "id": "b6f7e676-e601-4fb2-b759-99869f6af087"
+        },
+        {
+          "name": "Christmas Day - Monday, Dec. 25th",
+          "days": [
+            {
+              "day": "Midnight Mass",
+              "times": [
+                {
+                  "time": "12:00 AM",
+                  "note": "Mass By Candlelight",
+                  "id": "4f2fe01d-574f-4531-83f9-5b291459ed87"
+                }
+              ],
+              "id": "7e7bc69d-d2eb-4eab-b3cc-1f7ab0f683dd"
+            },
+            {
+              "day": "Mass During the Day",
+              "times": [
+                {
+                  "time": "9:00 AM",
+                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)",
+                  "id": "418262da-10de-4078-81f2-9923ebbe3bf4"
+                }
+              ],
+              "id": "c0404e80-7ba3-476e-a564-4df3387ea151"
+            }
+          ],
+          "id": "699b283d-3ae5-43a6-a26e-29a6ac956880"
+        }
+      ],
+      "id": "c879ad93-915e-4579-9486-76c1ac9f1c76"
+    },
+    {
       "name": "Confession Times",
       "sections": [
         {
@@ -427,102 +488,6 @@
         }
       ],
       "id": "f56ca711-880b-4497-812b-b92ca5603457"
-    },
-    {
-      "name": "Holy Day and Christmas",
-      "sections": [
-        {
-          "name": "Christmas Eve - Sunday, Dec. 24th",
-          "days": [
-            {
-              "day": "Vigil Mass (Children's Choir)",
-              "times": [
-                {
-                  "time": "4:00 PM",
-                  "id": "79fd6ef4-abf3-4f83-8d9c-5cf6162a84e3"
-                }
-              ],
-              "id": "a99e9b9a-c4e4-4d33-a953-b2e7835471b3"
-            },
-            {
-              "day": "Vigil Mass (Choir)",
-              "times": [
-                {
-                  "time": "6:00 PM",
-                  "note": "Christmas Carols Starts at 5:30 PM",
-                  "id": "f938d382-67df-4f5a-9e6a-99dd20c92c81"
-                }
-              ],
-              "id": "cfd1b581-eff6-4b73-a62a-f6108b9f591d"
-            }
-          ],
-          "id": "b6f7e676-e601-4fb2-b759-99869f6af087"
-        },
-        {
-          "name": "Christmas Day - Monday, Dec. 25th",
-          "days": [
-            {
-              "day": "Midnight Mass",
-              "times": [
-                {
-                  "time": "12:00 AM",
-                  "note": "Mass By Candlelight",
-                  "id": "4f2fe01d-574f-4531-83f9-5b291459ed87"
-                }
-              ],
-              "id": "7e7bc69d-d2eb-4eab-b3cc-1f7ab0f683dd"
-            },
-            {
-              "day": "Mass During the Day",
-              "times": [
-                {
-                  "time": "9:00 AM",
-                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)",
-                  "id": "418262da-10de-4078-81f2-9923ebbe3bf4"
-                }
-              ],
-              "id": "c0404e80-7ba3-476e-a564-4df3387ea151"
-            }
-          ],
-          "id": "699b283d-3ae5-43a6-a26e-29a6ac956880"
-        },
-        {
-          "id": "c3a9cbfe-5a18-4ba9-9930-2ea76677bb23",
-          "name": "Holy Day - Immaculate Conception",
-          "days": [
-            {
-              "id": "8d5ba761-c90e-4984-a7de-7f99c087c2b9",
-              "day": "Thursday, December 7, 2023",
-              "times": [
-                {
-                  "id": "b3439f12-c2dc-424b-a538-8df6bcfb9edc",
-                  "time": "7:00 PM",
-                  "note": "Vigil Mass"
-                }
-              ]
-            },
-            {
-              "id": "6e152838-1549-4ef7-a167-fd0a7aeadbf4",
-              "day": "Friday, December 8, 2023",
-              "times": [
-                {
-                  "id": "b9b309f9-2e07-49fb-ad04-440744b61b6a",
-                  "time": "7:00 AM"
-                },
-                {
-                  "id": "691d598b-4d85-43cc-82f9-961af242ec4c",
-                  "time": "12:00 PM"
-                },
-                {
-                  "id": "c248bd25-bf13-4b51-83a8-45c4edd5cb9b",
-                  "time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "id": "c879ad93-915e-4579-9486-76c1ac9f1c76"
     }
   ]
 }

@@ -138,7 +138,7 @@
                   "id": "4ff1ed83-1d56-4d8e-85a0-1b46d2ec57f4"
                 },
                 {
-                  "note": "No First Friday  6 PM Mass in December 2023",
+                  "note": "",
                   "id": "57f07cb5-b560-4225-ac4c-3d4475b14416"
                 }
               ],
@@ -151,65 +151,51 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
-      "name": "Christmas Schedule",
+      "name": "Parish Office Hours",
       "sections": [
         {
-          "name": "Christmas Eve - Sunday, Dec. 24th",
+          "name": "Parish Office Hours",
           "days": [
             {
-              "day": "Vigil Mass (Children's Choir)",
-              "times": [
-                {
-                  "time": "4:00 PM",
-                  "id": "79fd6ef4-abf3-4f83-8d9c-5cf6162a84e3"
-                }
-              ],
-              "id": "a99e9b9a-c4e4-4d33-a953-b2e7835471b3"
-            },
-            {
-              "day": "Vigil Mass (Choir)",
-              "times": [
-                {
-                  "time": "6:00 PM",
-                  "note": "Christmas Carols Starts at 5:30 PM",
-                  "id": "f938d382-67df-4f5a-9e6a-99dd20c92c81"
-                }
-              ],
-              "id": "cfd1b581-eff6-4b73-a62a-f6108b9f591d"
-            }
-          ],
-          "id": "b6f7e676-e601-4fb2-b759-99869f6af087"
-        },
-        {
-          "name": "Christmas Day - Monday, Dec. 25th",
-          "days": [
-            {
-              "day": "Midnight Mass",
-              "times": [
-                {
-                  "time": "12:00 AM",
-                  "note": "Mass By Candlelight",
-                  "id": "4f2fe01d-574f-4531-83f9-5b291459ed87"
-                }
-              ],
-              "id": "7e7bc69d-d2eb-4eab-b3cc-1f7ab0f683dd"
-            },
-            {
-              "day": "Mass During the Day",
+              "day": "Monday - Friday",
               "times": [
                 {
                   "time": "9:00 AM",
-                  "note": "Christmas Brunch after Mass (Contact Parish Office to Sign Up for Brunch)",
-                  "id": "418262da-10de-4078-81f2-9923ebbe3bf4"
+                  "end_time": "4:00 PM",
+                  "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f"
                 }
               ],
-              "id": "c0404e80-7ba3-476e-a564-4df3387ea151"
+              "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
+            },
+            {
+              "day": "Tuesday & Thursday",
+              "times": [
+                {
+                  "time": "12:00 PM",
+                  "end_time": "4:00 PM",
+                  "note": "",
+                  "id": "90945a52-3def-4dfd-ab37-108985e1c59e"
+                }
+              ],
+              "id": "826d901f-0ade-4c9a-a447-b6436b34a8bc"
+            },
+            {
+              "day": "St. Vincent de Paul Applications",
+              "times": [
+                {
+                  "time": "10:00 AM",
+                  "end_time": "1:00 PM",
+                  "note": "Accepted on Mondays",
+                  "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
+                }
+              ],
+              "id": "5a2febf5-4141-42e3-a995-dfcbcd7d3852"
             }
           ],
-          "id": "699b283d-3ae5-43a6-a26e-29a6ac956880"
+          "id": "da122c19-c24a-40f1-9bd3-fe1f55daab62"
         }
       ],
-      "id": "c879ad93-915e-4579-9486-76c1ac9f1c76"
+      "id": "f56ca711-880b-4497-812b-b92ca5603457"
     },
     {
       "name": "Confession Times",
@@ -419,57 +405,18 @@
       "name": "Stations of the Cross",
       "sections": [
         {
-          "name": "",
+          "name": "Parish Office Hours",
           "days": [
             {
-              "day": "Every Friday during Lent",
-              "times": [
-                {
-                  "time": "7:00 PM",
-                  "end_time": "",
-                  "id": "215d613d-c764-450c-ba57-233d84dc42a0"
-                }
-              ],
-              "id": "df9230fd-c281-4fe1-a611-b5aa562fc1d1"
-            }
-          ],
-          "id": "401c3a04-037c-4ed4-a4f8-447a9f67f736"
-        },
-        {
-          "note": "Station booklets are also available in the Narthex for use in private devotions throughout the year",
-          "id": "f58cbd0d-6a2c-4572-8f8c-42cd76bfce62"
-        }
-      ],
-      "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
-    },
-    {
-      "name": "Parish Office Hours",
-      "sections": [
-        {
-          "name": "Parish Office Hours (Oct. 2 - 24, 2023)",
-          "days": [
-            {
-              "day": "Monday, Wednesday, & Friday",
+              "day": "Monday - Friday",
               "times": [
                 {
                   "time": "9:00 AM",
-                  "end_time": "1:00 PM",
+                  "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f"
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
-            },
-            {
-              "day": "Tuesday & Thursday",
-              "times": [
-                {
-                  "time": "12:00 PM",
-                  "end_time": "4:00 PM",
-                  "note": "",
-                  "id": "90945a52-3def-4dfd-ab37-108985e1c59e"
-                }
-              ],
-              "id": "826d901f-0ade-4c9a-a447-b6436b34a8bc"
             },
             {
               "day": "St. Vincent de Paul Applications",
@@ -487,7 +434,7 @@
           "id": "da122c19-c24a-40f1-9bd3-fe1f55daab62"
         }
       ],
-      "id": "f56ca711-880b-4497-812b-b92ca5603457"
+      "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
     }
   ]
 }

@@ -151,6 +151,36 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "id": "29fdeeb2-8b54-4745-941b-2d2a4bac0459",
+      "name": "Ash Wednesday",
+      "sections": [
+        {
+          "id": "2d9cf76a-42b5-45c6-ae54-1b26cbab8c7b",
+          "name": "Ash Wednesday Mass Times",
+          "days": [
+            {
+              "id": "12179b0e-bcdc-4afc-beed-5b66f37e302f",
+              "day": "Wednesday, February 14, 2024",
+              "times": [
+                {
+                  "id": "edb5513a-d9f0-4cf9-8e30-8cfd11abaef5",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "72a7c2b9-2d5a-42d0-a6a2-ce0c38242e15",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "0ee607ad-44b7-4253-8330-e87ad447f36a",
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Parish Office Hours",
       "sections": [
         {

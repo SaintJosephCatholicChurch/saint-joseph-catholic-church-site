@@ -423,26 +423,26 @@
       "name": "Stations of the Cross",
       "sections": [
         {
-          "name": "Parish Office Hours",
+          "name": "Fridays during Lent",
           "days": [
             {
-              "day": "Monday - Friday",
+              "day": "Stations of the Cross",
               "times": [
                 {
-                  "time": "9:00 AM",
-                  "end_time": "4:00 PM",
+                  "time": "7:00 PM",
+                  "end_time": "",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f"
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
             },
             {
-              "day": "St. Vincent de Paul Applications",
+              "day": "Lenten Soup Supper",
               "times": [
                 {
-                  "time": "10:00 AM",
-                  "end_time": "1:00 PM",
-                  "note": "Accepted on Mondays",
+                  "time": "",
+                  "end_time": "",
+                  "note": "Time TBD",
                   "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
                 }
               ],

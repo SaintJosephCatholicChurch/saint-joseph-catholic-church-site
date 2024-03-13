@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,40 +13,41 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 
-import transientOptions from '../../../util/transientOptions';
+import CollapseSection from '../../../components/layout/CollapseSection';
 import TimesWidgetTimes from './TimesWidgetTimes';
 
 import type { FC } from 'react';
 import type { TimesDay } from '../../../interface';
 
-interface StyledDayTimeLineProps {
-  $noBorderBottom?: boolean;
-}
+const StyledDayTimeLine = styled('div')`
+  display: flex;
+  margin-top: 0;
+  margin-left: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
 
-const StyledDayTimeLine = styled(
-  'div',
-  transientOptions
-)<StyledDayTimeLineProps>(
-  ({ $noBorderBottom }) => `
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    min-height: 20px;
-    margin-top: 0;
-    padding: 8px 0;
-    margin-left: 30px;
-    padding-bottom: 16px;
-    gap: 16px;
-    ${$noBorderBottom ? '' : 'border-bottom: 1px solid #ccc;'}
-  `
-);
+const StyledDayTimeLineContent = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 20px;
+  padding: 12px 8px;
+  flex-grow: 1;
+`;
+
+const StyledDayTimeLineTimes = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+`;
 
 const StyledDayTimeLineTitleWrapper = styled('div')`
   display: flex;
   gap: 8px;
   width: 100%;
-  padding-right: 32px;
   box-sizing: border-box;
   align-items: center;
 `;
@@ -54,7 +55,13 @@ const StyledDayTimeLineTitleWrapper = styled('div')`
 const StyledDragHandle = styled('div')(
   ({ theme }) => `
     cursor: grab;
-    color: ${theme.palette.text.secondary};
+    color: ${theme.palette.text.primary};
+    background: #eee;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   `
 );
 
@@ -94,30 +101,41 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
   return (
     <div key={`section-day-${day.id}`} ref={setNodeRef} style={style} {...attributes}>
       <StyledDayTimeLine>
-        <StyledDayTimeLineTitleWrapper>
-          <TextField
-            label="Day / Line Title"
-            value={day.day}
-            size="small"
-            onChange={(event) => handleChange({ day: event.target.value })}
-            fullWidth
-            sx={{
-              input: {
-                color: '#8D6D26',
-                fontWeight: 500,
-                fontSize: '14px',
-                fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
-              }
-            }}
-          />
-          <IconButton onClick={handleDelete} color="error">
-            <DeleteIcon />
-          </IconButton>
-          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-            <DragHandleIcon />
-          </StyledDragHandle>
-        </StyledDayTimeLineTitleWrapper>
-        <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
+        <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+          <DragIndicatorIcon />
+        </StyledDragHandle>
+        <StyledDayTimeLineContent>
+          <CollapseSection
+            startCollapsed
+            position="before"
+            header={
+              <StyledDayTimeLineTitleWrapper>
+                <TextField
+                  label="Day / Line Title"
+                  value={day.day}
+                  size="small"
+                  onChange={(event) => handleChange({ day: event.target.value })}
+                  fullWidth
+                  sx={{
+                    input: {
+                      color: '#8D6D26',
+                      fontWeight: 500,
+                      fontSize: '14px',
+                      fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
+                    }
+                  }}
+                />
+                <IconButton onClick={handleDelete} color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </StyledDayTimeLineTitleWrapper>
+            }
+          >
+          <StyledDayTimeLineTimes>
+            <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
+          </StyledDayTimeLineTimes>
+          </CollapseSection>
+        </StyledDayTimeLineContent>
       </StyledDayTimeLine>
       {deleting ? (
         <Dialog

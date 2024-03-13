@@ -18,7 +18,8 @@ const StyledDayTimeLineTimes = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-left: 40px;
+  margin-left: 28px;
+  width: calc(100% - 28px);
 `;
 
 interface TimesWidgetTimesProps {
@@ -112,7 +113,7 @@ const TimesWidgetTimes: FC<TimesWidgetTimesProps> = ({ times: rawTimes = [], onC
           ) : null}
         </SortableContext>
       </DndContext>
-      <Button onClick={handleAdd} sx={{ ml: 5 }}>
+      <Button onClick={handleAdd} sx={{ ml: '28px' }}>
         <AddIcon />
         <Box>Add Time</Box>
       </Button>

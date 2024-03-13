@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,7 +14,6 @@ import { styled } from '@mui/material/styles';
 import { useCallback, useMemo, useState } from 'react';
 
 import CollapseSection from '../../../components/layout/CollapseSection';
-import transientOptions from '../../../util/transientOptions';
 import TimesWidgetDays from './TimesWidgetDays';
 
 import type { MouseEvent } from 'react';
@@ -26,43 +25,45 @@ const StyledNotesSectionContentWrapper = styled('div')`
   align-items: center;
   padding-left: 28px;
   justify-content: space-between;
+  width: 100%;
 `;
 
 const StyledSection = styled('div')`
-  margin-top: 24px;
   display: flex;
-  flex-direction: column;
   width: 100%;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #333;
-  gap: 8px;
-
-  .MuiCollapse-wrapperInner {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  border-radius: 4px;
+  border: 1px solid #ccc;
 `;
 
-interface StyledDayTimeLineProps {
-  $noBorderBottom?: boolean;
-}
-
-const StyledDayTimeLine = styled(
-  'div',
-  transientOptions
-)<StyledDayTimeLineProps>(
-  ({ $noBorderBottom }) => `
+const StyledSectionContent = styled('div')(
+  () => `
     display: flex;
     flex-direction: column;
-    align-items: items-center;
+    align-items: flex-start;
     justify-content: space-between;
-    min-height: 20px;
-    margin-top: 0;
-    gap: 16px;
-    ${$noBorderBottom ? '' : 'border-bottom: 1px solid #ccc;'}
+    width: 100%;
+    padding: 12px 8px;
+
+    .MuiCollapse-wrapperInner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   `
 );
+
+const StyledDayTimeLine = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: items-center;
+  justify-content: space-between;
+  min-height: 20px;
+  margin-top: 0;
+  gap: 16px;
+  border-bottom: #ccc;
+  border-radius: 4px;
+  width: 100%;
+`;
 
 const StyledDayTimeLineTitleWrapper = styled('div')`
   display: flex;
@@ -70,6 +71,7 @@ const StyledDayTimeLineTitleWrapper = styled('div')`
   width: 100%;
   box-sizing: border-box;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const StyledSectionHeaderWrapper = styled('div')`
@@ -83,12 +85,20 @@ const StyledSectionHeaderWrapper = styled('div')`
 const StyledSectionHeader = styled('div')`
   display: flex;
   gap: 8px;
+  justify-content: space-between;
+  flex-grow: 1;
 `;
 
 const StyledDragHandle = styled('div')(
   ({ theme }) => `
     cursor: grab;
-    color: ${theme.palette.text.secondary};
+    color: ${theme.palette.text.primary};
+    background: #eee;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   `
 );
 
@@ -140,31 +150,33 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
     return (
       <div key={`section-note-${section.id}`} ref={setNodeRef} style={style} {...attributes}>
         <StyledSection>
-          <StyledNotesSectionContentWrapper>
-            <StyledDayTimeLine $noBorderBottom={true}>
-              <StyledDayTimeLineTitleWrapper>
-                <TextField
-                  label="Note"
-                  value={section.note}
-                  size="small"
-                  onChange={(event) => handleChange({ note: event.target.value } as T)}
-                  fullWidth
-                  sx={{
-                    input: {
-                      fontSize: '13px',
-                      color: '#757575'
-                    }
-                  }}
-                />
-                <IconButton onClick={handleDelete} color="error">
-                  <DeleteIcon />
-                </IconButton>
-              </StyledDayTimeLineTitleWrapper>
-            </StyledDayTimeLine>
-            <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-              <DragHandleIcon />
-            </StyledDragHandle>
-          </StyledNotesSectionContentWrapper>
+          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+            <DragIndicatorIcon />
+          </StyledDragHandle>
+          <StyledSectionContent>
+            <StyledNotesSectionContentWrapper>
+              <StyledDayTimeLine>
+                <StyledDayTimeLineTitleWrapper>
+                  <TextField
+                    label="Note"
+                    value={section.note}
+                    size="small"
+                    onChange={(event) => handleChange({ note: event.target.value } as T)}
+                    fullWidth
+                    sx={{
+                      input: {
+                        fontSize: '13px',
+                        color: '#757575'
+                      }
+                    }}
+                  />
+                  <IconButton onClick={handleDelete} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledDayTimeLineTitleWrapper>
+              </StyledDayTimeLine>
+            </StyledNotesSectionContentWrapper>
+          </StyledSectionContent>
         </StyledSection>
         {deleting ? (
           <Dialog
@@ -174,11 +186,11 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
             aria-labelledby="deleting-section-title"
             aria-describedby="deleting-section-description"
           >
-            <DialogTitle id="deleting-section-title" className="text-gray-800 dark:text-white">
+            <DialogTitle id="deleting-section-title">
               <span key="delete-note">Delete note &quot;{section.note}&quot;?</span>
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="deleting-times category-description" className="text-gray-800 dark:text-white">
+              <DialogContentText id="deleting-times category-description">
                 <span key="delete-note-body">
                   Are you sure you want to delete this note &quot;{section.note}&quot;?
                 </span>
@@ -201,36 +213,38 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
   return (
     <div key={`section-${section.id}`} ref={setNodeRef} style={style} {...attributes}>
       <StyledSection>
-        <CollapseSection
-          header={
-            <StyledSectionHeaderWrapper>
-              <StyledSectionHeader>
-                <TextField
-                  label="Section"
-                  value={section.name}
-                  size="small"
-                  onChange={(event) => handleChange({ name: event.target.value } as T)}
-                  onClick={stopPropagationOnClick}
-                  sx={{
-                    input: {
-                      fontSize: '16x',
-                      fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
-                    }
-                  }}
-                />
-                <IconButton onClick={handleDelete} color="error">
-                  <DeleteIcon />
-                </IconButton>
-              </StyledSectionHeader>
-              <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-                <DragHandleIcon />
-              </StyledDragHandle>
-            </StyledSectionHeaderWrapper>
-          }
-          position="before"
-        >
-          <TimesWidgetDays days={section.days} onChange={(days) => handleChange({ days } as T)} />
-        </CollapseSection>
+        <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+          <DragIndicatorIcon />
+        </StyledDragHandle>
+        <StyledSectionContent>
+          <CollapseSection
+            position="before"
+            header={
+              <StyledSectionHeaderWrapper>
+                <StyledSectionHeader>
+                  <TextField
+                    label="Section"
+                    value={section.name}
+                    size="small"
+                    onChange={(event) => handleChange({ name: event.target.value } as T)}
+                    onClick={stopPropagationOnClick}
+                    sx={{
+                      input: {
+                        fontSize: '16x',
+                        fontFamily: "'Oswald', Helvetica, Arial, sans-serif"
+                      }
+                    }}
+                  />
+                  <IconButton onClick={handleDelete} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledSectionHeader>
+              </StyledSectionHeaderWrapper>
+            }
+          >
+            <TimesWidgetDays days={section.days} onChange={(days) => handleChange({ days } as T)} />
+          </CollapseSection>
+        </StyledSectionContent>
       </StyledSection>
       {deleting ? (
         <Dialog
@@ -240,11 +254,11 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
           aria-labelledby="deleting-section-title"
           aria-describedby="deleting-section-description"
         >
-          <DialogTitle id="deleting-section-title" className="text-gray-800 dark:text-white">
+          <DialogTitle id="deleting-section-title">
             <span key="delete-section">Delete section &quot;{section.name}&quot;?</span>
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="deleting-times category-description" className="text-gray-800 dark:text-white">
+            <DialogContentText id="deleting-times category-description">
               <span key="delete-section-body">
                 Are you sure you want to delete this section &quot;{section.name}&quot;?
               </span>

@@ -16,10 +16,11 @@ import type { Times } from '../../../interface';
 
 const StyledTabPanelContent = styled('div')`
   padding: 16px;
-  padding-left: 32px;
+  padding-left: 24px;
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  gap: 16px;
 
   &:not([hidden]) {
     display: flex;

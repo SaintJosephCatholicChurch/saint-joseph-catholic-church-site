@@ -10,7 +10,7 @@
     "dev": "cross-env NODE_ENV=development next dev",
     "build": "cross-env NODE_ENV=production next build",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",
-    "local-cms": "npx @staticcms/proxy-server",
+    "local-cms": "npx @staticcms/proxy-server@3.0.2",
     "redirects": "ts-node ./scripts/generate-redirects.ts",
     "prettier": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --write",
     "start": "next start",

@@ -22,12 +22,24 @@ const StyledArrowIconWrapper = styled(
   `
 );
 
-const StyledHeader = styled('div')`
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
+interface StyledHeaderProps {
+  $collapsed: boolean;
+}
+
+const StyledHeader = styled(
+  'div',
+  transientOptions
+)<StyledHeaderProps>(
+  ({ $collapsed }) => `
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: ${$collapsed ? '0' : '8px'};
+    transition: all 0.5s ease;
+    width: 100%;
+  `
+);
 
 interface CollapseSectionProps {
   header: React.ReactNode;
@@ -59,12 +71,14 @@ const CollapseSection = memo(
 
     return (
       <>
-        <StyledHeader onClick={toggleCollapse}>
+        <StyledHeader $collapsed={collapsed} onClick={toggleCollapse}>
           {position === 'before' ? collapseButton : null}
           {header}
           {position === 'after' ? collapseButton : null}
         </StyledHeader>
-        <Collapse in={!collapsed}>{children}</Collapse>
+        <Collapse in={!collapsed} sx={{ width: '100%' }}>
+          {children}
+        </Collapse>
       </>
     );
   }

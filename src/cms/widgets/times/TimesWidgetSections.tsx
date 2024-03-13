@@ -17,6 +17,7 @@ import type { TimesNoteSection, TimesSection } from '../../../interface';
 const StyledSectionTimeLines = styled('div')`
   display: flex;
   flex-direction: column;
+  gap: 16px;
 `;
 
 const StyledAddButtonWrapper = styled('div')`
@@ -127,11 +128,11 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
         </SortableContext>
       </DndContext>
       <StyledAddButtonWrapper>
-        <Button onClick={handleAdd} sx={{ mt: 2 }}>
+        <Button onClick={handleAdd}>
           <AddIcon />
           <Box>Add Section</Box>
         </Button>
-        <Button onClick={handleAddNote} sx={{ mt: 2 }}>
+        <Button onClick={handleAddNote}>
           <AddIcon />
           <Box>Add Note</Box>
         </Button>

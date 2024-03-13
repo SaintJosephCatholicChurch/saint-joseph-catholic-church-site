@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -24,12 +24,22 @@ import type { TimesTime } from '../../../interface';
 
 const StyledDayTimeLineTime = styled('div')`
   display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 16px;
-  padding-right: 64px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
 `;
+
+const StyledDayTimeLineTimeContent = styled('div')(
+  () => `
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-grow: 1;
+    padding: 12px 8px;
+  `
+);
 
 const StyledDayTimeLineTimeTimesWrapper = styled('div')`
   display: flex;
@@ -59,7 +69,13 @@ const StyledDeletingTimeDetailsNote = styled('div')`
 const StyledDragHandle = styled('div')(
   ({ theme }) => `
     cursor: grab;
-    color: ${theme.palette.text.secondary};
+    color: ${theme.palette.text.primary};
+    background: #eee;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   `
 );
 
@@ -99,80 +115,82 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
   return (
     <div key={`section-day-time-${time.id}`} ref={setNodeRef} style={style} {...attributes}>
       <StyledDayTimeLineTime>
-        <StyledDayTimeLineTimeTimesWrapper>
-          <TimePicker
-            label="Start Time"
-            value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
-            onChange={(newValue) => {
-              let newDate = '';
-              try {
-                if (newValue) {
-                  newDate = format(newValue, 'h:mm a');
+        <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
+          <DragIndicatorIcon />
+        </StyledDragHandle>
+        <StyledDayTimeLineTimeContent>
+          <StyledDayTimeLineTimeTimesWrapper>
+            <TimePicker
+              label="Start Time"
+              value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
+              onChange={(newValue) => {
+                let newDate = '';
+                try {
+                  if (newValue) {
+                    newDate = format(newValue, 'h:mm a');
+                  }
+                } catch (e) {
+                  console.error(e);
                 }
-              } catch (e) {
-                console.error(e);
-              }
-              handleChange({ time: newDate });
-            }}
-            slotProps={{
-              textField: {
-                size: 'small',
-                sx: { fontSize: '15px' }
-              }
-            }}
-            format="h:mm a"
-            ampm
-          />
-          <TimePicker
-            key={`section-day-time-${time.id}-end-time`}
-            label="End Time"
-            value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
-            onChange={(newValue) => {
-              let newDate = '';
-              try {
-                if (newValue) {
-                  newDate = format(newValue, 'h:mm a');
+                handleChange({ time: newDate });
+              }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { fontSize: '15px' }
                 }
-              } catch (e) {
-                console.error(e);
+              }}
+              format="h:mm a"
+              ampm
+            />
+            <TimePicker
+              key={`section-day-time-${time.id}-end-time`}
+              label="End Time"
+              value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
+              onChange={(newValue) => {
+                let newDate = '';
+                try {
+                  if (newValue) {
+                    newDate = format(newValue, 'h:mm a');
+                  }
+                } catch (e) {
+                  console.error(e);
+                }
+                handleChange({ end_time: newDate });
+              }}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { fontSize: '15px' }
+                }
+              }}
+              format="h:mm a"
+              ampm
+            />
+            <IconButton onClick={handleDelete} color="error">
+              <DeleteIcon />
+            </IconButton>
+          </StyledDayTimeLineTimeTimesWrapper>
+          <StyledDayTimeLineTimeCommentWrapper>
+            <TextField
+              label="Notes"
+              value={time.note}
+              size="small"
+              onChange={(event) =>
+                handleChange({
+                  note: event.target.value
+                })
               }
-              handleChange({ end_time: newDate });
-            }}
-            slotProps={{
-              textField: {
-                size: 'small',
-                sx: { fontSize: '15px' }
-              }
-            }}
-            format="h:mm a"
-            ampm
-          />
-          <IconButton onClick={handleDelete} color="error">
-            <DeleteIcon />
-          </IconButton>
-          <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-            <DragHandleIcon />
-          </StyledDragHandle>
-        </StyledDayTimeLineTimeTimesWrapper>
-        <StyledDayTimeLineTimeCommentWrapper>
-          <TextField
-            label="Notes"
-            value={time.note}
-            size="small"
-            onChange={(event) =>
-              handleChange({
-                note: event.target.value
-              })
-            }
-            fullWidth
-            sx={{
-              input: {
-                fontSize: '13px',
-                color: '#757575'
-              }
-            }}
-          />
-        </StyledDayTimeLineTimeCommentWrapper>
+              fullWidth
+              sx={{
+                input: {
+                  fontSize: '13px',
+                  color: '#757575'
+                }
+              }}
+            />
+          </StyledDayTimeLineTimeCommentWrapper>
+        </StyledDayTimeLineTimeContent>
       </StyledDayTimeLineTime>
       {deleting ? (
         <Dialog

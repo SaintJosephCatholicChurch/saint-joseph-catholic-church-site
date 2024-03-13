@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/material/styles';
 import { useCallback, useMemo } from 'react';
@@ -55,7 +55,7 @@ const SortableTab: FC<SortableTabProps> = ({ timeSchedule, index, onClick }) => 
   return (
     <StyledTabLabel ref={setNodeRef} style={style} {...attributes}>
       <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
-        <DragHandleIcon />
+        <DragIndicatorIcon />
       </StyledDragHandle>
       <Tab
         label={timeSchedule.name}

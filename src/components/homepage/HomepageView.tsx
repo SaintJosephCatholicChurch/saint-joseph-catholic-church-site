@@ -1,7 +1,15 @@
-import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import { styled, useTheme } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { memo, useCallback, useMemo } from 'react';
 
+import {
+  EXTRA_EXTRA_SMALL_BREAKPOINT,
+  EXTRA_SMALL_BREAKPOINT,
+  LARGE_BREAKPOINT,
+  SMALL_BREAKPOINT
+} from '../../constants';
 import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
 import getContainerQuery from '../../util/container.util';
@@ -38,6 +46,113 @@ const StyledReadingsAndPageSectionWrapper = styled(StyledSectionWrapper)(
     }
   `
 );
+
+const StyledNewsletterSignupSectionWrapper = styled(StyledSectionWrapper)`
+  padding-bottom: 32px;
+  background-color: rgba(232, 229, 225, 0.5);
+`;
+
+const StyledNewsletterSignupSectionContent = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-grow: 1;
+`;
+
+const StyledNewsletterBanner = styled('div')(
+  ({ theme }) => `
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      gap: 32px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+  `
+);
+
+const StyledNewsletterBannerTitles = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      align-items: center;
+    }
+  `
+);
+
+const StyledNewsletterBannerTitle = styled('h2')(
+  ({ theme }) => `
+    font-size: 42px;
+    margin: 0;
+    color: #bc2f3b;
+    text-transform: uppercase;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    line-height: 48px;
+
+    ${getContainerQuery(theme.breakpoints.down(LARGE_BREAKPOINT))} {
+      font-size: 36px;
+      line-height: 48px;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(SMALL_BREAKPOINT))} {
+      font-size: 32px;
+      line-height: unset;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
+      font-size: 28px;
+      line-height: unset;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
+      font-size: 24px;
+      line-height: unset;
+    }
+  `
+);
+
+const StyledNewsletterBannerSubtitle = styled('h3')(
+  ({ theme }) => `
+    font-size: 32px;
+    margin: 0;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    line-height: 36px;
+
+    ${getContainerQuery(theme.breakpoints.down(LARGE_BREAKPOINT))} {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(SMALL_BREAKPOINT))} {
+      font-size: 24px;
+      line-height: unset;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))} {
+      font-size: 20px;
+      line-height: unset;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
+      font-size: 18px;
+      line-height: unset;
+    }
+  `
+);
+
+const StyledNewsletterSignupButtonWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   ({ theme }) => `
@@ -111,11 +226,20 @@ interface HomepageViewProps {
 
 const HomepageView = memo(
   ({
-    homePageData: { slides, schedule_section, live_stream_button, invitation_text, daily_readings, featured },
+    homePageData: {
+      slides,
+      schedule_section,
+      live_stream_button,
+      invitation_text,
+      daily_readings,
+      featured,
+      newsletter
+    },
     times,
     recentPosts,
     hideSearch
   }: HomepageViewProps) => {
+    const theme = useTheme();
     const UpcomingEventsNoSSR = useMemo(
       () =>
         dynamic(() => import('../widgets/UpcomingEvents'), {
@@ -190,6 +314,55 @@ const HomepageView = memo(
             </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledReadingsAndPageSectionWrapper>
+        <StyledNewsletterSignupSectionWrapper>
+          <Container>
+            <StyledNewsletterSignupSectionContent>
+              <StyledNewsletterBanner>
+                <StyledNewsletterBannerTitles>
+                  <StyledNewsletterBannerTitle>{newsletter.bannerTitle}</StyledNewsletterBannerTitle>
+                  <StyledNewsletterBannerSubtitle>{newsletter.bannerSubtitle}</StyledNewsletterBannerSubtitle>
+                </StyledNewsletterBannerTitles>
+                <StyledNewsletterSignupButtonWrapper>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    startIcon={<Image src="./flocknote-logo.png" alt="flocknote signup" width={32} height={32} />}
+                    href={newsletter.signupLink}
+                    target="_blank"
+                    sx={{
+                      fontSize: '26px',
+                      backgroundColor: '#bc2f3b',
+                      '&:hover': {
+                        backgroundColor: '#d24c57',
+                        color: '#ffffff'
+                      },
+                      '.MuiButton-startIcon > *:nth-of-type(1)': {
+                        fontSize: '24px'
+                      },
+                      [getContainerQuery(theme.breakpoints.down(LARGE_BREAKPOINT))]: {
+                        fontSize: '22px'
+                      },
+                      [getContainerQuery(theme.breakpoints.down(SMALL_BREAKPOINT))]: {
+                        fontSize: '20px'
+                      },
+                      [getContainerQuery(theme.breakpoints.down(EXTRA_SMALL_BREAKPOINT))]: {
+                        fontSize: '16px'
+                      },
+                      [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
+                        fontSize: '14px',
+                        '.MuiButton-startIcon > *:nth-of-type(1)': {
+                          fontSize: '20px'
+                        }
+                      }
+                    }}
+                  >
+                    {newsletter.signupButtonText}
+                  </Button>
+                </StyledNewsletterSignupButtonWrapper>
+              </StyledNewsletterBanner>
+            </StyledNewsletterSignupSectionContent>
+          </Container>
+        </StyledNewsletterSignupSectionWrapper>
         <StyledNewsAndEventsWrapper>
           <Container>
             <StyledWidgetSectionContent>

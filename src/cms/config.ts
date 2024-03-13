@@ -232,7 +232,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   media_library: {
                     max_file_size: 10240000,
                     folder_support: false
-                  },
+                  }
                 }
               ]
             }
@@ -270,7 +270,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   media_library: {
                     max_file_size: 10240000,
                     folder_support: false
-                  },
+                  }
                 },
                 {
                   name: 'title',
@@ -321,7 +321,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   media_library: {
                     max_file_size: 10240000,
                     folder_support: false
-                  },
+                  }
                 }
               ]
             },
@@ -348,7 +348,36 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   media_library: {
                     max_file_size: 10240000,
                     folder_support: false
-                  },
+                  }
+                }
+              ]
+            },
+            {
+              name: 'newsletter',
+              label: 'Newsletter',
+              widget: 'object',
+              collapsed: true,
+              required: true,
+              fields: [
+                {
+                  name: 'bannerTitle',
+                  label: 'Banner Title',
+                  widget: 'string'
+                },
+                {
+                  name: 'bannerSubtitle',
+                  label: 'Banner Subtitle',
+                  widget: 'string'
+                },
+                {
+                  name: 'signupLink',
+                  label: 'Signup Link',
+                  widget: 'string'
+                },
+                {
+                  name: 'signupButtonText',
+                  label: 'Signup Button Text',
+                  widget: 'string'
                 }
               ]
             },
@@ -372,7 +401,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       media_library: {
                         max_file_size: 10240000,
                         folder_support: false
-                      },
+                      }
                     },
                     {
                       name: 'page',
@@ -405,7 +434,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       media_library: {
                         max_file_size: 10240000,
                         folder_support: false
-                      },
+                      }
                     },
                     {
                       name: 'title',
@@ -479,7 +508,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           media_library: {
             max_file_size: 10240000,
             folder_support: false
-          },
+          }
         }
       ]
     },
@@ -519,7 +548,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           media_library: {
             max_file_size: 10240000,
             folder_support: false
-          },
+          }
         },
         {
           name: 'date',
@@ -670,7 +699,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               media_library: {
                 max_file_size: 10240000,
                 folder_support: false
-              },
+              }
             },
             {
               name: 'site_keywords',
@@ -804,7 +833,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               media_library: {
                 max_file_size: 10240000,
                 folder_support: false
-              },
+              }
             }
           ]
         }

@@ -53,5 +53,11 @@
     "title": "Today's Readings",
     "subtitle": "From The United States Conference Of Catholic Bishops (USCCB)",
     "daily_readings_background": "/files/scripture-background.webp"
+  },
+  "newsletter": {
+    "bannerTitle": "Stay in touch with us",
+    "bannerSubtitle": "Via email and text messages",
+    "signupLink": "https://stjosephcatholicchurch95.flocknote.com/",
+    "signupButtonText": "Click here to sign up"
   }
 }

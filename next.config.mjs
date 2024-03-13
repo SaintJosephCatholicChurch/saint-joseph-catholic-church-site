@@ -13,6 +13,7 @@ const removeImports = removeImportsFn();
 
 let config = removeImports({
   output: 'export',
+  images: { unoptimized: true },
   pageExtensions: ['tsx'],
   webpack: (config) => {
     config.module.rules.push(

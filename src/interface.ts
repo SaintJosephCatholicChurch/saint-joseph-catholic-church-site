@@ -46,6 +46,7 @@ export interface HomePageData {
   schedule_section: ScheduleSection;
   daily_readings: DailyReadings;
   featured: (FeaturedPage | FeaturedLink)[];
+  newsletter: NewsletterDetails;
 }
 
 export interface Slide {
@@ -105,6 +106,13 @@ export interface ChurchDetails {
   readonly youtube_channel: string;
   readonly google_map_location: string;
   readonly online_giving_url: string;
+}
+
+export interface NewsletterDetails {
+  readonly bannerTitle?: string;
+  readonly bannerSubtitle?: string;
+  readonly signupLink?: string;
+  readonly signupButtonText?: string;
 }
 
 export interface Bulletin {

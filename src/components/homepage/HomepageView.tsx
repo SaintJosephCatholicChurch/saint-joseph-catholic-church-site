@@ -14,7 +14,6 @@ import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
-import useWindowSize from '../../util/useWindowSize';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
@@ -169,12 +168,7 @@ const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   `
 );
 
-const StyledNewsSectionContent = styled('div')`
-  display: flex;
-  width: 100%;
-`;
-
-const StyledWidgetSectionContent = styled('div')(
+const StyledWidgetsContent = styled('div')(
   ({ theme }) => `
     display: flex;
     flex-direction: column;
@@ -193,7 +187,7 @@ const StyledWidgetSectionContent = styled('div')(
   `
 );
 
-const StyledWidgetSecondarySectionContent = styled('div')(
+const StyledWidgetSectionContent = styled('div')(
   ({ theme }) => `
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -201,17 +195,13 @@ const StyledWidgetSecondarySectionContent = styled('div')(
     width: 100%;
 
     ${getContainerQuery(theme.breakpoints.down('lg'))} {
+      gap: 48px;
       grid-template-columns: minmax(0, 1fr);
     }
   `
 );
 
-const StyledFacebookFeedWrapper = styled('div')`
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledReadingsWidgetSectionContent = styled(StyledWidgetSecondarySectionContent)`
+const StyledReadingsWidgetSectionContent = styled(StyledWidgetSectionContent)`
   margin: 16px 0;
 `;
 
@@ -243,9 +233,6 @@ interface RenderFeatureOptions {
   hideOnNonMobile?: boolean;
 }
 
-const MAX_FACEBOOK_WIDGET_WIDTH = 500;
-const MAX_FACEBOOK_WIDGET_WIDTH_PADDING = 48;
-
 interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
@@ -269,15 +256,6 @@ const HomepageView = memo(
     hideSearch
   }: HomepageViewProps) => {
     const theme = useTheme();
-    const { width } = useWindowSize();
-
-    const facebookWidgetWidth = useMemo(
-      () =>
-        width >= MAX_FACEBOOK_WIDGET_WIDTH
-          ? MAX_FACEBOOK_WIDGET_WIDTH - MAX_FACEBOOK_WIDGET_WIDTH_PADDING
-          : width - MAX_FACEBOOK_WIDGET_WIDTH_PADDING,
-      [width]
-    );
 
     const UpcomingEventsNoSSR = useMemo(
       () =>
@@ -404,26 +382,12 @@ const HomepageView = memo(
         </StyledNewsletterSignupSectionWrapper>
         <StyledNewsAndEventsWrapper>
           <Container>
-            <StyledWidgetSectionContent>
-              <StyledNewsSectionContent>
+            <StyledWidgetsContent>
+              <StyledWidgetSectionContent>
                 <RecentNews posts={recentPosts} size="large" />
-              </StyledNewsSectionContent>
-              <StyledWidgetSecondarySectionContent>
                 <UpcomingEventsNoSSR />
-                <StyledFacebookFeedWrapper>
-                  <iframe
-                    src={`https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2F&tabs=timeline&width=${facebookWidgetWidth}&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
-                    width={facebookWidgetWidth}
-                    height="600"
-                    style={{ border: 'none', overflow: 'hidden' }}
-                    scrolling="no"
-                    frameBorder="0"
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  ></iframe>
-                </StyledFacebookFeedWrapper>
-              </StyledWidgetSecondarySectionContent>
-            </StyledWidgetSectionContent>
+              </StyledWidgetSectionContent>
+            </StyledWidgetsContent>
           </Container>
         </StyledNewsAndEventsWrapper>
         <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} hideSearch={hideSearch} />

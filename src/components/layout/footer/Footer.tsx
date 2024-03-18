@@ -1,10 +1,11 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import getContainerQuery from '../../../util/container.util';
 import transientOptions from '../../../util/transientOptions';
 import useLocation from '../../../util/useLocation';
+import useWindowSize from '../../../util/useWindowSize';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';
 import ContactDetails from './ContactDetails';
@@ -33,7 +34,7 @@ const StyledFooterContainerWrapper = styled(
     padding-bottom: 8px;
 
     ${getContainerQuery(theme.breakpoints.down('md'))} {
-      padding-top: 16px;
+      padding-top: 32px;
       padding-bottom: 24px;
     }
 
@@ -46,6 +47,7 @@ const StyledFooterContainerWrapper = styled(
 const StyledFooterContents = styled('div')(
   ({ theme }) => `
     display: grid;
+    padding-bottom: 24px;
 
     ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: 1fr;
@@ -60,6 +62,14 @@ const StyledFooterContents = styled('div')(
   `
 );
 
+const StyledFacebookFeedWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+`;
+
+const MAX_FACEBOOK_WIDGET_WIDTH = 500;
+const MAX_FACEBOOK_WIDGET_WIDTH_PADDING = 48;
+
 interface FooterProps {
   styles?: StylesConfig;
   churchDetails: ChurchDetails;
@@ -70,6 +80,16 @@ interface FooterProps {
 const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }: FooterProps) => {
   const { search } = useLocation();
   const [query, setQuery] = useState('');
+
+  const { width } = useWindowSize();
+
+  const facebookWidgetWidth = useMemo(
+    () =>
+      !width || width >= MAX_FACEBOOK_WIDGET_WIDTH
+        ? MAX_FACEBOOK_WIDGET_WIDTH - MAX_FACEBOOK_WIDGET_WIDTH_PADDING
+        : width - MAX_FACEBOOK_WIDGET_WIDTH_PADDING,
+    [width]
+  );
 
   useEffect(() => {
     const params = new URLSearchParams(search);
@@ -84,11 +104,25 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }
             <Box>
               <FooterAside title="Our Mission Statement" text={churchDetails.mission_statement} />
               <FooterAside title="Vision Statement" text={churchDetails.vision_statement} />
+              <Box>
+                <FooterHeader text="Search Our Site" />
+                {!hideSearch ? <SearchBox value={query} /> : <div />}
+                <ContactDetails churchDetails={churchDetails} />
+              </Box>
             </Box>
             <Box>
-              <FooterHeader text="Search Our Site" />
-              {!hideSearch ? <SearchBox value={query} /> : <div />}
-              <ContactDetails churchDetails={churchDetails} />
+              <StyledFacebookFeedWrapper>
+                <iframe
+                  src={`https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2F&tabs=timeline&width=${facebookWidgetWidth}&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
+                  width={facebookWidgetWidth}
+                  height="600"
+                  style={{ border: 'none', overflow: 'hidden' }}
+                  scrolling="no"
+                  frameBorder="0"
+                  allowFullScreen={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                ></iframe>
+              </StyledFacebookFeedWrapper>
             </Box>
           </StyledFooterContents>
         </Container>

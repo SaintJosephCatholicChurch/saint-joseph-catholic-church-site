@@ -93,6 +93,7 @@ const StyledPostSummary = styled(
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     line-height: 18.4px;
+    padding-bottom: 4px;
 
     & > p {
       margin: 0;

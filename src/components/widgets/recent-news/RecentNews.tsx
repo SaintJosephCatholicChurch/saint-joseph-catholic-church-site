@@ -13,6 +13,7 @@ const StyledRecentNews = styled('div')(
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
 
     ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 12px;

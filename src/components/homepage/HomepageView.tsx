@@ -14,6 +14,7 @@ import churchDetails from '../../lib/church_details';
 import config from '../../lib/config';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
+import useWindowSize from '../../util/useWindowSize';
 import CarouselView from '../carousel/CarouselView';
 import Container from '../layout/Container';
 import Footer from '../layout/footer/Footer';
@@ -168,7 +169,31 @@ const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   `
 );
 
+const StyledNewsSectionContent = styled('div')`
+  display: flex;
+  width: 100%;
+`;
+
 const StyledWidgetSectionContent = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    width: 100%;
+
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
+      gap: 48px;
+      width: 80%;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      grid-template-columns: minmax(0, 1fr);
+      width: 100%;
+    }
+  `
+);
+
+const StyledWidgetSecondarySectionContent = styled('div')(
   ({ theme }) => `
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -176,16 +201,17 @@ const StyledWidgetSectionContent = styled('div')(
     width: 100%;
 
     ${getContainerQuery(theme.breakpoints.down('lg'))} {
-      gap: 48px;
-    }
-
-    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: minmax(0, 1fr);
     }
   `
 );
 
-const StyledReadingsWidgetSectionContent = styled(StyledWidgetSectionContent)`
+const StyledFacebookFeedWrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledReadingsWidgetSectionContent = styled(StyledWidgetSecondarySectionContent)`
   margin: 16px 0;
 `;
 
@@ -217,6 +243,9 @@ interface RenderFeatureOptions {
   hideOnNonMobile?: boolean;
 }
 
+const MAX_FACEBOOK_WIDGET_WIDTH = 500;
+const MAX_FACEBOOK_WIDGET_WIDTH_PADDING = 48;
+
 interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
@@ -240,6 +269,16 @@ const HomepageView = memo(
     hideSearch
   }: HomepageViewProps) => {
     const theme = useTheme();
+    const { width } = useWindowSize();
+
+    const facebookWidgetWidth = useMemo(
+      () =>
+        width >= MAX_FACEBOOK_WIDGET_WIDTH
+          ? MAX_FACEBOOK_WIDGET_WIDTH - MAX_FACEBOOK_WIDGET_WIDTH_PADDING
+          : width - MAX_FACEBOOK_WIDGET_WIDTH_PADDING,
+      [width]
+    );
+
     const UpcomingEventsNoSSR = useMemo(
       () =>
         dynamic(() => import('../widgets/UpcomingEvents'), {
@@ -366,8 +405,24 @@ const HomepageView = memo(
         <StyledNewsAndEventsWrapper>
           <Container>
             <StyledWidgetSectionContent>
-              <RecentNews posts={recentPosts} size="large" />
-              <UpcomingEventsNoSSR />
+              <StyledNewsSectionContent>
+                <RecentNews posts={recentPosts} size="large" />
+              </StyledNewsSectionContent>
+              <StyledWidgetSecondarySectionContent>
+                <UpcomingEventsNoSSR />
+                <StyledFacebookFeedWrapper>
+                  <iframe
+                    src={`https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2F&tabs=timeline&width=${facebookWidgetWidth}&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
+                    width={facebookWidgetWidth}
+                    height="600"
+                    style={{ border: 'none', overflow: 'hidden' }}
+                    scrolling="no"
+                    frameBorder="0"
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  ></iframe>
+                </StyledFacebookFeedWrapper>
+              </StyledWidgetSecondarySectionContent>
             </StyledWidgetSectionContent>
           </Container>
         </StyledNewsAndEventsWrapper>

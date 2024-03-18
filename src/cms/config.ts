@@ -378,6 +378,11 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   name: 'signupButtonText',
                   label: 'Signup Button Text',
                   widget: 'string'
+                },
+                {
+                  name: 'rssFeedUrl',
+                  label: 'RSS Feed URL',
+                  widget: 'string'
                 }
               ]
             },

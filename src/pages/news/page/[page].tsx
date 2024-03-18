@@ -1,27 +1,27 @@
 import PageLayout from '../../../components/PageLayout';
-import PostList from '../../../components/posts/PostList';
+import PostListWithFlockNote from '../../../components/posts/PostListWithFlockNote';
 import config from '../../../lib/config';
 import homepageData from '../../../lib/homepage';
-import { countPosts, listPostContent } from '../../../lib/posts';
-import { listTags } from '../../../lib/tags';
+import { countPosts, fetchPostContent } from '../../../lib/posts';
 
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import type { PostContent } from '../../../interface';
 
 interface PostPageProps {
-  posts: PostContent[];
-  tags: string[];
+  allPosts: PostContent[];
   page: number;
   pagination: {
+    start: number;
+    total: number;
     current: number;
     pages: number;
   };
 }
 
-const PostPage = ({ posts, tags, pagination, page }: PostPageProps) => {
+const PostPage = ({ allPosts, pagination, page }: PostPageProps) => {
   return (
     <PageLayout url={`/news/page/${page}`} title="News" dailyReadings={homepageData.daily_readings}>
-      <PostList posts={posts} tags={tags} pagination={pagination} />
+      <PostListWithFlockNote allPosts={allPosts} pagination={pagination} />
     </PageLayout>
   );
 };
@@ -42,18 +42,22 @@ export const getStaticPaths: GetStaticPaths = () => {
 
 export const getStaticProps: GetStaticProps = ({ params }): { props: PostPageProps } => {
   const page = parseInt(params.page as string);
-  const posts = listPostContent(page, config.posts_per_page);
-  const tags = listTags();
+  const allPosts = fetchPostContent();
+  const postCount = countPosts();
+
+  const start = (page - 1) * config.posts_per_page;
+  const end = start + config.posts_per_page;
   const pagination = {
+    start,
+    total: postCount < end ? postCount - start : config.posts_per_page,
     current: page,
-    pages: Math.ceil(countPosts() / config.posts_per_page)
+    pages: Math.ceil(postCount / config.posts_per_page)
   };
 
   return {
     props: {
       page,
-      posts,
-      tags,
+      allPosts,
       pagination
     }
   };

@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
 
 import Pagination from '../Pagination';
+import PostSkeleton from './PostSkeleton';
 import PostSummary from './PostSummary';
-import useConvertedPosts from './hooks/useConvertedPosts';
+import usePosts from './hooks/usePosts';
 
 import type { PostContent } from '../../interface';
 
@@ -14,16 +15,25 @@ const StyledPostList = styled('div')`
 `;
 
 interface PostListProps {
-  posts: PostContent[];
-  tags: string[];
+  allPosts: PostContent[];
   pagination: {
+    start: number;
+    total: number;
     current: number;
     pages: number;
   };
 }
 
-const PostList = ({ posts: rawPosts, pagination }: PostListProps) => {
-  const posts = useConvertedPosts(rawPosts);
+const PostListWithFlockNote = ({ allPosts, pagination }: PostListProps) => {
+  const { loaded, data: posts } = usePosts(pagination.start, pagination.total, allPosts);
+
+  if (!loaded) {
+    return (
+      <StyledPostList>
+        <PostSkeleton />
+      </StyledPostList>
+    );
+  }
 
   return (
     <StyledPostList>
@@ -40,4 +50,4 @@ const PostList = ({ posts: rawPosts, pagination }: PostListProps) => {
   );
 };
 
-export default PostList;
+export default PostListWithFlockNote;

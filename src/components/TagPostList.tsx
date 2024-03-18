@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 
 import Pagination from './Pagination';
 import PostSummary from './posts/PostSummary';
+import useConvertedPosts from './posts/hooks/useConvertedPosts';
 
 import type { PostContent } from '../interface';
 
@@ -21,11 +22,13 @@ interface TagPostListProps {
   };
 }
 
-const TagPostList = ({ posts, tag, pagination }: TagPostListProps) => {
+const TagPostList = ({ posts: rawPosts, tag, pagination }: TagPostListProps) => {
+  const posts = useConvertedPosts(rawPosts);
+
   return (
     <StyledPostList>
       {posts.map((post) => (
-        <PostSummary key={`post-${post.data.slug}`} post={post} />
+        <PostSummary key={`post-${post.link}`} post={post} />
       ))}
       <Pagination
         current={pagination.current}

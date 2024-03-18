@@ -113,6 +113,7 @@ export interface NewsletterDetails {
   readonly bannerSubtitle?: string;
   readonly signupLink?: string;
   readonly signupButtonText?: string;
+  readonly rssFeedUrl?: string;
 }
 
 export interface Bulletin {
@@ -213,4 +214,34 @@ export interface SearchableEntry {
 export interface LogoDetails {
   readonly primary: string;
   readonly secondary: string;
+}
+
+export interface NewsPostData {
+  title: string;
+  summary: string;
+  link: string;
+  image: string;
+  date: Date;
+  target?: '_blank';
+}
+
+export interface FlockNote {
+  title: string;
+  link: string;
+  description: string;
+  pubDate: string;
+  guid: string;
+}
+
+export interface FlockNoteFeed {
+  rss?: {
+    script: string;
+    channel: {
+      title: string;
+      link: string;
+      description: string;
+      item: FlockNote[];
+    };
+    _version: string;
+  };
 }

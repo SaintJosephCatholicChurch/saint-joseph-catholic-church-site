@@ -58,6 +58,7 @@
     "bannerTitle": "Stay in touch with us",
     "bannerSubtitle": "Via email and text messages",
     "signupLink": "https://stjosephcatholicchurch95.flocknote.com/",
-    "signupButtonText": "Click here to sign up"
+    "signupButtonText": "Click here to sign up",
+    "rssFeedUrl": "https://rss.flocknote.com/852042"
   }
 }

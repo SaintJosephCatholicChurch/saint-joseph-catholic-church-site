@@ -8,11 +8,18 @@ import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 
-const StyledDailyReadingsWrapper = styled('div')`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
+const StyledDailyReadingsWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
+      grid-row: 1 / span 2;
+      grid-column: 2;
+    }
+  `
+);
 
 interface StyledDailyReadingsProps {
   $isFullWidth: boolean;
@@ -26,11 +33,6 @@ const StyledDailyReadings = styled(
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    ${getContainerQuery(theme.breakpoints.up('lg'))} {
-      grid-row: 1 / span 2;
-      grid-column: 2;
-    }
 
     ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
       gap: 12px;

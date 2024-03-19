@@ -226,11 +226,6 @@ const StyledDailyReadingsSectionBackground = styled(
   `
 );
 
-interface RenderFeatureOptions {
-  hideOnMobile?: boolean;
-  hideOnNonMobile?: boolean;
-}
-
 interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
@@ -263,41 +258,12 @@ const HomepageView = memo(
       []
     );
 
-    const renderFeaturedLinkPage = useCallback(
-      (featuredContent: FeaturedLink | FeaturedPage, index: number, options?: RenderFeatureOptions) => {
-        const { hideOnMobile = false, hideOnNonMobile = false } = options ?? {};
-
-        if (featuredContent.type === 'featured_link') {
-          return (
-            <FeaturedLinkView
-              key={`page-${index}`}
-              featuredLink={featuredContent}
-              isFullWidth
-              hideOnMobile={hideOnMobile}
-              hideOnNonMobile={hideOnNonMobile}
-            />
-          );
-        }
-        return (
-          <FeaturedPageView
-            key={`page-${index}`}
-            featuredPage={featuredContent}
-            isFullWidth
-            hideOnMobile={hideOnMobile}
-            hideOnNonMobile={hideOnNonMobile}
-          />
-        );
-      },
-      []
-    );
-
-    const firstFeaturedLinkPage = useMemo(() => {
-      if (featured.length === 0) {
-        return null;
+    const renderFeaturedLinkPage = useCallback((featuredContent: FeaturedLink | FeaturedPage, index: number) => {
+      if (featuredContent.type === 'featured_link') {
+        return <FeaturedLinkView key={`page-${index}`} featuredLink={featuredContent} isFullWidth />;
       }
-
-      return renderFeaturedLinkPage(featured[0], 0);
-    }, [featured, renderFeaturedLinkPage]);
+      return <FeaturedPageView key={`page-${index}`} featuredPage={featuredContent} isFullWidth />;
+    }, []);
 
     return (
       <StyledHomepageView>
@@ -312,20 +278,8 @@ const HomepageView = memo(
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
-              {firstFeaturedLinkPage}
-              {featured.map((featuredContent, index) => {
-                if (index > 0) {
-                  return renderFeaturedLinkPage(featuredContent, index, { hideOnNonMobile: true });
-                }
-                return null;
-              })}
+              {featured.map((featuredContent, index) => renderFeaturedLinkPage(featuredContent, index))}
               <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
-              {featured.map((featuredContent, index) => {
-                if (index > 0) {
-                  return renderFeaturedLinkPage(featuredContent, index, { hideOnMobile: true });
-                }
-                return null;
-              })}
             </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledReadingsAndPageSectionWrapper>

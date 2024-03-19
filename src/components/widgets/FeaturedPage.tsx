@@ -6,39 +6,6 @@ import { memo, useMemo } from 'react';
 import { FeaturedPage } from '../../interface';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
-import transientOptions from '../../util/transientOptions';
-
-interface StyledFeaturedPageWrapperProps {
-  $hideOnMobile: boolean;
-  $hideOnNonMobile: boolean;
-}
-
-const StyledFeaturedPageWrapper = styled(
-  'div',
-  transientOptions
-)<StyledFeaturedPageWrapperProps>(
-  ({ $hideOnMobile, $hideOnNonMobile, theme }) => `
-    ${
-      $hideOnMobile
-        ? `
-      ${getContainerQuery(theme.breakpoints.down('sm'))} {
-        display: none;
-      }
-    `
-        : ''
-    }
-
-    ${
-      $hideOnNonMobile
-        ? `
-      ${getContainerQuery(theme.breakpoints.up('sm'))} {
-        display: none;
-      }
-    `
-        : ''
-    }
-  `
-);
 
 const StyledTitle = styled('h3')`
   margin: 0;
@@ -69,60 +36,51 @@ const StyledSummary = styled('div')(
 interface FeaturedPageProps {
   featuredPage?: FeaturedPage;
   isFullWidth?: boolean;
-  hideOnMobile?: boolean;
-  hideOnNonMobile?: boolean;
 }
 
-const FeaturedPage = memo(
-  ({
-    featuredPage: { page, image, summary },
-    isFullWidth = false,
-    hideOnMobile = false,
-    hideOnNonMobile = false
-  }: FeaturedPageProps) => {
-    const theme = useTheme();
+const FeaturedPage = memo(({ featuredPage: { page, image, summary }, isFullWidth = false }: FeaturedPageProps) => {
+  const theme = useTheme();
 
-    const [slug, title] = useMemo(() => {
-      const parts = (page ?? '').split('|');
-      if (parts.length < 2) {
-        return ['', ''];
-      }
-
-      return [parts[0], parts[1]];
-    }, [page]);
-
-    if (isEmpty(slug) || isEmpty(title)) {
-      return null;
+  const [slug, title] = useMemo(() => {
+    const parts = (page ?? '').split('|');
+    if (parts.length < 2) {
+      return ['', ''];
     }
 
-    return (
-      <StyledFeaturedPageWrapper $hideOnMobile={hideOnMobile} $hideOnNonMobile={hideOnNonMobile}>
-        <Link href={slug}>
-          <Button
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              textTransform: 'none',
-              textAlign: 'left',
-              margin: '-8px -8px',
-              padding: '0 8px 8px',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
-                gap: '12px'
-              }
-            }}
-          >
-            <StyledTitle>{title}</StyledTitle>
-            {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
-            {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
-          </Button>
-        </Link>
-      </StyledFeaturedPageWrapper>
-    );
+    return [parts[0], parts[1]];
+  }, [page]);
+
+  if (isEmpty(slug) || isEmpty(title)) {
+    return null;
   }
-);
+
+  return (
+    <div>
+      <Link href={slug}>
+        <Button
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            textTransform: 'none',
+            textAlign: 'left',
+            margin: '-8px -8px',
+            padding: '0 8px 8px',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
+              gap: '12px'
+            }
+          }}
+        >
+          <StyledTitle>{title}</StyledTitle>
+          {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
+          {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
+        </Button>
+      </Link>
+    </div>
+  );
+});
 
 FeaturedPage.displayName = 'FeaturedPage';
 

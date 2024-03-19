@@ -21,6 +21,11 @@ const StyledDailyReadings = styled(
     flex-direction: column;
     gap: 8px;
 
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
+      grid-row: 1 / span 2;
+      grid-column: 2;
+    }
+
     ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
       gap: 12px;
     }

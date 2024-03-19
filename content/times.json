@@ -167,6 +167,17 @@
                   "time": "8:00 AM"
                 }
               ]
+            },
+            {
+              "id": "9c01d10f-897b-4af8-8122-65e58b809159",
+              "day": "The Passion of the Christ",
+              "times": [
+                {
+                  "id": "3994f252-fcde-4553-ab4f-ce15dbde9345",
+                  "time": "7:00 PM",
+                  "note": "Free Showing in the Parish Gymnasium"
+                }
+              ]
             }
           ]
         },

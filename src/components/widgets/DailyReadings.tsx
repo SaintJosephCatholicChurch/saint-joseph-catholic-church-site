@@ -12,7 +12,7 @@ const StyledDailyReadingsWrapper = styled('div')(
   ({ theme }) => `
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
 
     ${getContainerQuery(theme.breakpoints.up('lg'))} {
       grid-row: 1 / span 2;

@@ -177,12 +177,10 @@ const StyledWidgetsContent = styled('div')(
 
     ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 48px;
-      width: 80%;
     }
 
     ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: minmax(0, 1fr);
-      width: 100%;
     }
   `
 );

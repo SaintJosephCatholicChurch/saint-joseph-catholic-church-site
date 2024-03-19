@@ -21,20 +21,20 @@ const StyledFeaturedLinkWrapper = styled(
     ${
       $hideOnMobile
         ? `
-      ${getContainerQuery(theme.breakpoints.down('sm'))} {
-        display: none;
-      }
-    `
+          ${getContainerQuery(theme.breakpoints.down('lg'))} {
+            display: none;
+          }
+        `
         : ''
     }
 
     ${
       $hideOnNonMobile
         ? `
-      ${getContainerQuery(theme.breakpoints.up('sm'))} {
-        display: none;
-      }
-    `
+          ${getContainerQuery(theme.breakpoints.up('lg'))} {
+            display: none;
+          }
+        `
         : ''
     }
   `

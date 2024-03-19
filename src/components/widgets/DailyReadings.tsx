@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
+import { getDailyReadingIFrameUrl } from '../../lib/soundcloud';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
@@ -138,6 +139,30 @@ interface DailyReadingsViewProps {
 const DailyReadingsView = memo(
   ({ dailyReadings: { title, subtitle }, isFullWidth = false, showSubtitle = false }: DailyReadingsViewProps) => {
     const [readings, setReadings] = useState<ReadingsData | null>(null);
+    const [soundCloudUrl, setSoundCloudUrl] = useState<string | null>(null);
+
+    const soundCloudIFrame = (
+      <iframe width="100%" height="160" scrolling="no" frameBorder="no" allow="autoplay" src={soundCloudUrl}></iframe>
+    );
+
+    useEffect(() => {
+      let alive = true;
+
+      const getSoundCloudUrl = async () => {
+        const url = await getDailyReadingIFrameUrl();
+        if (!alive) {
+          return;
+        }
+
+        setSoundCloudUrl(url);
+      };
+
+      getSoundCloudUrl();
+
+      return () => {
+        alive = false;
+      };
+    }, []);
 
     useEffect(() => {
       let alive = true;
@@ -186,7 +211,7 @@ const DailyReadingsView = memo(
     }, []);
 
     if ((readings?.readings.length ?? 0) === 0) {
-      return null;
+      return <StyledDailyReadings $isFullWidth={isFullWidth}>{soundCloudIFrame}</StyledDailyReadings>;
     }
 
     return (
@@ -199,6 +224,7 @@ const DailyReadingsView = memo(
             <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
           </StyledDailyReading>
         ))}
+        {soundCloudIFrame}
       </StyledDailyReadings>
     );
   }

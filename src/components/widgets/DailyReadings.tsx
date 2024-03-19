@@ -224,7 +224,7 @@ const DailyReadingsView = memo(
     }, []);
 
     if ((readings?.readings.length ?? 0) === 0) {
-      return <StyledDailyReadings $isFullWidth={isFullWidth}>{soundCloudIFrame}</StyledDailyReadings>;
+      return <StyledDailyReadingsWrapper>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
     }
 
     return (

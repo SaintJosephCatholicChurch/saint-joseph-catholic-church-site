@@ -42,7 +42,7 @@ const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps
     <StyledPagination>
       <MuiPagination
         count={pages}
-        defaultPage={current}
+        page={current}
         siblingCount={1}
         onChange={onChange}
         size={isSmallScreen ? 'small' : 'medium'}

@@ -48,7 +48,7 @@ const StyledReadingsAndPageSectionWrapper = styled(StyledSectionWrapper)(
 );
 
 const StyledNewsletterSignupSectionWrapper = styled(StyledSectionWrapper)`
-  padding-bottom: 32px;
+  padding-bottom: 28px;
   background-color: rgba(232, 229, 225, 0.5);
 `;
 

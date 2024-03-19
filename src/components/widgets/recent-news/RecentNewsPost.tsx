@@ -7,8 +7,6 @@ import getContainerQuery from '../../../util/container.util';
 import { isNotEmpty } from '../../../util/string.util';
 import transientOptions from '../../../util/transientOptions';
 
-import type { PostContent } from '../../../interface';
-
 interface StyledPostImageProps {
   $image: string;
   $size: 'small' | 'large';
@@ -111,66 +109,67 @@ const StyledPostSummary = styled(
   `
 );
 
-interface RecentNewsProps {
-  post: PostContent;
+export interface RecentNewsPostData {
+  title: string;
+  summary: string;
+  link: string;
+  image: string;
+  date: Date;
+  target?: '_blank';
+}
+
+export interface RecentNewsProps {
+  post: RecentNewsPostData;
   size?: 'small' | 'large';
 }
 
-const RecentNewsPost = memo(
-  ({
-    post: {
-      summary,
-      data: { slug, image, title }
-    },
-    size = 'small'
-  }: RecentNewsProps) => {
-    const theme = useTheme();
+const RecentNewsPost = memo(({ post: { title, summary, link, image, target }, size = 'small' }: RecentNewsProps) => {
+  const theme = useTheme();
 
-    const [html, setHtml] = useState<string>('');
-    useEffect(() => {
-      setHtml(summary);
-    }, [summary]);
+  const [html, setHtml] = useState<string>('');
+  useEffect(() => {
+    setHtml(summary);
+  }, [summary]);
 
-    return (
-      <Link href={`/news/${slug}`}>
-        <Button
-          sx={{
-            display: 'flex',
-            [getContainerQuery(theme.breakpoints.down('sm'))]: {
-              gridTemplateColumns: '110px auto'
-            },
-            [getContainerQuery(theme.breakpoints.only('md'))]: {
-              gridTemplateColumns: '110px auto'
-            },
-            gap: '8px',
-            width: '100%',
-            color: 'inherit',
-            lineHeight: 'inherit',
-            letterSpacing: 'inherit',
-            textTransform: 'unset',
-            textAlign: 'left',
-            padding: '6px 8px',
-            margin: '-6px -8px',
-            '&:hover': {
-              backgroundColor: 'rgba(100,100,100,0.12)'
-            }
-          }}
-        >
-          {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
-          <StyledPostDetails>
-            <StyledPostTitle $size={size}>{title}</StyledPostTitle>
-            <StyledPostSummary
-              $size={size}
-              dangerouslySetInnerHTML={{
-                __html: html
-              }}
-            />
-          </StyledPostDetails>
-        </Button>
-      </Link>
-    );
-  }
-);
+  return (
+    <Link href={link} target={target}>
+      <Button
+        sx={{
+          display: 'flex',
+          [getContainerQuery(theme.breakpoints.down('sm'))]: {
+            gridTemplateColumns: '110px auto'
+          },
+          [getContainerQuery(theme.breakpoints.only('md'))]: {
+            gridTemplateColumns: '110px auto'
+          },
+          gap: '8px',
+          width: '100%',
+          color: 'inherit',
+          lineHeight: 'inherit',
+          letterSpacing: 'inherit',
+          textTransform: 'unset',
+          textAlign: 'left',
+          padding: '6px 8px',
+          margin: '-6px -8px',
+          '&:hover': {
+            backgroundColor: 'rgba(100,100,100,0.12)'
+          }
+        }}
+      >
+        {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
+        <StyledPostDetails>
+          <StyledPostTitle $size={size}>{title}</StyledPostTitle>
+          <StyledPostSummary
+            $size={size}
+            dangerouslySetInnerHTML={{
+              __html: html
+            }}
+          />
+        </StyledPostDetails>
+      </Button>
+    </Link>
+  );
+});
 
 RecentNewsPost.displayName = 'RecentNewsPost';
 

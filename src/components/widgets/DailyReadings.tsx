@@ -8,6 +8,12 @@ import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 
+const StyledDailyReadingsWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
 interface StyledDailyReadingsProps {
   $isFullWidth: boolean;
 }
@@ -147,7 +153,7 @@ const DailyReadingsView = memo(
     const [soundCloudUrl, setSoundCloudUrl] = useState<string | null>(null);
 
     const soundCloudIFrame = (
-      <iframe width="100%" height="160" scrolling="no" frameBorder="no" allow="autoplay" src={soundCloudUrl}></iframe>
+      <iframe width="100%" height="160" scrolling="no" frameBorder="no" allow="autoplay" src={soundCloudUrl} />
     );
 
     useEffect(() => {
@@ -220,17 +226,19 @@ const DailyReadingsView = memo(
     }
 
     return (
-      <StyledDailyReadings $isFullWidth={isFullWidth}>
-        <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
-        {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
-        {readings.readings.map((reading, index) => (
-          <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
-            <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-            <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
-          </StyledDailyReading>
-        ))}
+      <StyledDailyReadingsWrapper>
+        <StyledDailyReadings $isFullWidth={isFullWidth}>
+          <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
+          {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
+          {readings.readings.map((reading, index) => (
+            <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
+              <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+              <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+            </StyledDailyReading>
+          ))}
+        </StyledDailyReadings>
         {soundCloudIFrame}
-      </StyledDailyReadings>
+      </StyledDailyReadingsWrapper>
     );
   }
 );

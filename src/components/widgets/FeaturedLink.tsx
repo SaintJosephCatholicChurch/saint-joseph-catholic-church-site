@@ -6,39 +6,6 @@ import { memo } from 'react';
 import { FeaturedLink } from '../../interface';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
-import transientOptions from '../../util/transientOptions';
-
-interface StyledFeaturedLinkWrapperProps {
-  $hideOnMobile: boolean;
-  $hideOnNonMobile: boolean;
-}
-
-const StyledFeaturedLinkWrapper = styled(
-  'div',
-  transientOptions
-)<StyledFeaturedLinkWrapperProps>(
-  ({ $hideOnMobile, $hideOnNonMobile, theme }) => `
-    ${
-      $hideOnMobile
-        ? `
-      ${getContainerQuery(theme.breakpoints.down('sm'))} {
-        display: none;
-      }
-    `
-        : ''
-    }
-
-    ${
-      $hideOnNonMobile
-        ? `
-      ${getContainerQuery(theme.breakpoints.up('sm'))} {
-        display: none;
-      }
-    `
-        : ''
-    }
-  `
-);
 
 const StyledTitle = styled('h3')`
   margin: 0;
@@ -69,16 +36,12 @@ const StyledSummary = styled('div')(
 interface FeaturedLinkProps {
   featuredLink?: FeaturedLink;
   isFullWidth?: boolean;
-  hideOnMobile?: boolean;
-  hideOnNonMobile?: boolean;
 }
 
 const FeaturedLink = memo(
   ({
     featuredLink: { title, url, image, summary },
     isFullWidth = false,
-    hideOnMobile = false,
-    hideOnNonMobile = false
   }: FeaturedLinkProps) => {
     const theme = useTheme();
 
@@ -87,7 +50,7 @@ const FeaturedLink = memo(
     }
 
     return (
-      <StyledFeaturedLinkWrapper $hideOnMobile={hideOnMobile} $hideOnNonMobile={hideOnNonMobile}>
+      <div>
         <Link href={url}>
           <Button
             sx={{
@@ -110,7 +73,7 @@ const FeaturedLink = memo(
             {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
           </Button>
         </Link>
-      </StyledFeaturedLinkWrapper>
+      </div>
     );
   }
 );

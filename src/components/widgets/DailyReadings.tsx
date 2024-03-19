@@ -2,10 +2,31 @@ import { styled } from '@mui/material/styles';
 import { memo, useEffect, useState } from 'react';
 
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
+import { getDailyReadingIFrameUrl } from '../../lib/soundcloud';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
+
+interface StyledDailyReadingsWrapperProps {
+  $hasReadings: boolean;
+}
+
+const StyledDailyReadingsWrapper = styled(
+  'div',
+  transientOptions
+)<StyledDailyReadingsWrapperProps>(
+  ({ theme, $hasReadings }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
+      grid-row: 1 / span ${$hasReadings ? '2' : '1'};
+      grid-column: 2;
+    }
+  `
+);
 
 interface StyledDailyReadingsProps {
   $isFullWidth: boolean;
@@ -138,6 +159,30 @@ interface DailyReadingsViewProps {
 const DailyReadingsView = memo(
   ({ dailyReadings: { title, subtitle }, isFullWidth = false, showSubtitle = false }: DailyReadingsViewProps) => {
     const [readings, setReadings] = useState<ReadingsData | null>(null);
+    const [soundCloudUrl, setSoundCloudUrl] = useState<string | null>(null);
+
+    const soundCloudIFrame = (
+      <iframe width="100%" height="160" scrolling="no" frameBorder="no" allow="autoplay" src={soundCloudUrl} />
+    );
+
+    useEffect(() => {
+      let alive = true;
+
+      const getSoundCloudUrl = async () => {
+        const url = await getDailyReadingIFrameUrl();
+        if (!alive) {
+          return;
+        }
+
+        setSoundCloudUrl(url);
+      };
+
+      getSoundCloudUrl();
+
+      return () => {
+        alive = false;
+      };
+    }, []);
 
     useEffect(() => {
       let alive = true;
@@ -186,20 +231,23 @@ const DailyReadingsView = memo(
     }, []);
 
     if ((readings?.readings.length ?? 0) === 0) {
-      return null;
+      return <StyledDailyReadingsWrapper $hasReadings={false}>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
     }
 
     return (
-      <StyledDailyReadings $isFullWidth={isFullWidth}>
-        <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
-        {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
-        {readings.readings.map((reading, index) => (
-          <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
-            <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-            <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
-          </StyledDailyReading>
-        ))}
-      </StyledDailyReadings>
+      <StyledDailyReadingsWrapper $hasReadings={true}>
+        <StyledDailyReadings $isFullWidth={isFullWidth}>
+          <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
+          {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
+          {readings.readings.map((reading, index) => (
+            <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
+              <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+              <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+            </StyledDailyReading>
+          ))}
+        </StyledDailyReadings>
+        {soundCloudIFrame}
+      </StyledDailyReadingsWrapper>
     );
   }
 );

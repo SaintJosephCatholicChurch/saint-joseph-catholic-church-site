@@ -168,6 +168,23 @@ const StyledNewsAndEventsWrapper = styled(StyledSectionWrapper)(
   `
 );
 
+const StyledWidgetsContent = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    width: 100%;
+
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
+      gap: 48px;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  `
+);
+
 const StyledWidgetSectionContent = styled('div')(
   ({ theme }) => `
     display: grid;
@@ -177,9 +194,6 @@ const StyledWidgetSectionContent = styled('div')(
 
     ${getContainerQuery(theme.breakpoints.down('lg'))} {
       gap: 48px;
-    }
-
-    ${getContainerQuery(theme.breakpoints.down('md'))} {
       grid-template-columns: minmax(0, 1fr);
     }
   `
@@ -212,11 +226,6 @@ const StyledDailyReadingsSectionBackground = styled(
   `
 );
 
-interface RenderFeatureOptions {
-  hideOnMobile?: boolean;
-  hideOnNonMobile?: boolean;
-}
-
 interface HomepageViewProps {
   homePageData: HomePageData;
   times: Times[];
@@ -240,6 +249,7 @@ const HomepageView = memo(
     hideSearch
   }: HomepageViewProps) => {
     const theme = useTheme();
+
     const UpcomingEventsNoSSR = useMemo(
       () =>
         dynamic(() => import('../widgets/UpcomingEvents'), {
@@ -248,41 +258,12 @@ const HomepageView = memo(
       []
     );
 
-    const renderFeaturedLinkPage = useCallback(
-      (featuredContent: FeaturedLink | FeaturedPage, index: number, options?: RenderFeatureOptions) => {
-        const { hideOnMobile = false, hideOnNonMobile = false } = options ?? {};
-
-        if (featuredContent.type === 'featured_link') {
-          return (
-            <FeaturedLinkView
-              key={`page-${index}`}
-              featuredLink={featuredContent}
-              isFullWidth
-              hideOnMobile={hideOnMobile}
-              hideOnNonMobile={hideOnNonMobile}
-            />
-          );
-        }
-        return (
-          <FeaturedPageView
-            key={`page-${index}`}
-            featuredPage={featuredContent}
-            isFullWidth
-            hideOnMobile={hideOnMobile}
-            hideOnNonMobile={hideOnNonMobile}
-          />
-        );
-      },
-      []
-    );
-
-    const firstFeaturedLinkPage = useMemo(() => {
-      if (featured.length === 0) {
-        return null;
+    const renderFeaturedLinkPage = useCallback((featuredContent: FeaturedLink | FeaturedPage, index: number) => {
+      if (featuredContent.type === 'featured_link') {
+        return <FeaturedLinkView key={`page-${index}`} featuredLink={featuredContent} isFullWidth />;
       }
-
-      return renderFeaturedLinkPage(featured[0], 0);
-    }, [featured, renderFeaturedLinkPage]);
+      return <FeaturedPageView key={`page-${index}`} featuredPage={featuredContent} isFullWidth />;
+    }, []);
 
     return (
       <StyledHomepageView>
@@ -297,20 +278,8 @@ const HomepageView = memo(
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
-              {firstFeaturedLinkPage}
-              {featured.map((featuredContent, index) => {
-                if (index > 0) {
-                  return renderFeaturedLinkPage(featuredContent, index, { hideOnNonMobile: true });
-                }
-                return null;
-              })}
+              {featured.map((featuredContent, index) => renderFeaturedLinkPage(featuredContent, index))}
               <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
-              {featured.map((featuredContent, index) => {
-                if (index > 0) {
-                  return renderFeaturedLinkPage(featuredContent, index, { hideOnMobile: true });
-                }
-                return null;
-              })}
             </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledReadingsAndPageSectionWrapper>
@@ -365,10 +334,12 @@ const HomepageView = memo(
         </StyledNewsletterSignupSectionWrapper>
         <StyledNewsAndEventsWrapper>
           <Container>
-            <StyledWidgetSectionContent>
-              <RecentNews posts={recentPosts} size="large" />
-              <UpcomingEventsNoSSR />
-            </StyledWidgetSectionContent>
+            <StyledWidgetsContent>
+              <StyledWidgetSectionContent>
+                <RecentNews posts={recentPosts} size="large" />
+                <UpcomingEventsNoSSR />
+              </StyledWidgetSectionContent>
+            </StyledWidgetsContent>
           </Container>
         </StyledNewsAndEventsWrapper>
         <Footer churchDetails={churchDetails} privacyPolicyLink={config.privacy_policy_url} hideSearch={hideSearch} />

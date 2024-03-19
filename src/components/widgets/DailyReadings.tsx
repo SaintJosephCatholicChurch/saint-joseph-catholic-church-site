@@ -8,14 +8,21 @@ import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 
-const StyledDailyReadingsWrapper = styled('div')(
-  ({ theme }) => `
+interface StyledDailyReadingsWrapperProps {
+  $hasReadings: boolean;
+}
+
+const StyledDailyReadingsWrapper = styled(
+  'div',
+  transientOptions
+)<StyledDailyReadingsWrapperProps>(
+  ({ theme, $hasReadings }) => `
     display: flex;
     flex-direction: column;
     gap: 24px;
 
     ${getContainerQuery(theme.breakpoints.up('lg'))} {
-      grid-row: 1 / span 2;
+      grid-row: 1 / span ${$hasReadings ? '2' : '1'};
       grid-column: 2;
     }
   `
@@ -224,11 +231,11 @@ const DailyReadingsView = memo(
     }, []);
 
     if ((readings?.readings.length ?? 0) === 0) {
-      return <StyledDailyReadingsWrapper>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
+      return <StyledDailyReadingsWrapper $hasReadings={false}>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
     }
 
     return (
-      <StyledDailyReadingsWrapper>
+      <StyledDailyReadingsWrapper $hasReadings={true}>
         <StyledDailyReadings $isFullWidth={isFullWidth}>
           <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
           {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}

@@ -155,6 +155,23 @@
       "name": "Holy Week",
       "sections": [
         {
+          "id": "b51b5154-ed23-4370-9825-8ef65156cc51",
+          "name": "Palm Sunday Procession (March 24)",
+          "days": [
+            {
+              "id": "12f003b0-86de-4130-b705-088b24da30d6",
+              "day": "Beginning of the 10 AM Mass",
+              "times": [
+                {
+                  "id": "bcd6757b-db73-40ad-beab-cb970b835855",
+                  "time": "10:00 AM",
+                  "note": "Start outside of the Parish Office"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "2d9cf76a-42b5-45c6-ae54-1b26cbab8c7b",
           "name": "Holy Monday (March 25)",
           "days": [

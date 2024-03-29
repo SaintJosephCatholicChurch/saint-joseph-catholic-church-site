@@ -31,6 +31,17 @@
               ]
             },
             {
+              "id": "f6ad280e-1ac1-4420-9ecf-e8d59ed2be11",
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "42e6903a-9f8d-49f3-b6f4-f5de594a22f1",
+                  "time": "5:00 PM",
+                  "end_time": "6:30 PM"
+                }
+              ]
+            },
+            {
               "id": "d74b1932-0296-437a-84fa-caa7e5009991",
               "day": "Stations of the Cross",
               "times": [

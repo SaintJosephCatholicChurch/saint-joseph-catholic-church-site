@@ -24,8 +24,8 @@ export async function getDailyReadingIFrameUrl(): Promise<string | null> {
     const response = await fetch(
       `https://soundcloud.com/oembed?format=json&url=https%3A%2F%2Fsoundcloud.com%2Fusccb-readings%2Fdaily-mass-reading-podcast-for-${format(
         new Date(),
-        'MMMM-dd-yyyy'
-      )}&iframe=true`
+        'MMMM-d-yyyy'
+      ).toLowerCase()}&iframe=true`
     );
     const contents = (await response.json()) as SoundCloudResponse | null | undefined;
     if (isNullish(contents)) {

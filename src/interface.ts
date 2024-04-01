@@ -58,6 +58,11 @@ export interface TimesTime {
   readonly id: string | undefined;
   readonly time?: string;
   readonly end_time?: string;
+  readonly notes?: TimesTimeNote[];
+}
+
+export interface TimesTimeNote {
+  readonly id: string | undefined;
   readonly note?: string;
 }
 

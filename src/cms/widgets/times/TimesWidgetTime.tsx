@@ -10,7 +10,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import format from 'date-fns/format';
@@ -18,6 +17,7 @@ import parse from 'date-fns/parse';
 import { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '../../../util/string.util';
+import TimesWidgetTimeNotes from './TimesWidgetTimeNotes';
 
 import type { FC } from 'react';
 import type { TimesTime } from '../../../interface';
@@ -49,10 +49,10 @@ const StyledDayTimeLineTimeTimesWrapper = styled('div')`
 
 const StyledDayTimeLineTimeCommentWrapper = styled('div')`
   display: flex;
-  gap: 8px;
-  padding-left: 40px;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
-  box-sizing: border-box;
+  align-items: flex-start
 `;
 
 const StyledDeletingTimeDetails = styled('div')`
@@ -60,10 +60,6 @@ const StyledDeletingTimeDetails = styled('div')`
   margin-top: 16px;
   gap: 16px;
   align-items: baseline;
-`;
-
-const StyledDeletingTimeDetailsNote = styled('div')`
-  font-size: 12px;
 `;
 
 const StyledDragHandle = styled('div')(
@@ -172,23 +168,7 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
             </IconButton>
           </StyledDayTimeLineTimeTimesWrapper>
           <StyledDayTimeLineTimeCommentWrapper>
-            <TextField
-              label="Notes"
-              value={time.note}
-              size="small"
-              onChange={(event) =>
-                handleChange({
-                  note: event.target.value
-                })
-              }
-              fullWidth
-              sx={{
-                input: {
-                  fontSize: '13px',
-                  color: '#757575'
-                }
-              }}
-            />
+            <TimesWidgetTimeNotes times={time.notes} onChange={(notes) => handleChange({ notes })} />
           </StyledDayTimeLineTimeCommentWrapper>
         </StyledDayTimeLineTimeContent>
       </StyledDayTimeLineTime>
@@ -211,9 +191,6 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
                     <Box key="deleting-time-divider-end-time">-</Box>
                     <Box key="deleting-time-end-time">{time.end_time}</Box>
                   </>
-                ) : null}
-                {isNotEmpty(time.note) ? (
-                  <StyledDeletingTimeDetailsNote key="deleting-time-note">{time.note}</StyledDeletingTimeDetailsNote>
                 ) : null}
               </StyledDeletingTimeDetails>
             </DialogContentText>

@@ -150,6 +150,7 @@ const StyledDayTimeLineTimeComment = styled('div')(
     color: #757575;
     white-space: pre-line;
     text-align: right;
+    text-wrap: balance;
 
     ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       font-size: 12px;
@@ -248,27 +249,38 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                               </>
                             ) : null}
                           </StyledDayTimeLineTime>
-                        ) : (
-                          <StyledDayTimeLineTimeComment
-                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-first`}
-                            dangerouslySetInnerHTML={{
-                              __html: day.times[0].note?.replaceAll('-', '&#x2011;')
-                            }}
-                          ></StyledDayTimeLineTimeComment>
-                        )}
+                        ) : day.times[0].notes &&
+                          day.times[0].notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
+                          day.times[0].notes
+                            .filter((note) => isNotEmpty(note.note))
+                            .map((note) => (
+                              <StyledDayTimeLineTimeComment
+                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-first`}
+                                dangerouslySetInnerHTML={{
+                                  __html: note.note?.replaceAll('-', '&#x2011;')
+                                }}
+                              ></StyledDayTimeLineTimeComment>
+                            ))
+                        ) : null}
                       </StyledDayTimeLineTimeWrapper>
                     </StyledDayTimeLineTimes>
                   ) : null}
                   <StyledDayTimeLineTimes sx={{ width: '100%' }}>
                     {day.times?.map((time, timeIndex) =>
                       timeIndex === 0 ? (
-                        (isNotEmpty(time.time) || isNotEmpty(time.end_time)) && isNotEmpty(time.note) ? (
-                          <StyledDayTimeLineTimeComment
-                            key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
-                            dangerouslySetInnerHTML={{
-                              __html: time.note?.replaceAll('-', '&#x2011;')
-                            }}
-                          ></StyledDayTimeLineTimeComment>
+                        (isNotEmpty(time.time) || isNotEmpty(time.end_time)) &&
+                        time.notes &&
+                        time.notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
+                          time.notes
+                            .filter((note) => isNotEmpty(note.note))
+                            .map((note) => (
+                              <StyledDayTimeLineTimeComment
+                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
+                                dangerouslySetInnerHTML={{
+                                  __html: note.note?.replaceAll('-', '&#x2011;')
+                                }}
+                              ></StyledDayTimeLineTimeComment>
+                            ))
                         ) : null
                       ) : (
                         <StyledDayTimeLineTimeWrapper
@@ -295,14 +307,18 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                               ) : null}
                             </StyledDayTimeLineTime>
                           ) : null}
-                          {isNotEmpty(time.note) ? (
-                            <StyledDayTimeLineTimeComment
-                              key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
-                              dangerouslySetInnerHTML={{
-                                __html: time.note?.replaceAll('-', '&#x2011;')
-                              }}
-                            ></StyledDayTimeLineTimeComment>
-                          ) : null}
+                          {time.notes && time.notes.filter((note) => isNotEmpty(note.note)).length > 0
+                            ? time.notes
+                                .filter((note) => isNotEmpty(note.note))
+                                .map((note) => (
+                                  <StyledDayTimeLineTimeComment
+                                    key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
+                                    dangerouslySetInnerHTML={{
+                                      __html: note.note?.replaceAll('-', '&#x2011;')
+                                    }}
+                                  ></StyledDayTimeLineTimeComment>
+                                ))
+                            : null}
                         </StyledDayTimeLineTimeWrapper>
                       )
                     )}

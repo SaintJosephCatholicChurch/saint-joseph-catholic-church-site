@@ -113,6 +113,7 @@ const StyledDayTimeLine = styled('div')`
   margin-top: 2px;
   padding: 5px 0;
   border-bottom: 1px solid #ccc;
+  gap: 12px;
 `;
 
 const StyledDayTimeLineTitle = styled('div')(
@@ -124,6 +125,7 @@ const StyledDayTimeLineTitle = styled('div')(
 
     font-size: 17px;
     line-height: 21px;
+    white-space: nowrap;
 
     ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 15px;
@@ -138,16 +140,27 @@ const StyledDayTimeLineTimes = styled('div')`
   gap: 4px;
 `;
 
-const StyledDayTimeLineTime = styled('div')`
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 4px;
-`;
+interface StyledDayTimeLineTimeProps {
+  $inlineNotes: boolean;
+}
+
+const StyledDayTimeLineTime = styled(
+  'div',
+  transientOptions
+)<StyledDayTimeLineTimeProps>(
+  ({ $inlineNotes }) => `
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    align-items: center;
+    gap: ${$inlineNotes ? '12' : '4'}px;
+  `
+);
 
 const StyledDayTimeLineTimeTimes = styled('div')(
   ({ theme }) => `
     text-transform: uppercase;
+    white-space: nowrap;
 
     font-size: 15px;
     ${getContainerQuery(theme.breakpoints.down('md'))} {
@@ -168,12 +181,20 @@ const StyledDivider = styled('div')(
   `
 );
 
+const StyledDayTimeLineTimeNotes = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+`;
+
 const StyledDayTimeLineTimeComment = styled('div')`
   display: flex;
   align-items: center;
   font-size: 13px;
   line-height: 13px;
   color: #757575;
+  text-align: right;
 `;
 
 const StyledNote = styled('div')`
@@ -190,6 +211,8 @@ const StyledNote = styled('div')`
     border-bottom: 1px solid #ccc;
   }
 `;
+
+const NOTE_MAX_LINE_LENGTH = 45;
 
 interface ScheduleTabPanelProps {
   times: Times;
@@ -220,9 +243,12 @@ const ScheduleTabPanel = memo(
                     <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
                     <StyledDayTimeLineTimes>
                       {day.times?.map((time, timeIndex) => (
-                        <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
+                        <StyledDayTimeLineTime
+                          key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}
+                          $inlineNotes={!isNotEmpty(time.end_time)}
+                        >
                           <StyledDayTimeLineTimeTimes>
-                            {isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}
+                            {isNotEmpty(time.time) ? time.time : null}
                           </StyledDayTimeLineTimeTimes>
                           {isNotEmpty(time.end_time) ? (
                             <>
@@ -238,12 +264,22 @@ const ScheduleTabPanel = memo(
                               </StyledDayTimeLineTimeTimes>
                             </>
                           ) : null}
-                          {isNotEmpty(time.note) ? (
-                            <StyledDayTimeLineTimeComment
-                              key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}
-                            >
-                              {time.note}
-                            </StyledDayTimeLineTimeComment>
+                          {time.notes && time.notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
+                            <StyledDayTimeLineTimeNotes>
+                              {time.notes
+                                .filter((note) => isNotEmpty(note.note))
+                                .map((note) => (
+                                  <StyledDayTimeLineTimeComment
+                                    key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}
+                                    dangerouslySetInnerHTML={{
+                                      __html: note.note.replace(
+                                        new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),
+                                        '$1<br>'
+                                      )
+                                    }}
+                                  />
+                                ))}
+                            </StyledDayTimeLineTimeNotes>
                           ) : null}
                         </StyledDayTimeLineTime>
                       ))}

@@ -86,7 +86,12 @@
               "times": [
                 {
                   "id": "17b2d8af-03bd-4408-b1d5-c22bc8df1c2b",
-                  "note": "TBD"
+                  "notes": [
+                    {
+                      "note": "TBD",
+                      "id": "9b40ecd0-1a0d-467c-802b-4e1a436f192f"
+                    }
+                  ]
                 }
               ]
             },
@@ -137,7 +142,12 @@
                 {
                   "end_time": "",
                   "time": "5:00 PM",
-                  "note": "Rosary at 4:35 PM",
+                  "notes": [
+                    {
+                      "note": "Rosary at 4:35 PM",
+                      "id": "488cd181-546a-4195-9525-667c962cc1cb"
+                    }
+                  ],
                   "id": "b8168f22-98d5-48fd-8b2f-6bc6b830b499"
                 }
               ],
@@ -148,13 +158,23 @@
               "times": [
                 {
                   "time": "7:30 AM",
-                  "note": "Rosary at 7:10 AM",
+                  "notes": [
+                    {
+                      "note": "Rosary at 7:10 AM",
+                      "id": "e799ed13-86cb-4b67-8ebd-80300e494d0d"
+                    }
+                  ],
                   "end_time": "",
                   "id": "de1c02c1-c4de-4d9e-8e40-34360a5398f4"
                 },
                 {
                   "time": "10:00 AM",
-                  "note": "Rosary at 9:40 AM",
+                  "notes": [
+                    {
+                      "note": "Rosary at 9:40 AM",
+                      "id": "abae934f-911a-4029-befc-730927486e8f"
+                    }
+                  ],
                   "end_time": "",
                   "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
                 }
@@ -171,7 +191,12 @@
               "day": "Monday",
               "times": [
                 {
-                  "note": "No Public Mass",
+                  "notes": [
+                    {
+                      "note": "No Public Mass",
+                      "id": "def40232-aaa7-4235-8231-f3d29c235e44"
+                    }
+                  ],
                   "time": "",
                   "end_time": "",
                   "id": "a7392c84-9d2b-458a-bad2-d33a6ef39217"
@@ -183,12 +208,20 @@
               "day": "Tuesday",
               "times": [
                 {
-                  "note": "",
                   "time": "8:00 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c"
                 },
                 {
-                  "note": "Adoration from 7:00 - 8:00 AM;  Confession from 8:30 - 9:00 AM",
+                  "notes": [
+                    {
+                      "note": "Adoration from 7:00 - 8:00 AM",
+                      "id": "1b8b52c8-43d8-470a-9913-ce9b9f35c300"
+                    },
+                    {
+                      "note": "Confession from 8:30 - 9:00 AM",
+                      "id": "0e8e8ee9-ef84-475f-b206-a39188dbe6ba"
+                    }
+                  ],
                   "id": "7570bc61-12f2-4352-9217-0d9ff4109dd5"
                 }
               ],
@@ -200,11 +233,16 @@
                 {
                   "time": "7:00 PM",
                   "end_time": "",
-                  "note": "",
-                  "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe"
+                  "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe",
+                  "notes": []
                 },
                 {
-                  "note": "Adoration and Confession from 6:00 - 7:00 PM",
+                  "notes": [
+                    {
+                      "note": "Adoration and Confession from 6:00 - 7:00 PM",
+                      "id": "785e4882-d7d0-4579-9c77-d49310f18884"
+                    }
+                  ],
                   "id": "65a42201-52f6-4baa-b36a-18c37f1ff6db"
                 }
               ],
@@ -241,7 +279,12 @@
                   "id": "95518a16-b6e6-46e8-ad0b-1221309d268b"
                 },
                 {
-                  "note": "Confession from 8:30 - 9:00 AM",
+                  "notes": [
+                    {
+                      "note": "Confession from 8:30 - 9:00 AM",
+                      "id": "3b9c6ba5-ccac-45d8-814a-4455f783a9a0"
+                    }
+                  ],
                   "id": "d09da0fe-9d62-4903-a85c-4d1d96bf5e46"
                 }
               ],
@@ -258,13 +301,14 @@
               "times": [
                 {
                   "time": "6:00 PM",
-                  "note": "No First Friday evening Mass on April 5, 2024 due to Confirmation Mass in Decatur.",
+                  "notes": [
+                    {
+                      "note": "No First Friday evening Mass on April 5, 2024 due to Confirmation Mass in Decatur.",
+                      "id": "b2b056fd-7d54-4f76-ab77-08fe40208033"
+                    }
+                  ],
                   "end_time": "",
                   "id": "4ff1ed83-1d56-4d8e-85a0-1b46d2ec57f4"
-                },
-                {
-                  "note": "",
-                  "id": "57f07cb5-b560-4225-ac4c-3d4475b14416"
                 }
               ],
               "id": "c012ddb3-7d02-40fe-b0a5-6f314778b42e"
@@ -288,7 +332,11 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "note": "Parish Office Closed April 1 - 5, 2024"
+                  "notes": [
+                    {
+                      "note": "Parish Office Closed April 1 - 5, 2024"
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
@@ -299,7 +347,11 @@
                 {
                   "time": "10:00 AM",
                   "end_time": "1:00 PM",
-                  "note": "Accepted on Mondays",
+                  "notes": [
+                    {
+                      "note": "Accepted on Mondays"
+                    }
+                  ],
                   "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
                 }
               ],
@@ -322,7 +374,11 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "9:00 AM",
-                  "note": "After morning Mass",
+                  "notes": [
+                    {
+                      "note": "After morning Mass"
+                    }
+                  ],
                   "id": "20a93fa5-6b5d-405b-af4e-2506a08f36c6"
                 }
               ],
@@ -334,7 +390,11 @@
                 {
                   "time": "6:00 PM",
                   "end_time": "6:45 PM",
-                  "note": "Before evening Mass",
+                  "notes": [
+                    {
+                      "note": "Before evening Mass"
+                    }
+                  ],
                   "id": "c7a7ea72-81f9-4b11-9133-4028d1be9222"
                 }
               ],
@@ -346,13 +406,21 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "9:00 AM",
-                  "note": "After morning Mass",
+                  "notes": [
+                    {
+                      "note": "After morning Mass"
+                    }
+                  ],
                   "id": "abcbb182-b044-4474-beac-e3ae8597da0a"
                 },
                 {
                   "time": "4:00 PM",
                   "end_time": "4:45 PM",
-                  "note": "Before evening Mass",
+                  "notes": [
+                    {
+                      "note": "Before evening Mass"
+                    }
+                  ],
                   "id": "1cdcf249-bda5-474b-aa65-e4280621a04f"
                 }
               ],
@@ -384,7 +452,11 @@
               "day": "By Appointment",
               "times": [
                 {
-                  "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380",
+                  "notes": [
+                    {
+                      "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380"
+                    }
+                  ],
                   "id": "e021347c-becd-4177-8c8d-6efeeae3a6c8"
                 }
               ],
@@ -454,7 +526,11 @@
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
-                  "note": "Note: Adoration ends early April 5, 2024, due to Confirmation Mass in Decatur.",
+                  "notes": [
+                    {
+                      "note": "Note: Adoration ends early April 5, 2024, due to Confirmation Mass in Decatur."
+                    }
+                  ],
                   "time": "9:00 AM",
                   "end_time": "2:00 PM"
                 }
@@ -488,7 +564,11 @@
                 {
                   "time": "",
                   "end_time": "",
-                  "note": "Time TBD",
+                  "notes": [
+                    {
+                      "note": "Time TBD"
+                    }
+                  ],
                   "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
                 }
               ],

@@ -1,136 +1,6 @@
 {
   "times": [
     {
-      "id": "29fdeeb2-8b54-4745-941b-2d2a4bac0459",
-      "name": "Holy Week",
-      "sections": [
-        {
-          "id": "8e37f72f-fa9c-45de-83c9-03a2cfa6cfbf",
-          "name": "Good Friday (March 29)",
-          "days": [
-            {
-              "id": "2ab5618d-1723-40f6-93bc-b61b88a9cc2a",
-              "day": "Lauds / Morning Prayer",
-              "times": [
-                {
-                  "id": "a115ba15-4af7-416a-bc1b-e0c7b33297b5",
-                  "time": "8:30 AM",
-                  "end_time": "8:45 AM"
-                }
-              ]
-            },
-            {
-              "id": "35d4be7e-83eb-4771-86ca-e7207a1213d4",
-              "day": "Celebration of the Lord's Passion",
-              "times": [
-                {
-                  "id": "81db5441-141c-4a54-81dd-8be49d26a5e1",
-                  "time": "1:00 PM",
-                  "end_time": "3:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "f6ad280e-1ac1-4420-9ecf-e8d59ed2be11",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "42e6903a-9f8d-49f3-b6f4-f5de594a22f1",
-                  "time": "5:00 PM",
-                  "end_time": "6:30 PM"
-                }
-              ]
-            },
-            {
-              "id": "d74b1932-0296-437a-84fa-caa7e5009991",
-              "day": "Stations of the Cross",
-              "times": [
-                {
-                  "id": "02aab9f6-d11c-40b3-964c-1d60da81f4de",
-                  "time": "7:00 PM",
-                  "end_time": "7:45 PM"
-                }
-              ]
-            },
-            {
-              "id": "0355f4e0-164f-4ea6-9606-f6435c7306d7",
-              "day": "Tenebrae",
-              "times": [
-                {
-                  "id": "09a5c616-5e43-486b-ae5c-0a179078ebf2",
-                  "time": "8:00 PM",
-                  "end_time": "9:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "a213ac00-7083-40a1-b771-485b63b7873b",
-          "name": "Holy Saturday (March 30)",
-          "days": [
-            {
-              "id": "fbb7a88d-bbc1-4e48-8174-4cc2519fc7af",
-              "day": "Lauds / Morning Prayer",
-              "times": [
-                {
-                  "id": "3744f930-ed2b-4ea7-9318-81b60b186f70",
-                  "time": "8:00 AM",
-                  "end_time": "8:15 AM"
-                }
-              ]
-            },
-            {
-              "id": "dd43a115-56dd-4419-b531-bb943a779bc4",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "17b2d8af-03bd-4408-b1d5-c22bc8df1c2b",
-                  "notes": [
-                    {
-                      "note": "TBD",
-                      "id": "9b40ecd0-1a0d-467c-802b-4e1a436f192f"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "898aa3b6-f16c-461a-835b-8c0916410be5",
-              "day": "Easter Vigil in the Night",
-              "times": [
-                {
-                  "id": "ab9ddfcc-483e-4877-b864-a630928c22a5",
-                  "time": "9:00 PM",
-                  "end_time": "11:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "8287069f-56bb-4c0e-9651-f20a90872382",
-          "name": "Easter Sunday (March 31)",
-          "days": [
-            {
-              "id": "061b0db7-57a2-49b8-9394-8870cace697c",
-              "day": "Mass during the Day",
-              "times": [
-                {
-                  "id": "e2838a18-0ad7-4ee5-9fb3-0625ce5ac90f",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "c01755f1-6b66-4f6b-b1df-37e9ecf280cc",
-                  "time": "10:00 AM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Mass Times",
       "sections": [
         {
@@ -334,7 +204,8 @@
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
                   "notes": [
                     {
-                      "note": "Parish Office Closed April 1 - 5, 2024"
+                      "note": "Parish Office Closed April 1 - 5, 2024",
+                      "id": "39cffccf-77f6-483a-a44d-8b5a88e35df0"
                     }
                   ]
                 }
@@ -349,7 +220,8 @@
                   "end_time": "1:00 PM",
                   "notes": [
                     {
-                      "note": "Accepted on Mondays"
+                      "note": "Accepted on Mondays",
+                      "id": "8250ad6a-ce8f-413b-b0bb-64cfd383b23c"
                     }
                   ],
                   "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
@@ -408,7 +280,8 @@
                   "end_time": "9:00 AM",
                   "notes": [
                     {
-                      "note": "After morning Mass"
+                      "note": "After morning Mass",
+                      "id": "d3cfaeb9-762e-404f-9132-6b6cee3dc5b0"
                     }
                   ],
                   "id": "abcbb182-b044-4474-beac-e3ae8597da0a"
@@ -418,7 +291,8 @@
                   "end_time": "4:45 PM",
                   "notes": [
                     {
-                      "note": "Before evening Mass"
+                      "note": "Before evening Mass",
+                      "id": "fbb98ce8-7007-406a-ab2b-587052f38a99"
                     }
                   ],
                   "id": "1cdcf249-bda5-474b-aa65-e4280621a04f"
@@ -454,7 +328,8 @@
                 {
                   "notes": [
                     {
-                      "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380"
+                      "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380",
+                      "id": "d1efe951-f42b-4436-9af5-60201b6de234"
                     }
                   ],
                   "id": "e021347c-becd-4177-8c8d-6efeeae3a6c8"

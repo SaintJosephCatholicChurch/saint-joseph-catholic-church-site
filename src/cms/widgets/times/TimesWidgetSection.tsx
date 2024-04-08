@@ -229,6 +229,7 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
                     onChange={(event) => handleChange({ name: event.target.value } as T)}
                     onClick={stopPropagationOnClick}
                     sx={{
+                      width: '100%',
                       input: {
                         fontSize: '16x',
                         fontFamily: "'Oswald', Helvetica, Arial, sans-serif"

@@ -16,6 +16,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import { useCallback, useMemo, useState } from 'react';
 
+import CollapseSection from '../../../components/layout/CollapseSection';
 import { isNotEmpty } from '../../../util/string.util';
 import TimesWidgetTimeNotes from './TimesWidgetTimeNotes';
 
@@ -35,9 +36,14 @@ const StyledDayTimeLineTimeContent = styled('div')(
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
     flex-grow: 1;
     padding: 12px 8px;
+
+    .MuiCollapse-wrapperInner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   `
 );
 
@@ -52,7 +58,7 @@ const StyledDayTimeLineTimeCommentWrapper = styled('div')`
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  align-items: flex-start
+  align-items: flex-start;
 `;
 
 const StyledDeletingTimeDetails = styled('div')`
@@ -74,6 +80,14 @@ const StyledDragHandle = styled('div')(
     justify-content: center;
   `
 );
+
+const StyledTimesHeaderWrapper = styled('div')`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+`;
 
 export interface TimesWidgetTimeProps {
   time: TimesTime;
@@ -115,61 +129,70 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
           <DragIndicatorIcon />
         </StyledDragHandle>
         <StyledDayTimeLineTimeContent>
-          <StyledDayTimeLineTimeTimesWrapper>
-            <TimePicker
-              label="Start Time"
-              value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
-              onChange={(newValue) => {
-                let newDate = '';
-                try {
-                  if (newValue) {
-                    newDate = format(newValue, 'h:mm a');
-                  }
-                } catch (e) {
-                  console.error(e);
-                }
-                handleChange({ time: newDate });
-              }}
-              slotProps={{
-                textField: {
-                  size: 'small',
-                  sx: { fontSize: '15px' }
-                }
-              }}
-              format="h:mm a"
-              ampm
-            />
-            <TimePicker
-              key={`section-day-time-${time.id}-end-time`}
-              label="End Time"
-              value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
-              onChange={(newValue) => {
-                let newDate = '';
-                try {
-                  if (newValue) {
-                    newDate = format(newValue, 'h:mm a');
-                  }
-                } catch (e) {
-                  console.error(e);
-                }
-                handleChange({ end_time: newDate });
-              }}
-              slotProps={{
-                textField: {
-                  size: 'small',
-                  sx: { fontSize: '15px' }
-                }
-              }}
-              format="h:mm a"
-              ampm
-            />
-            <IconButton onClick={handleDelete} color="error">
-              <DeleteIcon />
-            </IconButton>
-          </StyledDayTimeLineTimeTimesWrapper>
-          <StyledDayTimeLineTimeCommentWrapper>
-            <TimesWidgetTimeNotes times={time.notes} onChange={(notes) => handleChange({ notes })} />
-          </StyledDayTimeLineTimeCommentWrapper>
+          <CollapseSection
+            position="before"
+            startCollapsed
+            header={
+              <StyledTimesHeaderWrapper>
+                <StyledDayTimeLineTimeTimesWrapper>
+                  <TimePicker
+                    label="Start Time"
+                    value={isNotEmpty(time.time) ? parse(time.time, 'h:mm a', new Date()) : null}
+                    onChange={(newValue) => {
+                      let newDate = '';
+                      try {
+                        if (newValue) {
+                          newDate = format(newValue, 'h:mm a');
+                        }
+                      } catch (e) {
+                        console.error(e);
+                      }
+                      handleChange({ time: newDate });
+                    }}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        sx: { fontSize: '15px' }
+                      }
+                    }}
+                    format="h:mm a"
+                    ampm
+                  />
+                  <TimePicker
+                    key={`section-day-time-${time.id}-end-time`}
+                    label="End Time"
+                    value={isNotEmpty(time.end_time) ? parse(time.end_time, 'h:mm a', new Date()) : null}
+                    onChange={(newValue) => {
+                      let newDate = '';
+                      try {
+                        if (newValue) {
+                          newDate = format(newValue, 'h:mm a');
+                        }
+                      } catch (e) {
+                        console.error(e);
+                      }
+                      handleChange({ end_time: newDate });
+                    }}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        sx: { fontSize: '15px' }
+                      }
+                    }}
+                    format="h:mm a"
+                    ampm
+                  />
+                  <IconButton onClick={handleDelete} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledDayTimeLineTimeTimesWrapper>
+              </StyledTimesHeaderWrapper>
+            }
+          >
+            <StyledDayTimeLineTimeCommentWrapper>
+              <TimesWidgetTimeNotes times={time.notes} onChange={(notes) => handleChange({ notes })} />
+            </StyledDayTimeLineTimeCommentWrapper>
+          </CollapseSection>
         </StyledDayTimeLineTimeContent>
       </StyledDayTimeLineTime>
       {deleting ? (

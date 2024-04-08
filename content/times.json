@@ -393,7 +393,7 @@
         },
         {
           "id": "f2451d77-7d02-4807-94ea-bd9f4af4c9d1",
-          "name": "First Friday of Each Month (Cancelled for December 2023)",
+          "name": "First Friday of Each Month",
           "days": [
             {
               "id": "970d3fad-87de-46c0-b660-6a22d37acd70",
@@ -403,7 +403,8 @@
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
                   "notes": [
                     {
-                      "note": "Note: Adoration ends early April 5, 2024, due to Confirmation Mass in Decatur."
+                      "note": "Note: Adoration ends early April 5, 2024, due to Confirmation Mass in Decatur.",
+                      "id": "e6aee550-004d-44c6-9a96-05a262bd2e42"
                     }
                   ],
                   "time": "9:00 AM",

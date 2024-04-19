@@ -56,12 +56,7 @@ async function fromStorageToEditor(
   return { result: newValue, cache };
 }
 
-function useStorageToEditor(
-  input: string,
-  collection: Collection<HtmlField>,
-  field: HtmlField,
-  entry: Entry
-) {
+function useStorageToEditor(input: string, collection: Collection<HtmlField>, field: HtmlField, entry: Entry) {
   const [html, setHtml] = useState<string>('');
   const [fileCheckCache, setFileCheckCache] = useState<Record<string, boolean>>({});
 

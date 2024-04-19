@@ -19,7 +19,7 @@ const StyledPostDetails = styled('div')`
 const RecentNewsSkeleton = memo(() => {
   return (
     <StyledRecentNewsSkeleton>
-      <Skeleton variant="rectangular" width={110} height={72} sx={{ flexShrink: 0}} />
+      <Skeleton variant="rectangular" width={110} height={72} sx={{ flexShrink: 0 }} />
       <StyledPostDetails>
         <Skeleton animation="wave" height={24} style={{ marginBottom: 2 }} />
         <Skeleton animation="wave" height={10} style={{ marginBottom: 4 }} />

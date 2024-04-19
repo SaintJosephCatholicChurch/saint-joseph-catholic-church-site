@@ -131,9 +131,9 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
               </StyledDayTimeLineTitleWrapper>
             }
           >
-          <StyledDayTimeLineTimes>
-            <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
-          </StyledDayTimeLineTimes>
+            <StyledDayTimeLineTimes>
+              <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
+            </StyledDayTimeLineTimes>
           </CollapseSection>
         </StyledDayTimeLineContent>
       </StyledDayTimeLine>

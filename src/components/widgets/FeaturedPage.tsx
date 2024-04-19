@@ -3,9 +3,10 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
 
-import { FeaturedPage } from '../../interface';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+
+import type { FeaturedPage as FeaturedPageData } from '../../interface';
 
 const StyledTitle = styled('h3')`
   margin: 0;
@@ -34,7 +35,7 @@ const StyledSummary = styled('div')(
 );
 
 interface FeaturedPageProps {
-  featuredPage?: FeaturedPage;
+  featuredPage?: FeaturedPageData;
   isFullWidth?: boolean;
 }
 

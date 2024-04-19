@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import parse from 'date-fns/parse';
+import { parse } from 'date-fns';
 
 import homepageData from '../../../lib/homepage';
 import { getFeed } from '../../../lib/rss';

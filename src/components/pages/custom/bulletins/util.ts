@@ -1,5 +1,4 @@
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { format, parse } from 'date-fns';
 import { useMemo } from 'react';
 
 import type { Bulletin } from '../../../../interface';

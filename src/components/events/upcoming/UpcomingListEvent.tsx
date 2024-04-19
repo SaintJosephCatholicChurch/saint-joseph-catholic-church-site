@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import { useMemo } from 'react';
 
 import { formatAsUtc } from '../../../util/date.util';

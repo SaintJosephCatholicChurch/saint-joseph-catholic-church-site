@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { useMediaAsset } from '@staticcms/core';
-import parseISO from 'date-fns/parseISO';
+import { parseISO } from 'date-fns';
 import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';

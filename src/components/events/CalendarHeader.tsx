@@ -8,11 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import addDays from 'date-fns/addDays';
-import addMonths from 'date-fns/addMonths';
-import addWeeks from 'date-fns/addWeeks';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import { addDays, addMonths, addWeeks, format, parse } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import getContainerQuery from '../../util/container.util';

@@ -1,4 +1,4 @@
-import parseISO from 'date-fns/parseISO';
+import { parseISO } from 'date-fns';
 import { useMemo } from 'react';
 
 import PageLayout from '../../components/PageLayout';

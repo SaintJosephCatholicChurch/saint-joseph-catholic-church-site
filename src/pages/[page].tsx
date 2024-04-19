@@ -1,4 +1,4 @@
-import parseISO from 'date-fns/parseISO';
+import { parseISO } from 'date-fns';
 
 import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';

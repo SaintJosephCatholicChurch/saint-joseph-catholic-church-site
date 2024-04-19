@@ -1,4 +1,4 @@
-import parse from 'date-fns/parse';
+import { parse } from 'date-fns';
 import { useMemo } from 'react';
 
 import type { NewsPostData, PostContent } from '../../../interface';

@@ -1,4 +1,4 @@
-import parseISO from 'date-fns/parseISO';
+import { parseISO } from 'date-fns';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 

@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
-import parseISO from 'date-fns/parseISO';
+import { format, parseISO } from 'date-fns';
 import escapeRegExp from 'lodash/escapeRegExp';
 import { useEffect, useMemo, useState } from 'react';
 

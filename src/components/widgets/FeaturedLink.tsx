@@ -3,9 +3,10 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
 
-import { FeaturedLink } from '../../interface';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+
+import type { FeaturedLink as FeaturedLinkData } from '../../interface';
 
 const StyledTitle = styled('h3')`
   margin: 0;
@@ -34,15 +35,12 @@ const StyledSummary = styled('div')(
 );
 
 interface FeaturedLinkProps {
-  featuredLink?: FeaturedLink;
+  featuredLink?: FeaturedLinkData;
   isFullWidth?: boolean;
 }
 
 const FeaturedLink = memo(
-  ({
-    featuredLink: { title, url, image, summary },
-    isFullWidth = false,
-  }: FeaturedLinkProps) => {
+  ({ featuredLink: { title, url, image, summary }, isFullWidth = false }: FeaturedLinkProps) => {
     const theme = useTheme();
 
     if (isEmpty(title) || isEmpty(url)) {

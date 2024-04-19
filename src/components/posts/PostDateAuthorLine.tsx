@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
-import formatISO from 'date-fns/formatISO';
+import { format, formatISO } from 'date-fns';
 import { memo } from 'react';
 
 import transientOptions from '../../util/transientOptions';

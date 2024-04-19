@@ -1,6 +1,4 @@
-import compareAsc from 'date-fns/compareAsc';
-import differenceInDays from 'date-fns/differenceInDays';
-import parseISO from 'date-fns/parseISO';
+import { compareAsc, differenceInDays, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
 
 import { isEmpty, isNotEmpty } from './string.util';

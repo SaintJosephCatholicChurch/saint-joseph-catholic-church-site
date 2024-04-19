@@ -1,7 +1,7 @@
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import Link from 'next/link';
 import { useMemo } from 'react';
 

@@ -1,9 +1,4 @@
-import addSeconds from 'date-fns/addSeconds';
-import differenceInDays from 'date-fns/differenceInDays';
-import format from 'date-fns/format';
-import isSameDay from 'date-fns/isSameDay';
-import isSameMonth from 'date-fns/isSameMonth';
-import isSameYear from 'date-fns/isSameYear';
+import { addSeconds, differenceInDays, format, isSameDay, isSameMonth, isSameYear } from 'date-fns';
 import { useMemo } from 'react';
 
 import { isNullish } from '../../../util/null.util';

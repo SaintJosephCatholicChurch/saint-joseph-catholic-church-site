@@ -1,4 +1,4 @@
-import formatISO from 'date-fns/formatISO';
+import { formatISO } from 'date-fns';
 import Script from 'next/script';
 import { jsonLdScriptProps } from 'react-schemaorg';
 

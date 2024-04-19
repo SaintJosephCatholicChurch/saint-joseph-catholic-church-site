@@ -12,6 +12,7 @@ import { memo, useCallback, useState } from 'react';
 import TabPanel from '../../../components/TabPanel';
 import TimesWidgetSections from './TimesWidgetSections';
 
+import type { MouseEvent } from 'react';
 import type { Times } from '../../../interface';
 
 const StyledTabPanelContent = styled('div')`
@@ -43,7 +44,10 @@ interface ScheduleTabPanelProps {
 
 const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: ScheduleTabPanelProps) => {
   const [deleting, setDeleting] = useState(false);
-  const handleOnDelete = useCallback(() => setDeleting(true), []);
+  const handleOnDelete = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    setDeleting(true);
+  }, []);
   const handleOnDeleteConfirm = useCallback(() => {
     setDeleting(false);
     onDelete();

@@ -16,7 +16,7 @@ import { useCallback, useMemo, useState } from 'react';
 import CollapseSection from '../../../components/layout/CollapseSection';
 import TimesWidgetTimes from './TimesWidgetTimes';
 
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import type { TimesDay } from '../../../interface';
 
 const StyledDayTimeLine = styled('div')`
@@ -73,7 +73,10 @@ export interface TimesWidgetDayProps {
 
 const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) => {
   const [deleting, setDeleting] = useState(false);
-  const handleDelete = useCallback(() => setDeleting(true), []);
+  const handleDelete = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    setDeleting(true);
+  }, []);
   const handleDeleteConfirm = useCallback(() => {
     setDeleting(false);
     onDelete(day);

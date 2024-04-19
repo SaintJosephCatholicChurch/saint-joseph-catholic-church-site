@@ -19,7 +19,7 @@ import CollapseSection from '../../../components/layout/CollapseSection';
 import { isNotEmpty } from '../../../util/string.util';
 import TimesWidgetTimeNotes from './TimesWidgetTimeNotes';
 
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import type { TimesTime } from '../../../interface';
 
 const StyledDayTimeLineTime = styled('div')`
@@ -96,7 +96,10 @@ export interface TimesWidgetTimeProps {
 
 const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete }) => {
   const [deleting, setDeleting] = useState(false);
-  const handleDelete = useCallback(() => setDeleting(true), []);
+  const handleDelete = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    setDeleting(true);
+  }, []);
   const handleDeleteConfirm = useCallback(() => {
     setDeleting(false);
     onDelete(time);

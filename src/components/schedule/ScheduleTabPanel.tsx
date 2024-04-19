@@ -270,7 +270,7 @@ const ScheduleTabPanel = memo(
                                 .filter((note) => isNotEmpty(note.note))
                                 .map((note) => (
                                   <StyledDayTimeLineTimeComment
-                                    key={`section-${sectionIndex}-day-${dayIndex}-note-${timeIndex}`}
+                                    key={`section-${sectionIndex}-day-${dayIndex}-note-${note.id}`}
                                     dangerouslySetInnerHTML={{
                                       __html: note.note.replace(
                                         new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),

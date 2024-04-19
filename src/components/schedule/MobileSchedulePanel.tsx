@@ -255,7 +255,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                             .filter((note) => isNotEmpty(note.note))
                             .map((note) => (
                               <StyledDayTimeLineTimeComment
-                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-first`}
+                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                 dangerouslySetInnerHTML={{
                                   __html: note.note?.replaceAll('-', '&#x2011;')
                                 }}
@@ -275,7 +275,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                             .filter((note) => isNotEmpty(note.note))
                             .map((note) => (
                               <StyledDayTimeLineTimeComment
-                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-0-second`}
+                                key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                 dangerouslySetInnerHTML={{
                                   __html: note.note?.replaceAll('-', '&#x2011;')
                                 }}
@@ -312,7 +312,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                                 .filter((note) => isNotEmpty(note.note))
                                 .map((note) => (
                                   <StyledDayTimeLineTimeComment
-                                    key={`mobile-section-${sectionIndex}-day-${day.day}-note-${timeIndex}`}
+                                    key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                     dangerouslySetInnerHTML={{
                                       __html: note.note?.replaceAll('-', '&#x2011;')
                                     }}

@@ -16,7 +16,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { isNotEmpty } from '../../../util/string.util';
 
-import type { FC } from 'react';
+import type { FC, MouseEvent } from 'react';
 import type { TimesTimeNote } from '../../../interface';
 
 const StyledDayTimeNote = styled('div')`
@@ -55,7 +55,10 @@ export interface TimesWidgetTimeNoteProps {
 
 const TimesWidgetTimeNote: FC<TimesWidgetTimeNoteProps> = ({ note, onChange, onDelete }) => {
   const [deleting, setDeleting] = useState(false);
-  const handleDelete = useCallback(() => setDeleting(true), []);
+  const handleDelete = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+    setDeleting(true);
+  }, []);
   const handleDeleteConfirm = useCallback(() => {
     setDeleting(false);
     onDelete(note);

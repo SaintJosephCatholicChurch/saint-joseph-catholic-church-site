@@ -134,7 +134,6 @@ const EditorControl: FC<WidgetControlProps<string, HtmlField>> = ({
       <StyledEditorControl>
         <BundledEditor
           theme="light"
-          // theme={theme}
           onInit={(_event, editor) => (editorRef.current = editor)}
           initialValue={initialValue}
           onChange={handleOnChange}

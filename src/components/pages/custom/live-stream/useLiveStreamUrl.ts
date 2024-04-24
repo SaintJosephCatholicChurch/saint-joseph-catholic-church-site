@@ -5,9 +5,14 @@ interface LiveResponse {
   url: string;
 }
 
-export default function useLiveStreamUrl(): [boolean, string] {
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(true);
+interface LiveState {
+  loading: boolean;
+  url: string;
+  isStreaming: boolean;
+}
+
+export default function useLiveStreamUrl(): { loading: boolean; url: string; isStreaming: boolean } {
+  const [state, setState] = useState<LiveState>({ loading: true, url: '', isStreaming: false });
 
   useEffect(() => {
     let alive = true;
@@ -18,14 +23,15 @@ export default function useLiveStreamUrl(): [boolean, string] {
         const contents = (await response.json()) as LiveResponse;
 
         if (alive) {
-          setUrl(contents.url);
+          setState({ loading: false, url: contents.url ?? '', isStreaming: contents.isStreaming ?? false });
+          return;
         }
       } catch (e) {
         console.warn('Loading livestream failed', e);
       }
 
       if (alive) {
-        setLoading(false);
+        setState({ loading: false, url: '', isStreaming: false });
       }
     };
 
@@ -36,5 +42,5 @@ export default function useLiveStreamUrl(): [boolean, string] {
     };
   }, []);
 
-  return [loading, url];
+  return state;
 }

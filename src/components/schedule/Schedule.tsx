@@ -1,4 +1,3 @@
-import LiveTvIcon from '@mui/icons-material/LiveTv';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -11,6 +10,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
+import HomepageLiveStream from '../pages/custom/live-stream/HomepageLiveStream';
 import MobileScheduleTabPanel from './MobileSchedulePanel';
 import ScheduleTabPanel from './ScheduleTabPanel';
 
@@ -31,6 +31,7 @@ const StyledHeader = styled('div')(
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
+    width: 100%;
 
     ${getContainerQuery(theme.breakpoints.down('md'))} {
       font-size: 24px;
@@ -76,7 +77,7 @@ const StyledHeaderText = styled('h1')(
 
 const StyledHeaderBorder = styled('div')`
   border-bottom: 2px solid #bbbbbb;
-  width: 50%;
+  width: 160px;
 `;
 
 const StyledTabsWrapper = styled('div')(
@@ -110,11 +111,20 @@ interface ScheduleProps {
   title?: string;
   liveStreamButton?: LiveStreamButton;
   invitationText?: string;
+  facebookPage?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabChange }: ScheduleProps) => {
+const Schedule = ({
+  times,
+  title,
+  liveStreamButton,
+  invitationText,
+  facebookPage,
+  tab,
+  onTabChange
+}: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
 
@@ -141,34 +151,8 @@ const Schedule = ({ times, title, liveStreamButton, invitationText, tab, onTabCh
             <StyledHeaderBorder key="invitation-text-divider" />
           </>
         ) : null}
-        {isNotEmpty(liveStreamButton?.url) && isNotEmpty(liveStreamButton?.title) ? (
-          <Link key="live-stream-button" href={liveStreamButton.url}>
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<LiveTvIcon />}
-              sx={{
-                marginTop: '16px',
-                fontSize: '20px',
-                backgroundColor: '#bc2f3b',
-                '&:hover': {
-                  backgroundColor: '#d24c57',
-                  color: '#ffffff'
-                },
-                '.MuiButton-startIcon > *:nth-of-type(1)': {
-                  fontSize: '24px'
-                },
-                [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
-                  fontSize: '16px',
-                  '.MuiButton-startIcon > *:nth-of-type(1)': {
-                    fontSize: '20px'
-                  }
-                }
-              }}
-            >
-              {liveStreamButton.title}
-            </Button>
-          </Link>
+        {isNotEmpty(facebookPage) ? (
+          <HomepageLiveStream facebookPage={facebookPage} liveStreamButton={liveStreamButton} />
         ) : null}
         <Link key="bulletin-button" href="/parish-bulletins">
           <Button

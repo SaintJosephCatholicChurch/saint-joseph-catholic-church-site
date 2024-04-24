@@ -35,6 +35,7 @@ function useElementSize<T extends HTMLElement = HTMLDivElement>(): [(node: T | n
   }, [ref?.offsetHeight, ref?.offsetWidth]);
 
   useEventListener('resize', handleSize);
+  useEventListener('orientationchange', handleSize);
 
   useIsomorphicLayoutEffect(() => {
     handleSize();

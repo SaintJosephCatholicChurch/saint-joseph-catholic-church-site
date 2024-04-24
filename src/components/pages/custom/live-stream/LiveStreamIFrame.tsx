@@ -37,7 +37,7 @@ const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps
 
   const [shouldBeLoaded, setShouldBeLoaded] = useState(false);
   const [takingAwhile, setTakingAwhile] = useState(false);
-  const [loading, livestreamUrl] = useLiveStreamUrl();
+  const { loading, url } = useLiveStreamUrl();
 
   useEffect(() => {
     setTimeout(() => {
@@ -83,7 +83,7 @@ const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps
     [facebookPage, theme.breakpoints]
   );
 
-  if (isEmpty(livestreamUrl)) {
+  if (isEmpty(url)) {
     return shouldBeLoaded || !loading ? (
       <StyledCircularProgressWrapper key="failed-to-load">
         <Typography variant="h5" component="div">
@@ -148,7 +148,7 @@ const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps
     <>
       <iframe
         key="facebook-livestream"
-        src={livestreamUrl}
+        src={url}
         width={width}
         height={height}
         style={{ border: 'none', overflow: 'hidden' }}

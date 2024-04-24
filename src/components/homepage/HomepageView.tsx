@@ -273,6 +273,7 @@ const HomepageView = memo(
           details={schedule_section}
           liveStreamButton={live_stream_button}
           invitationText={invitation_text}
+          facebookPage={churchDetails.facebook_page}
         />
         <StyledReadingsAndPageSectionWrapper>
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />

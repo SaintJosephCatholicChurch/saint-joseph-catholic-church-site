@@ -36,11 +36,20 @@ interface ScheduleProps {
   details?: ScheduleSection;
   liveStreamButton?: LiveStreamButton;
   invitationText?: string;
+  facebookPage?: string;
   tab?: number;
   onTabChange?: (index: number) => void;
 }
 
-const ScheduleWidget = ({ times, details, liveStreamButton, invitationText, tab, onTabChange }: ScheduleProps) => {
+const ScheduleWidget = ({
+  times,
+  details,
+  liveStreamButton,
+  invitationText,
+  facebookPage,
+  tab,
+  onTabChange
+}: ScheduleProps) => {
   return (
     <StyledSchedule $background={details?.schedule_background}>
       <Container>
@@ -49,6 +58,7 @@ const ScheduleWidget = ({ times, details, liveStreamButton, invitationText, tab,
           title={details?.title}
           liveStreamButton={liveStreamButton}
           invitationText={invitationText}
+          facebookPage={facebookPage}
           tab={tab}
           onTabChange={onTabChange}
         />

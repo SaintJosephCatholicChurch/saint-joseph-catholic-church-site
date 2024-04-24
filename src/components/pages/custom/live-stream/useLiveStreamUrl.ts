@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react';
 
-interface UseLiveStreamUrlProps {
-  livestreamProvider: 'youtube' | 'facebook';
-  facebookPage: string;
-  youtubeChannel: string;
-}
-
-interface YoutubeLiveResponse {
+interface LiveResponse {
   isStreaming: boolean;
   url: string;
 }
 
-export default function useLiveStreamUrl({
-  livestreamProvider,
-  facebookPage,
-  youtubeChannel
-}: UseLiveStreamUrlProps): [boolean, string] {
+export default function useLiveStreamUrl(): [boolean, string] {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -24,12 +14,8 @@ export default function useLiveStreamUrl({
 
     const getVideo = async () => {
       try {
-        const response = await fetch(
-          `https://api.stjosephchurchbluffton.org/.netlify/functions/live/${livestreamProvider}/${
-            livestreamProvider === 'facebook' ? facebookPage : youtubeChannel
-          }`
-        );
-        const contents = (await response.json()) as YoutubeLiveResponse;
+        const response = await fetch('https://api.stjosephchurchbluffton.org/.netlify/functions/live');
+        const contents = (await response.json()) as LiveResponse;
 
         if (alive) {
           setUrl(contents.url);
@@ -48,7 +34,7 @@ export default function useLiveStreamUrl({
     return () => {
       alive = false;
     };
-  }, [facebookPage, livestreamProvider, youtubeChannel]);
+  }, []);
 
   return [loading, url];
 }

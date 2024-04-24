@@ -1,5 +1,4 @@
 import FacebookIcon from '@mui/icons-material/Facebook';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
@@ -30,23 +29,15 @@ const StyledCircularProgressWrapper = styled('div')`
 interface LiveStreamIFrameProps {
   width: number;
   height: number;
-  livestreamProvider: 'youtube' | 'facebook';
   facebookPage: string;
-  youtubeChannel: string;
 }
 
-const LiveStreamIFrame = ({
-  width,
-  height,
-  livestreamProvider,
-  facebookPage,
-  youtubeChannel
-}: LiveStreamIFrameProps) => {
+const LiveStreamIFrame = ({ width, height, facebookPage }: LiveStreamIFrameProps) => {
   const theme = useTheme();
 
   const [shouldBeLoaded, setShouldBeLoaded] = useState(false);
   const [takingAwhile, setTakingAwhile] = useState(false);
-  const [loading, livestreamUrl] = useLiveStreamUrl({ livestreamProvider, facebookPage, youtubeChannel });
+  const [loading, livestreamUrl] = useLiveStreamUrl();
 
   useEffect(() => {
     setTimeout(() => {
@@ -64,12 +55,8 @@ const LiveStreamIFrame = ({
         key="view-more-buton"
         variant="contained"
         size="large"
-        startIcon={livestreamProvider === 'youtube' ? <YouTubeIcon /> : <FacebookIcon />}
-        href={
-          livestreamProvider === 'youtube'
-            ? `https://youtube.com/channel/${youtubeChannel}/live`
-            : `https://www.facebook.com/${facebookPage}/live`
-        }
+        startIcon={<FacebookIcon />}
+        href={`https://www.facebook.com/${facebookPage}/live`}
         target="_blank"
         sx={{
           marginTop: '16px',
@@ -93,7 +80,7 @@ const LiveStreamIFrame = ({
         View past streams
       </Button>
     ),
-    [facebookPage, livestreamProvider, theme.breakpoints, youtubeChannel]
+    [facebookPage, theme.breakpoints]
   );
 
   if (isEmpty(livestreamUrl)) {
@@ -105,12 +92,8 @@ const LiveStreamIFrame = ({
         <Button
           variant="contained"
           size="large"
-          startIcon={livestreamProvider === 'youtube' ? <YouTubeIcon /> : <FacebookIcon />}
-          href={
-            livestreamProvider === 'youtube'
-              ? `https://youtube.com/channel/${youtubeChannel}/live`
-              : `https://www.facebook.com/${facebookPage}/live`
-          }
+          startIcon={<FacebookIcon />}
+          href={`https://www.facebook.com/${facebookPage}/live`}
           target="_blank"
           sx={{
             marginTop: '16px',
@@ -131,7 +114,7 @@ const LiveStreamIFrame = ({
             }
           }}
         >
-          View on {livestreamProvider === 'youtube' ? 'YouTube' : 'Facebook'}
+          View on Facebook
         </Button>
       </StyledCircularProgressWrapper>
     ) : (
@@ -158,24 +141,6 @@ const LiveStreamIFrame = ({
         ) : null}
         <CircularProgress size="28px" />
       </StyledCircularProgressWrapper>
-    );
-  }
-
-  if (livestreamProvider === 'youtube') {
-    return (
-      <>
-        <iframe
-          key="youtube-livestream"
-          width={width}
-          height={height}
-          src={livestreamUrl}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
-        {viewMoreButton}
-      </>
     );
   }
 

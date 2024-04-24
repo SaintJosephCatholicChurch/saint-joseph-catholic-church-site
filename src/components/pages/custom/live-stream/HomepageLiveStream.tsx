@@ -39,7 +39,7 @@ const HomepageLiveStream = ({ facebookPage, liveStreamButton }: HomepageLiveStre
     setHeight(Math.floor((width / 16) * 9));
   }, [width]);
 
-  return !loading && isNotEmpty(url) && !isStreaming ? (
+  return !loading && isNotEmpty(url) && isStreaming ? (
     <StyledLiveStreamWrapper ref={ref} style={{ height: height + EXTRA_BUTTON_HEIGHT }}>
       <iframe
         key="facebook-livestream"

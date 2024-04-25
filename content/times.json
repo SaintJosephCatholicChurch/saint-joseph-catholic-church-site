@@ -173,7 +173,7 @@
                   "time": "6:00 PM",
                   "notes": [
                     {
-                      "note": "No First Friday evening Mass on April 5, 2024 due to Confirmation Mass in Decatur.",
+                      "note": "",
                       "id": "b2b056fd-7d54-4f76-ab77-08fe40208033"
                     }
                   ],
@@ -393,7 +393,7 @@
         },
         {
           "id": "f2451d77-7d02-4807-94ea-bd9f4af4c9d1",
-          "name": "First Friday of Each Month",
+          "name": "First Friday of Each Month (Cancelled for December 2023)",
           "days": [
             {
               "id": "970d3fad-87de-46c0-b660-6a22d37acd70",
@@ -404,7 +404,7 @@
                   "notes": [
                     {
                       "note": "Note: Adoration ends early April 5, 2024, due to Confirmation Mass in Decatur.",
-                      "id": "e6aee550-004d-44c6-9a96-05a262bd2e42"
+                      "id": "68105a69-5209-41f1-b982-21e3157283cf"
                     }
                   ],
                   "time": "9:00 AM",
@@ -442,7 +442,8 @@
                   "end_time": "",
                   "notes": [
                     {
-                      "note": "Time TBD"
+                      "note": "Time TBD",
+                      "id": "16fd518c-4c5d-472b-9b00-e882d0181ab3"
                     }
                   ],
                   "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"

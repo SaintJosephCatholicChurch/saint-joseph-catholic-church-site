@@ -24,10 +24,16 @@ const StyledContainer = styled(
 
     ${getContainerQuery(theme.breakpoints.only('md'))} {
       ${!$disablePadding ? 'padding: 0 32px;' : ''}
+      max-width: 100vw;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      max-width: 100vw;
     }
 
     ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
       ${!$disablePadding ? 'padding: 0 12px;' : ''}
+      max-width: 100vw;
     }
   `
 );

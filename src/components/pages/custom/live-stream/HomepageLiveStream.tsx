@@ -5,7 +5,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';
 import { isNotEmpty } from '../../../../util/string.util';
 import useElementSize from '../../../../util/useElementSize';
@@ -15,13 +15,28 @@ import type { LiveStreamButton } from '../../../../interface';
 
 const EXTRA_BUTTON_HEIGHT = 67;
 
-const StyledLiveStreamWrapper = styled('div')`
-  width: 100%;
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-`;
+const StyledLiveStreamWrapper = styled('div')(
+  ({ theme }) => `
+    width: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    max-width: ${MAX_APP_WIDTH - 48}px;
+
+    ${getContainerQuery(theme.breakpoints.only('md'))} {
+      max-width: calc(100vw - 64px);
+    }
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      max-width: calc(100vw - 48px);
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))} {
+      max-width: calc(100vw - 24px);
+    }
+  `
+);
 
 interface HomepageLiveStreamProps {
   facebookPage: string;

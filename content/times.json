@@ -248,7 +248,8 @@
                   "end_time": "9:00 AM",
                   "notes": [
                     {
-                      "note": "After morning Mass"
+                      "note": "After morning Mass",
+                      "id": "6d663d2c-68ed-4cf6-9abe-f093791c8064"
                     }
                   ],
                   "id": "20a93fa5-6b5d-405b-af4e-2506a08f36c6"
@@ -404,7 +405,7 @@
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
                   "notes": [],
                   "time": "9:00 AM",
-                  "end_time": "2:00 PM"
+                  "end_time": "6:00 PM"
                 }
               ]
             }

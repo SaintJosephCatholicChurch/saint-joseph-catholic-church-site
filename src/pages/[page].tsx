@@ -20,7 +20,7 @@ interface PageProps extends SidebarProps {
 const Page = ({ title, dateString, slug, description = '', content, ...sidebarProps }: PageProps) => {
   return (
     <PageLayout
-      url={`/pages/${slug}`}
+      url={`/${slug}`}
       title={title}
       pageDetails={{ date: parseISO(dateString) }}
       description={description}

@@ -159,21 +159,6 @@
                 }
               ],
               "id": "de1b2401-9326-4916-953e-7888bc4a6626"
-            },
-            {
-              "id": "f1fb5a12-0752-4537-9128-08fea6da019f",
-              "day": "Ascension Sunday",
-              "times": [
-                {
-                  "id": "7fa75c7a-6443-474e-b2b3-e42933c14b59",
-                  "notes": [
-                    {
-                      "id": "4bd8d4ba-79ee-492c-bdad-969b11b6fa0a",
-                      "note": "Please Note: In the Diocese of Fort Wayne-South Bend, the Solemnity of the Ascension is celebrated on the nearest Sunday."
-                    }
-                  ]
-                }
-              ]
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
@@ -205,6 +190,28 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "id": "80d72793-6306-4e0b-ae1a-d14e9fa750a1",
+      "name": "Memorial Day",
+      "sections": [
+        {
+          "id": "7c7890ae-ebd4-44a1-80c0-477765ae2fa3",
+          "name": "Memorial Day Mass",
+          "days": [
+            {
+              "id": "a497ccac-1b79-45af-b1b7-625d78a6f229",
+              "day": "Monday (May 27, 2024)",
+              "times": [
+                {
+                  "id": "fd85ba34-e2e6-4bd3-bbd3-7198396aa552",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -219,7 +226,7 @@
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
                   "notes": [
                     {
-                      "note": "Parish Office Closed April 1 - 5, 2024",
+                      "note": "Parish Office Closed Memorial Day (May 27, 2024)",
                       "id": "39cffccf-77f6-483a-a44d-8b5a88e35df0"
                     }
                   ]

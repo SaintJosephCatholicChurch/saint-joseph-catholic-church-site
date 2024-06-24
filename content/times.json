@@ -164,6 +164,22 @@
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
         },
         {
+          "id": "38a319fd-c600-4af0-a79a-a820d34e7b11",
+          "name": "Special Mass Times",
+          "days": [
+            {
+              "id": "f2210bb6-2fa5-410d-ab2c-61101cc32696",
+              "day": "Thursday, July 4",
+              "times": [
+                {
+                  "id": "a514d482-5f50-467b-ad93-e12b15ef61fc",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Mass (Ad Orientum)",
           "days": [
             {
@@ -202,7 +218,12 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "9ff7de6c-2655-4fd1-88b9-ce5d6611640b",
+                      "note": "Parish Office closed July 4-5, 2024"
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

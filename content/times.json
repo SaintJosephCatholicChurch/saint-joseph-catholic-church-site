@@ -180,13 +180,13 @@
           ]
         },
         {
-          "name": "Mass (Ad Orientum)",
+          "name": "Mass (Ad Orientum) - Cancelled July 2024",
           "days": [
             {
-              "day": "First Friday of the Month",
+              "day": "First Friday of the Month - Cancelled July 2024; Resumes August 2, 2024",
               "times": [
                 {
-                  "time": "6:00 PM",
+                  "time": "",
                   "notes": [
                     {
                       "note": "",
@@ -411,11 +411,11 @@
         },
         {
           "id": "f2451d77-7d02-4807-94ea-bd9f4af4c9d1",
-          "name": "First Friday of Each Month",
+          "name": "First Friday of Each Month (Cancelled July 2024)",
           "days": [
             {
               "id": "970d3fad-87de-46c0-b660-6a22d37acd70",
-              "day": "After morning Mass",
+              "day": "After morning Mass (Cancelled July 2024)",
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",

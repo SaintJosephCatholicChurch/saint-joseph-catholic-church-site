@@ -399,11 +399,11 @@
         },
         {
           "id": "f2451d77-7d02-4807-94ea-bd9f4af4c9d1",
-          "name": "First Friday of Each Month (Cancelled July 2024)",
+          "name": "First Friday of Each Month",
           "days": [
             {
               "id": "970d3fad-87de-46c0-b660-6a22d37acd70",
-              "day": "After morning Mass (Cancelled July 2024)",
+              "day": "After morning Mass ",
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",

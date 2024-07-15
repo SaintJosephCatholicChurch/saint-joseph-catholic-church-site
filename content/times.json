@@ -164,29 +164,13 @@
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
         },
         {
-          "id": "38a319fd-c600-4af0-a79a-a820d34e7b11",
-          "name": "Special Mass Times",
-          "days": [
-            {
-              "id": "f2210bb6-2fa5-410d-ab2c-61101cc32696",
-              "day": "Thursday, July 4",
-              "times": [
-                {
-                  "id": "a514d482-5f50-467b-ad93-e12b15ef61fc",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Mass (Ad Orientum) - Cancelled July 2024",
           "days": [
             {
-              "day": "First Friday of the Month - Cancelled July 2024; Resumes August 2, 2024",
+              "day": "First Friday of the Month",
               "times": [
                 {
-                  "time": "",
+                  "time": "6:00 PM",
                   "notes": [
                     {
                       "note": "",

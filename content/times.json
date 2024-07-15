@@ -293,8 +293,12 @@
                   "end_time": "4:45 PM",
                   "notes": [
                     {
-                      "note": "Before evening Mass",
-                      "id": "fbb98ce8-7007-406a-ab2b-587052f38a99"
+                      "id": "65bf93a4-a166-4b10-ba59-b4edd833dd34",
+                      "note": "Before evening Mass"
+                    },
+                    {
+                      "id": "aef26edb-4c8a-48f1-9fcd-d6698dc5ad96",
+                      "note": ""
                     }
                   ],
                   "id": "1cdcf249-bda5-474b-aa65-e4280621a04f"

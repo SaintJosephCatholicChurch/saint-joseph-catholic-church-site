@@ -55,6 +55,40 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
+          "id": "1aedbc5f-177e-4491-87a2-dbd19d76ae86",
+          "name": "Holy Day (Assumption of the Blessed Virgin Mary)",
+          "days": [
+            {
+              "id": "1550f902-b02e-4703-a5b4-3220c65ac44f",
+              "day": "Vigil Mass (Wednesday, Aug. 14th)",
+              "times": [
+                {
+                  "id": "6addc3f9-c577-4ce2-83a4-3601493fd478",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "b2eeb932-6ced-4857-9683-1b6202fd512e",
+              "day": "Mass (Thursday, Aug. 15th)",
+              "times": [
+                {
+                  "id": "7e1517ea-7804-468f-b61f-ecc232e3a222",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "e8dac857-b610-42c0-88f0-3db1abf049ff",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "b7381eef-89e1-46a6-a0a0-3100fd73bc9a",
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Weekday Mass",
           "days": [
             {

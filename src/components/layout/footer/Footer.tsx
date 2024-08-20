@@ -49,13 +49,13 @@ const StyledFooterContents = styled('div')(
     display: grid;
     padding-bottom: 24px;
 
-    ${getContainerQuery(theme.breakpoints.down('md'))} {
+    ${getContainerQuery(theme.breakpoints.down('lg'))} {
       grid-template-columns: 1fr;
       p: 3,
       gap: 2
     }
 
-    ${getContainerQuery(theme.breakpoints.up('md'))} {
+    ${getContainerQuery(theme.breakpoints.up('lg'))} {
       grid-template-columns: 2fr 1fr;
       gap: 48px;
     }

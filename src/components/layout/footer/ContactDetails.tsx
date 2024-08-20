@@ -3,18 +3,30 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import Image from 'next/image';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../../constants';
 import getContainerQuery from '../../../util/container.util';
 
 import type { ChurchDetails } from '../../../interface';
 
+export const StyledContactDetailsWrapper = styled('div')(
+  ({ theme }) => `
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      flex-direction: column;
+    }
+  `
+);
+
 export const StyledContactDetails = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 4px;
   fontsize: 16px;
-  margin-bottom: 16px;
 `;
 
 export const StyledChurchDetailsLinkWrapper = styled('div')(
@@ -75,46 +87,57 @@ export const StyledAddress = styled('div')(
   `
 );
 
+export const StyledImageWrapper = styled('div')`
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+`;
+
 interface ContactDetailsProps {
   churchDetails: ChurchDetails;
 }
 
 const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
   return (
-    <StyledContactDetails>
-      <StyledAddress>
-        <Box>
-          <strong>{churchDetails.name}</strong>
-        </Box>
-        <Box>{churchDetails.address}</Box>
-        <Box>
-          {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
-        </Box>
-      </StyledAddress>
-      <StyledChurchDetailsLinkWrapper>
-        <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
-          <PhoneEnabledIcon fontSize="small" />
-          {churchDetails.phone}
-        </StyledChurchDetailsLink>
-      </StyledChurchDetailsLinkWrapper>
-      <StyledChurchDetailsLinkWrapper>
-        <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
-          <EmailIcon fontSize="small" />
-          {churchDetails.email}
-        </StyledChurchDetailsLink>
-      </StyledChurchDetailsLinkWrapper>
-      <StyledChurchDetailsLinkWrapper>
-        <StyledChurchDetailsLink
-          href={`https://www.facebook.com/${churchDetails.facebook_page}`}
-          target="_blank"
-          rel="noreferrer"
-          title={`Facebook - ${churchDetails.facebook_page}`}
-        >
-          <FacebookIcon fontSize="small" />
-          {churchDetails.facebook_page}
-        </StyledChurchDetailsLink>
-      </StyledChurchDetailsLinkWrapper>
-    </StyledContactDetails>
+    <StyledContactDetailsWrapper>
+      <StyledContactDetails>
+        <StyledAddress>
+          <Box>
+            <strong>{churchDetails.name}</strong>
+          </Box>
+          <Box>{churchDetails.address}</Box>
+          <Box>
+            {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
+          </Box>
+        </StyledAddress>
+        <StyledChurchDetailsLinkWrapper>
+          <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
+            <PhoneEnabledIcon fontSize="small" />
+            {churchDetails.phone}
+          </StyledChurchDetailsLink>
+        </StyledChurchDetailsLinkWrapper>
+        <StyledChurchDetailsLinkWrapper>
+          <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
+            <EmailIcon fontSize="small" />
+            {churchDetails.email}
+          </StyledChurchDetailsLink>
+        </StyledChurchDetailsLinkWrapper>
+        <StyledChurchDetailsLinkWrapper>
+          <StyledChurchDetailsLink
+            href={`https://www.facebook.com/${churchDetails.facebook_page}`}
+            target="_blank"
+            rel="noreferrer"
+            title={`Facebook - ${churchDetails.facebook_page}`}
+          >
+            <FacebookIcon fontSize="small" />
+            {churchDetails.facebook_page}
+          </StyledChurchDetailsLink>
+        </StyledChurchDetailsLinkWrapper>
+      </StyledContactDetails>
+      <StyledImageWrapper>
+        <Image src="/st-joseph-logo.webp" alt="St Joseph Logo" width={180} height={180} />
+      </StyledImageWrapper>
+    </StyledContactDetailsWrapper>
   );
 };
 

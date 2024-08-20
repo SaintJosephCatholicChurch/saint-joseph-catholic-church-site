@@ -1,4 +1,5 @@
 {
   "javascript.preferences.importModuleSpecifier": "relative",
-  "typescript.preferences.importModuleSpecifier": "relative"
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "npm.packageManager": "npm"
 }

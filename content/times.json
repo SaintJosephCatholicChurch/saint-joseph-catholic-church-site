@@ -55,6 +55,22 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
+          "id": "3a2e45e2-f89c-42ad-91ce-d1b6dd62ad98",
+          "name": "Labor Day",
+          "days": [
+            {
+              "id": "634e2b0f-8397-4d20-aaee-50066586d0f6",
+              "day": "Monday, Sept. 2nd",
+              "times": [
+                {
+                  "id": "2889ca55-6814-46d1-9e37-d26080bb002a",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Weekday Mass",
           "days": [
             {

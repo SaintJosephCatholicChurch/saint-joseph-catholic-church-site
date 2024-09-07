@@ -26,10 +26,10 @@
   "featured": [
     {
       "type": "featured_link",
-      "title": "National Eucharistic Congress - Speaker Series",
-      "summary": "Listen to the various speakers from the 10th Annual Eucharistic Congress (provided by EWTN).",
-      "image": "/files/national-eucharistic-congress.jpg",
-      "url": "https://www.youtube.com/playlist?list=PL9CQlldupc5-TAMz3fOlJwyBO3zWLQFVv"
+      "title": "2023-2024 Financial and Spiritual Report",
+      "summary": "Annual Parish Report regarding the financial and spiritual state of the parish.",
+      "image": "/files/2023-2024-fiscal-report.webp",
+      "url": "blob:https://www.stjosephchurchbluffton.org/27f6588c-d68a-4087-94b7-4459030f99ce"
     },
     {
       "type": "featured_link",

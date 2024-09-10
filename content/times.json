@@ -55,22 +55,6 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
-          "id": "3a2e45e2-f89c-42ad-91ce-d1b6dd62ad98",
-          "name": "Labor Day",
-          "days": [
-            {
-              "id": "634e2b0f-8397-4d20-aaee-50066586d0f6",
-              "day": "Monday, Sept. 2nd",
-              "times": [
-                {
-                  "id": "2889ca55-6814-46d1-9e37-d26080bb002a",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Weekday Mass",
           "days": [
             {
@@ -218,12 +202,7 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": [
-                    {
-                      "id": "9ff7de6c-2655-4fd1-88b9-ce5d6611640b",
-                      "note": "Parish Office closed July 15, 2024"
-                    }
-                  ]
+                  "notes": []
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

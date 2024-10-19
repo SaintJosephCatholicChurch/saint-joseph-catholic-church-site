@@ -162,32 +162,94 @@
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
-        },
-        {
-          "name": "Mass (Ad Orientum)",
-          "days": [
-            {
-              "day": "First Friday of the Month",
-              "times": [
-                {
-                  "time": "6:00 PM",
-                  "notes": [
-                    {
-                      "note": "",
-                      "id": "b2b056fd-7d54-4f76-ab77-08fe40208033"
-                    }
-                  ],
-                  "end_time": "",
-                  "id": "4ff1ed83-1d56-4d8e-85a0-1b46d2ec57f4"
-                }
-              ],
-              "id": "c012ddb3-7d02-40fe-b0a5-6f314778b42e"
-            }
-          ],
-          "id": "eef6384c-c450-470c-a13c-05c97f500551"
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
+    },
+    {
+      "id": "36b4593e-5320-4c4e-a949-363f724f2f1d",
+      "name": "Holy Day Mass Times",
+      "sections": [
+        {
+          "id": "3cc7d8d8-1d6c-4039-9aaf-e862e5aff6f2",
+          "name": "Solemnity of All Saints (Holy Day of Obligation)",
+          "days": [
+            {
+              "id": "99f17ca8-c7e8-4ce1-86e7-ee5f7c026a33",
+              "day": "Vigil Mass (Oct. 31st)",
+              "times": [
+                {
+                  "id": "14cdaf21-43e0-4cfd-bed8-a072fbf7d2cb",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "659d16f4-f5e9-4842-80cf-98534fe44afa",
+              "day": "Mass (Nov. 1st)",
+              "times": [
+                {
+                  "id": "38da7bad-d148-4193-a3cd-88d0c544aabc",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "3891fad7-6eb9-4053-b926-234faea81538",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "e303867e-d111-4635-bdbd-a642a947cce2",
+                  "time": "5:30 PM",
+                  "notes": [
+                    {
+                      "id": "2fc3611e-c1fa-494b-9dde-130bf602e2e9",
+                      "note": "All Saints Day Party following Mass"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a60599f9-9046-4bcf-aba2-f86d30bf765d",
+          "name": "Commemoration of All Souls ",
+          "days": [
+            {
+              "id": "5d4816d2-301f-4dac-940e-9ad961ac39a3",
+              "day": "Mass (Nov. 2nd)",
+              "times": [
+                {
+                  "id": "0fffecfb-2e1f-4785-87b0-0d486db00f64",
+                  "time": "8:00 AM"
+                },
+                {
+                  "id": "21488471-6550-4ec8-878b-8ba087b642fe",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "b72ae2b4-ec6e-484c-b4ae-dc1cc9ea8177",
+                  "time": "5:00 PM",
+                  "notes": [
+                    {
+                      "id": "2dd21454-040a-4dac-8fef-ec7e854ad9af",
+                      "note": "Mass at St. Joseph Catholic Cemetery (3500 IN-124, Bluffton)"
+                    }
+                  ]
+                },
+                {
+                  "id": "846a1ca4-5c73-4109-b17e-336ed70a465c",
+                  "notes": [
+                    {
+                      "id": "442465c1-e7d1-433e-8326-11e68d3f7309",
+                      "note": "(For those who cannot come to the cemetery, a 5:00 PM Vigil Mass will be offered at Church)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Parish Office Hours",
@@ -417,38 +479,30 @@
       "name": "Stations of the Cross",
       "sections": [
         {
-          "name": "Fridays during Lent",
+          "id": "57c21468-9e74-468b-b395-462ddc360f12",
+          "name": "Stations of the Cross",
           "days": [
             {
-              "day": "Stations of the Cross",
+              "id": "437e6fd3-7c01-4459-8541-2787160180da",
+              "day": "Fridays during Lent",
               "times": [
                 {
-                  "time": "7:00 PM",
-                  "end_time": "",
-                  "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f"
+                  "id": "77c2ed87-7d7d-4e0d-944a-94d7feed9d03",
+                  "time": "7:00 PM"
                 }
-              ],
-              "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
-            },
-            {
-              "day": "Lenten Soup Supper",
-              "times": [
-                {
-                  "time": "",
-                  "end_time": "",
-                  "notes": [
-                    {
-                      "note": "Time TBD",
-                      "id": "16fd518c-4c5d-472b-9b00-e882d0181ab3"
-                    }
-                  ],
-                  "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
-                }
-              ],
-              "id": "5a2febf5-4141-42e3-a995-dfcbcd7d3852"
+              ]
             }
-          ],
-          "id": "da122c19-c24a-40f1-9bd3-fe1f55daab62"
+          ]
+        },
+        {
+          "id": "c0961c46-d943-49d2-a301-c3654f08ddfb",
+          "name": "Lenten Soup Suppers",
+          "days": [
+            {
+              "id": "d30b12a5-d909-427e-a9fa-eb3244128b55",
+              "day": "TBD"
+            }
+          ]
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"

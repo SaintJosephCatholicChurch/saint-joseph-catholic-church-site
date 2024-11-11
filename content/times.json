@@ -172,78 +172,23 @@
       "sections": [
         {
           "id": "3cc7d8d8-1d6c-4039-9aaf-e862e5aff6f2",
-          "name": "Solemnity of All Saints (Holy Day of Obligation)",
+          "name": "Solemnity of the Immaculate Conception",
           "days": [
             {
               "id": "99f17ca8-c7e8-4ce1-86e7-ee5f7c026a33",
-              "day": "Vigil Mass (Oct. 31st)",
+              "day": "Mass (Dec. 9th)",
               "times": [
                 {
                   "id": "14cdaf21-43e0-4cfd-bed8-a072fbf7d2cb",
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "659d16f4-f5e9-4842-80cf-98534fe44afa",
-              "day": "Mass (Nov. 1st)",
-              "times": [
-                {
-                  "id": "38da7bad-d148-4193-a3cd-88d0c544aabc",
                   "time": "7:00 AM"
                 },
                 {
-                  "id": "3891fad7-6eb9-4053-b926-234faea81538",
+                  "id": "87f05cd2-17ea-4f36-8a5a-3e044d7f48ca",
                   "time": "12:00 PM"
                 },
                 {
-                  "id": "e303867e-d111-4635-bdbd-a642a947cce2",
-                  "time": "5:30 PM",
-                  "notes": [
-                    {
-                      "id": "2fc3611e-c1fa-494b-9dde-130bf602e2e9",
-                      "note": "All Saints Day Party following Mass"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "a60599f9-9046-4bcf-aba2-f86d30bf765d",
-          "name": "Commemoration of All Souls ",
-          "days": [
-            {
-              "id": "5d4816d2-301f-4dac-940e-9ad961ac39a3",
-              "day": "Mass (Nov. 2nd)",
-              "times": [
-                {
-                  "id": "0fffecfb-2e1f-4785-87b0-0d486db00f64",
-                  "time": "8:00 AM"
-                },
-                {
-                  "id": "21488471-6550-4ec8-878b-8ba087b642fe",
-                  "time": "12:00 PM"
-                },
-                {
-                  "id": "b72ae2b4-ec6e-484c-b4ae-dc1cc9ea8177",
-                  "time": "5:00 PM",
-                  "notes": [
-                    {
-                      "id": "2dd21454-040a-4dac-8fef-ec7e854ad9af",
-                      "note": "Mass at St. Joseph Catholic Cemetery (3500 IN-124, Bluffton)"
-                    }
-                  ]
-                },
-                {
-                  "id": "846a1ca4-5c73-4109-b17e-336ed70a465c",
-                  "notes": [
-                    {
-                      "id": "442465c1-e7d1-433e-8326-11e68d3f7309",
-                      "note": "(For those who cannot come to the cemetery, a 5:00 PM Vigil Mass will be offered at Church)"
-                    }
-                  ]
+                  "id": "00c41e91-1359-421b-868c-4e972cff4423",
+                  "time": "7:00 PM"
                 }
               ]
             }

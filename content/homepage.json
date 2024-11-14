@@ -40,22 +40,9 @@
     },
     {
       "type": "featured_link",
-      "image": "/files/38th-annual-bishops-appeal-1-.webp",
-      "title": "38th Annual Bishop's Appeal Video",
-      "url": "https://vimeo.com/1005915131",
-      "summary": "View the video for our 38th Annual Bishop's Appeal. "
-    },
-    {
-      "type": "featured_link",
       "title": "Donate to the 38th Annual Bishop's Appeal",
       "url": "https://www.osvhub.com/diocesefwsb/giving/funds/2024-2025-38th-annual-bishop-s-appeal",
       "image": "/files/donate-38th-annual-bishops-appeal-1-.webp"
-    },
-    {
-      "type": "featured_link",
-      "image": "/files/faithful-citizenship.webp",
-      "title": "Forming Consciences for Faithful Citizenship",
-      "url": "https://www.usccb.org/issues-and-action/faithful-citizenship/forming-consciences-for-faithful-citizenship-title"
     }
   ],
   "daily_readings_background": "/files/scripture-background.webp",

@@ -168,27 +168,84 @@
     },
     {
       "id": "36b4593e-5320-4c4e-a949-363f724f2f1d",
-      "name": "Holy Day Mass Times",
+      "name": "Christmas Mass Times",
       "sections": [
         {
           "id": "3cc7d8d8-1d6c-4039-9aaf-e862e5aff6f2",
-          "name": "Solemnity of the Immaculate Conception",
+          "name": "Christmas Eve (December 24th)",
           "days": [
             {
               "id": "99f17ca8-c7e8-4ce1-86e7-ee5f7c026a33",
-              "day": "Mass (Dec. 9th)",
+              "day": "Mass",
               "times": [
                 {
                   "id": "14cdaf21-43e0-4cfd-bed8-a072fbf7d2cb",
-                  "time": "7:00 AM"
+                  "time": "4:00 PM",
+                  "notes": [
+                    {
+                      "id": "e85c90c9-e3af-455b-a895-73e22fcaa9a1",
+                      "note": "Children's Choir"
+                    }
+                  ]
                 },
                 {
                   "id": "87f05cd2-17ea-4f36-8a5a-3e044d7f48ca",
-                  "time": "12:00 PM"
+                  "time": "6:00 PM",
+                  "notes": [
+                    {
+                      "id": "711c5785-a35b-4e1f-9832-5e11cb6a4157",
+                      "note": "Adult Choir"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "c6826eea-ea5e-439f-94e9-e828d6d9ee18",
+              "day": "Christmas Carols",
+              "times": [
+                {
+                  "id": "14992246-d03f-4f52-b0d9-f1735c63e625",
+                  "time": "5:30 PM",
+                  "end_time": "6:00 PM",
+                  "notes": [
+                    {
+                      "id": "97052360-db86-4cb3-9c49-89d387dc3cf8",
+                      "note": "Adult Choir leads Christmas Carols before the 6:00 PM Mass"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fb61526b-7ce6-4819-8721-451b31ec4596",
+          "name": "Christmas Day (December 25th)",
+          "days": [
+            {
+              "id": "5eb78deb-8b09-4fcb-8c2d-4409cbd34c10",
+              "day": "Mass",
+              "times": [
+                {
+                  "id": "95242437-916a-43d5-9109-d8ba992bb1e8",
+                  "time": "12:00 AM",
+                  "notes": [
+                    {
+                      "id": "6d1de836-d4e8-4787-a943-a3571110ba37",
+                      "note": "Mass by Candlelight"
+                    }
+                  ]
                 },
                 {
-                  "id": "00c41e91-1359-421b-868c-4e972cff4423",
-                  "time": "7:00 PM"
+                  "id": "86e46548-1acb-407c-82b9-ab34b0ccb8c0",
+                  "time": "9:00 AM",
+                  "notes": [
+                    {
+                      "id": "a117c897-5eb1-47b1-a657-719029884bd2",
+                      "note": "Christmas Brunch after Mass"
+                    }
+                  ]
                 }
               ]
             }

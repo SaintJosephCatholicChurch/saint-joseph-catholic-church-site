@@ -250,6 +250,36 @@
               ]
             }
           ]
+        },
+        {
+          "id": "68f16fc3-de2f-4491-9559-81dfb765d4fb",
+          "name": "Mary, Mother of God (Holy Day of Obligation)",
+          "days": [
+            {
+              "id": "2e22689b-d239-4a82-8bd2-69b78d12bbae",
+              "day": "New Years' Eve (Dec. 31, 2024)",
+              "times": [
+                {
+                  "id": "8922637a-9271-4348-80d8-b6edf83d0ec1",
+                  "time": "5:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "56436e45-9d82-4eb8-81d8-27efeaa56069",
+              "day": "New Years' Day (Jan. 1, 2025)",
+              "times": [
+                {
+                  "id": "bb65af5e-ae0f-4871-91bb-896d3eb3731e",
+                  "time": "7:30 AM"
+                },
+                {
+                  "id": "069a2db2-2efb-415f-8932-695f350d0dc8",
+                  "time": "10:00 AM"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

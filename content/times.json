@@ -167,42 +167,6 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
-      "id": "36b4593e-5320-4c4e-a949-363f724f2f1d",
-      "name": "Holy Day Mass Times",
-      "sections": [
-        {
-          "id": "68f16fc3-de2f-4491-9559-81dfb765d4fb",
-          "name": "Mary, Mother of God (Holy Day of Obligation)",
-          "days": [
-            {
-              "id": "2e22689b-d239-4a82-8bd2-69b78d12bbae",
-              "day": "New Years' Eve (Dec. 31, 2024)",
-              "times": [
-                {
-                  "id": "8922637a-9271-4348-80d8-b6edf83d0ec1",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "56436e45-9d82-4eb8-81d8-27efeaa56069",
-              "day": "New Years' Day (Jan. 1, 2025)",
-              "times": [
-                {
-                  "id": "bb65af5e-ae0f-4871-91bb-896d3eb3731e",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "069a2db2-2efb-415f-8932-695f350d0dc8",
-                  "time": "10:00 AM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -417,7 +381,7 @@
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
                   "notes": [],
                   "time": "9:00 AM",
-                  "end_time": "6:00 PM"
+                  "end_time": "4:00 PM"
                 }
               ]
             }

@@ -79,7 +79,8 @@
               "times": [
                 {
                   "time": "8:00 AM",
-                  "id": "42ae1116-87eb-4299-868f-a53975ff440c"
+                  "id": "42ae1116-87eb-4299-868f-a53975ff440c",
+                  "notes": []
                 },
                 {
                   "notes": [
@@ -415,7 +416,14 @@
           "days": [
             {
               "id": "d30b12a5-d909-427e-a9fa-eb3244128b55",
-              "day": "TBD"
+              "day": "Fridays during Lent",
+              "times": [
+                {
+                  "id": "d2072c24-32cf-4c49-8f39-893ea630f89a",
+                  "time": "6:00 PM",
+                  "end_time": "6:40 PM"
+                }
+              ]
             }
           ]
         }

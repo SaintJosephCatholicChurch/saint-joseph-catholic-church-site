@@ -72,6 +72,10 @@ export interface TimesWidgetDayProps {
 }
 
 const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) => {
+  const stopPropagation = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   const [deleting, setDeleting] = useState(false);
   const handleDelete = useCallback((event: MouseEvent) => {
     event.stopPropagation();
@@ -118,6 +122,7 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
                   value={day.day}
                   size="small"
                   onChange={(event) => handleChange({ day: event.target.value })}
+                  onClick={stopPropagation}
                   fullWidth
                   sx={{
                     input: {

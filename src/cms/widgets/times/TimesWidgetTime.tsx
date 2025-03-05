@@ -95,6 +95,10 @@ export interface TimesWidgetTimeProps {
 }
 
 const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete }) => {
+  const stopPropagation = useCallback((event: MouseEvent) => {
+    event.stopPropagation();
+  }, []);
+
   const [deleting, setDeleting] = useState(false);
   const handleDelete = useCallback((event: MouseEvent) => {
     event.stopPropagation();
@@ -154,7 +158,8 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
                     slotProps={{
                       textField: {
                         size: 'small',
-                        sx: { fontSize: '15px' }
+                        sx: { fontSize: '15px' },
+                        onClick: stopPropagation
                       }
                     }}
                     format="h:mm a"
@@ -178,7 +183,8 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
                     slotProps={{
                       textField: {
                         size: 'small',
-                        sx: { fontSize: '15px' }
+                        sx: { fontSize: '15px' },
+                        onClick: stopPropagation
                       }
                     }}
                     format="h:mm a"

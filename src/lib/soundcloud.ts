@@ -8,7 +8,7 @@ interface DailyReadingsPodcastResponse {
 
 export async function getDailyReadingIFrameUrl(): Promise<string | null> {
   try {
-    const response = await fetch(`DAILY_READINGS_PODCAST`);
+    const response = await fetch(DAILY_READINGS_PODCAST);
     const contents = (await response.json()) as DailyReadingsPodcastResponse | null | undefined;
     if (isNullish(contents)) {
       return null;

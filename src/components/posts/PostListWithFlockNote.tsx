@@ -31,6 +31,10 @@ const PostListWithFlockNote = ({ allPosts, pagination }: PostListProps) => {
     return (
       <StyledPostList>
         <PostSkeleton />
+        <PostSkeleton />
+        <PostSkeleton />
+        <PostSkeleton />
+        <PostSkeleton />
       </StyledPostList>
     );
   }

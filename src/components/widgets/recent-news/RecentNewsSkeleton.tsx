@@ -22,8 +22,9 @@ const RecentNewsSkeleton = memo(() => {
       {/* <Skeleton variant="rectangular" width={110} height={72} sx={{ flexShrink: 0 }} /> */}
       <StyledPostDetails>
         <Skeleton animation="wave" height={24} style={{ marginBottom: 2 }} />
-        <Skeleton animation="wave" height={10} style={{ marginBottom: 4 }} />
-        <Skeleton animation="wave" height={10} width="80%" />
+        <Skeleton animation="wave" height={12} />
+        <Skeleton animation="wave" height={12} />
+        <Skeleton animation="wave" height={12} width="80%" />
       </StyledPostDetails>
     </StyledRecentNewsSkeleton>
   );

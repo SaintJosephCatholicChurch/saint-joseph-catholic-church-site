@@ -44,7 +44,7 @@ export default function usePosts(
               title: note.title,
               summary: note.description,
               link: note.link,
-              image: '/flocknote.png',
+              // image: '/flocknote.png',
               date: parse(note.pubDate, 'EEE, dd MMM yyyy HH:mm:ss xx', new Date()),
               target: '_blank'
             }))

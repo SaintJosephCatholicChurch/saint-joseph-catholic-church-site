@@ -223,7 +223,7 @@ export interface NewsPostData {
   title: string;
   summary: string;
   link: string;
-  image: string;
+  image?: string;
   date: Date;
   target?: '_blank';
 }

@@ -113,7 +113,7 @@ export interface RecentNewsPostData {
   title: string;
   summary: string;
   link: string;
-  image: string;
+  image?: string;
   date: Date;
   target?: '_blank';
 }

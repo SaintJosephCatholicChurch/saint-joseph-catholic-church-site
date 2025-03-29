@@ -421,7 +421,13 @@
                 {
                   "id": "d2072c24-32cf-4c49-8f39-893ea630f89a",
                   "time": "6:00 PM",
-                  "end_time": "6:40 PM"
+                  "end_time": "6:40 PM",
+                  "notes": [
+                    {
+                      "id": "ea33ef56-bae1-4639-a909-cd3d1704f9f4",
+                      "note": "No Soup Supper on April 4, 2025 due to Lenten Fish Fry"
+                    }
+                  ]
                 }
               ]
             }

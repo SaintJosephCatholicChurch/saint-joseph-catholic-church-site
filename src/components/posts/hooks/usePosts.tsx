@@ -35,7 +35,14 @@ export default function usePosts(
         return;
       }
 
-      const { item: entries = [] } = feed?.rss?.channel ?? {};
+      const { item: entries = [], link = '' } = feed?.rss?.channel ?? {};
+
+      let domain: string | null = null;
+      const domainMatches = /https:\/\/[a-zA-Z0-9]+\.flocknote\.com\//.exec(link);
+      if (domainMatches.length > 0) {
+        domain = domainMatches[0];
+      }
+
       if (entries.length > 0) {
         setFlockNotes(
           entries
@@ -43,7 +50,7 @@ export default function usePosts(
             .map((note) => ({
               title: note.title,
               summary: note.description,
-              link: note.link,
+              link: domain != null ? note.link.replace(/https:\/\/[a-zA-Z0-9]+\.flocknote\.com\//, domain) : note.link,
               // image: '/flocknote.png',
               date: parse(note.pubDate, 'EEE, dd MMM yyyy HH:mm:ss xx', new Date()),
               target: '_blank'

@@ -189,6 +189,7 @@ const DailyReadingsView = memo(
 
       const getReadings = async () => {
         const feed = await getFeed<FeedReading>(DAILY_READINGS_RSS);
+        console.log('[getReadings] feed', feed);
         if (!alive) {
           return;
         }
@@ -198,15 +199,17 @@ const DailyReadingsView = memo(
         }
 
         const { item: entries = [] } = feed?.rss?.channel ?? {};
-        if (entries.length > 0) {
-          const { link = '', title = '', description = '' } = entries[0];
+        for (const entry of entries) {
+          const { link = '', title = '', description = '' } = entry;
 
           const readings: Reading[] = [];
 
           let match: RegExpExecArray;
           do {
             match = ENTRY_REGEX.exec(description);
+            console.log('[getReadings] description', description);
             if (match && match.length === 4) {
+              console.log('[getReadings] match', match);
               readings.push({
                 title: match[1].trim(),
                 link: match[2].trim(),
@@ -215,11 +218,14 @@ const DailyReadingsView = memo(
             }
           } while (match && match.length === 4);
 
-          setReadings({
-            link,
-            title,
-            readings
-          });
+          if (readings.length > 0) {
+            setReadings({
+              link,
+              title,
+              readings
+            });
+            break;
+          }
         }
       };
 

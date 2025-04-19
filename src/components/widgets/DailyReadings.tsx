@@ -8,7 +8,7 @@ import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 
-const LARGE_NUMBER_OF_READINGS = 6;
+const LARGE_NUMBER_OF_READINGS = 12;
 
 interface StyledDailyReadingsWrapperProps {
   $readingsCount: number;

@@ -5,6 +5,7 @@ import { memo } from 'react';
 const StyledRecentNewsSkeleton = styled('div')`
   display: flex;
   gap: 8px;
+  padding: 7px 0;
 `;
 
 const StyledPostDetails = styled('div')`
@@ -21,9 +22,9 @@ const RecentNewsSkeleton = memo(() => {
     <StyledRecentNewsSkeleton>
       <StyledPostDetails>
         <Skeleton animation="wave" height={24} style={{ marginBottom: 2 }} />
-        <Skeleton animation="wave" height={12} />
-        <Skeleton animation="wave" height={12} />
-        <Skeleton animation="wave" height={12} width="80%" />
+        <Skeleton animation="wave" height={14} />
+        <Skeleton animation="wave" height={14} />
+        <Skeleton animation="wave" height={14} width="80%" />
       </StyledPostDetails>
     </StyledRecentNewsSkeleton>
   );

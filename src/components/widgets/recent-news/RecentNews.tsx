@@ -42,7 +42,6 @@ const StyledPosts = styled('div')`
 const StyledPostsSkeletons = styled('div')`
   display: flex;
   flex-direction: column;
-  gap: 16px;
 `;
 
 const StyledViewCalendarLink = styled(StyledLink)(

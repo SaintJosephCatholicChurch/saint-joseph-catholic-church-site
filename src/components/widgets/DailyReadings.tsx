@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
 import { getDailyReadingIFrameUrl } from '../../lib/soundcloud';
@@ -8,21 +8,23 @@ import transientOptions from '../../util/transientOptions';
 
 import type { DailyReadings } from '../../interface';
 
+const LARGE_NUMBER_OF_READINGS = 6;
+
 interface StyledDailyReadingsWrapperProps {
-  $hasReadings: boolean;
+  $readingsCount: number;
 }
 
 const StyledDailyReadingsWrapper = styled(
   'div',
   transientOptions
 )<StyledDailyReadingsWrapperProps>(
-  ({ theme, $hasReadings }) => `
+  ({ theme, $readingsCount }) => `
     display: flex;
     flex-direction: column;
     gap: 24px;
 
     ${getContainerQuery(theme.breakpoints.up('lg'))} {
-      grid-row: 1 / span ${$hasReadings ? '2' : '1'};
+      grid-row: 1 / span ${$readingsCount > 0 ? ($readingsCount > LARGE_NUMBER_OF_READINGS ? '3' : '2') : '1'};
       grid-column: 2;
     }
   `
@@ -243,12 +245,14 @@ const DailyReadingsView = memo(
       };
     }, []);
 
-    if ((readings?.readings.length ?? 0) === 0) {
-      return <StyledDailyReadingsWrapper $hasReadings={false}>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
+    const readingsCount = useMemo(() => readings?.readings.length ?? 0, [readings?.readings.length]);
+
+    if (readingsCount === 0) {
+      return <StyledDailyReadingsWrapper $readingsCount={readingsCount}>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
     }
 
     return (
-      <StyledDailyReadingsWrapper $hasReadings={true}>
+      <StyledDailyReadingsWrapper $readingsCount={readingsCount}>
         <StyledDailyReadings $isFullWidth={isFullWidth}>
           <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
           {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}

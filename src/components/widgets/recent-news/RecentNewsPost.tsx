@@ -53,6 +53,8 @@ const StyledPostHeader = styled('h4')`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0;
+  padding-bottom: 1px;
 `;
 
 interface StyledPostTitleProps {
@@ -84,6 +86,7 @@ const StyledPostTitle = styled(
 
 const StyledPostDate = styled('time')`
   display: flex;
+  white-space: nowrap;
   color: #757575;
   font-size: 13px;
   font-weight: 400;
@@ -98,7 +101,6 @@ const StyledPostSummary = styled(
   transientOptions
 )<StyledPostSummaryProps>(
   ({ theme, $size }) => `
-    margin: 0;
     overflow: hidden;
     height: 52px;
     font-size: ${$size === 'large' ? '16' : '15'}px;
@@ -106,7 +108,6 @@ const StyledPostSummary = styled(
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     line-height: 18.4px;
-    padding-bottom: 1px;
 
     & > p {
       margin: 0;

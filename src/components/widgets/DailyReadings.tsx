@@ -65,18 +65,21 @@ const StyledDailyReadingsSubtitle = styled('h4')`
 
 interface StyledDailyReadingProps {
   $isFullWidth: boolean;
+  $isAlternate: boolean;
 }
 
 const StyledDailyReading = styled(
   'a',
   transientOptions
 )<StyledDailyReadingProps>(
-  ({ theme, $isFullWidth }) => `
+  ({ theme, $isFullWidth, $isAlternate }) => `
     display: flex;
     align-items: baseline;
     color: #333;
     flex-wrap: wrap;
     line-height: 1.5;
+
+    margin-left: ${$isAlternate ? '24px' : '0'};
 
     &:hover {
       color: #161616;
@@ -126,6 +129,7 @@ interface Reading {
   title: string;
   link: string;
   description: string;
+  alternate: boolean;
 }
 
 interface ReadingsData {
@@ -207,10 +211,16 @@ const DailyReadingsView = memo(
           do {
             match = ENTRY_REGEX.exec(description);
             if (match && match.length === 4) {
+              const title = match[1]
+                .trim()
+                .replace(/&nbsp;/g, ' ')
+                .replace(/[oO]r /g, 'or');
+
               readings.push({
-                title: match[1].trim().replace(/&nbsp;/g, ' '),
+                title,
                 link: match[2].trim(),
-                description: match[3].trim().replace(/&nbsp;/g, ' ')
+                description: match[3].trim().replace(/&nbsp;/g, ' '),
+                alternate: title.startsWith('or ')
               });
             }
           } while (match && match.length === 4);
@@ -243,7 +253,13 @@ const DailyReadingsView = memo(
           <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
           {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
           {readings.readings.map((reading, index) => (
-            <StyledDailyReading key={`reading-${index}`} href={reading.link} target="_blank" $isFullWidth={isFullWidth}>
+            <StyledDailyReading
+              key={`reading-${index}`}
+              href={reading.link}
+              target="_blank"
+              $isFullWidth={isFullWidth}
+              $isAlternate={reading.alternate}
+            >
               <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
               <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
             </StyledDailyReading>

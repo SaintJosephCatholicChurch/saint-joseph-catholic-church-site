@@ -214,14 +214,14 @@ const DailyReadingsView = memo(
             match = ENTRY_REGEX.exec(description);
             if (match && match.length === 4) {
               const title = match[1]
-                .trim()
                 .replace(/&nbsp;/g, ' ')
-                .replace(/[oO]r/g, 'or');
+                .replace(/[oO]r/g, 'or')
+                .trim();
 
               readings.push({
                 title,
                 link: match[2].trim(),
-                description: match[3].trim().replace(/&nbsp;/g, ' '),
+                description: match[3].replace(/&nbsp;/g, ' ').trim(),
                 alternate: title === 'or'
               });
             }

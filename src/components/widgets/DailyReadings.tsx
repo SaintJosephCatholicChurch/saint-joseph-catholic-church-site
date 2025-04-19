@@ -216,13 +216,13 @@ const DailyReadingsView = memo(
               const title = match[1]
                 .trim()
                 .replace(/&nbsp;/g, ' ')
-                .replace(/[oO]r /g, 'or');
+                .replace(/[oO]r/g, 'or');
 
               readings.push({
                 title,
                 link: match[2].trim(),
                 description: match[3].trim().replace(/&nbsp;/g, ' '),
-                alternate: title.startsWith('or ')
+                alternate: title === 'or'
               });
             }
           } while (match && match.length === 4);

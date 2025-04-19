@@ -1,5 +1,7 @@
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
+import { format } from 'date-fns/format';
+import { formatISO } from 'date-fns/formatISO';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
 
@@ -47,12 +49,18 @@ const StyledPostDetails = styled('div')`
   color: #4f4f4f;
 `;
 
+const StyledPostHeader = styled('h4')`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 interface StyledPostTitleProps {
   $size: 'small' | 'large';
 }
 
 const StyledPostTitle = styled(
-  'h4',
+  'div',
   transientOptions
 )<StyledPostTitleProps>(
   ({ theme, $size }) => `
@@ -74,6 +82,13 @@ const StyledPostTitle = styled(
   `
 );
 
+const StyledPostDate = styled('time')`
+  display: flex;
+  color: #757575;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 17px;
+`;
 interface StyledPostSummaryProps {
   $size: 'small' | 'large';
 }
@@ -123,53 +138,58 @@ export interface RecentNewsProps {
   size?: 'small' | 'large';
 }
 
-const RecentNewsPost = memo(({ post: { title, summary, link, image, target }, size = 'small' }: RecentNewsProps) => {
-  const theme = useTheme();
+const RecentNewsPost = memo(
+  ({ post: { title, date, summary, link, image, target }, size = 'small' }: RecentNewsProps) => {
+    const theme = useTheme();
 
-  const [html, setHtml] = useState<string>('');
-  useEffect(() => {
-    setHtml(summary);
-  }, [summary]);
+    const [html, setHtml] = useState<string>('');
+    useEffect(() => {
+      setHtml(summary);
+    }, [summary]);
 
-  return (
-    <Link href={link} target={target}>
-      <Button
-        sx={{
-          display: 'flex',
-          [getContainerQuery(theme.breakpoints.down('sm'))]: {
-            gridTemplateColumns: '110px auto'
-          },
-          [getContainerQuery(theme.breakpoints.only('md'))]: {
-            gridTemplateColumns: '110px auto'
-          },
-          gap: '8px',
-          width: '100%',
-          color: 'inherit',
-          lineHeight: 'inherit',
-          letterSpacing: 'inherit',
-          textTransform: 'unset',
-          textAlign: 'left',
-          padding: '6px 8px',
-          margin: '-6px -8px',
-          '&:hover': {
-            backgroundColor: 'rgba(100,100,100,0.12)'
-          }
-        }}
-      >
-        {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
-        <StyledPostDetails>
-          <StyledPostTitle $size={size}>{title}</StyledPostTitle>
-          <StyledPostSummary
-            $size={size}
-            dangerouslySetInnerHTML={{
-              __html: html
-            }}
-          />
-        </StyledPostDetails>
-      </Button>
-    </Link>
-  );
-});
+    return (
+      <Link href={link} target={target}>
+        <Button
+          sx={{
+            display: 'flex',
+            [getContainerQuery(theme.breakpoints.down('sm'))]: {
+              gridTemplateColumns: '110px auto'
+            },
+            [getContainerQuery(theme.breakpoints.only('md'))]: {
+              gridTemplateColumns: '110px auto'
+            },
+            gap: '8px',
+            width: '100%',
+            color: 'inherit',
+            lineHeight: 'inherit',
+            letterSpacing: 'inherit',
+            textTransform: 'unset',
+            textAlign: 'left',
+            padding: '6px 8px',
+            margin: '-6px -8px',
+            '&:hover': {
+              backgroundColor: 'rgba(100,100,100,0.12)'
+            }
+          }}
+        >
+          {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
+          <StyledPostDetails>
+            <StyledPostHeader>
+              <StyledPostTitle $size={size}>{title}</StyledPostTitle>
+              <StyledPostDate dateTime={formatISO(date)}>{format(date, 'LLLL d, yyyy')}</StyledPostDate>
+            </StyledPostHeader>
+            <StyledPostSummary
+              $size={size}
+              dangerouslySetInnerHTML={{
+                __html: html
+              }}
+            />
+          </StyledPostDetails>
+        </Button>
+      </Link>
+    );
+  }
+);
 
 RecentNewsPost.displayName = 'RecentNewsPost';
 

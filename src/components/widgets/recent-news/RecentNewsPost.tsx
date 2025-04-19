@@ -166,8 +166,8 @@ const RecentNewsPost = memo(
             letterSpacing: 'inherit',
             textTransform: 'unset',
             textAlign: 'left',
-            padding: '6px 8px',
-            margin: '-6px -8px',
+            padding: '8px',
+            margin: '-8px',
             '&:hover': {
               backgroundColor: 'rgba(100,100,100,0.12)'
             }

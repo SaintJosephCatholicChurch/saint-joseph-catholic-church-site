@@ -208,9 +208,9 @@ const DailyReadingsView = memo(
             match = ENTRY_REGEX.exec(description);
             if (match && match.length === 4) {
               readings.push({
-                title: match[1].trim().replace(/&nbsp;/g, ''),
+                title: match[1].trim().replace(/&nbsp;/g, ' '),
                 link: match[2].trim(),
-                description: match[3].trim().replace(/&nbsp;/g, '')
+                description: match[3].trim().replace(/&nbsp;/g, ' ')
               });
             }
           } while (match && match.length === 4);

@@ -51,7 +51,7 @@ const StyledPostDetails = styled('div')`
 
 const StyledPostHeader = styled('h4')`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   margin: 0;
   padding-bottom: 1px;

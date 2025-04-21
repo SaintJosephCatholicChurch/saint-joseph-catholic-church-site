@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
@@ -23,8 +24,6 @@ const LiveStreamView = ({ facebookPage, width }: LiveStreamViewProps) => {
   useEffect(() => {
     setHeight(Math.floor((width / 16) * 9));
   }, [width]);
-
-  console.log('width:', width, ', height:', height);
 
   const LiveStreamIFrameNoSSR = useMemo(
     () =>

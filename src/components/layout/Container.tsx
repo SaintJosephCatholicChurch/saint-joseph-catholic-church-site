@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';

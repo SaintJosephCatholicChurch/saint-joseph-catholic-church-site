@@ -1,10 +1,10 @@
-import Box from '@mui/material/Box';
+'use client';
 import { styled } from '@mui/material/styles';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import getContainerQuery from '../../../util/container.util';
 import transientOptions from '../../../util/transientOptions';
-import useLocation from '../../../util/useLocation';
 import useWindowSize from '../../../util/useWindowSize';
 import SearchBox from '../../SearchBox';
 import Container from '../Container';
@@ -78,7 +78,7 @@ interface FooterProps {
 }
 
 const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }: FooterProps) => {
-  const { search } = useLocation();
+  const params = useSearchParams();
   const [query, setQuery] = useState('');
 
   const { width } = useWindowSize();
@@ -92,25 +92,24 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }
   );
 
   useEffect(() => {
-    const params = new URLSearchParams(search);
     setQuery(params.get('q'));
-  }, [search]);
+  }, [params]);
 
   return (
     <footer>
       <StyledFooterContainerWrapper $footerBackground={styles?.footer_background}>
         <Container>
           <StyledFooterContents>
-            <Box>
+            <div>
               <FooterAside title="Our Mission Statement" text={churchDetails.mission_statement} />
               <FooterAside title="Vision Statement" text={churchDetails.vision_statement} />
-              <Box>
+              <div>
                 <FooterHeader text="Search Our Site" />
                 {!hideSearch ? <SearchBox value={query} /> : <div />}
                 <ContactDetails churchDetails={churchDetails} />
-              </Box>
-            </Box>
-            <Box>
+              </div>
+            </div>
+            <div>
               <StyledFacebookFeedWrapper>
                 <iframe
                   src={`https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fstjosephchurchbluffton%2F&tabs=timeline&width=${facebookWidgetWidth}&height=600&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
@@ -123,7 +122,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }
                   allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 ></iframe>
               </StyledFacebookFeedWrapper>
-            </Box>
+            </div>
           </StyledFooterContents>
         </Container>
       </StyledFooterContainerWrapper>

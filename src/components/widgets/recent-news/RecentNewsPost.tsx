@@ -1,3 +1,4 @@
+'use client';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import { format } from 'date-fns/format';

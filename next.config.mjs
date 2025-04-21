@@ -11,10 +11,11 @@ const withPWA = withPWAFn({
 
 const removeImports = removeImportsFn();
 
-let config = removeImports({
+// next.config.js
+/** @type {import('next').NextConfig} */
+let config = {
   output: 'export',
   images: { unoptimized: true },
-  pageExtensions: ['tsx'],
   webpack: (config) => {
     config.module.rules.push(
       ...[
@@ -36,7 +37,9 @@ let config = removeImports({
   typescript: {
     ignoreBuildErrors: env === 'production'
   }
-});
+};
+
+config = removeImports(config);
 
 if (env === 'production') {
   config = withPWA(config);

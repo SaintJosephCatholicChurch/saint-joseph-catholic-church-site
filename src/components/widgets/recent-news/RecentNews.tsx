@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
@@ -64,7 +65,7 @@ interface RecentNewsProps {
 }
 
 const RecentNews = memo(({ posts, size }: RecentNewsProps) => {
-  const { loaded, data: news } = usePosts(0, RECENT_NEWS_TO_SHOW, posts);
+  const { loaded, data: news } = usePosts(posts);
 
   return (
     <StyledRecentNews>
@@ -77,7 +78,9 @@ const RecentNews = memo(({ posts, size }: RecentNewsProps) => {
         </StyledPostsSkeletons>
       ) : (
         <StyledPosts>
-          {news?.map((post, index) => <RecentNewsPost key={`recent-news-${index}`} post={post} size={size} />)}
+          {news
+            ?.slice(0, RECENT_NEWS_TO_SHOW)
+            .map((post, index) => <RecentNewsPost key={`recent-news-${index}`} post={post} size={size} />)}
         </StyledPosts>
       )}
       <Link href="/news">

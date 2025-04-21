@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import AddIcon from '@mui/icons-material/Add';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import { styled } from '@mui/material/styles';
@@ -164,7 +163,7 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
                   }}
                 >
                   <AddIcon />
-                  <Box>Add Category</Box>
+                  <div>Add Category</div>
                 </Button>
               </Tabs>
             </SortableContext>

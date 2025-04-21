@@ -1,18 +1,15 @@
 import churchDetails from '../lib/church_details';
 import config from '../lib/config';
+import JsonLdMeta from '../meta/JsonLdMeta';
 import { isNotEmpty } from '../util/string.util';
 import Layout from './Layout';
 import Footer from './layout/footer/Footer';
-import BasicMeta from './meta/BasicMeta';
-import JsonLdMeta from './meta/JsonLdMeta';
-import OpenGraphMeta from './meta/OpenGraphMeta';
-import TwitterCardMeta from './meta/TwitterCardMeta';
 import PageView from './pages/PageView';
 
 import type { ReactNode } from 'react';
 import type { DailyReadings, PostContent } from '../interface';
 
-interface PageProps {
+interface PageLayoutProps {
   children: ReactNode;
   title?: string;
   url: string;
@@ -47,13 +44,10 @@ const PageLayout = ({
   fullWidth,
   recentPosts,
   dailyReadings
-}: PageProps) => {
+}: PageLayoutProps) => {
   const keywords = tags?.filter((keyword) => isNotEmpty(keyword));
   return (
     <Layout>
-      <BasicMeta url={url} title={title} keywords={keywords} description={description} />
-      <OpenGraphMeta url={url} title={title} image={pageDetails?.image} description={description} />
-      <TwitterCardMeta url={url} title={title} image={pageDetails?.image} description={description} />
       {pageDetails ? (
         <JsonLdMeta
           url={url}

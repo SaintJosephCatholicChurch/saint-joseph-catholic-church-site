@@ -2,6 +2,15 @@ import type matter from 'gray-matter';
 
 export type ScreenSize = 'large' | 'medium' | 'small' | 'mobile';
 
+export type PageProps<T = {}> = {
+  params: {
+    [key: string]: string | string[];
+  };
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+} & T;
+
 export interface FileMatter {
   readonly fileName: string;
   readonly fullPath: string;

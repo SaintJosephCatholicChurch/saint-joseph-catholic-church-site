@@ -1,3 +1,4 @@
+'use client';
 /* eslint-disable react/display-name */
 import { createPlugin, sliceEvents } from '@fullcalendar/core';
 import { styled } from '@mui/material/styles';

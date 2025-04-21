@@ -2,7 +2,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -216,11 +215,11 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
             <DialogContentText id="deleting-times category-description">
               Are you sure you want to delete this time?
               <StyledDeletingTimeDetails>
-                <Box>{isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}</Box>
+                <div>{isNotEmpty(time.time) ? time.time : <div>&nbsp;</div>}</div>
                 {isNotEmpty(time.end_time) ? (
                   <>
-                    <Box key="deleting-time-divider-end-time">-</Box>
-                    <Box key="deleting-time-end-time">{time.end_time}</Box>
+                    <div key="deleting-time-divider-end-time">-</div>
+                    <div key="deleting-time-end-time">{time.end_time}</div>
                   </>
                 ) : null}
               </StyledDeletingTimeDetails>

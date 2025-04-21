@@ -1,3 +1,4 @@
+'use client';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';

@@ -1,3 +1,4 @@
+'use client';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';

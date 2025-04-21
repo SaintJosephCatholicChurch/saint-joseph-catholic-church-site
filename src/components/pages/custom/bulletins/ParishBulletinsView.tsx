@@ -1,3 +1,4 @@
+'use client';
 /* eslint-disable @next/next/no-img-element */
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -11,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList } from 'react-window';
 
@@ -375,7 +376,6 @@ interface ParishBulletinsViewProps {
 const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBulletinsViewProps) => {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
-  const [width, setWidth] = useState(0);
 
   const theme = useTheme();
   const router = useRouter();
@@ -422,10 +422,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
 
   const { height: windowHeight } = useWindowSize();
   const height = Math.min(Math.max((windowHeight ?? 0) - MARGIN_TOP - MARGIN_BOTTOM, MIN_HEIGHT), MAX_HEIGHT);
-
-  useEffect(() => {
-    setWidth((height / 11) * 8.5);
-  }, [height]);
+  const width = (height / 11) * 8.5;
 
   const BulletinRow = useMemo(() => BulletinListRowFactory(bulletin), [bulletin]);
 

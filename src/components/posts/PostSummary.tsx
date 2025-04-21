@@ -1,5 +1,5 @@
+'use client';
 import styled from '@emotion/styled';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import { memo, useEffect, useState } from 'react';
@@ -50,7 +50,7 @@ const PostSummary = memo(({ post }: PostSummaryProps) => {
         {isNotEmpty(post.image) ? <PostImage title={post.title} image={post.image} /> : null}
         <PostTitle title={post.title} enableMarginTop={isNotEmpty(post.image)} />
         <PostDateAuthorLine date={post.date} disableMargin />
-        <Box>
+        <div>
           <PageContentView>
             <div
               dangerouslySetInnerHTML={{
@@ -58,7 +58,7 @@ const PostSummary = memo(({ post }: PostSummaryProps) => {
               }}
             />
           </PageContentView>
-        </Box>
+        </div>
         <StyledReadMore className="read-more">Read More</StyledReadMore>
       </Button>
     </Link>

@@ -1,3 +1,4 @@
+'use client';
 import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
 import PostTitle from '../pages/PageTitle';

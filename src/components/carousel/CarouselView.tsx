@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
 import { Fade } from 'react-slideshow-image';

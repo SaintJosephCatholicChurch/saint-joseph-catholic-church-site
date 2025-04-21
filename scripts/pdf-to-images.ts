@@ -180,7 +180,7 @@ function fixCommonBulletinErrors(textContent: string) {
     normalizeWhitespace: true
   };
   let bulletinsProcessed = 0;
-  const bulletins = fetchBulletins();
+  const bulletins = await fetchBulletins();
   for (const bulletin of bulletins) {
     const pdfFullPath = join(publicPath, bulletin.pdf);
 

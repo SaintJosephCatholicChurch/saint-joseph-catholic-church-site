@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+'use client';
 import { parse } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
 
 import homepageData from '../../../lib/homepage';
 import { getFeed } from '../../../lib/rss';
@@ -8,13 +9,9 @@ import useConvertedPosts from './useConvertedPosts';
 
 import type { FlockNoteFeed, NewsPostData, PostContent } from '../../../interface';
 
-export default function usePosts(
-  start: number,
-  limit: number,
-  rawPosts: PostContent[]
-): { loaded: boolean; data: NewsPostData[] } {
+export default function usePosts(rawPosts: PostContent[]): { loaded: boolean; data: NewsPostData[] } {
   const [flockNotes, setFlockNotes] = useState<NewsPostData[]>([]);
-  const [flockNotesLoaded, setFlockNotesLoaded] = useState(false);
+  const [flockNotesLoaded, setFlockNotesLoaded] = useState(true);
 
   const posts = useConvertedPosts(rawPosts);
 
@@ -74,7 +71,7 @@ export default function usePosts(
 
       unsortedNews.sort((a, b) => b.date.getTime() - a.date.getTime());
 
-      return unsortedNews.slice(start, start + limit);
-    }, [flockNotes, limit, posts, start])
+      return unsortedNews;
+    }, [flockNotes, posts])
   };
 }

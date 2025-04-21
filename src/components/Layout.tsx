@@ -1,7 +1,7 @@
+'use client';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
-import Head from 'next/head';
 
 import churchDetails from '../lib/church_details';
 import menuDetails from '../lib/menu';
@@ -46,20 +46,6 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <StyledLayout id="drawer-container">
-        <Head>
-          <meta charSet="utf-8" />
-          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-          <link rel="manifest" href="/manifest.json" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-          <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
-          />
-          <meta name="theme-color" content="#bc2f3b" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          <meta name="description" content={churchDetails.name} />
-        </Head>
         <div id="back-to-top-anchor" />
         <Navigation churchDetails={churchDetails} menuDetails={menuDetails} />
         <StyledMain>{children}</StyledMain>

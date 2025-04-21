@@ -2,7 +2,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -89,8 +88,8 @@ const TimesWidgetTimeNote: FC<TimesWidgetTimeNoteProps> = ({ note, onChange, onD
         <StyledDragHandle ref={setActivatorNodeRef} {...listeners}>
           <DragIndicatorIcon />
         </StyledDragHandle>
-        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-          <Box sx={{ padding: '12px', width: '100%' }}>
+        <div sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <div sx={{ padding: '12px', width: '100%' }}>
             <TextField
               label="Note"
               value={note.note}
@@ -108,11 +107,11 @@ const TimesWidgetTimeNote: FC<TimesWidgetTimeNoteProps> = ({ note, onChange, onD
                 }
               }}
             />
-          </Box>
+          </div>
           <IconButton onClick={handleDelete} color="error">
             <DeleteIcon />
           </IconButton>
-        </Box>
+        </div>
       </StyledDayTimeNote>
       {deleting ? (
         <Dialog
@@ -127,7 +126,7 @@ const TimesWidgetTimeNote: FC<TimesWidgetTimeNoteProps> = ({ note, onChange, onD
             <DialogContentText id="deleting-note category-description">
               Are you sure you want to delete this note?
               <StyledDeletingTimeDetails>
-                <Box>{isNotEmpty(note.note) ? note.note : <div>&nbsp;</div>}</Box>
+                <div>{isNotEmpty(note.note) ? note.note : <div>&nbsp;</div>}</div>
               </StyledDeletingTimeDetails>
             </DialogContentText>
           </DialogContent>

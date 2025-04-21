@@ -1,3 +1,4 @@
+'use client';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -9,7 +10,11 @@ import getContainerQuery from '../../../../util/container.util';
 import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
 
-import type { FormEventHandler } from 'react';
+import type { FC, FormEventHandler } from 'react';
+
+const StyledDetails = styled('div')`
+  margin-bottom: 32px;
+`;
 
 const StyledCommentFormWrapper = styled('div')`
   position: relative;
@@ -94,7 +99,11 @@ interface AskFormBody {
   comment: string;
 }
 
-const AskForm = () => {
+export interface AskFormProps {
+  contentClassName: string;
+}
+
+const AskForm: FC<AskFormProps> = ({ contentClassName }) => {
   const [contactFormData, setContactFormData] = useState<Partial<AskFormBody>>({});
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -152,69 +161,78 @@ const AskForm = () => {
   );
 
   return (
-    <StyledCommentFormWrapper>
-      <StyledSubmittedMessage $submitted={submitted}>
-        <CheckCircleIcon
-          color="success"
-          sx={{
-            fontSize: '72px'
-          }}
-        />
-        Question successfully submitted!
-      </StyledSubmittedMessage>
-      <StyledContactForm onSubmit={onSubmit} $submitted={submitted}>
-        <StyledFirstRow>
+    <>
+      <StyledDetails className={contentClassName}>
+        <p>
+          Do you have a question regarding the Catholic Faith that you would like answered as a part of our Did You
+          Know? Campaign?
+        </p>
+        <p>To ask a question, fill in the request form below.</p>
+      </StyledDetails>
+      <StyledCommentFormWrapper>
+        <StyledSubmittedMessage $submitted={submitted}>
+          <CheckCircleIcon
+            color="success"
+            sx={{
+              fontSize: '72px'
+            }}
+          />
+          Question successfully submitted!
+        </StyledSubmittedMessage>
+        <StyledContactForm onSubmit={onSubmit} $submitted={submitted}>
+          <StyledFirstRow>
+            <TextField
+              name="name"
+              label="Full Name"
+              variant="outlined"
+              fullWidth
+              required
+              size="small"
+              onChange={(event) => onChange({ name: event.target.value })}
+              disabled={inProgress}
+            />
+            <TextField
+              name="email"
+              label="Email"
+              type="email"
+              variant="outlined"
+              fullWidth
+              required
+              size="small"
+              onChange={(event) => onChange({ email: event.target.value })}
+              disabled={inProgress}
+            />
+          </StyledFirstRow>
           <TextField
-            name="name"
-            label="Full Name"
+            name="comment"
+            label="Questions"
             variant="outlined"
             fullWidth
+            multiline
+            rows={4}
             required
             size="small"
-            onChange={(event) => onChange({ name: event.target.value })}
+            onChange={(event) => onChange({ comment: event.target.value })}
             disabled={inProgress}
           />
-          <TextField
-            name="email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            fullWidth
-            required
-            size="small"
-            onChange={(event) => onChange({ email: event.target.value })}
-            disabled={inProgress}
-          />
-        </StyledFirstRow>
-        <TextField
-          name="comment"
-          label="Questions"
-          variant="outlined"
-          fullWidth
-          multiline
-          rows={4}
-          required
-          size="small"
-          onChange={(event) => onChange({ comment: event.target.value })}
-          disabled={inProgress}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={!valid || inProgress}
-          sx={{
-            width: '150px',
-            backgroundColor: '#bf303c',
-            '&:hover': {
-              backgroundColor: '#822129',
-              color: '#ccc'
-            }
-          }}
-        >
-          Send Message
-        </Button>
-      </StyledContactForm>
-    </StyledCommentFormWrapper>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={!valid || inProgress}
+            sx={{
+              width: '150px',
+              backgroundColor: '#bf303c',
+              '&:hover': {
+                backgroundColor: '#822129',
+                color: '#ccc'
+              }
+            }}
+          >
+            Send Message
+          </Button>
+        </StyledContactForm>
+      </StyledCommentFormWrapper>
+    </>
   );
 };
 

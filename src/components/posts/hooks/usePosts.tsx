@@ -11,7 +11,7 @@ import type { FlockNoteFeed, NewsPostData, PostContent } from '../../../interfac
 
 export default function usePosts(rawPosts: PostContent[]): { loaded: boolean; data: NewsPostData[] } {
   const [flockNotes, setFlockNotes] = useState<NewsPostData[]>([]);
-  const [flockNotesLoaded, setFlockNotesLoaded] = useState(true);
+  const [flockNotesLoaded, setFlockNotesLoaded] = useState(false);
 
   const posts = useConvertedPosts(rawPosts);
 

@@ -17,6 +17,7 @@
     "type-check": "tsc --watch"
   },
   "dependencies": {
+    "@base-ui-components/react": "1.0.0-alpha.8",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
@@ -35,10 +36,9 @@
     "@fullcalendar/list": "6.1.17",
     "@fullcalendar/react": "6.1.17",
     "@fullcalendar/timegrid": "6.1.17",
-    "@mui/base": "5.0.0-beta.30",
-    "@mui/icons-material": "^6",
-    "@mui/material": "^6",
-    "@mui/system": "^6",
+    "@mui/icons-material": "^7",
+    "@mui/material": "^7",
+    "@mui/system": "^7",
     "@mui/x-date-pickers": "8.0.0",
     "@staticcms/core": "4.1.4",
     "@svgr/webpack": "8.1.0",

@@ -220,7 +220,7 @@ const DailyReadingsView = memo(
 
               readings.push({
                 title,
-                link: match[2].trim(),
+                link: match[2].trim().replace(/(https:\/\/bible\.usccb\.org)([^/])/, '$1/$2'),
                 description: match[3].replace(/&nbsp;/g, ' ').trim(),
                 alternate: title === 'or'
               });

@@ -46,7 +46,7 @@ export const generateStaticParams = async (): Promise<Record<string, unknown>[]>
 };
 
 const Post = async ({ params }: PageProps) => {
-  const slug = params.post as string;
+  const slug = (await params).post as string;
 
   if (process.env.NODE_ENV === 'development' || slugToPostContent == null) {
     slugToPostContent = buildSlugToPostContent(await fetchPostContent());

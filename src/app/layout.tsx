@@ -1,7 +1,5 @@
-import Head from 'next/head';
 import { Suspense } from 'react';
 
-import churchDetails from '../lib/church_details';
 import { disableReactDevTools } from '../util/devtools.util';
 
 import 'normalize.css';
@@ -38,17 +36,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
-        />
-        <meta name="theme-color" content="#bc2f3b" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="description" content={churchDetails.name} />
-      </Head>
       <body>
         <Suspense>{children}</Suspense>
       </body>

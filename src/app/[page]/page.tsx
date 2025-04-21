@@ -20,7 +20,7 @@ const buildSlugToPageContent = (pageContents: PageContent[]) => {
 let slugToPageContent: Record<string, PageContent> | null = null;
 
 export const getData = async ({ params }: PageProps) => {
-  const slug = params.page as string;
+  const slug = (await params).page as string;
 
   if (process.env.NODE_ENV === 'development' || slugToPageContent == null) {
     const pages = await fetchPageContent();

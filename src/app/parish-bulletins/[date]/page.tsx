@@ -13,8 +13,8 @@ import type { Bulletin, PageProps } from '../../../interface';
 
 const title = 'Parish Bulletins';
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const date = params.date as string;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const date = (await params).date as string;
   const url = `/parish-bulletins/${date}`;
 
   return {
@@ -45,7 +45,7 @@ export const generateStaticParams = async (): Promise<Record<string, unknown>[]>
 };
 
 const ParishBulletin = async ({ params }: PageProps) => {
-  const date = params.date as string;
+  const date = (await params).date as string;
 
   if (process.env.NODE_ENV === 'development' || dateToBulletin == null) {
     dateToBulletin = await buildDateToBulletin();

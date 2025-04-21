@@ -10,8 +10,8 @@ import { generateTwitterCardMeta } from '../../../../meta/TwitterCardMeta';
 import type { Metadata } from 'next/types';
 import type { PageProps } from '../../../../interface';
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const tag = params.tag as string;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const tag = (await params).tag as string;
 
   const url = `/news/tags/${tag}`;
   const title = `#${tag}`;
@@ -29,7 +29,7 @@ export const generateStaticParams = (): Record<string, unknown>[] => {
 };
 
 const TagsIndex = async ({ params }: PageProps) => {
-  const tag = params.tag as string;
+  const tag = (await params).tag as string;
   const posts = await listPostContent(tag);
 
   return (

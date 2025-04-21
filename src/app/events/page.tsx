@@ -1,7 +1,5 @@
-import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
-
 import PageLayout from '../../components/PageLayout';
+import EventsPage from '../../components/pages/custom/events/EventsPage';
 import { generateBasicMeta } from '../../meta/BasicMeta';
 import { generateOpenGraphMeta } from '../../meta/OpenGraphMeta';
 import { generateTwitterCardMeta } from '../../meta/TwitterCardMeta';
@@ -18,17 +16,9 @@ export const metadata: Metadata = {
 };
 
 const Events = () => {
-  const CalendarViewNoSSR = useMemo(
-    () =>
-      dynamic(() => import('../../components/events/CalendarView'), {
-        ssr: false
-      }),
-    []
-  );
-
   return (
     <PageLayout url={url} title={title} hideHeader hideSidebar disablePadding>
-      <CalendarViewNoSSR />
+      <EventsPage />
     </PageLayout>
   );
 };

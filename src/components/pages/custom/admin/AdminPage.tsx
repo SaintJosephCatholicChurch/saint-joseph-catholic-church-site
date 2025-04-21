@@ -1,17 +1,8 @@
 'use client';
-import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
+import CMSView from '../../../../cms/CMSView';
 
 const AdminPage = () => {
-  const DynamicComponentWithNoSSR = useMemo(
-    () =>
-      dynamic(() => import('../../../../cms/CMSView'), {
-        ssr: false
-      }),
-    []
-  );
-
-  return useMemo(() => <DynamicComponentWithNoSSR key="admin" />, [DynamicComponentWithNoSSR]);
+  return <CMSView key="admin" />;
 };
 
 export default AdminPage;

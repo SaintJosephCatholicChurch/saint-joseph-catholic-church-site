@@ -96,6 +96,32 @@ const StyledDailyReading = styled(
   `
 );
 
+const StyledDailyReadingNoLink = styled(
+  'div',
+  transientOptions
+)<StyledDailyReadingProps>(
+  ({ theme, $isFullWidth, $isAlternate }) => `
+    display: flex;
+    align-items: baseline;
+    color: #333;
+    flex-wrap: wrap;
+    line-height: 1.5;
+
+    margin-left: ${$isAlternate ? '24px' : '0'};
+
+    &:hover {
+      color: #161616;
+      text-decoration: underline;
+    }
+
+    ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
+      flex-direction: ${$isAlternate ? 'row' : 'column'};
+      align-items: flex-start;
+      gap: 4px;
+    }
+  `
+);
+
 const StyledDailyReadingTitle = styled('h5')(
   ({ theme }) => `
     display: flex;
@@ -218,9 +244,14 @@ const DailyReadingsView = memo(
                 .replace(/[oO]r/g, 'or')
                 .trim();
 
+              let link: string | undefined = match[2].trim().replace(/(https:\/\/bible\.usccb\.org)([^/])/, '$1/$2');
+              if (link === 'https://bible.usccb.org/route?&amp;lt;nolink&amp;gt;' || link === '') {
+                link = undefined;
+              }
+
               readings.push({
                 title,
-                link: match[2].trim().replace(/(https:\/\/bible\.usccb\.org)([^/])/, '$1/$2'),
+                link,
                 description: match[3].replace(/&nbsp;/g, ' ').trim(),
                 alternate: title === 'or'
               });
@@ -257,16 +288,29 @@ const DailyReadingsView = memo(
           <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
           {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
           {readings.readings.map((reading, index) => (
-            <StyledDailyReading
-              key={`reading-${index}`}
-              href={reading.link}
-              target="_blank"
-              $isFullWidth={isFullWidth}
-              $isAlternate={reading.alternate}
-            >
-              <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-              <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
-            </StyledDailyReading>
+            <>
+              {reading.link !== undefined ? (
+                <StyledDailyReading
+                  key={`reading-${index}`}
+                  href={reading.link}
+                  target="_blank"
+                  $isFullWidth={isFullWidth}
+                  $isAlternate={reading.alternate}
+                >
+                  <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+                  <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+                </StyledDailyReading>
+              ) : (
+                <StyledDailyReadingNoLink
+                  key={`reading-${index}`}
+                  $isFullWidth={isFullWidth}
+                  $isAlternate={reading.alternate}
+                >
+                  <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+                  <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+                </StyledDailyReadingNoLink>
+              )}
+            </>
           ))}
         </StyledDailyReadings>
         {soundCloudIFrame}

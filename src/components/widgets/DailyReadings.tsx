@@ -89,7 +89,7 @@ const StyledDailyReading = styled(
     }
 
     ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
-      flex-direction: column;
+      flex-direction: ${$isAlternate ? 'row' : 'column'};
       align-items: flex-start;
       gap: 4px;
     }

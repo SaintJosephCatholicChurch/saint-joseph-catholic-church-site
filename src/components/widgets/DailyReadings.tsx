@@ -109,11 +109,6 @@ const StyledDailyReadingNoLink = styled(
 
     margin-left: ${$isAlternate ? '24px' : '0'};
 
-    &:hover {
-      color: #161616;
-      text-decoration: underline;
-    }
-
     ${getContainerQuery(theme.breakpoints.down(!$isFullWidth ? 'lg' : 'sm'))} {
       flex-direction: ${$isAlternate ? 'row' : 'column'};
       align-items: flex-start;

@@ -245,7 +245,7 @@ const DailyReadingsView = memo(
                 .trim();
 
               let link: string | undefined = match[2].trim().replace(/(https:\/\/bible\.usccb\.org)([^/])/, '$1/$2');
-              if (link === 'https://bible.usccb.org/route?&amp;lt;nolink&amp;gt;' || link === '') {
+              if (link === 'https://bible.usccb.org/route?&lt;nolink&gt;' || link === '') {
                 link = undefined;
               }
 

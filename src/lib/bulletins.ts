@@ -9,14 +9,7 @@ import type { Bulletin, BulletinPDFData } from '../interface';
 
 const pagesDirectory = join(process.cwd(), 'content/bulletins');
 
-let bulletinCache: BulletinPDFData[];
-let metaCache: BulletinPDFData[];
-
 export async function fetchBulletins(): Promise<Bulletin[]> {
-  if (bulletinCache && process.env.NODE_ENV !== 'development') {
-    return bulletinCache;
-  }
-
   const fileNames = (await readdir(pagesDirectory)).filter((it) => it.endsWith('.json'));
   fileNames.sort(
     (a, b) =>
@@ -26,7 +19,7 @@ export async function fetchBulletins(): Promise<Bulletin[]> {
 
   const jsonFileNames = fileNames.filter((it) => it.endsWith('.json'));
 
-  bulletinCache = [];
+  const bulletinCache = [];
 
   for (const fileName of jsonFileNames) {
     bulletinCache.push(JSON.parse(await readFile(join(pagesDirectory, fileName), 'utf8')) as BulletinPDFData);
@@ -50,11 +43,7 @@ export async function fetchBulletinMetaData(bulletin: Bulletin | undefined): Pro
 }
 
 export async function fetchBulletinsMetaData(): Promise<BulletinPDFData[]> {
-  if (metaCache && process.env.NODE_ENV !== 'development') {
-    return metaCache;
-  }
-
-  metaCache = [];
+  const metaCache = [];
 
   const bulletins = await fetchBulletins();
   for (const bulletin of bulletins) {

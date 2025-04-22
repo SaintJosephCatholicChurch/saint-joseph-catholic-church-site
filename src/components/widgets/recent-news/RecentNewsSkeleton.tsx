@@ -6,7 +6,7 @@ import { memo } from 'react';
 const StyledRecentNewsSkeleton = styled('div')`
   display: flex;
   gap: 8px;
-  padding: 9px 0;
+  padding: 6px 0;
 `;
 
 const StyledPostDetails = styled('div')`

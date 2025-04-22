@@ -1,3 +1,4 @@
+'use client';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

@@ -1,3 +1,4 @@
+'use client';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';

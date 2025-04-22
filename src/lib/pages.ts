@@ -1,7 +1,7 @@
-import fs from 'fs';
+import { readdir, readFile } from 'fs/promises';
 import matter from 'gray-matter';
+import { JSON_SCHEMA, load } from 'js-yaml';
 import path from 'path';
-import yaml from 'js-yaml';
 
 import type { FileMatter, PageContent, PageContentData } from '../interface';
 
@@ -10,27 +10,33 @@ const pagesDirectory = path.join(process.cwd(), 'content/pages');
 let pageMatterCache: FileMatter[];
 let pageCache: PageContent[];
 
-export function fetchPageMatter(): FileMatter[] {
+export async function fetchPageMatter(): Promise<FileMatter[]> {
   if (pageMatterCache && process.env.NODE_ENV !== 'development') {
     return pageMatterCache;
   }
   // Get file names under /pages
-  const fileNames = fs.readdirSync(pagesDirectory);
-  const allPagesMatter = fileNames
-    .filter((it) => it.endsWith('.mdx'))
-    .map((fileName) => {
-      // Read file as string
-      const fullPath = path.join(pagesDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const fileNames = await readdir(pagesDirectory);
+  const allPagesMatter: {
+    fileName: string;
+    fullPath: string;
+    matterResult: matter.GrayMatterFile<string>;
+  }[] = [];
 
-      // Use gray-matter to parse the page metadata section
-      const matterResult = matter(fileContents, {
-        engines: {
-          yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object
-        }
-      });
-      return { fileName, fullPath, matterResult };
+  const pageFileNames = fileNames.filter((it) => it.endsWith('.mdx'));
+
+  for (const fileName of pageFileNames) {
+    // Read file as string
+    const fullPath = path.join(pagesDirectory, fileName);
+    const fileContents = await readFile(fullPath, 'utf8');
+
+    // Use gray-matter to parse the page metadata section
+    const matterResult = matter(fileContents, {
+      engines: {
+        yaml: (s) => load(s, { schema: JSON_SCHEMA }) as object
+      }
     });
+    allPagesMatter.push({ fileName, fullPath, matterResult });
+  }
 
   // Sort pages by date
   pageMatterCache = allPagesMatter.sort((a, b) => {
@@ -46,12 +52,13 @@ export function fetchPageMatter(): FileMatter[] {
   return pageMatterCache;
 }
 
-export function fetchPageContent(): PageContent[] {
+export async function fetchPageContent(): Promise<PageContent[]> {
   if (pageCache && process.env.NODE_ENV !== 'development') {
     return pageCache;
   }
 
-  const allPagesData = fetchPageMatter().map(({ fileName: _filename, fullPath, matterResult: { data, content } }) => {
+  const pageMatters = await fetchPageMatter();
+  const allPagesData = pageMatters.map(({ fileName: _filename, fullPath, matterResult: { data, content } }) => {
     // TODO Auto generate slugs
     // const slug = fileName.replace(/\.mdx$/, '');
     // Validate slug string
@@ -82,12 +89,14 @@ export function fetchPageContent(): PageContent[] {
   return pageCache;
 }
 
-export function countPages(tag?: string): number {
-  return fetchPageContent().filter((it) => !tag || (it.data.tags && it.data.tags.includes(tag))).length;
+export async function countPages(tag?: string): Promise<number> {
+  const pageContent = await fetchPageContent();
+  return pageContent.filter((it) => !tag || (it.data.tags && it.data.tags.includes(tag))).length;
 }
 
-export function listPageContent(page: number, limit: number, tag?: string): PageContent[] {
-  return fetchPageContent()
+export async function listPageContent(page: number, limit: number, tag?: string): Promise<PageContent[]> {
+  const pageContent = await fetchPageContent();
+  return pageContent
     .filter((it) => !tag || (it.data.tags && it.data.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }

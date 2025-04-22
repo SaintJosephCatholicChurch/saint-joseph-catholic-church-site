@@ -1,3 +1,4 @@
+'use client';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';

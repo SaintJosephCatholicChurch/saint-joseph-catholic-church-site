@@ -1,3 +1,4 @@
+'use client';
 import ArticleIcon from '@mui/icons-material/Article';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import WebIcon from '@mui/icons-material/Web';

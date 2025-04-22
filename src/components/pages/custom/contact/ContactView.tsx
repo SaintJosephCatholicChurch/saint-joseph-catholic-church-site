@@ -1,7 +1,7 @@
+'use client';
 import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 import Container from '../../../../components/layout/Container';
@@ -141,13 +141,13 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
             <StyledContactContent>
               <StyledContactDetails>
                 <StyledAddress>
-                  <Box>
+                  <div>
                     <strong>{churchDetails.name}</strong>
-                  </Box>
-                  <Box>{churchDetails.address}</Box>
-                  <Box>
+                  </div>
+                  <div>{churchDetails.address}</div>
+                  <div>
                     {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
-                  </Box>
+                  </div>
                 </StyledAddress>
                 <StyledChurchDetailSection>
                   <StyledChurchDetailTitle>Church Phone</StyledChurchDetailTitle>

@@ -1,10 +1,11 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
 import Footer from '../layout/footer/Footer';
 import ContactView from '../pages/custom/contact/ContactView';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/lite';
 import type { ChurchDetails } from '../../interface';
 
 const StyledChurchDetailsPreview = styled('div')`

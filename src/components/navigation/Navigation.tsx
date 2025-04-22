@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { useCallback, useMemo, useState } from 'react';

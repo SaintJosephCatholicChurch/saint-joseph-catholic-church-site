@@ -1,3 +1,4 @@
+'use client';
 import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '@mui/material/Button';

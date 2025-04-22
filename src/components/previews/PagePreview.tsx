@@ -1,9 +1,10 @@
+'use client';
 import { styled } from '@mui/material/styles';
 
 import PageContentView from '../pages/PageContentView';
 import PageTitle from '../pages/PageTitle';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/lite';
 import type { PageContentData } from '@/interface';
 
 const StyledPagePreview = styled('div')`

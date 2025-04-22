@@ -1,7 +1,9 @@
+'use client';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { MENU_DELAY } from '../../constants';
@@ -9,7 +11,6 @@ import getContainerQuery from '../../util/container.util';
 import { isEmpty } from '../../util/string.util';
 import useClickOutside from '../../util/useClickOutside';
 import { useDebouncedToggleOff } from '../../util/useDebounce';
-import useLocation from '../../util/useLocation';
 import NavItemPopup from './NavItemPopup';
 import { getMenuLinkUrl } from './hooks/useMenuLinkUrl';
 
@@ -54,7 +55,7 @@ interface NavItemProps {
 
 const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const theme = useTheme();
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const wrapperRef = useRef<HTMLDivElement>();
   const buttonRef = useRef<HTMLButtonElement>();
   const activeMenuItemRef = useRef<HTMLButtonElement>();

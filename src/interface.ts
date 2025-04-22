@@ -2,6 +2,12 @@ import type matter from 'gray-matter';
 
 export type ScreenSize = 'large' | 'medium' | 'small' | 'mobile';
 
+export type PageProps = {
+  params: Promise<{
+    [key: string]: string | string[];
+  }>;
+};
+
 export interface FileMatter {
   readonly fileName: string;
   readonly fullPath: string;

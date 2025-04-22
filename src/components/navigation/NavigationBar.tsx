@@ -1,3 +1,4 @@
+'use client';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';

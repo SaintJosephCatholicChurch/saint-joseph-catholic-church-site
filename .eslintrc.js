@@ -64,7 +64,7 @@ module.exports = {
       }
     ],
     'unicorn/prefer-string-slice': 'error',
-    'react/no-unknown-property': ['error', { ignore: ['css'] }],
+    'react/no-unknown-property': ['error', { ignore: ['css', 'sx'] }],
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {

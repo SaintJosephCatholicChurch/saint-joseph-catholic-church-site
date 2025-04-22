@@ -1,3 +1,4 @@
+'use client';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';

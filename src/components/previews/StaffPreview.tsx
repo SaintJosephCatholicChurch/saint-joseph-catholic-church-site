@@ -1,9 +1,10 @@
+'use client';
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
 import StaffView from '../pages/custom/staff/StaffView';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/lite';
 import type { Staff } from '../../interface';
 
 const StyledStaffWrapper = styled('div')`

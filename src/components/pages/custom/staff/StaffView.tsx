@@ -1,3 +1,4 @@
+'use client';
 import { styled } from '@mui/material/styles';
 
 import { STAFF_CARD_GAP_SIZE } from '../../../../constants';

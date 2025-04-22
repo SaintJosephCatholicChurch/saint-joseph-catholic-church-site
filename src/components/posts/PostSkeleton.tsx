@@ -10,27 +10,8 @@ const StyledPostSkeleton = styled('div')`
 `;
 
 const PostSkeleton = memo(() => {
-  // const theme = useTheme();
-
   return (
     <StyledPostSkeleton>
-      {/* <Skeleton
-        variant="rectangular"
-        width="100%"
-        sx={{
-          flexShrink: 0,
-          height: 400,
-          [getContainerQuery(theme.breakpoints.down('lg'))]: {
-            height: 325
-          },
-          [getContainerQuery(theme.breakpoints.down('md'))]: {
-            height: 275
-          },
-          [getContainerQuery(theme.breakpoints.down('sm'))]: {
-            height: 200
-          }
-        }}
-      /> */}
       <Skeleton animation="wave" height={48} width="90%" style={{ marginBottom: 8 }} />
       <Skeleton animation="wave" height={10} width="15%" style={{ marginBottom: 16 }} />
       <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />

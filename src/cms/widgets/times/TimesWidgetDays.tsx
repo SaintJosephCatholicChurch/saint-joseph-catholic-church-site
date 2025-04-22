@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import AddIcon from '@mui/icons-material/Add';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -119,7 +118,7 @@ const TimesWidgetDays: FC<TimesWidgetDaysProps> = ({ days: rawDays = [], onChang
       <StyledAddButtonWrapper>
         <Button onClick={handleAdd} sx={{ ml: '30px' }}>
           <AddIcon />
-          <Box>Add Day / Line</Box>
+          <div>Add Day / Line</div>
         </Button>
       </StyledAddButtonWrapper>
     </>

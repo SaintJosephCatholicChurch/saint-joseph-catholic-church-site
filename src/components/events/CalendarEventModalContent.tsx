@@ -1,3 +1,4 @@
+'use client';
 import EventIcon from '@mui/icons-material/Event';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import NotesIcon from '@mui/icons-material/Notes';

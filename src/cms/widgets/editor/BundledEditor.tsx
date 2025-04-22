@@ -1,5 +1,4 @@
 /* eslint-disable import/no-unresolved */
-import Box from '@mui/material/Box';
 import { Editor } from '@tinymce/tinymce-react';
 import { useEffect } from 'react';
 
@@ -78,7 +77,7 @@ export default function BundledEditor(props: BundleEditorProps) {
   // note that skin and content_css is disabled to avoid the normal
   // loading process and is instead loaded as a string via content_style
   return (
-    <Box
+    <div
       sx={{
         '.tox-tinymce': {
           borderRadius: 0
@@ -94,6 +93,6 @@ export default function BundledEditor(props: BundleEditorProps) {
         }}
         {...rest}
       />
-    </Box>
+    </div>
   );
 }

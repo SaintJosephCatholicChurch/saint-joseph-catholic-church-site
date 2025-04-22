@@ -1,3 +1,4 @@
+'use client';
 import Popover from '@mui/material/Popover';
 
 import useModalContainer from '../../util/useModalContainer';

@@ -1,10 +1,10 @@
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useCallback } from 'react';
 
 import ScheduleWidget from './TimesWidgetControl';
 
-import type { WidgetControlProps } from '@staticcms/core';
+import type { WidgetControlProps } from '@staticcms/lite';
 import type { FC } from 'react';
 import type { Times } from '../../../interface';
 import type { TimesField } from '../../config';

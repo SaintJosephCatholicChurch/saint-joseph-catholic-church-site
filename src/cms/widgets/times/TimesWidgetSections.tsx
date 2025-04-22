@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import AddIcon from '@mui/icons-material/Add';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -130,11 +129,11 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
       <StyledAddButtonWrapper>
         <Button onClick={handleAdd}>
           <AddIcon />
-          <Box>Add Section</Box>
+          <div>Add Section</div>
         </Button>
         <Button onClick={handleAddNote}>
           <AddIcon />
-          <Box>Add Note</Box>
+          <div>Add Note</div>
         </Button>
       </StyledAddButtonWrapper>
     </>

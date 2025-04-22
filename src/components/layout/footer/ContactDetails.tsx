@@ -1,7 +1,7 @@
+'use client';
 import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 
@@ -102,13 +102,13 @@ const ContactDetails = ({ churchDetails }: ContactDetailsProps) => {
     <StyledContactDetailsWrapper>
       <StyledContactDetails>
         <StyledAddress>
-          <Box>
+          <div>
             <strong>{churchDetails.name}</strong>
-          </Box>
-          <Box>{churchDetails.address}</Box>
-          <Box>
+          </div>
+          <div>{churchDetails.address}</div>
+          <div>
             {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
-          </Box>
+          </div>
         </StyledAddress>
         <StyledChurchDetailsLinkWrapper>
           <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>

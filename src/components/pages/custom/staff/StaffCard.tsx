@@ -1,8 +1,9 @@
+'use client';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 
 import { STAFF_CARD_GAP_SIZE, STAFF_DEFAULT_CARD_SIZE, STAFF_GLOBAL_PADDING } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';

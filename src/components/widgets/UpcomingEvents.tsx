@@ -1,9 +1,10 @@
+'use client';
 // eslint-disable-next-line import/order
 import FullCalendar from '@fullcalendar/react';
 
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import { styled } from '@mui/material/styles';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { addMonths } from 'date-fns';
 import Link from 'next/link';

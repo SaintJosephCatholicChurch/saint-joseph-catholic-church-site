@@ -1,3 +1,4 @@
+'use client';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
 import Button from '@mui/material/Button';

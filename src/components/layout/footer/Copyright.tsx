@@ -1,5 +1,4 @@
 import CopyrightIcon from '@mui/icons-material/Copyright';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -80,12 +79,12 @@ const Copyright = ({ privacyPolicyLink }: CopyrightProps) => {
       <StyledCopyrightText>
         <StyledCopyrightSection>
           <CopyrightIcon fontSize="small" />
-          <Box>
+          <div>
             {year} {churchDetails.name}.
-          </Box>
+          </div>
         </StyledCopyrightSection>
         <StyledCopyrightSection>
-          <Box>All Rights Reserved.</Box>
+          <div>All Rights Reserved.</div>
         </StyledCopyrightSection>
       </StyledCopyrightText>
       <Link href={privacyPolicyLink}>

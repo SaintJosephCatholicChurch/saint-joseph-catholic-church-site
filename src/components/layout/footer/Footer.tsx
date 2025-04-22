@@ -92,6 +92,9 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }
   );
 
   useEffect(() => {
+    if (!params) {
+      return;
+    }
     setQuery(params.get('q'));
   }, [params]);
 

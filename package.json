@@ -10,7 +10,7 @@
     "dev": "cross-env NODE_ENV=development next dev",
     "build": "cross-env NODE_ENV=production next build",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",
-    "local-cms": "npx @staticcms/proxy-server@^4",
+    "local-cms": "npx @staticcms/proxy-server-lite@^1",
     "redirects": "ts-node ./scripts/generate-redirects.ts",
     "prettier": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --write",
     "start": "next start",
@@ -40,7 +40,7 @@
     "@mui/material": "7.0.2",
     "@mui/system": "7.0.2",
     "@mui/x-date-pickers": "8.0.0",
-    "@staticcms/core": "4.1.4",
+    "@staticcms/lite": "1.0.4",
     "@svgr/webpack": "8.1.0",
     "@tinymce/tinymce-react": "4.3.0",
     "@types/react-window": "1.8.8",
@@ -52,7 +52,7 @@
     "is-hotkey": "0.2.0",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
-    "next": "15.3.1",
+    "next": "^14",
     "normalize.css": "8.0.1",
     "pdf.js-extract": "0.2.1",
     "raw-loader": "4.0.2",
@@ -69,7 +69,7 @@
   "devDependencies": {
     "@babel/core": "7.26.10",
     "@emotion/eslint-plugin": "11.12.0",
-    "@next/eslint-plugin-next": "15.3.1",
+    "@next/eslint-plugin-next": "^14",
     "@npmcli/git": "6.0.3",
     "@opentelemetry/api": "1.9.0",
     "@types/dompurify": "3.2.0",
@@ -114,5 +114,9 @@
     "trailingComma": "none",
     "singleQuote": true,
     "printWidth": 120
+  },
+  "resolutions": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }

@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/lite';
 import type { HomePageData, PostContent } from '../../interface';
 
 const StyledHomepagePreview = styled('div')`

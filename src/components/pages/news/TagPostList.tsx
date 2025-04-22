@@ -48,6 +48,9 @@ const TagPostList = ({ tag, posts: rawPosts, postsPerPage }: TagPostListProps) =
   const isSmallScreen = useMediaQueryDown('sm');
 
   useEffect(() => {
+    if (!searchParams) {
+      return;
+    }
     const searchPage = searchParams.get('page');
     if (searchPage != null) {
       const searchPageInt = parseInt(searchPage);

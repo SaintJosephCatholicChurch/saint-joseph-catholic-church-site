@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import Navigation from '../navigation/Navigation';
 import churchDetails from '../../lib/church_details';
 
-import type { TemplatePreviewComponent } from '@staticcms/core';
+import type { TemplatePreviewComponent } from '@staticcms/lite';
 import type { MenuData } from '@/interface';
 
 const StyledNavigationWrapper = styled('div')`

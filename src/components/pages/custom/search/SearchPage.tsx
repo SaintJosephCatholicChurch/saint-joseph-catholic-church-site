@@ -67,6 +67,9 @@ const SearchPage: FC<SearchPageProps> = ({ searchableEntries }) => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
+    if (!params) {
+      return;
+    }
     setQuery(params.get('q'));
   }, [params]);
 

@@ -1,4 +1,4 @@
-import type { BaseField, Config } from '@staticcms/core';
+import type { BaseField, Config } from '@staticcms/lite';
 
 export interface TimesField extends BaseField {
   widget: 'times';
@@ -31,8 +31,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
     frame: false
   },
   media_library: {
-    max_file_size: 10240000,
-    folder_support: false
+    max_file_size: 10240000
   },
   collections: [
     {
@@ -216,8 +215,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   media_folder: '/public/staff',
                   public_folder: '/staff',
                   media_library: {
-                    max_file_size: 10240000,
-                    folder_support: false
+                    max_file_size: 10240000
                   }
                 }
               ]
@@ -254,8 +252,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   label: 'Image',
                   widget: 'image',
                   media_library: {
-                    max_file_size: 10240000,
-                    folder_support: false
+                    max_file_size: 10240000
                   }
                 },
                 {
@@ -305,8 +302,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   label: 'Schedule Background',
                   widget: 'image',
                   media_library: {
-                    max_file_size: 10240000,
-                    folder_support: false
+                    max_file_size: 10240000
                   }
                 }
               ]
@@ -332,8 +328,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                   label: 'Background',
                   widget: 'image',
                   media_library: {
-                    max_file_size: 10240000,
-                    folder_support: false
+                    max_file_size: 10240000
                   }
                 }
               ]
@@ -390,8 +385,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       widget: 'image',
                       required: false,
                       media_library: {
-                        max_file_size: 10240000,
-                        folder_support: false
+                        max_file_size: 10240000
                       }
                     },
                     {
@@ -423,8 +417,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
                       widget: 'image',
                       required: false,
                       media_library: {
-                        max_file_size: 10240000,
-                        folder_support: false
+                        max_file_size: 10240000
                       }
                     },
                     {
@@ -497,8 +490,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           media_folder: '/public/bulletins',
           public_folder: '/bulletins',
           media_library: {
-            max_file_size: 10240000,
-            folder_support: false
+            max_file_size: 10240000
           }
         }
       ]
@@ -537,8 +529,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
           widget: 'image',
           required: false,
           media_library: {
-            max_file_size: 10240000,
-            folder_support: false
+            max_file_size: 10240000
           }
         },
         {
@@ -688,8 +679,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               label: 'Site Image',
               widget: 'image',
               media_library: {
-                max_file_size: 10240000,
-                folder_support: false
+                max_file_size: 10240000
               }
             },
             {
@@ -822,8 +812,7 @@ const config: Config<TimesField | HtmlField | EventsField> = {
               label: 'Footer background',
               widget: 'image',
               media_library: {
-                max_file_size: 10240000,
-                folder_support: false
+                max_file_size: 10240000
               }
             }
           ]

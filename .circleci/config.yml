@@ -32,7 +32,6 @@ jobs:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./out
   buildBeta:
-    working_directory: ~/repoBeta
     docker:
       - image: cimg/node:20.19.1
     steps:

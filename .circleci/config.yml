@@ -46,12 +46,15 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install --no-save
+      - run: git status
       - run:
           name: Process Bulletins
           command: npm run bulletins-ci
+      - run: git status
       - run:
           name: NextJS Build
           command: npm run build
+      - run: git status
       - save_cache:
           key: nextjs-cache-{{ checksum "package-lock.json" }}
           when: on_success

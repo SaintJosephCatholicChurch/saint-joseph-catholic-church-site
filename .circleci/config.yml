@@ -40,7 +40,7 @@ jobs:
           fingerprints:
             - '0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08'
       - checkout
-      - run: git pull
+      - run: git reset --hard origin/beta
       - restore_cache:
           keys:
             - nextjs-cache-{{ checksum "package-lock.json" }}

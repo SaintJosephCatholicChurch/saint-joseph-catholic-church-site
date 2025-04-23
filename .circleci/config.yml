@@ -32,13 +32,14 @@ jobs:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN --prod --dir=./out
   buildBeta:
-    working_directory: ~/repo
+    working_directory: ~/repoBeta
     docker:
       - image: cimg/node:20.19.1
     steps:
       - add_ssh_keys:
           fingerprints:
             - '0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08'
+      - run: git fetch
       - checkout
       - restore_cache:
           keys:

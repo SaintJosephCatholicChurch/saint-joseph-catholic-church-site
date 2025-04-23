@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/node:18.18.2
+      - image: cimg/node:20.19.1
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -34,7 +34,7 @@ jobs:
   buildBeta:
     working_directory: ~/repo
     docker:
-      - image: cimg/node:18.18.2
+      - image: cimg/node:20.19.1
     steps:
       - add_ssh_keys:
           fingerprints:

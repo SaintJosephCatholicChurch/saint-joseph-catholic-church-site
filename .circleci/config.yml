@@ -39,17 +39,12 @@ jobs:
           fingerprints:
             - '0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08'
       - checkout
-      - run: git reset --hard origin/beta
       - restore_cache:
           keys:
             - nextjs-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
           command: npm install --no-save
-      - run: git status
-      - run:
-          name: Process Bulletins
-          command: npm run bulletins-ci
       - run: git status
       - run:
           name: NextJS Build

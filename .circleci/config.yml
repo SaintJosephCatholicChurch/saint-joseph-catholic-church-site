@@ -7,7 +7,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08"
+            - '0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08'
       - checkout
       - restore_cache:
           keys:
@@ -38,7 +38,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08"
+            - '0e:0c:5d:32:f5:b2:f8:26:04:de:92:b1:3b:65:e9:08'
       - checkout
       - restore_cache:
           keys:
@@ -71,8 +71,6 @@ workflows:
             branches:
               only:
                 - main
-  build-deploy:
-    jobs:
       - buildBeta:
           filters:
             branches:

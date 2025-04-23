@@ -46,6 +46,9 @@ jobs:
           name: Install Dependencies
           command: npm install --no-save
       - run:
+          name: Process Bulletins
+          command: npm run bulletins-ci
+      - run:
           name: NextJS Build
           command: npm run build
       - save_cache:

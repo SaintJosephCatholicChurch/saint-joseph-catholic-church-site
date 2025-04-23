@@ -173,7 +173,9 @@ function fixCommonBulletinErrors(textContent: string) {
 }
 
 (async function () {
-  await git.spawn(['checkout', 'main']);
+  if (process.argv.length <= 2 || process.argv[2] !== '-ci') {
+    await git.spawn(['checkout', 'main']);
+  }
 
   const pdfExtract = new PDFExtract();
   const options: PDFExtractOptions = {

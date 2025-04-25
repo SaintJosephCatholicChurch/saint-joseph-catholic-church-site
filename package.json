@@ -40,7 +40,7 @@
     "@mui/material": "7.0.2",
     "@mui/system": "7.0.2",
     "@mui/x-date-pickers": "8.0.0",
-    "@staticcms/lite": "1.0.7",
+    "@staticcms/lite": "1.0.8",
     "@svgr/webpack": "8.1.0",
     "@tinymce/tinymce-react": "4.3.0",
     "@types/react-window": "1.8.8",

@@ -49,7 +49,14 @@ const FeaturedLink = memo(
 
     return (
       <div>
-        <Link href={url} target="_blank">
+        <Link
+          href={url}
+          target={
+            /^https:\/\/[a-z]+\.stjosephchurchbluffton\.org\//.test(url) && !/\.[a-z]{1,4}$/.test(url)
+              ? undefined
+              : '_blank'
+          }
+        >
           <Button
             sx={{
               display: 'flex',

@@ -49,7 +49,7 @@ const FeaturedLink = memo(
 
     return (
       <div>
-        <Link href={url}>
+        <Link href={url} target="_blank">
           <Button
             sx={{
               display: 'flex',

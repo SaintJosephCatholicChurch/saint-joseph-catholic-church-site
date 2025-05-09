@@ -1,6 +1,5 @@
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
-import Link from 'next/link';
 import { memo } from 'react';
 
 import getContainerQuery from '../../util/container.util';
@@ -49,35 +48,33 @@ const FeaturedLink = memo(
 
     return (
       <div>
-        <Link
+        <Button
+          component="a"
           href={url}
           target={
             /^https:\/\/[a-z]+\.stjosephchurchbluffton\.org\//.test(url) && !/\.[a-z]{1,4}$/.test(url)
               ? undefined
               : '_blank'
           }
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            textTransform: 'none',
+            textAlign: 'left',
+            margin: '-8px -8px',
+            padding: '0 8px 8px',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
+              gap: '12px'
+            }
+          }}
         >
-          <Button
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              textTransform: 'none',
-              textAlign: 'left',
-              margin: '-8px -8px',
-              padding: '0 8px 8px',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
-                gap: '12px'
-              }
-            }}
-          >
-            <StyledTitle>{title}</StyledTitle>
-            {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
-            {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
-          </Button>
-        </Link>
+          <StyledTitle>{title}</StyledTitle>
+          {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
+          {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
+        </Button>
       </div>
     );
   }

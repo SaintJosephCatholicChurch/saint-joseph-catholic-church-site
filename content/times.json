@@ -4,22 +4,6 @@
       "name": "Mass Times",
       "sections": [
         {
-          "id": "319154e8-07e8-4e53-9362-e7eb7fdaaacd",
-          "name": "Memorial Day",
-          "days": [
-            {
-              "id": "39b1576e-b50f-4b16-bdfb-f70aef3e7126",
-              "day": "Memorial Day (Monday, May 26)",
-              "times": [
-                {
-                  "id": "9ff3a5ea-45d3-43c9-adb3-e4734075d134",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Sunday Mass",
           "days": [
             {

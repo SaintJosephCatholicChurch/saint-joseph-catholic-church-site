@@ -55,6 +55,22 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
+          "id": "4f43985c-0813-471a-91d1-0fe89084a2b1",
+          "name": "Fourth of July (2025)",
+          "days": [
+            {
+              "id": "469e416a-85ea-4679-99e7-493dd3c92a06",
+              "day": "Friday, July 4",
+              "times": [
+                {
+                  "id": "6b07b2af-51ae-43d6-9808-00809e227b62",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Weekday Mass",
           "days": [
             {

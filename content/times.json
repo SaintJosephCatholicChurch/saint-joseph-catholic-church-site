@@ -396,7 +396,12 @@
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
-                  "notes": [],
+                  "notes": [
+                    {
+                      "id": "656df298-72a9-4d42-bc1a-e7ca78c203e7",
+                      "note": "There will be no First Friday Adoration in July. The Church is open for private prayer."
+                    }
+                  ],
                   "time": "9:00 AM",
                   "end_time": "4:00 PM"
                 }

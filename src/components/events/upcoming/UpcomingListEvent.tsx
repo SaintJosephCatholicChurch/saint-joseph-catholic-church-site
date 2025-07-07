@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { useMemo } from 'react';
 
 import { formatAsUtc } from '../../../util/date.util';
@@ -82,15 +82,26 @@ const UpcomingListEvent = ({ segment, onClick }: UpcomingListEventProps) => {
 
   const time = useMemo(() => {
     if (segment.def.allDay) {
+      if (!isSameDay(segment.instance.range.start, segment.instance.range.end)) {
+        return ` - ${format(segment.instance.range.end, 'MMM d')}`;
+      }
+
       return 'All Day';
     }
 
     if (segment.isStart) {
-      return formatAsUtc(segment.range.start, 'h:mmaaa');
+      return formatAsUtc(segment.range.start, 'h:mm aaa');
     }
 
-    return `Till ${formatAsUtc(segment.range.end, 'h:mmaaa')}`;
-  }, [segment.def.allDay, segment.isStart, segment.range.end, segment.range.start]);
+    return `Till ${formatAsUtc(segment.range.end, 'h:mm aaa')}`;
+  }, [
+    segment.def.allDay,
+    segment.instance.range.end,
+    segment.instance.range.start,
+    segment.isStart,
+    segment.range.end,
+    segment.range.start
+  ]);
 
   const title = useEventTitle(segment.def.title);
 

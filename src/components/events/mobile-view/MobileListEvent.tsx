@@ -6,8 +6,8 @@ import { useMemo } from 'react';
 import { formatAsUtc } from '../../../util/date.util';
 import useEventTitle from '../hooks/useEventTitle';
 
-import type { MouseEvent } from 'react';
 import type { EventRenderRange } from '@fullcalendar/core';
+import type { MouseEvent } from 'react';
 
 const StyledMobileEvent = styled('div')`
   display: grid;

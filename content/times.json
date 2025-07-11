@@ -55,22 +55,6 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
-          "id": "4f43985c-0813-471a-91d1-0fe89084a2b1",
-          "name": "Fourth of July (2025)",
-          "days": [
-            {
-              "id": "469e416a-85ea-4679-99e7-493dd3c92a06",
-              "day": "Friday, July 4",
-              "times": [
-                {
-                  "id": "6b07b2af-51ae-43d6-9808-00809e227b62",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Weekday Mass",
           "days": [
             {
@@ -179,6 +163,80 @@
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
+        },
+        {
+          "id": "4f43985c-0813-471a-91d1-0fe89084a2b1",
+          "name": "Totus Tuus Mass Schedule (2025)",
+          "days": [
+            {
+              "id": "469e416a-85ea-4679-99e7-493dd3c92a06",
+              "day": "Monday, July 21",
+              "times": [
+                {
+                  "id": "6b07b2af-51ae-43d6-9808-00809e227b62",
+                  "time": "11:15 AM"
+                }
+              ]
+            },
+            {
+              "id": "bc09cfc9-ff67-4b09-899f-5160a3d40fba",
+              "day": "Tuesday, July 22",
+              "times": [
+                {
+                  "id": "1d781f5c-bc98-438d-bffe-cfa445fed9bc",
+                  "time": "11:15 AM",
+                  "notes": [
+                    {
+                      "id": "ba845864-14f9-4243-a163-8c2641139bed",
+                      "note": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "82b3f747-967a-4a90-b06a-18a27a8f136c",
+              "day": "Wednesday, July 23",
+              "times": [
+                {
+                  "id": "a2dbf7e2-35a5-47c0-844f-8bf13ef7274c",
+                  "time": "11:15 AM",
+                  "notes": [
+                    {
+                      "id": "20e00827-cf6e-4240-b3d6-bce71ecb47aa",
+                      "note": "Adoration from 7:15-8:15 PM"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "c86250a7-211c-483c-97c1-72a61b4e9748",
+              "day": "Thursday, July 24",
+              "times": [
+                {
+                  "id": "a7c192e3-e868-4ad0-ab10-142ad182f6ba",
+                  "time": "11:15 AM",
+                  "notes": [
+                    {
+                      "id": "f515c514-4e13-4469-a9cb-e9e4c303d21b",
+                      "note": "Adoration from 1:15-2:25 PM"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "8c06e0d3-c87b-4633-9b71-3a25fdff6b28",
+              "day": "Friday, July 25",
+              "times": [
+                {
+                  "id": "547b96cc-aae4-4349-871a-442cc31b2c90",
+                  "time": "11:15 AM"
+                }
+              ]
+            }
+          ]
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"

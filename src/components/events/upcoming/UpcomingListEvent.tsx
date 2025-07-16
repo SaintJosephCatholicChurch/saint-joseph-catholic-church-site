@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import { addSeconds, format, isSameDay } from 'date-fns';
+import { addSeconds, isSameDay } from 'date-fns';
 import { useMemo } from 'react';
 
 import { formatAsUtc } from '../../../util/date.util';

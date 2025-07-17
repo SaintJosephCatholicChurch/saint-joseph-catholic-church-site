@@ -64,6 +64,7 @@ const NavigationBar = ({
         justifyContent: 'center',
         width: '100%'
       }}
+      position={inCMS ? 'absolute' : undefined}
     >
       <StyledGiveButtonOffset />
       <StyledDesktopSpacer />

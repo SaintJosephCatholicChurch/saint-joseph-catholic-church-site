@@ -62,8 +62,8 @@
           "page": "knights-of-columbus"
         },
         {
-          "title": "Lay Ministries",
-          "page": "lay-ministries"
+          "title": "Liturgical Ministries",
+          "page": "liturgical-ministries"
         },
         {
           "title": "Parish Council",
@@ -92,6 +92,10 @@
         {
           "title": "Youth Group",
           "page": "youth-group"
+        },
+        {
+          "title": "Parish Meal Train",
+          "page": "meal-train"
         }
       ]
     },

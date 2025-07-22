@@ -302,6 +302,38 @@
       "name": "Confession Times",
       "sections": [
         {
+          "id": "11f04c16-ec1f-424c-b1ac-15d5064bc924",
+          "name": "Special Schedule - Totus Tuus (July 21-25)",
+          "days": [
+            {
+              "id": "4069b222-cc6f-4e5e-9f3b-87f4d5e6a3be",
+              "day": "Tuesday, July 22",
+              "times": [
+                {
+                  "id": "6dab890c-a126-4346-9f36-45e919bb278c",
+                  "time": "11:45 AM",
+                  "end_time": "12:15 PM"
+                }
+              ]
+            },
+            {
+              "id": "f7631b41-035a-4341-b911-6a3ebfda4675",
+              "day": "By Appointment",
+              "times": [
+                {
+                  "id": "471d9fc0-fe02-49fe-86bc-325f35666f6c",
+                  "notes": [
+                    {
+                      "id": "d35106ba-11e3-4115-ac65-0a7ee323c8a9",
+                      "note": "Contact Fr. David at frdavidvioli@gmail.com or 824-1380"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "days": [
             {
               "day": "Tuesday",
@@ -370,7 +402,8 @@
               "id": "2cd58927-472e-45f8-8096-752c61f35b8a"
             }
           ],
-          "id": "136e6ddc-5d44-4b6e-b299-561bf12245e9"
+          "id": "136e6ddc-5d44-4b6e-b299-561bf12245e9",
+          "name": "Regular Schedule"
         },
         {
           "days": [

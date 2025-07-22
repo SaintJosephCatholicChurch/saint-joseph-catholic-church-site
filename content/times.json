@@ -449,6 +449,40 @@
       "name": "Adoration Times",
       "sections": [
         {
+          "id": "8a325b1d-b26e-40e9-b83d-e97ddf5cd1a3",
+          "name": "Special Schedule - Totus Tuus (July 21-25)",
+          "days": [
+            {
+              "id": "099acde7-7501-4fe1-b6f5-03341e452435",
+              "day": "Wednesday, July 23",
+              "times": [
+                {
+                  "id": "9e2c07a3-9175-4d1c-9643-73c31ad47516",
+                  "time": "7:15 PM",
+                  "end_time": "8:15 PM",
+                  "notes": [
+                    {
+                      "id": "c640b557-291d-4bf9-bcf5-e74546555243",
+                      "note": "Praise and Worship Holy Hour"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "100890c8-9d7b-4267-b829-812dc585fd78",
+              "day": "Thursday, July 24",
+              "times": [
+                {
+                  "id": "8d47cd93-a670-4d49-83c4-ded90eca6ffe",
+                  "time": "1:25 PM",
+                  "end_time": "2:25 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Every Tuesday Morning",
           "days": [
             {

@@ -48,9 +48,9 @@ const UpcomingListView =
     };
 
     const newSegs = [...segs].filter(
-      (seg) => seg.isStart && seg.range.end.getTime() + today.getTimezoneOffset() * 1000 * 60 >= today.getTime()
+      (seg) => seg.instance.range.end.getTime() + today.getTimezoneOffset() * 1000 * 60 >= today.getTime()
     );
-    newSegs.sort((a, b) => a.range.start.getTime() - b.range.start.getTime());
+    newSegs.sort((a, b) => a.instance.range.start.getTime() - b.instance.range.start.getTime());
     const sortedSegs = newSegs.slice(0, UPCOMING_EVENTS_TO_SHOW);
 
     return (

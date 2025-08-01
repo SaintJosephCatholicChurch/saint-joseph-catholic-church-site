@@ -78,23 +78,23 @@ interface UpcomingListEventProps {
 }
 
 const UpcomingListEvent = ({ segment, onClick }: UpcomingListEventProps) => {
-  const monthAndDay = useMemo(() => formatAsUtc(segment.range.start, 'MMM d'), [segment.range.start]);
+  const monthAndDay = useMemo(() => formatAsUtc(segment.instance.range.start, 'MMM d'), [segment.instance.range.start]);
 
   const time = useMemo(() => {
     if (segment.def.allDay) {
-      if (!isSameDay(segment.range.start, addSeconds(segment.range.end, -1))) {
-        return ` - ${formatAsUtc(addSeconds(segment.range.end, -1), 'MMM d')}`;
+      if (!isSameDay(segment.instance.range.start, addSeconds(segment.instance.range.end, -1))) {
+        return ` - ${formatAsUtc(addSeconds(segment.instance.range.end, -1), 'MMM d')}`;
       }
 
       return 'All Day';
     }
 
     if (segment.isStart) {
-      return formatAsUtc(segment.range.start, 'h:mm aaa');
+      return formatAsUtc(segment.instance.range.start, 'h:mm aaa');
     }
 
-    return `Till ${formatAsUtc(segment.range.end, 'h:mm aaa')}`;
-  }, [segment.def.allDay, segment.isStart, segment.range.end, segment.range.start]);
+    return `Till ${formatAsUtc(segment.instance.range.end, 'h:mm aaa')}`;
+  }, [segment.def.allDay, segment.isStart, segment.instance.range.end, segment.instance.range.start]);
 
   const title = useEventTitle(segment.def.title);
 

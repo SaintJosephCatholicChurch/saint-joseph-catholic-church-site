@@ -24,8 +24,6 @@ const LiveStreamView = ({ facebookPage, width }: LiveStreamViewProps) => {
     setHeight(Math.floor((width / 16) * 9));
   }, [width]);
 
-  console.log('width:', width, ', height:', height);
-
   const LiveStreamIFrameNoSSR = useMemo(
     () =>
       dynamic(() => import('./LiveStreamIFrame'), {

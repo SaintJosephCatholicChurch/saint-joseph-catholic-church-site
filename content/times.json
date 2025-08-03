@@ -186,10 +186,6 @@
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
             },
             {
-              "id": "655f05ff-4cf0-4815-b72b-824d212308be",
-              "day": "Note: Parish Office closed July 31 - August 1, 2025"
-            },
-            {
               "day": "St. Vincent de Paul Applications",
               "times": [
                 {
@@ -385,12 +381,7 @@
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
-                  "notes": [
-                    {
-                      "id": "656df298-72a9-4d42-bc1a-e7ca78c203e7",
-                      "note": "There will be no First Friday Adoration in July. The Church is open for private prayer."
-                    }
-                  ],
+                  "notes": [],
                   "time": "9:00 AM",
                   "end_time": "4:00 PM"
                 }

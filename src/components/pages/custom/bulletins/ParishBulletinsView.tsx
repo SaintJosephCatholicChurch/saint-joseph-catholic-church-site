@@ -12,7 +12,7 @@ import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FixedSizeList } from 'react-window';
 
 import getContainerQuery from '../../../../util/container.util';
@@ -441,6 +441,17 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
 
   const title = useFormattedBulletinTitle(bulletin);
 
+  const listRef = useRef<FixedSizeList<Bulletin[]>>(null);
+  useEffect(() => {
+    if (bulletin != null && listRef.current) {
+      listRef.current.scrollToItem(
+        bulletins.findIndex((b) => b.pdf === bulletin.pdf),
+        'start'
+      ); // 'start' aligns the item to the top of the visible area
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StyledParishBulletinsViewWrapper $width={width + BUTTON_WIDTH}>
       <PageTitle title="Parish Bulletins" />
@@ -454,6 +465,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
           }}
         >
           <FixedSizeList
+            ref={listRef}
             height={height}
             width="100%"
             itemSize={60}

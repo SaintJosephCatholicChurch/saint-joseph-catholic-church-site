@@ -4,6 +4,40 @@
       "name": "Mass Times",
       "sections": [
         {
+          "id": "cb7495c5-7965-406c-aa6a-a2c90e7f908d",
+          "name": "Holy Day Mass",
+          "days": [
+            {
+              "id": "0f02faa0-96a5-4c3f-807b-e953852db16b",
+              "day": "Vigil Mass (Thursday, Aug. 14)",
+              "times": [
+                {
+                  "id": "8dd506ee-5a31-4833-8467-2afa63f2f20d",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "98bd8604-47e0-4607-b0c9-392d6dbf76cb",
+              "day": "Mass (Friday, Aug. 15)",
+              "times": [
+                {
+                  "id": "4cc91660-cfa2-420d-8e97-5370e93af326",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "686c2841-f838-4b06-a115-cfb09a2e5b17",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "c1da5314-f439-4aef-90a9-886427d6a504",
+                  "time": "5:30 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Sunday Mass",
           "days": [
             {

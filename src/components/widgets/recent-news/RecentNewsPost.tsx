@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { format } from 'date-fns/format';
 import { formatISO } from 'date-fns/formatISO';
 import Link from 'next/link';
@@ -141,8 +141,6 @@ export interface RecentNewsProps {
 
 const RecentNewsPost = memo(
   ({ post: { title, date, summary, link, image, target }, size = 'small' }: RecentNewsProps) => {
-    const theme = useTheme();
-
     const [html, setHtml] = useState<string>('');
     useEffect(() => {
       setHtml(summary);
@@ -153,12 +151,6 @@ const RecentNewsPost = memo(
         <Button
           sx={{
             display: 'flex',
-            [getContainerQuery(theme.breakpoints.down('sm'))]: {
-              gridTemplateColumns: '110px auto'
-            },
-            [getContainerQuery(theme.breakpoints.only('md'))]: {
-              gridTemplateColumns: '110px auto'
-            },
             gap: '8px',
             width: '100%',
             color: 'inherit',

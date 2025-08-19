@@ -4,40 +4,6 @@
       "name": "Mass Times",
       "sections": [
         {
-          "id": "cb7495c5-7965-406c-aa6a-a2c90e7f908d",
-          "name": "Holy Day Mass",
-          "days": [
-            {
-              "id": "0f02faa0-96a5-4c3f-807b-e953852db16b",
-              "day": "Vigil Mass (Thursday, Aug. 14)",
-              "times": [
-                {
-                  "id": "8dd506ee-5a31-4833-8467-2afa63f2f20d",
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "98bd8604-47e0-4607-b0c9-392d6dbf76cb",
-              "day": "Mass (Friday, Aug. 15)",
-              "times": [
-                {
-                  "id": "4cc91660-cfa2-420d-8e97-5370e93af326",
-                  "time": "7:00 AM"
-                },
-                {
-                  "id": "686c2841-f838-4b06-a115-cfb09a2e5b17",
-                  "time": "12:00 PM"
-                },
-                {
-                  "id": "c1da5314-f439-4aef-90a9-886427d6a504",
-                  "time": "5:30 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Sunday Mass",
           "days": [
             {
@@ -202,46 +168,6 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
-      "id": "0f4b4f2e-fbac-473c-818c-11aaa1ec6fed",
-      "name": "Holy Day Mass Times",
-      "sections": [
-        {
-          "id": "461b926f-b874-4b49-b95b-100960575234",
-          "name": "Solemnity of the Assumption of the Blessed Virgin Mary",
-          "days": [
-            {
-              "id": "f3ee8d61-fc30-4d80-a176-12167e32f58b",
-              "day": "Vigil Mass (August 14, 2025)",
-              "times": [
-                {
-                  "id": "27f086df-917d-40ef-a43f-e4cb1e54753f",
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "993a116e-abbf-44db-81fe-a8031304f23b",
-              "day": "Mass (August 15, 2025)",
-              "times": [
-                {
-                  "id": "e165ad7f-3362-49a9-a0d1-5161aa4b494e",
-                  "time": "7:00 AM"
-                },
-                {
-                  "id": "5d9a24de-ed17-4ed7-a89a-f94b412d69b9",
-                  "time": "12:00 PM"
-                },
-                {
-                  "id": "152cffd8-dcd9-4f1a-b77f-14f3f1cd1718",
-                  "time": "5:30 PM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -264,7 +190,7 @@
               "times": [
                 {
                   "time": "10:00 AM",
-                  "end_time": "1:00 PM",
+                  "end_time": "3:00 PM",
                   "notes": [
                     {
                       "note": "Accepted on Mondays",

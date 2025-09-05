@@ -55,28 +55,6 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
-          "id": "cce38f35-7227-4c17-981e-99a1d5e399ee",
-          "name": "Labor Day Mass",
-          "days": [
-            {
-              "id": "ed849c37-8d42-44dd-92d0-e2170ebacd03",
-              "day": "Monday, September 1, 2025",
-              "times": [
-                {
-                  "id": "d3992ae5-ffb0-4d75-b58b-8d783128f66a",
-                  "time": "9:00 AM",
-                  "notes": [
-                    {
-                      "id": "92df01c7-a572-4f14-bd8e-df21451e11b1",
-                      "note": ""
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "Weekday Mass",
           "days": [
             {
@@ -202,12 +180,7 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": [
-                    {
-                      "id": "3eb6ce83-452a-4004-9824-148fa765c7ca",
-                      "note": "Parish Office closed for Labor Day on Monday, September 1, 2025"
-                    }
-                  ]
+                  "notes": []
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

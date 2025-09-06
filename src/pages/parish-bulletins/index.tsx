@@ -1,15 +1,27 @@
 import { format, parseISO } from 'date-fns';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { fetchBulletins } from '../../lib/bulletins';
 
 import type { GetStaticProps } from 'next/types';
 import type { Bulletin } from '../../interface';
 
-const ParishBulletin = () => {};
+interface ParishBulletinsProps {
+  bulletin?: Bulletin;
+}
+
+const ParishBulletin = ({ bulletin }: ParishBulletinsProps) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace(`/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`);
+  });
+};
 
 export default ParishBulletin;
 
-export const getStaticProps: GetStaticProps = () => {
+export const getStaticProps: GetStaticProps = (): { props: ParishBulletinsProps } => {
   let bulletin: Bulletin | undefined;
 
   const bulletins = fetchBulletins();
@@ -18,9 +30,8 @@ export const getStaticProps: GetStaticProps = () => {
   }
 
   return {
-    redirect: {
-      destination: `/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`,
-      permanent: true
+    props: {
+      bulletin
     }
   };
 };

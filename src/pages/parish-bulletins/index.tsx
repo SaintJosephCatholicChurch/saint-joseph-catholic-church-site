@@ -1,27 +1,22 @@
-import PageLayout from '../../components/PageLayout';
-import ParishBulletinsView from '../../components/pages/custom/bulletins/ParishBulletinsView';
-import { fetchBulletinMetaData, fetchBulletins } from '../../lib/bulletins';
-import { isNotNullish } from '../../util/null.util';
+import { format, parseISO } from 'date-fns';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+import { fetchBulletins } from '../../lib/bulletins';
 
 import type { GetStaticProps } from 'next/types';
-import type { Bulletin, BulletinPDFData } from '../../interface';
+import type { Bulletin } from '../../interface';
 
 interface ParishBulletinsProps {
   bulletin?: Bulletin;
-  bulletins: Bulletin[];
-  meta?: BulletinPDFData;
 }
 
-const ParishBulletin = ({ bulletin, bulletins, meta }: ParishBulletinsProps) => {
-  return (
-    <PageLayout url="/parish-bulletins" title="Parish Bulletins" hideSidebar hideHeader>
-      {isNotNullish(bulletin) && isNotNullish(meta) ? (
-        <ParishBulletinsView bulletins={bulletins} bulletin={bulletin} meta={meta} />
-      ) : (
-        <p>Bulletin not found</p>
-      )}
-    </PageLayout>
-  );
+const ParishBulletin = ({ bulletin }: ParishBulletinsProps) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(`/parish-bulletins/${format(parseISO(bulletin.date), 'yyyy-MM-dd')}`);
+  });
 };
 
 export default ParishBulletin;
@@ -36,9 +31,7 @@ export const getStaticProps: GetStaticProps = (): { props: ParishBulletinsProps 
 
   return {
     props: {
-      bulletin,
-      bulletins,
-      meta: fetchBulletinMetaData(bulletin)
+      bulletin
     }
   };
 };

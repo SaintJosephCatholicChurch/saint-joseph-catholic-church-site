@@ -345,7 +345,6 @@ const BulletinListRowFactory = (bulletin: Bulletin) => {
       <BulletListButton
         key={`bulletin-${index}`}
         style={style}
-        index={index}
         bulletin={data[index]}
         selected={data[index].pdf === bulletin.pdf}
       />

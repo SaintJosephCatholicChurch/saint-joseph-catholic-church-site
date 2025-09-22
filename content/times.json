@@ -180,7 +180,12 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "33c99ea7-78cd-40cf-bac5-8ae9957e579a",
+                      "note": "Parish Office closed Friday, September 26, 2025."
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

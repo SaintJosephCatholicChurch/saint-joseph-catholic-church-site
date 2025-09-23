@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 import contentStyles from '../../../public/styles/content.module.css';
+import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 import { BULLETIN, NEWS } from '../../constants';
 
 import type { SearchableEntry } from '../../interface';
@@ -77,50 +78,50 @@ const SearchResult = ({ entry: { url, title, subtitle, type }, summary }: Search
   }, [type]);
 
   return (
-    <Link href={url}>
-      <Button
-        key={`result-${url}`}
-        startIcon={<Icon fontSize="large" />}
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          textAlign: 'left',
-          width: 'calc(100% + 32px)',
-          color: '#333',
-          lineHeight: 'inherit',
-          letterSpacing: 'inherit',
-          textTransform: 'unset',
-          gap: '4px',
-          margin: '-16px',
-          padding: '16px',
-          '&:hover': {
-            color: '#000',
-            backgroundColor: 'rgba(118,118,118,0.15)'
-          },
-          '.MuiButton-startIcon': {
-            marginLeft: 0,
-            '*:nth-of-type(1)': {
-              fontSize: '24px'
-            }
+    <Button
+      LinkComponent={Link}
+      href={url}
+      key={`result-${url}`}
+      startIcon={<Icon fontSize="large" />}
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: 'calc(100% + 32px)',
+        color: '#333',
+        lineHeight: 'inherit',
+        letterSpacing: 'inherit',
+        textTransform: 'unset',
+        gap: '4px',
+        margin: '-16px',
+        padding: '16px',
+        '&:hover': {
+          color: '#000',
+          backgroundColor: 'rgba(118,118,118,0.15)'
+        },
+        '.MuiButton-startIcon': {
+          marginLeft: 0,
+          '*:nth-of-type(1)': {
+            fontSize: '24px'
           }
-        }}
-      >
-        <StyledSearchResultBody>
-          <StyledSearchResultTitleWrapper>
-            <StyledSearchResultTitle>{title}</StyledSearchResultTitle>
-            {subtitle ? <StyledSearchResultSubtitle>{subtitle}</StyledSearchResultSubtitle> : null}
-          </StyledSearchResultTitleWrapper>
-          {summary ? (
-            <StyledSearchResultContent
-              className={`${contentStyles.content}`}
-              dangerouslySetInnerHTML={{
-                __html: summary
-              }}
-            />
-          ) : null}
-        </StyledSearchResultBody>
-      </Button>
-    </Link>
+        }
+      }}
+    >
+      <StyledSearchResultBody>
+        <StyledSearchResultTitleWrapper>
+          <StyledSearchResultTitle>{title}</StyledSearchResultTitle>
+          {subtitle ? <StyledSearchResultSubtitle>{subtitle}</StyledSearchResultSubtitle> : null}
+        </StyledSearchResultTitleWrapper>
+        {summary ? (
+          <StyledSearchResultContent
+            className={`${contentStyles.content}`}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtmlImages(summary)
+            }}
+          />
+        ) : null}
+      </StyledSearchResultBody>
+    </Button>
   );
 };
 

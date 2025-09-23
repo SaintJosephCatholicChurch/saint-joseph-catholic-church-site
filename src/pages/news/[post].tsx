@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 
 import PageLayout from '../../components/PageLayout';
 import PostView from '../../components/posts/PostView';
+import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 import { fetchPostContent } from '../../lib/posts';
 import { getSidebarProps } from '../../lib/sidebar';
 
@@ -36,7 +37,7 @@ const Post = ({ title, image, dateString, slug, tags, description = '', content,
       <PostView title={title} date={date} image={image} tags={tags}>
         <div
           dangerouslySetInnerHTML={{
-            __html: content
+            __html: sanitizeHtmlImages(content)
           }}
         />
       </PostView>

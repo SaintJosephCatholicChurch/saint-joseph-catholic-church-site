@@ -8,6 +8,7 @@ import { memo, useEffect, useState } from 'react';
 import getContainerQuery from '../../../util/container.util';
 import { isNotEmpty } from '../../../util/string.util';
 import transientOptions from '../../../util/transientOptions';
+import sanitizeHtmlImages from '../../../util/sanitizeHtmlImages';
 
 interface StyledPostImageProps {
   $image: string;
@@ -147,39 +148,36 @@ const RecentNewsPost = memo(
     }, [summary]);
 
     return (
-      <Link href={link} target={target}>
-        <Button
-          sx={{
-            display: 'flex',
-            gap: '8px',
-            width: '100%',
-            color: 'inherit',
-            lineHeight: 'inherit',
-            letterSpacing: 'inherit',
-            textTransform: 'unset',
-            textAlign: 'left',
-            padding: '8px',
-            margin: '-8px',
-            '&:hover': {
-              backgroundColor: 'rgba(100,100,100,0.12)'
-            }
-          }}
-        >
-          {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
-          <StyledPostDetails>
-            <StyledPostHeader>
-              <StyledPostTitle $size={size}>{title}</StyledPostTitle>
-              <StyledPostDate dateTime={formatISO(date)}>{format(date, 'LLLL d, yyyy')}</StyledPostDate>
-            </StyledPostHeader>
-            <StyledPostSummary
-              $size={size}
-              dangerouslySetInnerHTML={{
-                __html: html
-              }}
-            />
-          </StyledPostDetails>
-        </Button>
-      </Link>
+      <Button
+        LinkComponent={Link}
+        href={link}
+        target={target}
+        rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+        sx={{
+          display: 'flex',
+          gap: '8px',
+          width: '100%',
+          color: 'inherit',
+          lineHeight: 'inherit',
+          letterSpacing: 'inherit',
+          textTransform: 'unset',
+          textAlign: 'left',
+          padding: '8px',
+          margin: '-8px',
+          '&:hover': {
+            backgroundColor: 'rgba(100,100,100,0.12)'
+          }
+        }}
+      >
+        {isNotEmpty(image) ? <StyledPostImage $image={image} $size={size} /> : null}
+        <StyledPostDetails>
+          <StyledPostHeader>
+            <StyledPostTitle $size={size}>{title}</StyledPostTitle>
+            <StyledPostDate dateTime={formatISO(date)}>{format(date, 'LLLL d, yyyy')}</StyledPostDate>
+          </StyledPostHeader>
+          <StyledPostSummary $size={size} dangerouslySetInnerHTML={{ __html: sanitizeHtmlImages(html) }} />
+        </StyledPostDetails>
+      </Button>
     );
   }
 );

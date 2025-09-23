@@ -4,6 +4,7 @@ import NotesIcon from '@mui/icons-material/Notes';
 import { styled, useTheme } from '@mui/material/styles';
 
 import getContainerQuery from '../../util/container.util';
+import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 
 const StyledContentWrapper = styled('div')`
   padding: 16px 28px 24px 16px;
@@ -138,11 +139,7 @@ const CalendarEventModalContent = ({ title, date, time, location, description }:
         {description ? (
           <StyledLine>
             <NotesIcon fontSize="small" sx={{ height: '22px' }} />
-            <StyledDescription
-              dangerouslySetInnerHTML={{
-                __html: description
-              }}
-            />
+            <StyledDescription dangerouslySetInnerHTML={{ __html: sanitizeHtmlImages(description) }} />
           </StyledLine>
         ) : null}
       </StyledContent>

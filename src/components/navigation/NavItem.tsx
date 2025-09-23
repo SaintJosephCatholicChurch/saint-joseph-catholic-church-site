@@ -85,6 +85,11 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
 
   const handleOnKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
+      const target = event.target;
+      if ('href' in target && target.href) {
+        return;
+      }
+
       if (event.key === 'Enter') {
         event.stopPropagation();
         event.preventDefault();
@@ -225,13 +230,18 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
     setSelected(false);
   }, [item, pathname]);
 
-  const wrappedLink = useMemo(() => {
-    const button = (
+  const wrappedLink = useMemo(
+    () => (
       <Button
+        LinkComponent={!isEmpty(url) ? Link : undefined}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        target={!isEmpty(url) && url?.startsWith('http') ? '_blank' : undefined}
+        href={!isEmpty(url) ? url : undefined}
         ref={buttonRef}
         onClick={handleOnClick(item)}
         onKeyDown={handleOnKeyDown}
-        tabIndex={isEmpty(url) ? 0 : -1}
+        tabIndex={0}
         size="large"
         sx={{
           padding: '12px 18px 14px',
@@ -289,18 +299,9 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
           <StyledUnderline className="menu-item-underline" />
         </StyledUnderlineWrapper>
       </Button>
-    );
-
-    if (isEmpty(url)) {
-      return button;
-    }
-
-    return (
-      <Link target={url?.startsWith('http') ? '_blank' : undefined} href={url}>
-        {button}
-      </Link>
-    );
-  }, [debouncedIsOpen, handleOnClick, handleOnKeyDown, inCMS, item, selected, size, theme.breakpoints, url]);
+    ),
+    [debouncedIsOpen, handleOnClick, handleOnKeyDown, inCMS, item, selected, size, theme.breakpoints, url]
+  );
 
   return (
     <StyledNavItem ref={wrapperRef} onMouseOver={handleOnMouseOver} onMouseOut={handleOnMouseOut}>

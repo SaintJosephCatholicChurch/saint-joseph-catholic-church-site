@@ -2,6 +2,7 @@ import { parseISO } from 'date-fns';
 
 import PageLayout from '../components/PageLayout';
 import PageContentView from '../components/pages/PageContentView';
+import sanitizeHtmlImages from '../util/sanitizeHtmlImages';
 import { fetchPageContent } from '../lib/pages';
 import { getSidebarProps } from '../lib/sidebar';
 
@@ -29,7 +30,7 @@ const Page = ({ title, dateString, slug, description = '', content, ...sidebarPr
       <PageContentView>
         <div
           dangerouslySetInnerHTML={{
-            __html: content
+            __html: sanitizeHtmlImages(content)
           }}
         />
       </PageContentView>

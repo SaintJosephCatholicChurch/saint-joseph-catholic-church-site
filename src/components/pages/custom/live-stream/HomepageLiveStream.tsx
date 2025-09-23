@@ -99,33 +99,34 @@ const HomepageLiveStream = ({ facebookPage, liveStreamButton }: HomepageLiveStre
       }
     </StyledLiveStreamWrapper>
   ) : isNotEmpty(liveStreamButton?.url) && isNotEmpty(liveStreamButton?.title) ? (
-    <Link key="live-stream-button" href={liveStreamButton.url}>
-      <Button
-        variant="contained"
-        size="large"
-        startIcon={<LiveTvIcon />}
-        sx={{
-          marginTop: '16px',
-          fontSize: '20px',
-          backgroundColor: '#bc2f3b',
-          '&:hover': {
-            backgroundColor: '#d24c57',
-            color: '#ffffff'
-          },
+    <Button
+      key="live-stream-button"
+      LinkComponent={Link}
+      href={liveStreamButton.url}
+      variant="contained"
+      size="large"
+      startIcon={<LiveTvIcon />}
+      sx={{
+        marginTop: '16px',
+        fontSize: '20px',
+        backgroundColor: '#bc2f3b',
+        '&:hover': {
+          backgroundColor: '#d24c57',
+          color: '#ffffff'
+        },
+        '.MuiButton-startIcon > *:nth-of-type(1)': {
+          fontSize: '24px'
+        },
+        [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
+          fontSize: '16px',
           '.MuiButton-startIcon > *:nth-of-type(1)': {
-            fontSize: '24px'
-          },
-          [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
-            fontSize: '16px',
-            '.MuiButton-startIcon > *:nth-of-type(1)': {
-              fontSize: '20px'
-            }
+            fontSize: '20px'
           }
-        }}
-      >
-        {liveStreamButton.title}
-      </Button>
-    </Link>
+        }
+      }}
+    >
+      {liveStreamButton.title}
+    </Button>
   ) : null;
 };
 

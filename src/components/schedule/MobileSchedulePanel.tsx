@@ -10,6 +10,7 @@ import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
+import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 
 import type { Times } from '../../interface';
 
@@ -257,7 +258,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                               <StyledDayTimeLineTimeComment
                                 key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                 dangerouslySetInnerHTML={{
-                                  __html: note.note?.replaceAll('-', '&#x2011;')
+                                  __html: sanitizeHtmlImages(note.note?.replaceAll('-', '&#x2011;'))
                                 }}
                               ></StyledDayTimeLineTimeComment>
                             ))
@@ -277,7 +278,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                               <StyledDayTimeLineTimeComment
                                 key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                 dangerouslySetInnerHTML={{
-                                  __html: note.note?.replaceAll('-', '&#x2011;')
+                                  __html: sanitizeHtmlImages(note.note?.replaceAll('-', '&#x2011;'))
                                 }}
                               ></StyledDayTimeLineTimeComment>
                             ))
@@ -314,7 +315,7 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                                   <StyledDayTimeLineTimeComment
                                     key={`mobile-section-${sectionIndex}-day-${day.day}-note-${note.id}`}
                                     dangerouslySetInnerHTML={{
-                                      __html: note.note?.replaceAll('-', '&#x2011;')
+                                      __html: sanitizeHtmlImages(note.note?.replaceAll('-', '&#x2011;'))
                                     }}
                                   ></StyledDayTimeLineTimeComment>
                                 ))

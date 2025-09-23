@@ -19,33 +19,37 @@ const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, on
   const { title } = link;
 
   return (
-    <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
-      <Button
-        ref={ref}
+    <Button
+      LinkComponent={Link}
+      ref={ref}
+      href={url}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      target={url?.startsWith('http') ? '_blank' : undefined}
+      rel={url?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      sx={{
+        color: '#680b12',
+        padding: 0,
+        textTransform: 'none',
+        '&:hover': {
+          color: '#2e2e2e'
+        },
+        width: '100%'
+      }}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+    >
+      <MenuItem
         sx={{
-          color: '#680b12',
-          padding: 0,
-          textTransform: 'none',
-          '&:hover': {
-            color: '#2e2e2e'
-          },
-          width: '100%'
+          width: '100%',
+          fontSize: '15px',
+          padding: '10px 20px',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
         }}
-        onClick={onClick}
-        onKeyDown={onKeyDown}
       >
-        <MenuItem
-          sx={{
-            width: '100%',
-            fontSize: '15px',
-            padding: '10px 20px',
-            borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
-          }}
-        >
-          {title}
-        </MenuItem>
-      </Button>
-    </Link>
+        {title}
+      </MenuItem>
+    </Button>
   );
 });
 

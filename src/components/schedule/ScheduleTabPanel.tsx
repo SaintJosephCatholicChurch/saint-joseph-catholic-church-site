@@ -4,6 +4,7 @@ import { memo } from 'react';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
+import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 import TabPanel from '../TabPanel';
 
 import type { Times } from '../../interface';
@@ -272,9 +273,11 @@ const ScheduleTabPanel = memo(
                                   <StyledDayTimeLineTimeComment
                                     key={`section-${sectionIndex}-day-${dayIndex}-note-${note.id}`}
                                     dangerouslySetInnerHTML={{
-                                      __html: note.note.replace(
-                                        new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),
-                                        '$1<br>'
+                                      __html: sanitizeHtmlImages(
+                                        note.note.replace(
+                                          new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),
+                                          '$1<br>'
+                                        )
                                       )
                                     }}
                                   />

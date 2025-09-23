@@ -57,28 +57,28 @@ const FeaturedPage = memo(({ featuredPage: { page, image, summary }, isFullWidth
 
   return (
     <div>
-      <Link href={slug}>
-        <Button
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            textTransform: 'none',
-            textAlign: 'left',
-            margin: '-8px -8px',
-            padding: '0 8px 8px',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
-              gap: '12px'
-            }
-          }}
-        >
-          <StyledTitle>{title}</StyledTitle>
-          {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
-          {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
-        </Button>
-      </Link>
+      <Button
+        LinkComponent={Link}
+        href={slug}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          textTransform: 'none',
+          textAlign: 'left',
+          margin: '-8px -8px',
+          padding: '0 8px 8px',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
+            gap: '12px'
+          }
+        }}
+      >
+        <StyledTitle>{title}</StyledTitle>
+        {isNotEmpty(image) ? <StyledImage src={image} alt={title ?? ''} loading="lazy" decoding="async" /> : null}
+        {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
+      </Button>
     </div>
   );
 });

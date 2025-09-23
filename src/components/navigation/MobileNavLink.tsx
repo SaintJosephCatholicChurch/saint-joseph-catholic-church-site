@@ -17,14 +17,16 @@ const MobileNavLink = ({ link, onClick }: MobileNavLinkProps) => {
   const { title } = link;
 
   return (
-    <Link href={url} target={url?.startsWith('http') ? '_blank' : undefined}>
-      <ListItemButton
-        sx={{ pl: 4, color: '#ffffff', '&:hover': { color: '#ffffff' }, width: '100%' }}
-        onClick={onClick}
-      >
-        <ListItemText primary={title} />
-      </ListItemButton>
-    </Link>
+    <ListItemButton
+      LinkComponent={Link}
+      href={url}
+      target={url?.startsWith('http') ? '_blank' : undefined}
+      rel={url?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      sx={{ pl: 4, color: '#ffffff', '&:hover': { color: '#ffffff' }, width: '100%' }}
+      onClick={onClick}
+    >
+      <ListItemText primary={title} />
+    </ListItemButton>
   );
 };
 

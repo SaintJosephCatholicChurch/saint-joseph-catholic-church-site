@@ -189,7 +189,15 @@ const DailyReadingsView = memo(
     const [soundCloudUrl, setSoundCloudUrl] = useState<string | null>(null);
 
     const soundCloudIFrame = (
-      <iframe width="100%" height="160" scrolling="no" frameBorder="no" allow="autoplay" src={soundCloudUrl} />
+      <iframe
+        name="soundcloud"
+        width="100%"
+        height="160"
+        scrolling="no"
+        frameBorder="no"
+        allow="autoplay"
+        src={soundCloudUrl}
+      />
     );
 
     useEffect(() => {

@@ -154,32 +154,33 @@ const Schedule = ({
         {isNotEmpty(facebookPage) ? (
           <HomepageLiveStream facebookPage={facebookPage} liveStreamButton={liveStreamButton} />
         ) : null}
-        <Link key="bulletin-button" href="/parish-bulletins">
-          <Button
-            variant="text"
-            size="large"
-            startIcon={<NewspaperIcon />}
-            sx={{
-              fontSize: '18px',
-              color: '#bc2f3b',
-              '&:hover': {
-                backgroundColor: 'rgba(210, 76, 87, 0.1)',
-                color: '#d24c57'
-              },
+        <Button
+          LinkComponent={Link}
+          key="bulletin-button"
+          href="/parish-bulletins"
+          variant="text"
+          size="large"
+          startIcon={<NewspaperIcon />}
+          sx={{
+            fontSize: '18px',
+            color: '#bc2f3b',
+            '&:hover': {
+              backgroundColor: 'rgba(210, 76, 87, 0.1)',
+              color: '#d24c57'
+            },
+            '.MuiButton-startIcon > *:nth-of-type(1)': {
+              fontSize: '22px'
+            },
+            [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
+              fontSize: '14px',
               '.MuiButton-startIcon > *:nth-of-type(1)': {
-                fontSize: '22px'
-              },
-              [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
-                fontSize: '14px',
-                '.MuiButton-startIcon > *:nth-of-type(1)': {
-                  fontSize: '18px'
-                }
+                fontSize: '18px'
               }
-            }}
-          >
-            Bulletins
-          </Button>
-        </Link>
+            }
+          }}
+        >
+          Bulletins
+        </Button>
         {isNotEmpty(title) ? <StyledHeaderPreText key="title">{title}</StyledHeaderPreText> : null}
       </StyledHeader>
       <List

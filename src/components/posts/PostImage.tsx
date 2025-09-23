@@ -12,7 +12,7 @@ interface PostImageProps {
 }
 
 const PostImage = memo(({ title, image }: PostImageProps) => {
-  return <StyledImage src={image} alt={title} />;
+  return <StyledImage src={image} alt={title} loading="lazy" decoding="async" />;
 });
 
 PostImage.displayName = 'PostImage';

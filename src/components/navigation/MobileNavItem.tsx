@@ -45,9 +45,12 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
     return getMenuLinkUrl(item);
   }, [item]);
 
-  const wrappedLink = useMemo(() => {
-    const button = (
+  const wrappedLink = useMemo(
+    () => (
       <ListItemButton
+        LinkComponent={url ? Link : undefined}
+        target={url && url?.startsWith('http') ? '_blank' : undefined}
+        href={url ? url : undefined}
         key={`drawer-nav-item-${item.title}`}
         sx={{ color: '#fde7a5', textTransform: 'uppercase', '&:hover': { color: '#fde7a5' } }}
         onClick={handleOnClick(item)}
@@ -55,18 +58,9 @@ const MobileNavItem = ({ item }: MobileNavItemProps) => {
         <ListItemText primary={item.title} />
         {item.menu_links?.length ? open ? <ExpandLess /> : <ExpandMore /> : null}
       </ListItemButton>
-    );
-
-    if (!url) {
-      return button;
-    }
-
-    return (
-      <Link target={url?.startsWith('http') ? '_blank' : undefined} href={url}>
-        {button}
-      </Link>
-    );
-  }, [handleOnClick, item, open, url]);
+    ),
+    [handleOnClick, item, open, url]
+  );
 
   return (
     <>

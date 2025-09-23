@@ -190,7 +190,8 @@ const DailyReadingsView = memo(
 
     const soundCloudIFrame = (
       <iframe
-        name="soundcloud"
+        title="Daily Readings Audio Recording"
+        name="soundcloud-readings"
         width="100%"
         height="160"
         scrolling="no"

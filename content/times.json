@@ -180,7 +180,12 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "3e081d3a-3874-443f-8bb9-26385e74de25",
+                      "note": "Closed Oct. 20-24, 2025"
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

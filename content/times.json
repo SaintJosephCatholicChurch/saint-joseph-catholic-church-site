@@ -47,6 +47,16 @@
                   ],
                   "end_time": "",
                   "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
+                },
+                {
+                  "id": "aea290ba-6c7b-46a4-94ca-25f4ec043c3d",
+                  "time": "1:00 PM",
+                  "notes": [
+                    {
+                      "id": "e290b23b-a864-4fcb-8f61-851957e6002e",
+                      "note": "Nov. 2, 2025 - Mass at St. Joseph Cemetery"
+                    }
+                  ]
                 }
               ],
               "id": "0ccf4552-f32b-4b3a-84cf-acc120c3182f"
@@ -168,6 +178,78 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
+      "name": "Holy Day Mass Times",
+      "sections": [
+        {
+          "id": "d3ee25c6-c90e-48d3-beb0-f217c31823b9",
+          "name": "Solemnity of All Saints (Nov. 1, 2025)",
+          "days": [
+            {
+              "id": "768f7cda-c8f6-4792-ac3c-f83833e8f0d8",
+              "day": "Saturday, Nov. 1",
+              "times": [
+                {
+                  "id": "6c1aee90-b88e-4e7a-819c-656c68a6c724",
+                  "time": "8:00 AM"
+                },
+                {
+                  "id": "8edd6897-2d33-4392-a98b-53df4012cfdb",
+                  "time": "11:00 AM",
+                  "notes": [
+                    {
+                      "id": "c1f1d1fc-dad4-4c15-9d09-068778c658b4",
+                      "note": "All Saints Day Party & Potluck after Mass"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "10f5ea44-ad12-4a14-a49f-502898295bfc",
+          "name": "Commemoration of All the Faithful Departed",
+          "days": [
+            {
+              "id": "5699f929-81ce-4aa6-bc39-e865ae991914",
+              "day": "Saturday, Nov. 1",
+              "times": [
+                {
+                  "id": "bcc2ef4b-1c3a-45c6-8f43-605bcabd4289",
+                  "time": "5:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "4593d02a-475a-46b4-8cf0-d5208e9501e9",
+              "day": "Sunday, Nov. 2",
+              "times": [
+                {
+                  "id": "6d33c2cd-d09f-4eed-806d-e172e6333f39",
+                  "time": "7:30 AM"
+                },
+                {
+                  "id": "22716c98-8f55-4237-ab36-1bcbb071f22d",
+                  "time": "10:00 AM"
+                },
+                {
+                  "id": "19c63186-b164-4ae2-9cbb-815bad532388",
+                  "time": "1:00 PM",
+                  "notes": [
+                    {
+                      "id": "6355f3cc-32a3-4a35-8212-639b36f8d9a6",
+                      "note": "at St. Joseph Cemetery"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -180,12 +262,7 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": [
-                    {
-                      "id": "3e081d3a-3874-443f-8bb9-26385e74de25",
-                      "note": "Closed Oct. 20-24, 2025"
-                    }
-                  ]
+                  "notes": []
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

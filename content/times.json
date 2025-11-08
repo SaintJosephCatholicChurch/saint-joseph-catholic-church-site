@@ -178,78 +178,6 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
-      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
-      "name": "Holy Day Mass Times",
-      "sections": [
-        {
-          "id": "d3ee25c6-c90e-48d3-beb0-f217c31823b9",
-          "name": "Solemnity of All Saints (Nov. 1, 2025)",
-          "days": [
-            {
-              "id": "768f7cda-c8f6-4792-ac3c-f83833e8f0d8",
-              "day": "Saturday, Nov. 1",
-              "times": [
-                {
-                  "id": "6c1aee90-b88e-4e7a-819c-656c68a6c724",
-                  "time": "8:00 AM"
-                },
-                {
-                  "id": "8edd6897-2d33-4392-a98b-53df4012cfdb",
-                  "time": "11:00 AM",
-                  "notes": [
-                    {
-                      "id": "c1f1d1fc-dad4-4c15-9d09-068778c658b4",
-                      "note": "All Saints Day Party & Potluck after Mass"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "10f5ea44-ad12-4a14-a49f-502898295bfc",
-          "name": "Commemoration of All the Faithful Departed",
-          "days": [
-            {
-              "id": "5699f929-81ce-4aa6-bc39-e865ae991914",
-              "day": "Saturday, Nov. 1",
-              "times": [
-                {
-                  "id": "bcc2ef4b-1c3a-45c6-8f43-605bcabd4289",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "4593d02a-475a-46b4-8cf0-d5208e9501e9",
-              "day": "Sunday, Nov. 2",
-              "times": [
-                {
-                  "id": "6d33c2cd-d09f-4eed-806d-e172e6333f39",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "22716c98-8f55-4237-ab36-1bcbb071f22d",
-                  "time": "10:00 AM"
-                },
-                {
-                  "id": "19c63186-b164-4ae2-9cbb-815bad532388",
-                  "time": "1:00 PM",
-                  "notes": [
-                    {
-                      "id": "6355f3cc-32a3-4a35-8212-639b36f8d9a6",
-                      "note": "at St. Joseph Cemetery"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -527,6 +455,52 @@
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
+    },
+    {
+      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
+      "name": "Holy Day Mass Times",
+      "sections": [
+        {
+          "id": "d3ee25c6-c90e-48d3-beb0-f217c31823b9",
+          "name": "Solemnity of the Immaculate Conception",
+          "days": [
+            {
+              "id": "768f7cda-c8f6-4792-ac3c-f83833e8f0d8",
+              "day": "Sunday, December 7th (Vigil)",
+              "times": [
+                {
+                  "id": "6c1aee90-b88e-4e7a-819c-656c68a6c724",
+                  "time": "5:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "e501b7ac-b38a-4fd8-81ee-753eec112d33",
+              "day": "Monday, December 8th",
+              "times": [
+                {
+                  "id": "602f2f41-9bcd-4527-a11f-4d8a5dcd67fd",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "1a83c52f-cee5-427d-b6d4-33508a98286b",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "d625a0a9-e21c-45c4-b1fb-bc006fb8d993",
+                  "time": "7:00 PM",
+                  "notes": [
+                    {
+                      "id": "4b748242-286d-4d60-963e-9854ef18d71a",
+                      "note": "Beginning of Forty Hours Devotion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

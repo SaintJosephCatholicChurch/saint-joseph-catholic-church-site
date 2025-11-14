@@ -465,16 +465,6 @@
           "name": "Solemnity of the Immaculate Conception",
           "days": [
             {
-              "id": "768f7cda-c8f6-4792-ac3c-f83833e8f0d8",
-              "day": "Sunday, December 7th (Vigil)",
-              "times": [
-                {
-                  "id": "6c1aee90-b88e-4e7a-819c-656c68a6c724",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
               "id": "e501b7ac-b38a-4fd8-81ee-753eec112d33",
               "day": "Monday, December 8th",
               "times": [

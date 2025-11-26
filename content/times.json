@@ -190,7 +190,12 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "c982ca03-a585-43ec-9d17-b044d96316b8",
+                      "note": "Parish Office Closed Nov. 27-28, 2025 for Thanksgiving Holiday"
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
@@ -464,6 +469,16 @@
           "id": "d3ee25c6-c90e-48d3-beb0-f217c31823b9",
           "name": "Solemnity of the Immaculate Conception",
           "days": [
+            {
+              "id": "f836580f-c411-4610-b6c2-16d0e9386607",
+              "day": "Sunday, December 7th",
+              "times": [
+                {
+                  "id": "38343a67-0da9-4225-b198-e4c9f2f89aec",
+                  "time": "5:00 PM"
+                }
+              ]
+            },
             {
               "id": "e501b7ac-b38a-4fd8-81ee-753eec112d33",
               "day": "Monday, December 8th",

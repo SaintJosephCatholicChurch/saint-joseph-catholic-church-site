@@ -47,19 +47,24 @@
                   ],
                   "end_time": "",
                   "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
-                },
-                {
-                  "id": "aea290ba-6c7b-46a4-94ca-25f4ec043c3d",
-                  "time": "1:00 PM",
-                  "notes": [
-                    {
-                      "id": "e290b23b-a864-4fcb-8f61-851957e6002e",
-                      "note": "Nov. 2, 2025 - Mass at St. Joseph Cemetery"
-                    }
-                  ]
                 }
               ],
               "id": "0ccf4552-f32b-4b3a-84cf-acc120c3182f"
+            },
+            {
+              "id": "bfe2ea1a-028a-441c-8335-a53a0d7983fe",
+              "day": "",
+              "times": [
+                {
+                  "id": "59e3bfdf-6917-4e04-9492-31b9848fa4d9",
+                  "notes": [
+                    {
+                      "id": "4c693abc-8ab9-43d2-a8de-7b2856bcaab0",
+                      "note": "Please Note: Weekend Masses will be held in the Parish Social Hall starting January 4, 2026."
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
@@ -170,12 +175,103 @@
                 }
               ],
               "id": "de1b2401-9326-4916-953e-7888bc4a6626"
+            },
+            {
+              "id": "bf758169-d0e9-4640-8898-2166c2f73f4c",
+              "day": "",
+              "times": [
+                {
+                  "id": "c2cfd1a2-808b-4635-8add-0f3346d75752",
+                  "notes": [
+                    {
+                      "id": "8888ee10-5848-4262-9652-e373544a50da",
+                      "note": "Please Note: Week Day Masses will be held in the Parish Conference Room starting December 30, 2025."
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
+    },
+    {
+      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
+      "name": "Holy Day Mass Times",
+      "sections": [
+        {
+          "id": "c7d1eb8f-4395-4a51-8581-2a5407a752d5",
+          "name": "Christmas",
+          "days": [
+            {
+              "id": "8b4ed90f-3d62-4ab2-89b1-1d05e6913f66",
+              "day": "Wednesday, December 24th",
+              "times": [
+                {
+                  "id": "5dacf073-206a-41bc-ac43-101f5ed3749a",
+                  "time": "4:00 PM"
+                },
+                {
+                  "id": "0d713008-d23a-4887-aeeb-8461c8ce3170",
+                  "time": "6:00 PM",
+                  "notes": [
+                    {
+                      "id": "5cb0851c-2a18-4a83-b2d9-4ff6b5180283",
+                      "note": "Choir Sing-Along at 5:30 PM"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "86667598-9c37-480c-ad20-f00c38020bfb",
+              "day": "Thursday, December 25th",
+              "times": [
+                {
+                  "id": "47116374-0a02-46f9-bedc-aa01262c655a",
+                  "time": "12:00 AM"
+                },
+                {
+                  "id": "bffc2082-58e3-4874-8e46-9876af83cb1d",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "9444e8ff-7c4e-4487-ba25-0dc1170a64f6",
+          "name": "Solemnity of Mary, Mother of God",
+          "days": [
+            {
+              "id": "b9cddc68-7de2-4085-b02b-1827284e821e",
+              "day": "Wednesday, December 31, 2025",
+              "times": [
+                {
+                  "id": "e2698d34-11f8-43e2-a7be-88f7e04d6abf",
+                  "time": "5:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "c73b9acd-48bf-4a7c-989b-e1990a7bc339",
+              "day": "Thursday, January 1, 2026",
+              "times": [
+                {
+                  "id": "ff7abe27-50fa-4a2a-8286-86ebf6503788",
+                  "time": "7:30 AM"
+                },
+                {
+                  "id": "5a772c46-17f8-43cc-bf8a-9d730724c13e",
+                  "time": "10:00 AM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Parish Office Hours",
@@ -193,7 +289,7 @@
                   "notes": [
                     {
                       "id": "c982ca03-a585-43ec-9d17-b044d96316b8",
-                      "note": "Parish Office Closed Nov. 27-28, 2025 for Thanksgiving Holiday"
+                      "note": "Parish Office Closed Dec. 24-27, 2025 and Jan. 1-5, 2026"
                     }
                   ]
                 }
@@ -208,7 +304,7 @@
                   "end_time": "3:00 PM",
                   "notes": [
                     {
-                      "note": "Accepted on Mondays",
+                      "note": "Accepted on Mondays when Parish Office is open",
                       "id": "8250ad6a-ce8f-413b-b0bb-64cfd383b23c"
                     }
                   ],
@@ -306,7 +402,13 @@
                 {
                   "time": "3:00 PM",
                   "end_time": "3:45 PM",
-                  "id": "07790f18-da0a-4a62-b73f-666bfa6e3dc1"
+                  "id": "07790f18-da0a-4a62-b73f-666bfa6e3dc1",
+                  "notes": [
+                    {
+                      "id": "9d3a1c67-dab8-43d5-a1dd-cf6ebe8c38e8",
+                      "note": "No First Friday Confessions on January 2, 2026 due to New Years Holiday"
+                    }
+                  ]
                 }
               ],
               "id": "00539d07-e2b5-4912-b0a0-bc000732ad60"
@@ -334,6 +436,27 @@
             }
           ],
           "id": "77375739-2d82-419f-83a4-bbd824666ee9"
+        },
+        {
+          "id": "f1c3dc55-662f-45d0-9e32-881e2c3acbfa",
+          "name": "Confessions During Parish Renovations - December 30, 2026",
+          "days": [
+            {
+              "id": "6f5a3f5e-ef0c-4365-826f-21f9c2e0c767",
+              "day": "",
+              "times": [
+                {
+                  "id": "eb156f8e-df1c-4ebc-ac5a-9b5eee93e934",
+                  "notes": [
+                    {
+                      "id": "3248c485-22ec-440f-8967-d47584c20e52",
+                      "note": "Note: Confessions before or after week day Masses will heard in Room 208, opposite the Parish Conference Room. Confessions before the Saturday evening Mass will be heard in the South Social Hall Stairwell."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ],
       "id": "d407d4c2-6889-4556-9136-9acd14c31738"
@@ -396,13 +519,22 @@
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
-                  "notes": [],
+                  "notes": [
+                    {
+                      "id": "0d38eecc-3e41-4bdb-8d3e-73462c9fa542",
+                      "note": "No First Friday Adoration on January 2, 2026 due to New Years Holiday"
+                    }
+                  ],
                   "time": "9:00 AM",
                   "end_time": "4:00 PM"
                 }
               ]
             }
           ]
+        },
+        {
+          "id": "6a73e259-842d-4228-9214-bc97192c5ce7",
+          "name": "Please Note: Adoration will be held in the Parish Conference Room starting December 30, 2025."
         }
       ],
       "id": "92ac4474-522a-4b8c-9139-72634ebfec2d"
@@ -447,12 +579,7 @@
                 },
                 {
                   "id": "8dc489d6-d141-4ba3-abcf-7280ef945eb3",
-                  "notes": [
-                    {
-                      "id": "3b4db314-05fa-49cb-bd34-6cdfb6b3530c",
-                      "note": "No Soup Supper on April 4, 2025 due to Lenten Fish Fry"
-                    }
-                  ]
+                  "notes": []
                 }
               ]
             }
@@ -460,122 +587,6 @@
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
-    },
-    {
-      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
-      "name": "Holy Day Mass Times",
-      "sections": [
-        {
-          "id": "d3ee25c6-c90e-48d3-beb0-f217c31823b9",
-          "name": "Solemnity of the Immaculate Conception",
-          "days": [
-            {
-              "id": "f836580f-c411-4610-b6c2-16d0e9386607",
-              "day": "Sunday, December 7th",
-              "times": [
-                {
-                  "id": "38343a67-0da9-4225-b198-e4c9f2f89aec",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "e501b7ac-b38a-4fd8-81ee-753eec112d33",
-              "day": "Monday, December 8th",
-              "times": [
-                {
-                  "id": "602f2f41-9bcd-4527-a11f-4d8a5dcd67fd",
-                  "time": "7:00 AM"
-                },
-                {
-                  "id": "1a83c52f-cee5-427d-b6d4-33508a98286b",
-                  "time": "12:00 PM"
-                },
-                {
-                  "id": "d625a0a9-e21c-45c4-b1fb-bc006fb8d993",
-                  "time": "7:00 PM",
-                  "notes": [
-                    {
-                      "id": "4b748242-286d-4d60-963e-9854ef18d71a",
-                      "note": "Beginning of Forty Hours Devotion"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "c7d1eb8f-4395-4a51-8581-2a5407a752d5",
-          "name": "Christmas",
-          "days": [
-            {
-              "id": "8b4ed90f-3d62-4ab2-89b1-1d05e6913f66",
-              "day": "Wednesday, December 24th",
-              "times": [
-                {
-                  "id": "5dacf073-206a-41bc-ac43-101f5ed3749a",
-                  "time": "4:00 PM"
-                },
-                {
-                  "id": "0d713008-d23a-4887-aeeb-8461c8ce3170",
-                  "time": "6:00 PM",
-                  "notes": [
-                    {
-                      "id": "5cb0851c-2a18-4a83-b2d9-4ff6b5180283",
-                      "note": "Choir Sing-Along at 5:30 PM"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "86667598-9c37-480c-ad20-f00c38020bfb",
-              "day": "Thursday, December 25th",
-              "times": [
-                {
-                  "id": "47116374-0a02-46f9-bedc-aa01262c655a",
-                  "time": "12:00 AM"
-                },
-                {
-                  "id": "bffc2082-58e3-4874-8e46-9876af83cb1d",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "9444e8ff-7c4e-4487-ba25-0dc1170a64f6",
-          "name": "Solemnity of Mary, Mother of God",
-          "days": [
-            {
-              "id": "b9cddc68-7de2-4085-b02b-1827284e821e",
-              "day": "Wednesday, December 31, 2025",
-              "times": [
-                {
-                  "id": "e2698d34-11f8-43e2-a7be-88f7e04d6abf",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "c73b9acd-48bf-4a7c-989b-e1990a7bc339",
-              "day": "Thursday, January 1, 2026",
-              "times": [
-                {
-                  "id": "ff7abe27-50fa-4a2a-8286-86ebf6503788",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "5a772c46-17f8-43cc-bf8a-9d730724c13e",
-                  "time": "10:00 AM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
     }
   ]
 }

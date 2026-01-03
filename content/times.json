@@ -198,82 +198,6 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
-      "id": "35ea21e4-4696-4fe9-b4e1-db1ade930003",
-      "name": "Holy Day Mass Times",
-      "sections": [
-        {
-          "id": "c7d1eb8f-4395-4a51-8581-2a5407a752d5",
-          "name": "Christmas",
-          "days": [
-            {
-              "id": "8b4ed90f-3d62-4ab2-89b1-1d05e6913f66",
-              "day": "Wednesday, December 24th",
-              "times": [
-                {
-                  "id": "5dacf073-206a-41bc-ac43-101f5ed3749a",
-                  "time": "4:00 PM"
-                },
-                {
-                  "id": "0d713008-d23a-4887-aeeb-8461c8ce3170",
-                  "time": "6:00 PM",
-                  "notes": [
-                    {
-                      "id": "5cb0851c-2a18-4a83-b2d9-4ff6b5180283",
-                      "note": "Choir Sing-Along at 5:30 PM"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "86667598-9c37-480c-ad20-f00c38020bfb",
-              "day": "Thursday, December 25th",
-              "times": [
-                {
-                  "id": "47116374-0a02-46f9-bedc-aa01262c655a",
-                  "time": "12:00 AM"
-                },
-                {
-                  "id": "bffc2082-58e3-4874-8e46-9876af83cb1d",
-                  "time": "9:00 AM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "9444e8ff-7c4e-4487-ba25-0dc1170a64f6",
-          "name": "Solemnity of Mary, Mother of God",
-          "days": [
-            {
-              "id": "b9cddc68-7de2-4085-b02b-1827284e821e",
-              "day": "Wednesday, December 31, 2025",
-              "times": [
-                {
-                  "id": "e2698d34-11f8-43e2-a7be-88f7e04d6abf",
-                  "time": "5:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "c73b9acd-48bf-4a7c-989b-e1990a7bc339",
-              "day": "Thursday, January 1, 2026",
-              "times": [
-                {
-                  "id": "ff7abe27-50fa-4a2a-8286-86ebf6503788",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "5a772c46-17f8-43cc-bf8a-9d730724c13e",
-                  "time": "10:00 AM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -289,7 +213,7 @@
                   "notes": [
                     {
                       "id": "c982ca03-a585-43ec-9d17-b044d96316b8",
-                      "note": "Parish Office Closed Dec. 24-27, 2025 and Jan. 1-5, 2026"
+                      "note": "Parish Office Closed Jan. 5, 2026"
                     }
                   ]
                 }
@@ -406,7 +330,7 @@
                   "notes": [
                     {
                       "id": "9d3a1c67-dab8-43d5-a1dd-cf6ebe8c38e8",
-                      "note": "No First Friday Confessions on January 2, 2026 due to New Years Holiday"
+                      "note": ""
                     }
                   ]
                 }
@@ -450,7 +374,7 @@
                   "notes": [
                     {
                       "id": "3248c485-22ec-440f-8967-d47584c20e52",
-                      "note": "Note: Confessions before or after week day Masses will heard in Room 208, opposite the Parish Conference Room. Confessions before the Saturday evening Mass will be heard in the South Social Hall Stairwell."
+                      "note": "Note: Confessions before or after week day Masses will heard in Room 208, opposite the Parish Conference Room. Confessions before the Saturday evening Mass will be heard in the 3rd Grade Classroom (See signs  Parish Social Hall)"
                     }
                   ]
                 }

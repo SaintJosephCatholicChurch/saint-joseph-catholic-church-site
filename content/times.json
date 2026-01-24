@@ -210,12 +210,7 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": [
-                    {
-                      "id": "c982ca03-a585-43ec-9d17-b044d96316b8",
-                      "note": "Parish Office Closed Jan. 19, 2026"
-                    }
-                  ]
+                  "notes": []
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"

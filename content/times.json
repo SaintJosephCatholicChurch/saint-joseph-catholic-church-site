@@ -198,6 +198,42 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "id": "f51936d9-ea65-4b56-acf7-356194cf3fe6",
+      "name": "Ash Wednesday",
+      "sections": [
+        {
+          "id": "e5cf505d-2358-40ef-a2d6-364c04077ede",
+          "name": "Mass Times for Ash Wednesday",
+          "days": [
+            {
+              "id": "b0a8ce87-1874-4801-a75a-aea028a60dc8",
+              "day": "Ash Wednesday (February 18, 2026)",
+              "times": [
+                {
+                  "id": "63b341ca-dd36-4dd3-8988-d419c68903b4",
+                  "time": "7:00 AM"
+                },
+                {
+                  "id": "b8a865c7-6f3f-4f3a-bd1b-55cfe8d7f74e",
+                  "time": "12:00 PM"
+                },
+                {
+                  "id": "efff83d0-c699-413a-9409-19aa1dd36aff",
+                  "time": "7:00 PM",
+                  "notes": [
+                    {
+                      "id": "8fe3adb3-520f-4d5a-b7ee-6155df358b74",
+                      "note": "Adult Choir"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Parish Office Hours",
       "sections": [
         {

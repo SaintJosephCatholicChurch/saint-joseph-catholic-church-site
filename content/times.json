@@ -506,6 +506,152 @@
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
+    },
+    {
+      "id": "c590170c-aa27-4b35-9dbc-d9c95d678e9c",
+      "name": "Holy Week (2026)",
+      "sections": [
+        {
+          "id": "04e2b7a7-65a8-4889-b7a5-83ad4a5c516e",
+          "name": "Holy Monday",
+          "days": [
+            {
+              "id": "1181883e-3c76-4f6f-9982-1cc5257eec8e",
+              "day": "Parish Penance Service",
+              "times": [
+                {
+                  "id": "4bae769f-f04c-48aa-8014-ff6f3a0cba89",
+                  "time": "6:00 PM",
+                  "end_time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "0088f1e9-c1a3-4d05-a500-7cc3ac80c7fe",
+          "name": "Holy Tuesday",
+          "days": [
+            {
+              "id": "1168c8ef-e82d-4c60-aaa8-03aeb30f4b53",
+              "day": "Adoration"
+            },
+            {
+              "id": "41a548fd-d75a-4648-a2b4-dfa7b8df864a",
+              "day": "Mass"
+            },
+            {
+              "id": "cf52cb2d-62a1-40df-ad81-be2d01bbd624",
+              "day": "Confession"
+            },
+            {
+              "id": "af36f718-fee4-4d5a-ac2e-83ba299ed3e0",
+              "day": "Chrism Mass",
+              "times": [
+                {
+                  "id": "37dfed5b-f284-4824-a914-8255b3efa4af",
+                  "time": "7:00 PM",
+                  "notes": [
+                    {
+                      "id": "8159a6b7-36ab-4c70-bf48-540dadf56c66",
+                      "note": "Cathedral of the Immaculate Conception, Fort Wayne"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "37938c32-4469-4f88-8b06-812a72a10808",
+          "name": "Spy Wednesday",
+          "days": [
+            {
+              "id": "68151e0c-4484-40e7-a41d-f475eec45f89",
+              "day": "Adoration / Confession"
+            },
+            {
+              "id": "e6f53a82-bf77-44ad-9903-5ec7b3f6b729",
+              "day": "Mass"
+            }
+          ]
+        },
+        {
+          "id": "acc754a3-9ecd-422b-8f60-2d6f3f240450",
+          "name": "Maudy Thursday"
+        },
+        {
+          "id": "07ba309e-5922-4aff-9eb7-50960f1cb980",
+          "name": "Holy Saturday",
+          "days": [
+            {
+              "id": "dc518ff6-2910-4974-a5ae-4907bf502aa0",
+              "day": "Morning Prayer",
+              "times": []
+            },
+            {
+              "id": "503ca7e2-776b-4cf8-8ca4-2a6adbb621a2",
+              "day": "Confession"
+            },
+            {
+              "id": "e3f3eb8f-1749-4ed8-b468-dc2ca104182d",
+              "day": "Easter Vigil in the Holy Night",
+              "times": [
+                {
+                  "id": "171e58d3-cfc1-490b-b6a5-c2ce549ca9db",
+                  "time": "9:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "8153555d-5f79-45e1-88de-93fd2025b0ed",
+          "name": "Good Friday",
+          "days": [
+            {
+              "id": "bfd0f7d3-ff8a-491e-b16b-79e21014e9c9",
+              "day": "Morning Prayer"
+            },
+            {
+              "id": "183bc467-c64f-4cd1-86d1-835cea98c560",
+              "day": "Confession"
+            },
+            {
+              "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",
+              "day": "Service of the Lord's Passion"
+            },
+            {
+              "id": "8e4eea2e-b30e-45bf-89ba-b064236d017f",
+              "day": "Stations of the Cross"
+            },
+            {
+              "id": "0036f35e-26e4-46c5-a186-df27f213e196",
+              "day": "Tenebrae"
+            }
+          ]
+        },
+        {
+          "id": "e6a87e6f-9e63-4e7b-a4ac-70ef18f3be75",
+          "name": "Easter Sunday",
+          "days": [
+            {
+              "id": "00891ce7-47d5-4ffe-88fc-297ff4f7ea11",
+              "day": "Mass",
+              "times": [
+                {
+                  "id": "105ddfcb-790b-4ec3-b136-3a76e6756e9b",
+                  "time": "7:30 AM"
+                },
+                {
+                  "id": "6331ea13-7b91-44af-af7f-5ebb0a5c1fa8",
+                  "time": "10:00 AM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

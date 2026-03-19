@@ -224,15 +224,34 @@
           "days": [
             {
               "id": "1168c8ef-e82d-4c60-aaa8-03aeb30f4b53",
-              "day": "Adoration"
+              "day": "Adoration",
+              "times": [
+                {
+                  "id": "788c30e6-55c2-4056-8afe-bf836d8467ee",
+                  "time": "7:00 AM"
+                }
+              ]
             },
             {
               "id": "41a548fd-d75a-4648-a2b4-dfa7b8df864a",
-              "day": "Mass"
+              "day": "Mass",
+              "times": [
+                {
+                  "id": "677cd122-4500-4093-9eb7-c543cce4e433",
+                  "time": "8:00 AM"
+                }
+              ]
             },
             {
               "id": "cf52cb2d-62a1-40df-ad81-be2d01bbd624",
-              "day": "Confession"
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "70b45251-ff3e-403f-9c2f-19a2eb827666",
+                  "time": "8:30 AM",
+                  "end_time": "9:00 AM"
+                }
+              ]
             },
             {
               "id": "af36f718-fee4-4d5a-ac2e-83ba299ed3e0",
@@ -258,11 +277,24 @@
           "days": [
             {
               "id": "68151e0c-4484-40e7-a41d-f475eec45f89",
-              "day": "Adoration / Confession"
+              "day": "Adoration / Confession",
+              "times": [
+                {
+                  "id": "6ea297e6-e511-4cad-a5a3-8aa535ae0015",
+                  "time": "6:00 PM",
+                  "end_time": "7:00 PM"
+                }
+              ]
             },
             {
               "id": "e6f53a82-bf77-44ad-9903-5ec7b3f6b729",
-              "day": "Mass"
+              "day": "Mass",
+              "times": [
+                {
+                  "id": "4d4b79a6-d57d-413e-bf41-29c90330623f",
+                  "time": "7:00 PM"
+                }
+              ]
             }
           ]
         },
@@ -280,15 +312,34 @@
             },
             {
               "id": "ab020cc7-83db-4fa2-a840-16962e41b43e",
-              "day": "Mass of the Lord's Supper"
+              "day": "Mass of the Lord's Supper",
+              "times": [
+                {
+                  "id": "83cb688e-4c89-4472-8c66-135b22279cd3",
+                  "time": "7:00 PM"
+                }
+              ]
             },
             {
               "id": "9b3a7fba-3d89-48d1-869d-e55e3e5604ec",
-              "day": "Nightly Adoration"
+              "day": "Nightly Adoration",
+              "times": [
+                {
+                  "id": "a4e44594-ccb7-4163-9d22-9e78fa0b2ddd",
+                  "time": "8:30 PM",
+                  "end_time": "12:00 AM"
+                }
+              ]
             },
             {
               "id": "e2a893c0-9036-45b3-b4d5-24d4cbbccc73",
-              "day": "Compline (Night Prayer)"
+              "day": "Compline (Night Prayer)",
+              "times": [
+                {
+                  "id": "70ddb079-0ef8-4382-b969-58f10965a27d",
+                  "time": "11:45 PM"
+                }
+              ]
             }
           ]
         },
@@ -306,11 +357,27 @@
             },
             {
               "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",
-              "day": "Service of the Lord's Passion"
+              "day": "Service of the Lord's Passion",
+              "times": [
+                {
+                  "id": "b6660b82-6cd8-48dc-af4f-b1af99d99574",
+                  "time": "1:00 PM"
+                }
+              ]
             },
             {
               "id": "8e4eea2e-b30e-45bf-89ba-b064236d017f",
-              "day": "Stations of the Cross"
+              "day": "Stations of the Cross",
+              "times": [
+                {
+                  "id": "ac612ce0-5d73-4ce2-9424-24dcb4202889",
+                  "time": "7:00 PM"
+                },
+                {
+                  "id": "49375db7-6a3c-49d4-8ffb-a0770988f6aa",
+                  "time": "8:00 PM"
+                }
+              ]
             },
             {
               "id": "0036f35e-26e4-46c5-a186-df27f213e196",
@@ -329,7 +396,14 @@
             },
             {
               "id": "503ca7e2-776b-4cf8-8ca4-2a6adbb621a2",
-              "day": "Confession"
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "451c6c01-3a12-41f9-8eb7-43660e26e0c7",
+                  "time": "8:30 AM",
+                  "end_time": "10:00 AM"
+                }
+              ]
             },
             {
               "id": "e3f3eb8f-1749-4ed8-b468-dc2ca104182d",

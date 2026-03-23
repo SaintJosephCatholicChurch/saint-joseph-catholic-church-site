@@ -304,7 +304,13 @@
           "days": [
             {
               "id": "f8b3ae2d-e0f2-45c4-ab26-305c925c1017",
-              "day": "Lauds (Morning Prayer)"
+              "day": "Lauds (Morning Prayer)",
+              "times": [
+                {
+                  "id": "5a6545e1-b9c0-4a29-be2d-c194295a875b",
+                  "time": "8:00 AM"
+                }
+              ]
             },
             {
               "id": "8435a33b-6b0a-4dab-8d63-b32a7d709e80",
@@ -349,7 +355,13 @@
           "days": [
             {
               "id": "bfd0f7d3-ff8a-491e-b16b-79e21014e9c9",
-              "day": "Lauds (Morning Prayer)"
+              "day": "Lauds (Morning Prayer)",
+              "times": [
+                {
+                  "id": "a907f722-f04a-40f7-bd54-c83134697189",
+                  "time": "8:30 AM"
+                }
+              ]
             },
             {
               "id": "183bc467-c64f-4cd1-86d1-835cea98c560",
@@ -372,16 +384,18 @@
                 {
                   "id": "ac612ce0-5d73-4ce2-9424-24dcb4202889",
                   "time": "7:00 PM"
-                },
-                {
-                  "id": "49375db7-6a3c-49d4-8ffb-a0770988f6aa",
-                  "time": "8:00 PM"
                 }
               ]
             },
             {
               "id": "0036f35e-26e4-46c5-a186-df27f213e196",
-              "day": "Tenebrae"
+              "day": "Tenebrae",
+              "times": [
+                {
+                  "id": "19996471-f297-41f6-a43f-a3db7a67f78c",
+                  "time": "8:00 PM"
+                }
+              ]
             }
           ]
         },
@@ -392,7 +406,12 @@
             {
               "id": "dc518ff6-2910-4974-a5ae-4907bf502aa0",
               "day": "Lauds (Morning Prayer)",
-              "times": []
+              "times": [
+                {
+                  "id": "7a2b21ea-8e0f-47a7-a795-fb9896441ac6",
+                  "time": "8:00 AM"
+                }
+              ]
             },
             {
               "id": "503ca7e2-776b-4cf8-8ca4-2a6adbb621a2",
@@ -432,6 +451,10 @@
                 {
                   "id": "6331ea13-7b91-44af-af7f-5ebb0a5c1fa8",
                   "time": "10:00 AM"
+                },
+                {
+                  "id": "f3a3ff47-afb3-4d80-91d5-b33d4c82c0c5",
+                  "time": "12:00 PM"
                 }
               ]
             }

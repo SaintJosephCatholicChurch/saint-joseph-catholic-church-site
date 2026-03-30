@@ -14,6 +14,8 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import type { FC } from 'react';
 import type { TimesNoteSection, TimesSection } from '../../../interface';
 
+type TimesWidgetSectionValue = TimesSection | TimesNoteSection;
+
 const StyledSectionTimeLines = styled('div')`
   display: flex;
   flex-direction: column;
@@ -25,8 +27,8 @@ const StyledAddButtonWrapper = styled('div')`
 `;
 
 interface TimesWidgetSectionsProps {
-  sections?: (TimesSection | TimesNoteSection)[];
-  onChange: (sections: (TimesSection | TimesNoteSection)[]) => void;
+  sections?: TimesWidgetSectionValue[];
+  onChange: (sections: TimesWidgetSectionValue[]) => void;
 }
 
 const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSections = [], onChange }) => {
@@ -46,10 +48,10 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
     }
   }, [sections, hasMissingIds, onChange]);
 
-  const [internalValue, setInternalValue] = useState(sections);
+  const [internalValue, setInternalValue] = useState<TimesWidgetSectionValue[]>(sections);
 
   const handleChange = useCallback(
-    (newSection: TimesSection) => {
+    (newSection: TimesWidgetSectionValue) => {
       const index = internalValue.findIndex((t) => t.id === newSection.id);
       if (index < 0) {
         return;
@@ -64,7 +66,7 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
   );
 
   const handleDelete = useCallback(
-    (newSection: TimesSection) => {
+    (newSection: TimesWidgetSectionValue) => {
       const index = internalValue.findIndex((t) => t.id === newSection.id);
       if (index < 0) {
         return;

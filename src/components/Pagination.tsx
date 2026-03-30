@@ -27,7 +27,7 @@ const Pagination = ({ current, pages, firstPageLink, pageLink }: PaginationProps
   const isSmallScreen = useMediaQueryDown('sm');
 
   const onChange = useCallback(
-    (_event: ChangeEvent, newPage: number) => {
+    (_event: ChangeEvent<unknown>, newPage: number) => {
       if (newPage === 1) {
         router.push(firstPageLink);
         return;

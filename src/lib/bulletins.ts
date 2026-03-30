@@ -34,7 +34,7 @@ export function fetchBulletins(): Bulletin[] {
 }
 
 export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinPDFData | undefined {
-  if (isNullish(bulletin)) {
+  if (isNullish(bulletin?.pdf)) {
     return undefined;
   }
 
@@ -52,7 +52,9 @@ export function fetchBulletinsMetaData(): BulletinPDFData[] {
     return metaCache;
   }
 
-  metaCache = fetchBulletins().map(fetchBulletinMetaData);
+  metaCache = fetchBulletins()
+    .map(fetchBulletinMetaData)
+    .filter((it): it is BulletinPDFData => !isNullish(it));
 
   return metaCache;
 }

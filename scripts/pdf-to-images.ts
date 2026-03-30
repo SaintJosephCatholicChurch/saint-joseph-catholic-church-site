@@ -182,6 +182,10 @@ function fixCommonBulletinErrors(textContent: string) {
   let bulletinsProcessed = 0;
   const bulletins = fetchBulletins();
   for (const bulletin of bulletins) {
+    if (!bulletin.pdf) {
+      continue;
+    }
+
     const pdfFullPath = join(publicPath, bulletin.pdf);
 
     const folderPath = bulletin.pdf.replace(/\.pdf$/g, '');

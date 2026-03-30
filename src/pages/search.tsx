@@ -33,7 +33,7 @@ const StyledSearchQueryTitle = styled('h2')`
 
 function getLongestMatch(entry: SearchableEntry, escapedQuery: string) {
   let biggestMatch = '';
-  let m: RegExpExecArray;
+  let m: RegExpExecArray | null;
 
   const regex = new RegExp(
     `(?:[\\s]+[^\\s]+){0,10}[\\s]*${escapedQuery
@@ -64,7 +64,7 @@ const Search = ({ searchableEntries }: SearchProps) => {
 
   useEffect(() => {
     const params = new URLSearchParams(search);
-    setQuery(params.get('q'));
+    setQuery(params.get('q') ?? '');
   }, [search]);
 
   const escapedQuery = useMemo(() => escapeRegExp(query), [query]);

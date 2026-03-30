@@ -51,7 +51,7 @@ const buildDateToBulletin = () => {
 let dateToBulletin = buildDateToBulletin();
 
 export const getStaticProps: GetStaticProps = ({ params }): { props: ParishBulletinsProps } => {
-  const date = params.date as string;
+  const date = (params?.date ?? '') as string;
 
   if (process.env.NODE_ENV === 'development') {
     dateToBulletin = buildDateToBulletin();

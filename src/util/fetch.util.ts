@@ -8,5 +8,5 @@ export async function doesUrlFileExist(url: string): Promise<{ type: string; exi
   }
 
   const response = await fetch(cleanUrl, { method: 'HEAD' });
-  return { type: response.headers.get('Content-Type'), exists: response.ok };
+  return { type: response.headers.get('Content-Type') ?? '', exists: response.ok };
 }

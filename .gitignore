@@ -37,3 +37,6 @@ workbox-*
 
 # tinymce
 /public/tinymce/
+
+tsconfig.*.tsbuildinfo
+.eslintcache

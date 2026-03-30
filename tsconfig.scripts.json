@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "scripts/**/*.d.ts",
+    "src/interface.ts",
+    "src/lib/bulletins.ts",
+    "src/components/pages/custom/bulletins/util.ts",
+    "src/util/null.util.ts",
+    "src/util/pdf/**/*.d.ts",
+    "global.d.ts",
+    "next-env.d.ts"
+  ]
+}

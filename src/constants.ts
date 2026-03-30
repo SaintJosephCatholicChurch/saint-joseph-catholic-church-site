@@ -112,3 +112,4 @@ export const REDIRECTS = {
 };
 
 export const CONTACT_URL = 'https://api.stjosephchurchbluffton.org/.netlify/functions/contact';
+export const PARISH_REGISTRATION_URL = 'https://api.stjosephchurchbluffton.org/.netlify/functions/parish-registration';

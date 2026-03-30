@@ -76,10 +76,17 @@ module.exports = {
   },
   plugins: ['babel', '@emotion', 'unicorn', 'react-hooks', '@typescript-eslint'],
   settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx']
+    },
     react: {
       version: 'detect'
     },
     'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json'
+      },
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       }
@@ -104,6 +111,17 @@ module.exports = {
         project: ['./tsconfig.json'], // Specify it only for TypeScript files
         ecmaFeatures: {
           jsx: true
+        }
+      },
+      settings: {
+        'import/resolver': {
+          typescript: {
+            alwaysTryTypes: true,
+            project: './tsconfig.json'
+          },
+          node: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx']
+          }
         }
       },
       rules: {

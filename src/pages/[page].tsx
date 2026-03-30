@@ -57,7 +57,7 @@ const buildSlugToPageContent = (pageContents: PageContent[]) => {
 let slugToPageContent = buildSlugToPageContent(fetchPageContent());
 
 export const getStaticProps: GetStaticProps = ({ params }): { props: PageProps } => {
-  const slug = params.page as string;
+  const slug = (params?.page ?? '') as string;
 
   if (process.env.NODE_ENV === 'development') {
     slugToPageContent = buildSlugToPageContent(fetchPageContent());

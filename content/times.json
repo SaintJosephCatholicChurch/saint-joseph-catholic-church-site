@@ -117,7 +117,14 @@
             },
             {
               "id": "8435a33b-6b0a-4dab-8d63-b32a7d709e80",
-              "day": "Confession"
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "a37291e5-090f-497a-97ed-c98b3e504e97",
+                  "time": "5:00 PM",
+                  "end_time": "6:30 PM"
+                }
+              ]
             },
             {
               "id": "ab020cc7-83db-4fa2-a840-16962e41b43e",
@@ -168,7 +175,14 @@
             },
             {
               "id": "183bc467-c64f-4cd1-86d1-835cea98c560",
-              "day": "Confession"
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "6ff50676-539d-4fdb-8bdd-fb45c100dffa",
+                  "time": "5:00 PM",
+                  "end_time": "6:30 PM"
+                }
+              ]
             },
             {
               "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",

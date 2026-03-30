@@ -3,8 +3,10 @@
 // - add loading="lazy" where appropriate
 // - add decoding="async"
 // - ensure self-closing <img/> format
-export default function sanitizeHtmlImages(html: string | undefined): string | undefined {
-  if (!html) return html;
+export default function sanitizeHtmlImages(html: string | undefined): string | TrustedHTML {
+  if (!html) {
+    return '';
+  }
 
   // Add alt="" if missing, add loading and decoding attributes, and normalize closing
   // This is a safe, conservative transformation and should not change existing alt text.

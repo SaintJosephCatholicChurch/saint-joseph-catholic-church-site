@@ -5,103 +5,6 @@
       "name": "Holy Week (2026)",
       "sections": [
         {
-          "id": "04e2b7a7-65a8-4889-b7a5-83ad4a5c516e",
-          "name": "Holy Monday",
-          "days": [
-            {
-              "id": "1181883e-3c76-4f6f-9982-1cc5257eec8e",
-              "day": "Parish Penance Service",
-              "times": [
-                {
-                  "id": "4bae769f-f04c-48aa-8014-ff6f3a0cba89",
-                  "time": "6:00 PM",
-                  "end_time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "0088f1e9-c1a3-4d05-a500-7cc3ac80c7fe",
-          "name": "Holy Tuesday",
-          "days": [
-            {
-              "id": "1168c8ef-e82d-4c60-aaa8-03aeb30f4b53",
-              "day": "Adoration",
-              "times": [
-                {
-                  "id": "788c30e6-55c2-4056-8afe-bf836d8467ee",
-                  "time": "7:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "41a548fd-d75a-4648-a2b4-dfa7b8df864a",
-              "day": "Mass",
-              "times": [
-                {
-                  "id": "677cd122-4500-4093-9eb7-c543cce4e433",
-                  "time": "8:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "cf52cb2d-62a1-40df-ad81-be2d01bbd624",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "70b45251-ff3e-403f-9c2f-19a2eb827666",
-                  "time": "8:30 AM",
-                  "end_time": "9:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "af36f718-fee4-4d5a-ac2e-83ba299ed3e0",
-              "day": "Chrism Mass",
-              "times": [
-                {
-                  "id": "37dfed5b-f284-4824-a914-8255b3efa4af",
-                  "time": "7:00 PM",
-                  "notes": [
-                    {
-                      "id": "8159a6b7-36ab-4c70-bf48-540dadf56c66",
-                      "note": "Cathedral of the Immaculate Conception, Fort Wayne"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "37938c32-4469-4f88-8b06-812a72a10808",
-          "name": "Spy Wednesday",
-          "days": [
-            {
-              "id": "68151e0c-4484-40e7-a41d-f475eec45f89",
-              "day": "Adoration / Confession",
-              "times": [
-                {
-                  "id": "6ea297e6-e511-4cad-a5a3-8aa535ae0015",
-                  "time": "6:00 PM",
-                  "end_time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "e6f53a82-bf77-44ad-9903-5ec7b3f6b729",
-              "day": "Mass",
-              "times": [
-                {
-                  "id": "4d4b79a6-d57d-413e-bf41-29c90330623f",
-                  "time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "id": "acc754a3-9ecd-422b-8f60-2d6f3f240450",
           "name": "Maudy Thursday",
           "days": [
@@ -122,7 +25,13 @@
                 {
                   "id": "a37291e5-090f-497a-97ed-c98b3e504e97",
                   "time": "5:00 PM",
-                  "end_time": "6:30 PM"
+                  "end_time": "6:30 PM",
+                  "notes": [
+                    {
+                      "id": "09771842-1e0c-49a7-ac91-ac8fab18c3ff",
+                      "note": "Kindergarten Classroom"
+                    }
+                  ]
                 }
               ]
             },
@@ -133,6 +42,23 @@
                 {
                   "id": "83cb688e-4c89-4472-8c66-135b22279cd3",
                   "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "6e6682a3-84ba-4ac0-b2d3-02572080ad6a",
+              "day": "Confession",
+              "times": [
+                {
+                  "id": "a7a0ca3e-c32b-4370-87ae-a1707e24cb45",
+                  "time": "8:30 PM",
+                  "end_time": "9:00 PM",
+                  "notes": [
+                    {
+                      "id": "8405a12e-c384-498f-a392-f212af21c39a",
+                      "note": "Kindergarten Classroom"
+                    }
+                  ]
                 }
               ]
             },

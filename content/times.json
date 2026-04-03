@@ -349,13 +349,17 @@
                 {
                   "time": "10:00 AM",
                   "end_time": "3:00 PM",
+                  "notes": [],
+                  "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
+                },
+                {
+                  "id": "b3facc38-f0e9-48f6-bba4-e96c32e7f44e",
                   "notes": [
                     {
-                      "note": "Accepted on Mondays when Parish Office is open",
-                      "id": "8250ad6a-ce8f-413b-b0bb-64cfd383b23c"
+                      "id": "c6f9f1c5-a9c8-4389-bee9-11bc3205adea",
+                      "note": "Accepted on Mondays when Parish Office is open"
                     }
-                  ],
-                  "id": "4daf55c5-dacc-45eb-993d-c0e0059d9198"
+                  ]
                 }
               ],
               "id": "5a2febf5-4141-42e3-a995-dfcbcd7d3852"
@@ -566,12 +570,7 @@
               "times": [
                 {
                   "id": "a9ddec26-c62b-4499-9366-ef4cb6660775",
-                  "notes": [
-                    {
-                      "id": "0d38eecc-3e41-4bdb-8d3e-73462c9fa542",
-                      "note": "No First Friday Adoration on January 2, 2026 due to New Years Holiday"
-                    }
-                  ],
+                  "notes": [],
                   "time": "9:00 AM",
                   "end_time": "4:00 PM"
                 }

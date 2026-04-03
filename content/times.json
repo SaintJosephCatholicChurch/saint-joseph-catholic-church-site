@@ -5,87 +5,6 @@
       "name": "Holy Week (2026)",
       "sections": [
         {
-          "id": "acc754a3-9ecd-422b-8f60-2d6f3f240450",
-          "name": "Maudy Thursday",
-          "days": [
-            {
-              "id": "f8b3ae2d-e0f2-45c4-ab26-305c925c1017",
-              "day": "Lauds (Morning Prayer)",
-              "times": [
-                {
-                  "id": "5a6545e1-b9c0-4a29-be2d-c194295a875b",
-                  "time": "8:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "8435a33b-6b0a-4dab-8d63-b32a7d709e80",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "a37291e5-090f-497a-97ed-c98b3e504e97",
-                  "time": "5:00 PM",
-                  "end_time": "6:30 PM",
-                  "notes": [
-                    {
-                      "id": "09771842-1e0c-49a7-ac91-ac8fab18c3ff",
-                      "note": "Kindergarten Classroom"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "ab020cc7-83db-4fa2-a840-16962e41b43e",
-              "day": "Mass of the Lord's Supper",
-              "times": [
-                {
-                  "id": "83cb688e-4c89-4472-8c66-135b22279cd3",
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "6e6682a3-84ba-4ac0-b2d3-02572080ad6a",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "a7a0ca3e-c32b-4370-87ae-a1707e24cb45",
-                  "time": "8:30 PM",
-                  "end_time": "9:00 PM",
-                  "notes": [
-                    {
-                      "id": "8405a12e-c384-498f-a392-f212af21c39a",
-                      "note": "Kindergarten Classroom"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "9b3a7fba-3d89-48d1-869d-e55e3e5604ec",
-              "day": "Nightly Adoration",
-              "times": [
-                {
-                  "id": "a4e44594-ccb7-4163-9d22-9e78fa0b2ddd",
-                  "time": "8:30 PM",
-                  "end_time": "12:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "e2a893c0-9036-45b3-b4d5-24d4cbbccc73",
-              "day": "Compline (Night Prayer)",
-              "times": [
-                {
-                  "id": "70ddb079-0ef8-4382-b969-58f10965a27d",
-                  "time": "11:45 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "id": "8153555d-5f79-45e1-88de-93fd2025b0ed",
           "name": "Good Friday",
           "days": [
@@ -100,6 +19,16 @@
               ]
             },
             {
+              "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",
+              "day": "Service of the Lord's Passion",
+              "times": [
+                {
+                  "id": "b6660b82-6cd8-48dc-af4f-b1af99d99574",
+                  "time": "1:00 PM"
+                }
+              ]
+            },
+            {
               "id": "183bc467-c64f-4cd1-86d1-835cea98c560",
               "day": "Confession",
               "times": [
@@ -107,16 +36,6 @@
                   "id": "6ff50676-539d-4fdb-8bdd-fb45c100dffa",
                   "time": "5:00 PM",
                   "end_time": "6:30 PM"
-                }
-              ]
-            },
-            {
-              "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",
-              "day": "Service of the Lord's Passion",
-              "times": [
-                {
-                  "id": "b6660b82-6cd8-48dc-af4f-b1af99d99574",
-                  "time": "1:00 PM"
                 }
               ]
             },

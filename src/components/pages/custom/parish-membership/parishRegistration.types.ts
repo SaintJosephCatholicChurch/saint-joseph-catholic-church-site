@@ -27,20 +27,23 @@ export interface FamilyInformation {
 }
 
 export interface AdultMember {
-  firstNameNickname: string;
+  parishStatus: string;
+  role: string;
+  firstName: string;
+  nickname: string;
+  maidenName: string;
   gender: string;
   dateOfBirth: string;
-  maritalStatus: string;
-  validCatholicMarriage: string;
-  parishStatus: string;
-  occupationEmployer: string;
-  workPhoneOrCell: string;
   email: string;
-  role: string;
+  workPhone: string;
+  cellPhone: string;
   firstLanguage: string;
-  maidenName: string;
+  occupation: string;
+  employer: string;
   birthplace: string;
   isCatholic: string;
+  maritalStatus: string;
+  validCatholicMarriage: string;
   sacraments: Sacraments;
 }
 

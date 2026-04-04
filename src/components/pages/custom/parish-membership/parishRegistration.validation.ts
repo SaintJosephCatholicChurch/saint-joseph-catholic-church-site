@@ -1,5 +1,5 @@
 import { isNotEmpty } from '../../../../util/string.util';
-import { SACRAMENT_FIELDS } from './parishRegistration.constants';
+import { SACRAMENT_FIELDS, STATE_OPTIONS } from './parishRegistration.constants';
 
 import type {
   ParishRegistrationFormData,
@@ -10,6 +10,9 @@ import type {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+const PHONE_REGEX = /^\(\d{3}\) \d{3}-\d{4}$/;
+const ZIP_REGEX = /^\d{5}(?:-\d{4})?$/;
+const STATE_VALUES = new Set(STATE_OPTIONS.map((option) => option.value));
 
 const isValidDateString = (value: string): boolean => {
   if (!DATE_REGEX.test(value)) {
@@ -19,6 +22,9 @@ const isValidDateString = (value: string): boolean => {
   const parsedDate = new Date(value);
   return !Number.isNaN(parsedDate.getTime());
 };
+
+const isValidPhoneString = (value: string): boolean => PHONE_REGEX.test(value);
+const isValidZipString = (value: string): boolean => ZIP_REGEX.test(value);
 
 const isChildMemberBlank = (child: ParishRegistrationFormData['children'][number]): boolean => {
   const hasCoreDetails = [
@@ -63,9 +69,33 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     errors['family.registrationDate'] = 'Enter a valid registration date.';
   }
 
+  if (isNotEmpty(formData.family.homePhone) && !isValidPhoneString(formData.family.homePhone.trim())) {
+    errors['family.homePhone'] = 'Enter a 10-digit phone number including area code.';
+  }
+
+  if (isNotEmpty(formData.family.emergencyPhone) && !isValidPhoneString(formData.family.emergencyPhone.trim())) {
+    errors['family.emergencyPhone'] = 'Enter a 10-digit phone number including area code.';
+  }
+
+  if (isNotEmpty(formData.family.zip) && !isValidZipString(formData.family.zip.trim())) {
+    errors['family.zip'] = 'Enter a valid ZIP code.';
+  }
+
+  if (isNotEmpty(formData.family.state) && !STATE_VALUES.has(formData.family.state.trim())) {
+    errors['family.state'] = 'Select a valid state.';
+  }
+
   formData.adults.forEach((adult, adultIndex) => {
     if (isNotEmpty(adult.email.trim()) && !EMAIL_REGEX.test(adult.email.trim())) {
       errors[`adults.${adultIndex}.email`] = 'Enter a valid adult email address.';
+    }
+
+    if (isNotEmpty(adult.workPhone) && !isValidPhoneString(adult.workPhone.trim())) {
+      errors[`adults.${adultIndex}.workPhone`] = 'Enter a 10-digit phone number including area code.';
+    }
+
+    if (isNotEmpty(adult.cellPhone) && !isValidPhoneString(adult.cellPhone.trim())) {
+      errors[`adults.${adultIndex}.cellPhone`] = 'Enter a 10-digit phone number including area code.';
     }
 
     if (isNotEmpty(adult.dateOfBirth) && !isValidDateString(adult.dateOfBirth)) {

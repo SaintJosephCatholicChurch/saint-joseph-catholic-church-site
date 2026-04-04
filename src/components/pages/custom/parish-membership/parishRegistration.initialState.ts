@@ -8,20 +8,23 @@ const createSacraments = (): Sacraments => ({
 });
 
 export const createAdultMember = (): AdultMember => ({
-  firstNameNickname: '',
+  parishStatus: '',
+  role: '',
+  firstName: '',
+  nickname: '',
+  maidenName: '',
   gender: '',
   dateOfBirth: '',
-  maritalStatus: '',
-  validCatholicMarriage: '',
-  parishStatus: '',
-  occupationEmployer: '',
-  workPhoneOrCell: '',
   email: '',
-  role: '',
+  workPhone: '',
+  cellPhone: '',
   firstLanguage: '',
-  maidenName: '',
+  occupation: '',
+  employer: '',
   birthplace: '',
   isCatholic: '',
+  maritalStatus: '',
+  validCatholicMarriage: '',
   sacraments: createSacraments()
 });
 

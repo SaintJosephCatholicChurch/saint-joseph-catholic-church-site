@@ -6,6 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
+import { PatternFormat } from 'react-number-format';
 import { useCallback, useMemo, useState } from 'react';
 
 import { PARISH_REGISTRATION_URL } from '../../../../constants';
@@ -29,7 +30,61 @@ import type {
   SacramentKey,
   ValidationErrors
 } from './parishRegistration.types';
+import type { TextFieldProps } from '@mui/material/TextField';
 import type { FormEventHandler } from 'react';
+
+const FORM_STATE_OPTIONS = [
+  { value: 'AL', label: 'Alabama' },
+  { value: 'AK', label: 'Alaska' },
+  { value: 'AZ', label: 'Arizona' },
+  { value: 'AR', label: 'Arkansas' },
+  { value: 'CA', label: 'California' },
+  { value: 'CO', label: 'Colorado' },
+  { value: 'CT', label: 'Connecticut' },
+  { value: 'DE', label: 'Delaware' },
+  { value: 'FL', label: 'Florida' },
+  { value: 'GA', label: 'Georgia' },
+  { value: 'HI', label: 'Hawaii' },
+  { value: 'ID', label: 'Idaho' },
+  { value: 'IL', label: 'Illinois' },
+  { value: 'IN', label: 'Indiana' },
+  { value: 'IA', label: 'Iowa' },
+  { value: 'KS', label: 'Kansas' },
+  { value: 'KY', label: 'Kentucky' },
+  { value: 'LA', label: 'Louisiana' },
+  { value: 'ME', label: 'Maine' },
+  { value: 'MD', label: 'Maryland' },
+  { value: 'MA', label: 'Massachusetts' },
+  { value: 'MI', label: 'Michigan' },
+  { value: 'MN', label: 'Minnesota' },
+  { value: 'MS', label: 'Mississippi' },
+  { value: 'MO', label: 'Missouri' },
+  { value: 'MT', label: 'Montana' },
+  { value: 'NE', label: 'Nebraska' },
+  { value: 'NV', label: 'Nevada' },
+  { value: 'NH', label: 'New Hampshire' },
+  { value: 'NJ', label: 'New Jersey' },
+  { value: 'NM', label: 'New Mexico' },
+  { value: 'NY', label: 'New York' },
+  { value: 'NC', label: 'North Carolina' },
+  { value: 'ND', label: 'North Dakota' },
+  { value: 'OH', label: 'Ohio' },
+  { value: 'OK', label: 'Oklahoma' },
+  { value: 'OR', label: 'Oregon' },
+  { value: 'PA', label: 'Pennsylvania' },
+  { value: 'RI', label: 'Rhode Island' },
+  { value: 'SC', label: 'South Carolina' },
+  { value: 'SD', label: 'South Dakota' },
+  { value: 'TN', label: 'Tennessee' },
+  { value: 'TX', label: 'Texas' },
+  { value: 'UT', label: 'Utah' },
+  { value: 'VT', label: 'Vermont' },
+  { value: 'VA', label: 'Virginia' },
+  { value: 'WA', label: 'Washington' },
+  { value: 'WV', label: 'West Virginia' },
+  { value: 'WI', label: 'Wisconsin' },
+  { value: 'WY', label: 'Wyoming' }
+];
 
 const StyledFormWrapper = styled('div')`
   position: relative;
@@ -172,6 +227,64 @@ const StyledSectionActions = styled('div')`
   margin-top: 20px;
 `;
 
+interface PhoneTextFieldProps extends Pick<
+  TextFieldProps,
+  'disabled' | 'error' | 'fullWidth' | 'helperText' | 'inputProps' | 'label' | 'size'
+> {
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+const PhoneTextField = ({ onValueChange, value, ...props }: PhoneTextFieldProps) => (
+  <PatternFormat
+    customInput={TextField}
+    format="(###) ###-####"
+    mask="_"
+    value={value}
+    type="tel"
+    onValueChange={(values: unknown) => {
+      const formattedValue =
+        typeof values === 'object' &&
+        values !== null &&
+        'formattedValue' in values &&
+        typeof values.formattedValue === 'string'
+          ? values.formattedValue
+          : '';
+
+      onValueChange(formattedValue);
+    }}
+    {...props}
+  />
+);
+
+interface ZipTextFieldProps extends Pick<
+  TextFieldProps,
+  'disabled' | 'error' | 'fullWidth' | 'helperText' | 'inputProps' | 'label' | 'size'
+> {
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+const formatZipCode = (value: string): string => {
+  const digits = value.replace(/\D/g, '').slice(0, 9);
+
+  if (digits.length <= 5) {
+    return digits;
+  }
+
+  return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+};
+
+const ZipTextField = ({ onValueChange, value, ...props }: ZipTextFieldProps) => (
+  <TextField
+    {...props}
+    value={value}
+    onChange={(event) => {
+      onValueChange(formatZipCode(event.target.value));
+    }}
+  />
+);
+
 const getFieldError = (errors: ValidationErrors, submitAttempted: boolean, path: string): string | undefined => {
   if (!submitAttempted) {
     return undefined;
@@ -179,6 +292,8 @@ const getFieldError = (errors: ValidationErrors, submitAttempted: boolean, path:
 
   return errors[path];
 };
+
+const getStringValue = (value: unknown): string => (typeof value === 'string' ? value : '');
 
 const isChildMemberBlank = (child: ChildMember): boolean => {
   const hasCoreDetails = [
@@ -513,38 +628,55 @@ const ParishRegistrationForm = () => {
               disabled={inProgress || submitted}
             />
             <TextField
+              select
               label="State"
               size="small"
               fullWidth
               value={formData.family.state}
+              error={Boolean(getFieldError(errors, submitAttempted, 'family.state'))}
+              helperText={getFieldError(errors, submitAttempted, 'family.state')}
               onChange={(event) => updateFamily('state', event.target.value)}
               disabled={inProgress || submitted}
-            />
-            <TextField
+            >
+              <MenuItem value="">Select state</MenuItem>
+              {FORM_STATE_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {`${getStringValue(option.label)} (${getStringValue(option.value)})`}
+                </MenuItem>
+              ))}
+            </TextField>
+            <ZipTextField
               label="Zip"
               size="small"
               fullWidth
               value={formData.family.zip}
-              onChange={(event) => updateFamily('zip', event.target.value)}
+              error={Boolean(getFieldError(errors, submitAttempted, 'family.zip'))}
+              helperText={getFieldError(errors, submitAttempted, 'family.zip')}
+              onValueChange={(value) => updateFamily('zip', value)}
               disabled={inProgress || submitted}
+              inputProps={{ inputMode: 'numeric' }}
             />
-            <TextField
+            <PhoneTextField
               label="Home Phone"
-              type="tel"
               size="small"
               fullWidth
               value={formData.family.homePhone}
-              onChange={(event) => updateFamily('homePhone', event.target.value)}
+              error={Boolean(getFieldError(errors, submitAttempted, 'family.homePhone'))}
+              helperText={getFieldError(errors, submitAttempted, 'family.homePhone')}
+              onValueChange={(value) => updateFamily('homePhone', value)}
               disabled={inProgress || submitted}
+              inputProps={{ inputMode: 'tel' }}
             />
-            <TextField
+            <PhoneTextField
               label="Emergency Phone"
-              type="tel"
               size="small"
               fullWidth
               value={formData.family.emergencyPhone}
-              onChange={(event) => updateFamily('emergencyPhone', event.target.value)}
+              error={Boolean(getFieldError(errors, submitAttempted, 'family.emergencyPhone'))}
+              helperText={getFieldError(errors, submitAttempted, 'family.emergencyPhone')}
+              onValueChange={(value) => updateFamily('emergencyPhone', value)}
               disabled={inProgress || submitted}
+              inputProps={{ inputMode: 'tel' }}
             />
             <TextField
               label="Family Email"
@@ -561,17 +693,56 @@ const ParishRegistrationForm = () => {
           </StyledFieldGrid>
         </StyledSection>
 
-        {formData.adults.map((adult, index) => (
+        {formData.adults.map((adult: AdultMember, index: number) => (
           <StyledSection key={`adult-${index}`}>
             <StyledSectionTitle>{`Adult Member ${index + 1}`}</StyledSectionTitle>
             <StyledMemberCard>
               <StyledFieldGrid>
                 <TextField
-                  label="First Name / Nickname"
+                  select
+                  label="Parish Status"
                   size="small"
                   fullWidth
-                  value={adult.firstNameNickname}
-                  onChange={(event) => updateAdult(index, 'firstNameNickname', event.target.value)}
+                  value={adult.parishStatus}
+                  onChange={(event) => updateAdult(index, 'parishStatus', event.target.value)}
+                  disabled={inProgress || submitted}
+                >
+                  {PARISH_STATUS_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Role"
+                  size="small"
+                  fullWidth
+                  value={adult.role}
+                  onChange={(event) => updateAdult(index, 'role', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="First Name"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.firstName)}
+                  onChange={(event) => updateAdult(index, 'firstName', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="Nickname"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.nickname)}
+                  onChange={(event) => updateAdult(index, 'nickname', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="Maiden Name"
+                  size="small"
+                  fullWidth
+                  value={adult.maidenName}
+                  onChange={(event) => updateAdult(index, 'maidenName', event.target.value)}
                   disabled={inProgress || submitted}
                 />
                 <TextField
@@ -602,6 +773,89 @@ const ParishRegistrationForm = () => {
                   disabled={inProgress || submitted}
                 />
                 <TextField
+                  label="Email"
+                  type="email"
+                  size="small"
+                  fullWidth
+                  value={adult.email}
+                  error={Boolean(getFieldError(errors, submitAttempted, `adults.${index}.email`))}
+                  helperText={getFieldError(errors, submitAttempted, `adults.${index}.email`)}
+                  onChange={(event) => updateAdult(index, 'email', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <PhoneTextField
+                  label="Work Phone"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.workPhone)}
+                  error={Boolean(getFieldError(errors, submitAttempted, `adults.${index}.workPhone`))}
+                  helperText={getFieldError(errors, submitAttempted, `adults.${index}.workPhone`)}
+                  onValueChange={(value) => updateAdult(index, 'workPhone', value)}
+                  disabled={inProgress || submitted}
+                  inputProps={{ inputMode: 'tel' }}
+                />
+                <PhoneTextField
+                  label="Cell Phone"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.cellPhone)}
+                  error={Boolean(getFieldError(errors, submitAttempted, `adults.${index}.cellPhone`))}
+                  helperText={getFieldError(errors, submitAttempted, `adults.${index}.cellPhone`)}
+                  onValueChange={(value) => updateAdult(index, 'cellPhone', value)}
+                  disabled={inProgress || submitted}
+                  inputProps={{ inputMode: 'tel' }}
+                />
+                <TextField
+                  label="First Language"
+                  size="small"
+                  fullWidth
+                  value={adult.firstLanguage}
+                  onChange={(event) => updateAdult(index, 'firstLanguage', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="Occupation"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.occupation)}
+                  onChange={(event) => updateAdult(index, 'occupation', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="Employer"
+                  size="small"
+                  fullWidth
+                  value={getStringValue(adult.employer)}
+                  onChange={(event) => updateAdult(index, 'employer', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  label="Birthplace"
+                  size="small"
+                  fullWidth
+                  value={adult.birthplace}
+                  onChange={(event) => updateAdult(index, 'birthplace', event.target.value)}
+                  disabled={inProgress || submitted}
+                />
+                <TextField
+                  select
+                  label="Catholic?"
+                  size="small"
+                  fullWidth
+                  value={adult.isCatholic}
+                  onChange={(event) => updateAdult(index, 'isCatholic', event.target.value)}
+                  disabled={inProgress || submitted}
+                >
+                  {YES_NO_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </StyledFieldGrid>
+              {renderSacramentFields('adults', index, adult)}
+              <StyledFieldGrid>
+                <TextField
                   select
                   label="Marital Status"
                   size="small"
@@ -631,98 +885,7 @@ const ParishRegistrationForm = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <TextField
-                  select
-                  label="Parish Status"
-                  size="small"
-                  fullWidth
-                  value={adult.parishStatus}
-                  onChange={(event) => updateAdult(index, 'parishStatus', event.target.value)}
-                  disabled={inProgress || submitted}
-                >
-                  {PARISH_STATUS_OPTIONS.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  label="Role"
-                  size="small"
-                  fullWidth
-                  value={adult.role}
-                  onChange={(event) => updateAdult(index, 'role', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="Occupation / Employer"
-                  size="small"
-                  fullWidth
-                  value={adult.occupationEmployer}
-                  onChange={(event) => updateAdult(index, 'occupationEmployer', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="Work Phone / Cell"
-                  type="tel"
-                  size="small"
-                  fullWidth
-                  value={adult.workPhoneOrCell}
-                  onChange={(event) => updateAdult(index, 'workPhoneOrCell', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="Email"
-                  type="email"
-                  size="small"
-                  fullWidth
-                  value={adult.email}
-                  error={Boolean(getFieldError(errors, submitAttempted, `adults.${index}.email`))}
-                  helperText={getFieldError(errors, submitAttempted, `adults.${index}.email`)}
-                  onChange={(event) => updateAdult(index, 'email', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="First Language"
-                  size="small"
-                  fullWidth
-                  value={adult.firstLanguage}
-                  onChange={(event) => updateAdult(index, 'firstLanguage', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="Maiden Name"
-                  size="small"
-                  fullWidth
-                  value={adult.maidenName}
-                  onChange={(event) => updateAdult(index, 'maidenName', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  label="Birthplace"
-                  size="small"
-                  fullWidth
-                  value={adult.birthplace}
-                  onChange={(event) => updateAdult(index, 'birthplace', event.target.value)}
-                  disabled={inProgress || submitted}
-                />
-                <TextField
-                  select
-                  label="Catholic?"
-                  size="small"
-                  fullWidth
-                  value={adult.isCatholic}
-                  onChange={(event) => updateAdult(index, 'isCatholic', event.target.value)}
-                  disabled={inProgress || submitted}
-                >
-                  {YES_NO_OPTIONS.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
               </StyledFieldGrid>
-              {renderSacramentFields('adults', index, adult)}
             </StyledMemberCard>
           </StyledSection>
         ))}
@@ -730,7 +893,7 @@ const ParishRegistrationForm = () => {
         <StyledSection>
           <StyledSectionTitle>Children / Dependents</StyledSectionTitle>
 
-          {formData.children.map((child, index) => (
+          {formData.children.map((child: ChildMember, index: number) => (
             <StyledMemberCard key={`child-${index}`}>
               <StyledSubsectionTitle>{`Child / Dependent ${index + 1}`}</StyledSubsectionTitle>
               <StyledFieldGrid>

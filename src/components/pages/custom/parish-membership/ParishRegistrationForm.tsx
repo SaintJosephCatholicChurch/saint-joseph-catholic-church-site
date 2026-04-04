@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { PARISH_REGISTRATION_URL } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';
@@ -18,11 +18,7 @@ import {
   SACRAMENT_FIELDS,
   YES_NO_OPTIONS
 } from './parishRegistration.constants';
-import {
-  createChildMember,
-  createParishRegistrationInitialState,
-  getTodayDateString
-} from './parishRegistration.initialState';
+import { createChildMember, createParishRegistrationInitialState } from './parishRegistration.initialState';
 import { validateParishRegistration } from './parishRegistration.validation';
 
 import type {
@@ -106,7 +102,7 @@ const StyledSection = styled('section')`
 `;
 
 const StyledSectionTitle = styled('h2')`
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   color: #bf303c;
   font-size: 24px;
   line-height: 24px;
@@ -212,22 +208,6 @@ const ParishRegistrationForm = () => {
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
-
-  useEffect(() => {
-    setFormData((current) => {
-      if (current.family.registrationDate !== '') {
-        return current;
-      }
-
-      return {
-        ...current,
-        family: {
-          ...current.family,
-          registrationDate: getTodayDateString()
-        }
-      };
-    });
-  }, []);
 
   const sanitizedFormData = useMemo(
     () => ({
@@ -472,26 +452,6 @@ const ParishRegistrationForm = () => {
         <StyledSection>
           <StyledSectionTitle>Family Information</StyledSectionTitle>
           <StyledFieldGrid>
-            <TextField
-              label="Registration Date"
-              type="date"
-              size="small"
-              fullWidth
-              value={formData.family.registrationDate}
-              error={Boolean(getFieldError(errors, submitAttempted, 'family.registrationDate'))}
-              helperText={getFieldError(errors, submitAttempted, 'family.registrationDate')}
-              InputLabelProps={{ shrink: true }}
-              onChange={(event) => updateFamily('registrationDate', event.target.value)}
-              disabled={inProgress || submitted}
-            />
-            <TextField
-              label="Envelope #"
-              size="small"
-              fullWidth
-              value={formData.family.envelopeNumber}
-              onChange={(event) => updateFamily('envelopeNumber', event.target.value)}
-              disabled={inProgress || submitted}
-            />
             <TextField
               label="Last Name"
               size="small"

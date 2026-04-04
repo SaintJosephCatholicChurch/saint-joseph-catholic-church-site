@@ -38,9 +38,18 @@ export const createChildMember = (): ChildMember => ({
   sacraments: createSacraments()
 });
 
+export const getTodayDateString = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = `${today.getMonth() + 1}`.padStart(2, '0');
+  const date = `${today.getDate()}`.padStart(2, '0');
+
+  return `${year}-${month}-${date}`;
+};
+
 export const createParishRegistrationInitialState = (): ParishRegistrationFormData => ({
   family: {
-    registrationDate: '',
+    registrationDate: getTodayDateString(),
     envelopeNumber: '',
     lastName: '',
     firstNames: '',
@@ -61,12 +70,3 @@ export const createParishRegistrationInitialState = (): ParishRegistrationFormDa
     priestVisitDetails: ''
   }
 });
-
-export const getTodayDateString = (): string => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = `${today.getMonth() + 1}`.padStart(2, '0');
-  const date = `${today.getDate()}`.padStart(2, '0');
-
-  return `${year}-${month}-${date}`;
-};

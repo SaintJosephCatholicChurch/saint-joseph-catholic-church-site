@@ -6,7 +6,7 @@
     "build-analyze": "cross-env ANALYZE=true next build",
     "bulletins-ci": "ts-node --project ./tsconfig.scripts.json ./scripts/pdf-to-images.ts -ci",
     "bulletins": "ts-node --project ./tsconfig.scripts.json ./scripts/pdf-to-images.ts",
-    "deploy": "npm run bulletins && npm run build",
+    "deploy": "npm run build",
     "dev": "cross-env NODE_ENV=development next dev",
     "build": "cross-env NODE_ENV=production next build",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts",

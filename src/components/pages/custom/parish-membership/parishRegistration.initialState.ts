@@ -23,8 +23,6 @@ export const createAdultMember = (): AdultMember => ({
   employer: '',
   birthplace: '',
   isCatholic: '',
-  maritalStatus: '',
-  validCatholicMarriage: '',
   sacraments: createSacraments()
 });
 
@@ -68,6 +66,10 @@ export const createParishRegistrationInitialState = (): ParishRegistrationFormDa
     familyEmail: ''
   },
   adults: [createAdultMember(), createAdultMember()],
+  marriage: {
+    maritalStatus: '',
+    validCatholicMarriage: ''
+  },
   children: [],
   additional: {
     priestVisitRequested: '',

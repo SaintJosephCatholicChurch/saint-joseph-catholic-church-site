@@ -42,9 +42,12 @@ export interface AdultMember {
   employer: string;
   birthplace: string;
   isCatholic: string;
+  sacraments: Sacraments;
+}
+
+export interface MarriageInformation {
   maritalStatus: string;
   validCatholicMarriage: string;
-  sacraments: Sacraments;
 }
 
 export interface ChildMember {
@@ -69,6 +72,7 @@ export interface AdditionalInformation {
 export interface ParishRegistrationFormData {
   family: FamilyInformation;
   adults: AdultMember[];
+  marriage: MarriageInformation;
   children: ChildMember[];
   additional: AdditionalInformation;
 }

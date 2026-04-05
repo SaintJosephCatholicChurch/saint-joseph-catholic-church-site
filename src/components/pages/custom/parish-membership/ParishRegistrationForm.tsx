@@ -389,12 +389,30 @@ const isChildMemberBlank = (child: ChildMember): boolean => {
   );
 };
 
+const getMarriageFieldValue = (value: unknown, field: 'maritalStatus' | 'validCatholicMarriage'): string => {
+  if (typeof value !== 'object' || value === null) {
+    return '';
+  }
+
+  const record = value as Record<string, unknown>;
+  const marriageValue = record.marriage;
+
+  if (typeof marriageValue !== 'object' || marriageValue === null) {
+    return '';
+  }
+
+  const fieldValue = (marriageValue as Record<string, unknown>)[field];
+  return typeof fieldValue === 'string' ? fieldValue : '';
+};
+
 const ParishRegistrationForm = () => {
   const [formData, setFormData] = useState<ParishRegistrationFormData>(createParishRegistrationInitialState);
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
+  const marriageMaritalStatus = getMarriageFieldValue(formData, 'maritalStatus');
+  const validCatholicMarriage = getMarriageFieldValue(formData, 'validCatholicMarriage');
 
   const sanitizedFormData = useMemo(
     () => ({
@@ -501,6 +519,19 @@ const ParishRegistrationForm = () => {
         [field]: value,
         ...(field === 'priestVisitRequested' && value !== 'yes' ? { priestVisitDetails: '' } : {})
       }
+    }));
+  }, []);
+
+  const updateMarriage = useCallback((field: keyof ParishRegistrationFormData['marriage'], value: string) => {
+    setFormData((current) => ({
+      ...current,
+      marriage: (() => {
+        return {
+          maritalStatus: field === 'maritalStatus' ? value : getMarriageFieldValue(current, 'maritalStatus'),
+          validCatholicMarriage:
+            field === 'validCatholicMarriage' ? value : getMarriageFieldValue(current, 'validCatholicMarriage')
+        };
+      })()
     }));
   }, []);
 
@@ -1051,44 +1082,84 @@ const ParishRegistrationForm = () => {
                 </StyledFieldGrid>
               </StyledFieldGroup>
               <StyledFieldGroup>{renderSacramentFields('adults', index, adult)}</StyledFieldGroup>
-              <StyledFieldGroup>
-                <StyledFieldGroupTitle>Marriage Information</StyledFieldGroupTitle>
-                <StyledFieldGrid>
-                  <TextField
-                    select
-                    label="Marital Status"
-                    size="small"
-                    fullWidth
-                    value={adult.maritalStatus}
-                    onChange={(event) => updateAdult(index, 'maritalStatus', event.target.value)}
-                    disabled={inProgress || submitted}
-                  >
-                    {MARITAL_STATUS_OPTIONS.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <TextField
-                    select
-                    label="Valid Catholic Marriage"
-                    size="small"
-                    fullWidth
-                    value={adult.validCatholicMarriage}
-                    onChange={(event) => updateAdult(index, 'validCatholicMarriage', event.target.value)}
-                    disabled={inProgress || submitted}
-                  >
-                    {YES_NO_OPTIONS.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </StyledFieldGrid>
-              </StyledFieldGroup>
             </StyledMemberCard>
           </StyledSection>
         ))}
+
+        <StyledSection>
+          <StyledSectionTitle>Marriage Information</StyledSectionTitle>
+          <StyledMemberCard>
+            <StyledFieldGroup>
+              <StyledFieldGrid>
+                <TextField
+                  select
+                  label="Marital Status"
+                  size="small"
+                  fullWidth
+                  value={marriageMaritalStatus}
+                  onChange={(event) => updateMarriage('maritalStatus', event.target.value)}
+                  disabled={inProgress || submitted}
+                >
+                  {MARITAL_STATUS_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={validCatholicMarriage === 'yes'}
+                      onChange={(event) => {
+                        updateMarriage('validCatholicMarriage', event.target.checked ? 'yes' : 'no');
+                      }}
+                      disabled={inProgress || submitted}
+                    />
+                  }
+                  label="Valid Catholic Marriage?"
+                />
+              </StyledFieldGrid>
+            </StyledFieldGroup>
+          </StyledMemberCard>
+        </StyledSection>
+
+        <StyledSection>
+          <StyledSectionTitle>Additional Information</StyledSectionTitle>
+          <StyledFieldGroup>
+            <StyledFieldGroupTitle>Pastoral Care</StyledFieldGroupTitle>
+            <StyledFieldGrid>
+              <StyledWideField>
+                <TextField
+                  select
+                  label="Would any household member like to be visited by a priest?"
+                  size="small"
+                  fullWidth
+                  value={formData.additional.priestVisitRequested}
+                  onChange={(event) => updateAdditional('priestVisitRequested', event.target.value)}
+                  disabled={inProgress || submitted}
+                >
+                  {YES_NO_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </StyledWideField>
+              <StyledWideField>
+                <TextField
+                  label="Priest Visit Details"
+                  size="small"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  value={formData.additional.priestVisitDetails}
+                  onChange={(event) => updateAdditional('priestVisitDetails', event.target.value)}
+                  disabled={formData.additional.priestVisitRequested !== 'yes' || inProgress || submitted}
+                />
+              </StyledWideField>
+            </StyledFieldGrid>
+          </StyledFieldGroup>
+        </StyledSection>
 
         <StyledSection>
           <StyledSectionTitle>Children / Dependents</StyledSectionTitle>
@@ -1220,44 +1291,6 @@ const ParishRegistrationForm = () => {
               Add Child / Dependent
             </Button>
           </StyledSectionActions>
-        </StyledSection>
-
-        <StyledSection>
-          <StyledSectionTitle>Additional Information</StyledSectionTitle>
-          <StyledFieldGroup>
-            <StyledFieldGroupTitle>Pastoral Care</StyledFieldGroupTitle>
-            <StyledFieldGrid>
-              <StyledWideField>
-                <TextField
-                  select
-                  label="Would any household member like to be visited by a priest?"
-                  size="small"
-                  fullWidth
-                  value={formData.additional.priestVisitRequested}
-                  onChange={(event) => updateAdditional('priestVisitRequested', event.target.value)}
-                  disabled={inProgress || submitted}
-                >
-                  {YES_NO_OPTIONS.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </StyledWideField>
-              <StyledWideField>
-                <TextField
-                  label="Priest Visit Details"
-                  size="small"
-                  fullWidth
-                  multiline
-                  rows={3}
-                  value={formData.additional.priestVisitDetails}
-                  onChange={(event) => updateAdditional('priestVisitDetails', event.target.value)}
-                  disabled={formData.additional.priestVisitRequested !== 'yes' || inProgress || submitted}
-                />
-              </StyledWideField>
-            </StyledFieldGrid>
-          </StyledFieldGroup>
         </StyledSection>
 
         <StyledSectionActions>

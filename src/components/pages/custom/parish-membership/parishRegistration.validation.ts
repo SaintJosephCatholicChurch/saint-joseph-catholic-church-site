@@ -1,5 +1,10 @@
 import { isNotEmpty } from '../../../../util/string.util';
-import { SACRAMENT_FIELDS, STATE_OPTIONS } from './parishRegistration.constants';
+import {
+  MARITAL_STATUS_OPTIONS,
+  SACRAMENT_FIELDS,
+  STATE_OPTIONS,
+  YES_NO_OPTIONS
+} from './parishRegistration.constants';
 
 import type {
   ParishRegistrationFormData,
@@ -13,6 +18,8 @@ const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 const PHONE_REGEX = /^\(\d{3}\) \d{3}-\d{4}$/;
 const ZIP_REGEX = /^\d{5}(?:-\d{4})?$/;
 const STATE_VALUES = new Set(STATE_OPTIONS.map((option) => option.value));
+const MARITAL_STATUS_VALUES = new Set(MARITAL_STATUS_OPTIONS.map((option) => option.value));
+const YES_NO_VALUES = new Set(YES_NO_OPTIONS.map((option) => option.value));
 
 const isValidDateString = (value: string): boolean => {
   if (!DATE_REGEX.test(value)) {
@@ -26,6 +33,20 @@ const isValidDateString = (value: string): boolean => {
 const isValidPhoneString = (value: string): boolean => PHONE_REGEX.test(value);
 const isValidZipString = (value: string): boolean => ZIP_REGEX.test(value);
 const getStringValue = (value: unknown): string => (typeof value === 'string' ? value : '');
+const getMarriageValue = (value: unknown, field: 'maritalStatus' | 'validCatholicMarriage'): string => {
+  if (typeof value !== 'object' || value === null) {
+    return '';
+  }
+
+  const rootRecord = value as Record<string, unknown>;
+  const marriageValue = rootRecord.marriage;
+
+  if (typeof marriageValue !== 'object' || marriageValue === null) {
+    return '';
+  }
+
+  return getStringValue((marriageValue as Record<string, unknown>)[field]);
+};
 
 const isChildMemberBlank = (child: ParishRegistrationFormData['children'][number]): boolean => {
   const hasCoreDetails = [
@@ -51,6 +72,8 @@ const isChildMemberBlank = (child: ParishRegistrationFormData['children'][number
 
 export const validateParishRegistration = (formData: ParishRegistrationFormData): ValidationErrors => {
   const errors: ValidationErrors = {};
+  const marriageMaritalStatus = getMarriageValue(formData, 'maritalStatus').trim();
+  const validCatholicMarriage = getMarriageValue(formData, 'validCatholicMarriage').trim();
 
   if (!isNotEmpty(formData.family.lastName.trim())) {
     errors['family.lastName'] = 'Last name is required.';
@@ -153,6 +176,14 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
       }
     });
   });
+
+  if (isNotEmpty(marriageMaritalStatus) && !MARITAL_STATUS_VALUES.has(marriageMaritalStatus)) {
+    errors['marriage.maritalStatus'] = 'Select a valid marital status.';
+  }
+
+  if (isNotEmpty(validCatholicMarriage) && !YES_NO_VALUES.has(validCatholicMarriage)) {
+    errors['marriage.validCatholicMarriage'] = 'Select a valid value.';
+  }
 
   formData.children.forEach((child, childIndex) => {
     if (isChildMemberBlank(child)) {

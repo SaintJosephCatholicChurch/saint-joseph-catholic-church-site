@@ -25,6 +25,7 @@ const isValidDateString = (value: string): boolean => {
 
 const isValidPhoneString = (value: string): boolean => PHONE_REGEX.test(value);
 const isValidZipString = (value: string): boolean => ZIP_REGEX.test(value);
+const getStringValue = (value: unknown): string => (typeof value === 'string' ? value : '');
 
 const isChildMemberBlank = (child: ParishRegistrationFormData['children'][number]): boolean => {
   const hasCoreDetails = [
@@ -59,6 +60,14 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     errors['family.address'] = 'Address is required.';
   }
 
+  if (!isNotEmpty(formData.family.city.trim())) {
+    errors['family.city'] = 'City is required.';
+  }
+
+  if (!isNotEmpty(formData.family.state.trim())) {
+    errors['family.state'] = 'State is required.';
+  }
+
   if (!isNotEmpty(formData.family.familyEmail.trim())) {
     errors['family.familyEmail'] = 'Family email is required.';
   } else if (!EMAIL_REGEX.test(formData.family.familyEmail.trim())) {
@@ -69,7 +78,9 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     errors['family.registrationDate'] = 'Enter a valid registration date.';
   }
 
-  if (isNotEmpty(formData.family.homePhone) && !isValidPhoneString(formData.family.homePhone.trim())) {
+  if (!isNotEmpty(formData.family.homePhone.trim())) {
+    errors['family.homePhone'] = 'Home phone is required.';
+  } else if (!isValidPhoneString(formData.family.homePhone.trim())) {
     errors['family.homePhone'] = 'Enter a 10-digit phone number including area code.';
   }
 
@@ -77,7 +88,9 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     errors['family.emergencyPhone'] = 'Enter a 10-digit phone number including area code.';
   }
 
-  if (isNotEmpty(formData.family.zip) && !isValidZipString(formData.family.zip.trim())) {
+  if (!isNotEmpty(formData.family.zip.trim())) {
+    errors['family.zip'] = 'ZIP code is required.';
+  } else if (!isValidZipString(formData.family.zip.trim())) {
     errors['family.zip'] = 'Enter a valid ZIP code.';
   }
 
@@ -86,6 +99,30 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
   }
 
   formData.adults.forEach((adult, adultIndex) => {
+    if (!isNotEmpty(adult.parishStatus.trim())) {
+      errors[`adults.${adultIndex}.parishStatus`] = 'Parish status is required.';
+    }
+
+    if (!isNotEmpty(adult.role.trim())) {
+      errors[`adults.${adultIndex}.role`] = 'Role is required.';
+    }
+
+    if (!isNotEmpty(adult.firstName.trim())) {
+      errors[`adults.${adultIndex}.firstName`] = 'First name is required.';
+    }
+
+    if (!isNotEmpty(adult.gender.trim())) {
+      errors[`adults.${adultIndex}.gender`] = 'Gender is required.';
+    }
+
+    if (!isNotEmpty(adult.dateOfBirth.trim())) {
+      errors[`adults.${adultIndex}.dateOfBirth`] = 'Date of birth is required.';
+    }
+
+    if (!isNotEmpty(adult.birthplace.trim())) {
+      errors[`adults.${adultIndex}.birthplace`] = 'Birthplace is required.';
+    }
+
     if (isNotEmpty(adult.email.trim()) && !EMAIL_REGEX.test(adult.email.trim())) {
       errors[`adults.${adultIndex}.email`] = 'Enter a valid adult email address.';
     }
@@ -120,6 +157,32 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
   formData.children.forEach((child, childIndex) => {
     if (isChildMemberBlank(child)) {
       return;
+    }
+
+    const childBirthplace = getStringValue(child.birthplace);
+
+    if (!isNotEmpty(child.relationshipToHeadOfHousehold.trim())) {
+      errors[`children.${childIndex}.relationshipToHeadOfHousehold`] = 'Relationship to head of household is required.';
+    }
+
+    if (!isNotEmpty(child.firstName.trim())) {
+      errors[`children.${childIndex}.firstName`] = 'First name is required.';
+    }
+
+    if (!isNotEmpty(child.lastName.trim())) {
+      errors[`children.${childIndex}.lastName`] = 'Last name is required.';
+    }
+
+    if (!isNotEmpty(child.gender.trim())) {
+      errors[`children.${childIndex}.gender`] = 'Gender is required.';
+    }
+
+    if (!isNotEmpty(child.birthdate.trim())) {
+      errors[`children.${childIndex}.birthdate`] = 'Birthdate is required.';
+    }
+
+    if (!isNotEmpty(childBirthplace.trim())) {
+      errors[`children.${childIndex}.birthplace`] = 'Birthplace is required.';
     }
 
     if (isNotEmpty(child.birthdate) && !isValidDateString(child.birthdate)) {

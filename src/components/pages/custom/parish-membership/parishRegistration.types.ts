@@ -52,6 +52,7 @@ export interface ChildMember {
   lastName: string;
   gender: string;
   birthdate: string;
+  birthplace: string;
   relationshipToHeadOfHousehold: string;
   school: string;
   highSchoolGraduationYear: string;

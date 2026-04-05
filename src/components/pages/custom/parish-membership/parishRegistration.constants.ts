@@ -81,8 +81,24 @@ export const STATE_OPTIONS: Option[] = [
 ];
 
 export const SACRAMENT_FIELDS = [
-  { key: 'baptism', label: 'Baptism' },
-  { key: 'eucharist', label: 'Eucharist' },
-  { key: 'reconciliation', label: 'Reconciliation' },
-  { key: 'confirmation', label: 'Confirmation' }
+  {
+    key: 'baptism',
+    questionLabel: 'Baptized?',
+    dateLabel: 'Baptism Date'
+  },
+  {
+    key: 'reconciliation',
+    questionLabel: 'Reconciliation?',
+    dateLabel: 'Reconciliation Date'
+  },
+  {
+    key: 'eucharist',
+    questionLabel: 'First Eucharist?',
+    dateLabel: 'First Eucharist Date'
+  },
+  {
+    key: 'confirmation',
+    questionLabel: 'Confirmed?',
+    dateLabel: 'Confirmation Date'
+  }
 ] as const;

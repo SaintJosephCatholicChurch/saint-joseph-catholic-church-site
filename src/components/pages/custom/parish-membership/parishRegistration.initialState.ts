@@ -33,6 +33,7 @@ export const createChildMember = (): ChildMember => ({
   lastName: '',
   gender: '',
   birthdate: '',
+  birthplace: '',
   relationshipToHeadOfHousehold: '',
   school: '',
   highSchoolGraduationYear: '',

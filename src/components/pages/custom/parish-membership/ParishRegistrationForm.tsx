@@ -188,6 +188,21 @@ const StyledWideField = styled('div')`
   grid-column: 1 / -1;
 `;
 
+interface StyledMobileOrderedFieldProps {
+  $mobileOrder: number;
+}
+
+const StyledMobileOrderedField = styled(
+  'div',
+  transientOptions
+)<StyledMobileOrderedFieldProps>(
+  ({ $mobileOrder, theme }) => `
+    ${getContainerQuery(theme.breakpoints.down('md'))} {
+      order: ${$mobileOrder};
+    }
+  `
+);
+
 const StyledFieldGroup = styled('div')`
   display: flex;
   flex-direction: column;
@@ -913,30 +928,34 @@ const ParishRegistrationForm = () => {
                     onChange={(event) => updateAdult(index, 'nickname', event.target.value)}
                     disabled={inProgress || submitted}
                   />
-                  <TextField
-                    select
-                    label="Gender"
-                    size="small"
-                    fullWidth
-                    required
-                    value={adult.gender}
-                    onChange={(event) => updateAdult(index, 'gender', event.target.value)}
-                    disabled={inProgress || submitted}
-                  >
-                    {GENDER_OPTIONS.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  <TextField
-                    label="Maiden Name"
-                    size="small"
-                    fullWidth
-                    value={adult.maidenName}
-                    onChange={(event) => updateAdult(index, 'maidenName', event.target.value)}
-                    disabled={inProgress || submitted}
-                  />
+                  <StyledMobileOrderedField $mobileOrder={2}>
+                    <TextField
+                      select
+                      label="Gender"
+                      size="small"
+                      fullWidth
+                      required
+                      value={adult.gender}
+                      onChange={(event) => updateAdult(index, 'gender', event.target.value)}
+                      disabled={inProgress || submitted}
+                    >
+                      {GENDER_OPTIONS.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </StyledMobileOrderedField>
+                  <StyledMobileOrderedField $mobileOrder={1}>
+                    <TextField
+                      label="Maiden Name"
+                      size="small"
+                      fullWidth
+                      value={adult.maidenName}
+                      onChange={(event) => updateAdult(index, 'maidenName', event.target.value)}
+                      disabled={inProgress || submitted}
+                    />
+                  </StyledMobileOrderedField>
                 </StyledFieldGrid>
               </StyledFieldGroup>
               <StyledFieldGroup>

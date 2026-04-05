@@ -87,67 +87,29 @@ const FORM_STATE_OPTIONS = [
 ];
 
 const StyledFormWrapper = styled('div')`
-  position: relative;
   display: flex;
   width: 100%;
 `;
 
-interface StyledParishRegistrationFormProps {
-  $submitted: boolean;
-}
+const StyledParishRegistrationForm = styled('form')`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+`;
 
-const StyledParishRegistrationForm = styled(
-  'form',
-  transientOptions
-)<StyledParishRegistrationFormProps>(
-  ({ $submitted }) => `
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-
-    ${
-      $submitted
-        ? `
-          opacity: 0.35;
-          pointer-events: none;
-        `
-        : ''
-    }
-  `
-);
-
-interface StyledSubmittedMessageProps {
-  $submitted: boolean;
-}
-
-const StyledSubmittedMessage = styled(
-  'div',
-  transientOptions
-)<StyledSubmittedMessageProps>(
-  ({ $submitted }) => `
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 16px;
-    font-size: 24px;
-    background: rgba(255, 255, 255, 0.9);
-    z-index: 1;
-
-    ${
-      !$submitted
-        ? `
-          visibility: hidden;
-          pointer-events: none;
-        `
-        : ''
-    }
-  `
-);
+const StyledSubmittedMessage = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 220px;
+  font-size: 24px;
+  padding: 32px 24px;
+`;
 
 const StyledSection = styled('section')`
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -741,11 +703,13 @@ const ParishRegistrationForm = () => {
 
   return (
     <StyledFormWrapper>
-      <StyledSubmittedMessage $submitted={submitted}>
-        <CheckCircleIcon color="success" sx={{ fontSize: '72px' }} />
-        <div>Parish registration successfully submitted.</div>
-      </StyledSubmittedMessage>
-      <StyledParishRegistrationForm onSubmit={onSubmit} $submitted={submitted}>
+      {submitted ? (
+        <StyledSubmittedMessage>
+          <CheckCircleIcon color="success" sx={{ fontSize: '72px' }} />
+          <div>Parish registration successfully submitted.</div>
+        </StyledSubmittedMessage>
+      ) : (
+        <StyledParishRegistrationForm onSubmit={onSubmit}>
         {submitError ? <Alert severity="error">{submitError}</Alert> : null}
 
         <StyledSection>
@@ -1310,7 +1274,8 @@ const ParishRegistrationForm = () => {
             {inProgress ? 'Submitting...' : 'Submit Registration'}
           </Button>
         </StyledSectionActions>
-      </StyledParishRegistrationForm>
+        </StyledParishRegistrationForm>
+      )}
     </StyledFormWrapper>
   );
 };

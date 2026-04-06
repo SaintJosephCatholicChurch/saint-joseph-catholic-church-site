@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { PatternFormat } from 'react-number-format';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PARISH_REGISTRATION_URL } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';
@@ -385,6 +385,14 @@ const ParishRegistrationForm = () => {
 
   const errors = useMemo(() => validateParishRegistration(sanitizedFormData), [sanitizedFormData]);
   const valid = useMemo(() => Object.keys(errors).length === 0, [errors]);
+
+  useEffect(() => {
+    if (!submitted) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [submitted]);
 
   const updateFamily = useCallback((field: keyof ParishRegistrationFormData['family'], value: string) => {
     setFormData((current) => ({

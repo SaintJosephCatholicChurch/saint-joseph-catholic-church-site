@@ -3,7 +3,6 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { PatternFormat } from 'react-number-format';
@@ -793,17 +792,18 @@ const ParishRegistrationForm = () => {
                         size="small"
                         fullWidth
                         required
+                        SelectProps={{ native: true }}
                         value={formData.family.state}
                         error={Boolean(getFieldError(errors, submitAttempted, 'family.state'))}
                         helperText={getFieldError(errors, submitAttempted, 'family.state')}
                         onChange={(event) => updateFamily('state', event.target.value)}
                         disabled={inProgress || submitted}
                       >
-                        <MenuItem value="">Select state</MenuItem>
+                        <option value="" aria-label="No state selected" />
                         {FORM_STATE_OPTIONS.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
+                          <option key={option.value} value={option.value}>
                             {`${getStringValue(option.label)} (${getStringValue(option.value)})`}
-                          </MenuItem>
+                          </option>
                         ))}
                       </TextField>
                       <ZipTextField
@@ -886,14 +886,16 @@ const ParishRegistrationForm = () => {
                       size="small"
                       fullWidth
                       required
+                      SelectProps={{ native: true }}
                       value={adult.parishStatus}
                       onChange={(event) => updateAdult(index, 'parishStatus', event.target.value)}
                       disabled={inProgress || submitted}
                     >
+                      <option value="" aria-label="No parish status selected" />
                       {PARISH_STATUS_OPTIONS.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
+                        <option key={option.value} value={option.value}>
                           {option.label}
-                        </MenuItem>
+                        </option>
                       ))}
                     </TextField>
                     <TextField
@@ -930,14 +932,16 @@ const ParishRegistrationForm = () => {
                         size="small"
                         fullWidth
                         required
+                        SelectProps={{ native: true }}
                         value={adult.gender}
                         onChange={(event) => updateAdult(index, 'gender', event.target.value)}
                         disabled={inProgress || submitted}
                       >
+                        <option value="" aria-label="No gender selected" />
                         {GENDER_OPTIONS.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
+                          <option key={option.value} value={option.value}>
                             {option.label}
-                          </MenuItem>
+                          </option>
                         ))}
                       </TextField>
                     </StyledMobileOrderedField>
@@ -1060,14 +1064,16 @@ const ParishRegistrationForm = () => {
                     label="Marital Status"
                     size="small"
                     fullWidth
+                    SelectProps={{ native: true }}
                     value={marriageMaritalStatus}
                     onChange={(event) => updateMarriage('maritalStatus', event.target.value)}
                     disabled={inProgress || submitted}
                   >
+                    <option value="" aria-label="No marital status selected" />
                     {MARITAL_STATUS_OPTIONS.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value}>
                         {option.label}
-                      </MenuItem>
+                      </option>
                     ))}
                   </TextField>
                   <FormControlLabel
@@ -1098,14 +1104,16 @@ const ParishRegistrationForm = () => {
                     label="Would any household member like to be visited by a priest?"
                     size="small"
                     fullWidth
+                    SelectProps={{ native: true }}
                     value={formData.additional.priestVisitRequested}
                     onChange={(event) => updateAdditional('priestVisitRequested', event.target.value)}
                     disabled={inProgress || submitted}
                   >
+                    <option value="" aria-label="No priest visit preference selected" />
                     {YES_NO_OPTIONS.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value}>
                         {option.label}
-                      </MenuItem>
+                      </option>
                     ))}
                   </TextField>
                 </StyledWideField>
@@ -1170,14 +1178,16 @@ const ParishRegistrationForm = () => {
                       size="small"
                       fullWidth
                       required
+                      SelectProps={{ native: true }}
                       value={child.gender}
                       onChange={(event) => updateChild(index, 'gender', event.target.value)}
                       disabled={inProgress || submitted}
                     >
+                      <option value="" aria-label="No gender selected" />
                       {GENDER_OPTIONS.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
+                        <option key={option.value} value={option.value}>
                           {option.label}
-                        </MenuItem>
+                        </option>
                       ))}
                     </TextField>
                   </StyledFieldGrid>

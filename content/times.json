@@ -1,136 +1,8 @@
 {
   "times": [
     {
-      "id": "c590170c-aa27-4b35-9dbc-d9c95d678e9c",
-      "name": "Holy Week (2026)",
-      "sections": [
-        {
-          "id": "8153555d-5f79-45e1-88de-93fd2025b0ed",
-          "name": "Good Friday",
-          "days": [
-            {
-              "id": "bfd0f7d3-ff8a-491e-b16b-79e21014e9c9",
-              "day": "Lauds (Morning Prayer)",
-              "times": [
-                {
-                  "id": "a907f722-f04a-40f7-bd54-c83134697189",
-                  "time": "8:30 AM"
-                }
-              ]
-            },
-            {
-              "id": "04a250f7-07c8-4f5b-8807-2cc92857e509",
-              "day": "Service of the Lord's Passion",
-              "times": [
-                {
-                  "id": "b6660b82-6cd8-48dc-af4f-b1af99d99574",
-                  "time": "1:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "183bc467-c64f-4cd1-86d1-835cea98c560",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "6ff50676-539d-4fdb-8bdd-fb45c100dffa",
-                  "time": "5:00 PM",
-                  "end_time": "6:30 PM"
-                }
-              ]
-            },
-            {
-              "id": "8e4eea2e-b30e-45bf-89ba-b064236d017f",
-              "day": "Stations of the Cross",
-              "times": [
-                {
-                  "id": "ac612ce0-5d73-4ce2-9424-24dcb4202889",
-                  "time": "7:00 PM"
-                }
-              ]
-            },
-            {
-              "id": "0036f35e-26e4-46c5-a186-df27f213e196",
-              "day": "Tenebrae",
-              "times": [
-                {
-                  "id": "19996471-f297-41f6-a43f-a3db7a67f78c",
-                  "time": "8:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "07ba309e-5922-4aff-9eb7-50960f1cb980",
-          "name": "Holy Saturday",
-          "days": [
-            {
-              "id": "dc518ff6-2910-4974-a5ae-4907bf502aa0",
-              "day": "Lauds (Morning Prayer)",
-              "times": [
-                {
-                  "id": "7a2b21ea-8e0f-47a7-a795-fb9896441ac6",
-                  "time": "8:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "503ca7e2-776b-4cf8-8ca4-2a6adbb621a2",
-              "day": "Confession",
-              "times": [
-                {
-                  "id": "451c6c01-3a12-41f9-8eb7-43660e26e0c7",
-                  "time": "8:30 AM",
-                  "end_time": "10:00 AM"
-                }
-              ]
-            },
-            {
-              "id": "e3f3eb8f-1749-4ed8-b468-dc2ca104182d",
-              "day": "Easter Vigil in the Holy Night",
-              "times": [
-                {
-                  "id": "171e58d3-cfc1-490b-b6a5-c2ce549ca9db",
-                  "time": "9:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "e6a87e6f-9e63-4e7b-a4ac-70ef18f3be75",
-          "name": "Easter Sunday",
-          "days": [
-            {
-              "id": "00891ce7-47d5-4ffe-88fc-297ff4f7ea11",
-              "day": "Mass",
-              "times": [
-                {
-                  "id": "105ddfcb-790b-4ec3-b136-3a76e6756e9b",
-                  "time": "7:30 AM"
-                },
-                {
-                  "id": "6331ea13-7b91-44af-af7f-5ebb0a5c1fa8",
-                  "time": "10:00 AM"
-                },
-                {
-                  "id": "f3a3ff47-afb3-4d80-91d5-b33d4c82c0c5",
-                  "time": "12:00 PM"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "Mass Times",
       "sections": [
-        {
-          "id": "346a7426-c227-4c38-9285-f15a54fa2833",
-          "name": "Please refer to Holy Week (2026) Tab for March 30 - April 5, 2026"
-        },
         {
           "name": "Sunday Mass",
           "days": [
@@ -178,21 +50,6 @@
                 }
               ],
               "id": "0ccf4552-f32b-4b3a-84cf-acc120c3182f"
-            },
-            {
-              "id": "bfe2ea1a-028a-441c-8335-a53a0d7983fe",
-              "day": "",
-              "times": [
-                {
-                  "id": "59e3bfdf-6917-4e04-9492-31b9848fa4d9",
-                  "notes": [
-                    {
-                      "id": "4c693abc-8ab9-43d2-a8de-7b2856bcaab0",
-                      "note": "Please Note: Weekend Masses will be held in the Parish Social Hall starting January 4, 2026."
-                    }
-                  ]
-                }
-              ]
             }
           ],
           "id": "60059095-5988-44fb-b73e-47cf9be36999"

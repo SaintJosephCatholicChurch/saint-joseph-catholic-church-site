@@ -80,7 +80,12 @@
                 {
                   "time": "8:00 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "6f0f0733-42e5-43a6-898e-404e1708d09d",
+                      "note": "No Public Mass May 12, 2026"
+                    }
+                  ]
                 },
                 {
                   "notes": [
@@ -125,7 +130,13 @@
                 {
                   "time": "8:00 AM",
                   "end_time": "",
-                  "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7"
+                  "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
+                  "notes": [
+                    {
+                      "id": "49208a2a-763b-46ec-bd8f-b00b178da952",
+                      "note": "No Public Mass May 7, 2026"
+                    }
+                  ]
                 }
               ],
               "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"

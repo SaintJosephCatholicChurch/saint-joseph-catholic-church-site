@@ -6,10 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { CONTACT_URL } from '../../../../constants';
-import { isNotEmpty } from '../../../../util/string.util';
 import transientOptions from '../../../../util/transientOptions';
 
 import type { FormEventHandler } from 'react';
@@ -91,61 +90,49 @@ interface ContactFormProps {
 }
 
 const ContactForm = ({ disableForm = false }: ContactFormProps) => {
-  const [contactFormData, setContactFormData] = useState<Partial<ContactBody>>({ subject: 'Comment / Question' });
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const valid = useMemo(() => {
-    if (isNotEmpty(contactFormData.name) && isNotEmpty(contactFormData.email) && isNotEmpty(contactFormData.comment)) {
-      return true;
-    }
 
-    return false;
-  }, [contactFormData.comment, contactFormData.email, contactFormData.name]);
+  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback((event) => {
+    const submitForm = async () => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const name = `${formData.get('name') ?? ''}`.trim();
+      const email = `${formData.get('email') ?? ''}`.trim();
+      const subject = `${formData.get('subject') ?? 'Comment / Question'}`.trim();
+      const comment = `${formData.get('comment') ?? ''}`.trim();
 
-  const onChange = useCallback(
-    (data: Partial<ContactBody>) => {
-      setContactFormData({ ...contactFormData, ...data });
-    },
-    [contactFormData]
-  );
+      if (!name || !email || !comment) {
+        return;
+      }
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
-      const submitForm = async () => {
-        event.preventDefault();
-        if (!valid) {
-          return;
-        }
+      setInProgress(true);
 
-        setInProgress(true);
+      try {
+        await fetch(CONTACT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            subject,
+            comment
+          })
+        });
+      } catch (error) {
+        console.error('There was an error', error);
+        setInProgress(false);
+        return;
+      }
 
-        try {
-          await fetch(CONTACT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              name: contactFormData.name,
-              email: contactFormData.email,
-              subject: contactFormData.subject,
-              comment: contactFormData.comment
-            })
-          });
-        } catch (error) {
-          console.error('There was an error', error);
-          setInProgress(false);
-          return;
-        }
+      setSubmitted(true);
+    };
 
-        setSubmitted(true);
-      };
-
-      submitForm();
-    },
-    [contactFormData.comment, contactFormData.email, contactFormData.name, contactFormData.subject, valid]
-  );
+    submitForm();
+  }, []);
 
   return (
     <StyledCommentFormWrapper>
@@ -166,7 +153,6 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           fullWidth
           required
           size="small"
-          onChange={(event) => onChange({ name: event.target.value })}
           disabled={disableForm || inProgress}
         />
         <TextField
@@ -177,7 +163,6 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           fullWidth
           required
           size="small"
-          onChange={(event) => onChange({ email: event.target.value })}
           disabled={disableForm || inProgress}
         />
         <FormControl fullWidth required size="small" disabled={disableForm || inProgress}>
@@ -188,7 +173,6 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
             id="subject-select"
             label="Subject"
             defaultValue="Comment / Question"
-            onChange={(event) => onChange({ subject: event.target.value })}
           >
             <MenuItem value="Comment / Question">Comment / Question</MenuItem>
             <MenuItem value="Prayer Request">Prayer Request</MenuItem>
@@ -204,13 +188,12 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
           rows={4}
           required
           size="small"
-          onChange={(event) => onChange({ comment: event.target.value })}
           disabled={disableForm || inProgress}
         />
         <Button
           type="submit"
           variant="contained"
-          disabled={disableForm || !valid || inProgress}
+          disabled={disableForm || inProgress}
           sx={{
             width: '150px',
             backgroundColor: '#bf303c',

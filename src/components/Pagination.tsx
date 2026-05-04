@@ -1,6 +1,6 @@
 import MuiPagination from '@mui/material/Pagination';
 import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 import { useMediaQueryDown } from '../util/useMediaQuery';

@@ -2,19 +2,15 @@
 const env = process.env.NODE_ENV || 'development';
 
 import withPWAFn from '@ducanh2912/next-pwa';
-import removeImportsFn from 'next-remove-imports';
 
 const withPWA = withPWAFn({
   publicExcludes: ['!bulletins/**/*'],
   dest: 'public'
 });
 
-const removeImports = removeImportsFn();
-
-let config = removeImports({
+let config = {
   output: 'export',
   images: { unoptimized: true },
-  pageExtensions: ['tsx'],
   webpack: (config) => {
     config.module.rules.push(
       ...[
@@ -36,7 +32,7 @@ let config = removeImports({
   typescript: {
     ignoreBuildErrors: env === 'production'
   }
-});
+};
 
 if (env === 'production') {
   config = withPWA(config);

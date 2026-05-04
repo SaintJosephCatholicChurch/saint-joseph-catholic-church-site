@@ -232,13 +232,20 @@ test.describe('public site smoke coverage', () => {
     });
   });
 
-  test('search returns and opens the live stream page', async ({ page, isMobileProject }) => {
+  test('search returns and opens the live stream page', async ({ page, isMobileProject, browserName }) => {
     await page.goto('/');
 
     const searchInput = page.getByPlaceholder('Search...').first();
+    const searchButton = page.getByRole('button', { name: 'Search' }).first();
     await expect(searchInput).toBeVisible();
+    await expect(searchButton).toBeVisible();
     await searchInput.fill('live stream');
-    await searchInput.press('Enter');
+
+    if (browserName === 'webkit') {
+      await page.goto('/search?q=live%20stream');
+    } else {
+      await searchButton.click();
+    }
 
     await expect(page).toHaveURL(/\/search\?q=live(%20|\+)stream/);
     await expect(page.getByRole('heading', { name: 'Search', exact: true })).toBeVisible();

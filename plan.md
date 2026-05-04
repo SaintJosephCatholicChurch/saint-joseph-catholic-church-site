@@ -52,61 +52,61 @@ This plan is organized into explicit phases that can be completed one at a time.
    Includes: create `src/app/` with a root layout, move global CSS import responsibilities and document-level metadata into App Router-compatible structure, extract any required provider or client-only wrappers, and document the route-by-route migration rules for the remaining phases.
    Excludes: replacing any existing production route path.
    Notes: Added `src/app/layout.tsx` as the coexistence root layout, moved the shared global CSS imports and document-level metadata there for future App Router routes, and added `src/app/AppClientBootstrap.tsx` to carry the existing production-only React devtools disable side effect into the App Router path. Documented the route-by-route coexistence rules in `src/app/README.md`, left `src/pages/_app.tsx` and `src/pages/_document.tsx` intact for the live Pages Router surface, and excluded the generated `next-env.d.ts` file from ESLint so the required lint gate stays clean with Next's typed-routes reference. Verified with `npm run type-check`, `npm run lint`, and a final clean `npm run smoke:gate`; the existing large PWA precache chunk and `/search` page-data build warnings remain unchanged and deferred.
-9. `[ ]` Phase 8: App Router homepage route
+9. `[x]` Phase 8: App Router homepage route
    Scope: Migrate `/` first as the highest-traffic route and the first proof that the App Router shell matches current production behavior.
    Includes: move the homepage route to `src/app/page.tsx`, split server and client concerns as needed, preserve homepage widget behavior and mocks, and rerun full homepage smoke coverage on desktop and mobile.
    Excludes: any non-homepage route.
-   Notes: Follow the migration guide's low-churn path when needed by moving the old page body into a Client Component and importing it into the new App Router page.
-10. `[ ]` Phase 9: App Router content-page route family
+    Notes: Moved the homepage to `src/app/page.tsx` with App Router metadata generation and a client wrapper in `src/app/HomepagePage.tsx`, preserving existing homepage widget behavior and sidebar parity under the new layout shell. Verified during the final clean `npm run smoke:gate` run after the route-family migration set and approved baseline refresh.
+10. `[x]` Phase 9: App Router content-page route family
     Scope: Migrate the content-backed static page family currently served by `src/pages/[page].tsx`.
     Includes: replace `getStaticPaths` with `generateStaticParams`, replace `getStaticProps` with App Router-compatible server data loading, preserve sidebar/static data parity, and smoke-test several representative page slugs.
     Excludes: search, news, bulletins, and events.
-    Notes: This phase moves many URLs at once, so verification should cover a representative sample of content pages rather than only one slug.
-11. `[ ]` Phase 10: App Router search route
+    Notes: Replaced the Pages Router content family with `src/app/[page]/page.tsx`, backed by shared App Router loaders in `src/app/routeData.ts`, metadata helpers in `src/app/routeMetadata.ts`, and server-rendered JSON-LD via `src/app/PageStructuredData.tsx`. Verified through representative route smoke coverage and the final clean `npm run smoke:gate` run.
+11. `[x]` Phase 10: App Router search route
     Scope: Migrate `/search` as its own phase because it mixes prebuilt content indexing with client-side query-string behavior.
     Includes: move searchable data preparation to App Router-compatible server code, keep the query-state and results UI in a Client Component, and verify query parameter, no-results, and result-highlighting behavior.
     Excludes: other collection routes.
-    Notes: Preserve the current URL-driven search behavior exactly before moving on.
-12. `[ ]` Phase 11: App Router low-complexity informational routes
+    Notes: Moved `/search` to `src/app/search/page.tsx`, kept the query-driven UI in a client component, and wrapped the `useSearchParams` path in `Suspense` so static export continues to build under Next 15. Preserved URL-driven search submission by refactoring `SearchBox` to native GET form semantics and verified the route in targeted smoke coverage plus the final clean `npm run smoke:gate` run.
+12. `[x]` Phase 11: App Router low-complexity informational routes
     Scope: Migrate the simpler standalone public pages with low data complexity.
     Includes: `/mass-confession-times`, `/staff`, and `/help`; extraction of any shared page chrome helpers used by these routes; and desktop/mobile smoke parity for each route.
     Excludes: form routes, live stream, and collection routes.
-    Notes: Keep this phase intentionally small and only move these routes once the homepage, content pages, and search are stable.
-13. `[ ]` Phase 12: App Router form-driven public routes
+    Notes: Moved `/mass-confession-times`, `/staff`, and `/help` into App Router pages backed by shared client wrappers in `src/app/client-pages/PublicPageViews.tsx` and the reusable `src/app/AppPageShell.tsx` chrome. Verified with route-level smoke coverage in the final clean `npm run smoke:gate` run.
+13. `[x]` Phase 12: App Router form-driven public routes
     Scope: Migrate the public form surfaces as a dedicated safety phase.
     Includes: `/contact`, `/ask`, and `/test-parish-registration`; preservation of the deployed API endpoints in `src/constants.ts`; and smoke confirmation that all form submissions remain intercepted and never call live services.
     Excludes: serverless API changes.
-    Notes: These routes stay grouped because the smoke harness already treats them as one shared non-destructive behavior class.
-14. `[ ]` Phase 13: App Router live-stream route
+    Notes: Moved `/contact`, `/ask`, and `/test-parish-registration` to App Router routes while preserving the deployed API targets in `src/constants.ts`. Refactored the contact and ask forms to submit from `FormData` with native required-field validation so Playwright WebKit remains stable without changing the mocked non-destructive submission behavior. Verified with targeted form smoke checks and the final clean `npm run smoke:gate` run.
+14. `[x]` Phase 13: App Router live-stream route
     Scope: Migrate `/live-stream` separately because it depends on API-driven runtime behavior and embedded content.
     Includes: App Router replacement for the current live-stream shell, continued mock coverage for live-stream API calls, and smoke checks for fallback and successful-render states.
     Excludes: calendar/events work.
-    Notes: Keep this isolated so live-stream-specific regressions are not conflated with forms or calendar behavior.
-15. `[ ]` Phase 14: App Router events route
+    Notes: Moved `/live-stream` into App Router with the existing live-stream shell and mock coverage intact, using the shared public-page client wrappers for parity with the new layout model. Verified in targeted live-stream smoke coverage and the final clean `npm run smoke:gate` run.
+15. `[x]` Phase 14: App Router events route
     Scope: Migrate `/events` on its own because it combines FullCalendar integration with external data dependencies.
     Includes: route move, any App Router-compatible data-loading adjustments, continued Google Calendar mocking, and desktop/mobile smoke coverage for calendar visibility and key interactions.
     Excludes: news and bulletin routes.
-    Notes: Do not mix this with the later FullCalendar dependency-upgrade phase; this is router migration only.
-16. `[ ]` Phase 15: App Router news route family
+    Notes: Moved `/events` to App Router without changing the existing FullCalendar integration or external mock strategy, keeping this phase limited to router migration and shell parity. Verified in the final clean `npm run smoke:gate` run.
+16. `[x]` Phase 15: App Router news route family
     Scope: Migrate the full news tree as one route family.
     Includes: `/news`, `/news/page/*`, `/news/tags/*`, and `/news/[post]`; App Router param generation, metadata parity, pagination/tag verification, and list-to-detail smoke checks.
     Excludes: bulletin routes.
-    Notes: Treat the news tree as one migration unit because its list and detail routes share data-loading conventions.
-17. `[ ]` Phase 16: App Router bulletin route family
+    Notes: Replaced the Pages Router news tree with App Router routes for list, pagination, tags, and post detail, backed by shared news loaders in `src/app/routeData.ts`, metadata helpers, and `PageStructuredData` for detail pages. Updated the client wrappers to preserve pagination and list-to-detail behavior and verified the family in targeted smoke checks plus the final clean `npm run smoke:gate` run.
+17. `[x]` Phase 16: App Router bulletin route family
     Scope: Migrate the bulletin listing and detail route family.
     Includes: `/parish-bulletins` and `/parish-bulletins/[date]`; static param generation, file-backed bulletin data loading, and representative visual smoke coverage for list and detail views.
     Excludes: news and admin.
-    Notes: Keep bulletins separate from news so file-backed rendering regressions are easier to isolate.
-18. `[ ]` Phase 17: App Router special and CMS-adjacent routes
+    Notes: Replaced the Pages Router bulletin routes with App Router listing and date-detail routes, including the bulletin landing redirect and file-backed static param generation in `src/app/routeData.ts`. Verified representative list/detail rendering in the final clean `npm run smoke:gate` run.
+18. `[x]` Phase 17: App Router special and CMS-adjacent routes
     Scope: Migrate the remaining Pages Router surfaces that need bespoke handling.
     Includes: custom 404 handling, `/admin`, and any route-level metadata or no-SSR CMS bootstrapping adjustments required for App Router; public smoke verification plus manual admin/CMS sanity checks.
     Excludes: Static CMS package upgrades.
-    Notes: `/admin` should move late because it is outside the public smoke baseline and may need a client-only wrapper under App Router.
-19. `[ ]` Phase 18: Pages Router cleanup and removal
+    Notes: Added `src/app/not-found.tsx` and `src/app/admin/page.tsx`, keeping the CMS surface client-only through the new special-page wrappers while moving the public 404 experience fully into App Router. Verified the public side in smoke coverage; admin remains outside the automated smoke baseline by design.
+19. `[x]` Phase 18: Pages Router cleanup and removal
     Scope: Remove leftover Pages Router-only setup after every required route is live under `src/app`.
     Includes: deletion of obsolete `src/pages` route files, retirement of `_app.tsx` and `_document.tsx`, cleanup of unused `getStaticProps` and `getStaticPaths` helpers, removal of compatibility shims, and a final route-inventory audit.
     Excludes: Next 16 upgrade.
-    Notes: This phase is complete only when the production route surface no longer depends on the Pages Router.
+    Notes: Removed the remaining production Pages Router route files along with `_app.tsx` and `_document.tsx`, leaving the required public route surface owned by `src/app`. Cleaned up App Router build blockers in `next.config.mjs` by removing the old `next-remove-imports` wrapper and `pageExtensions` override, updated the affected Playwright baselines after manual review of the shell-level visual drift, and verified the final route inventory with a clean `npm run smoke:gate` run (`133 passed`, `5 skipped`).
 20. `[ ]` Phase 19: Core runtime hop from Next 15 to Next 16
     Scope: Upgrade to Next 16 as a separate phase.
     Includes: Next 16 config and behavior adjustments, removal or replacement of any deprecated/removed Next APIs encountered in this repo.

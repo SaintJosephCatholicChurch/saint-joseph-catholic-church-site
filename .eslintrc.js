@@ -1,5 +1,6 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
+  ignorePatterns: ['next-env.d.ts'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',

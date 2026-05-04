@@ -47,107 +47,112 @@ This plan is organized into explicit phases that can be completed one at a time.
    Includes: create `src/app/` with a root layout, move global CSS import responsibilities and document-level metadata into App Router-compatible structure, extract any required provider or client-only wrappers, and document the route-by-route migration rules for the remaining phases.
    Excludes: replacing any existing production route path.
    Notes: The official guide recommends incremental migration with `app` and `pages` coexisting. Keep `src/pages/_app.tsx` and `src/pages/_document.tsx` until the last Pages Router route is removed, because App Router layout styles do not apply back to `pages/*` routes during coexistence.
-8. `[ ]` Phase 8: App Router homepage route
+8. `[x]` Phase 7: App Router foundation and coexistence scaffold
+   Scope: Introduce the App Router shell after Next 15 is stable, while keeping the existing Pages Router live during the migration window.
+   Includes: create `src/app/` with a root layout, move global CSS import responsibilities and document-level metadata into App Router-compatible structure, extract any required provider or client-only wrappers, and document the route-by-route migration rules for the remaining phases.
+   Excludes: replacing any existing production route path.
+   Notes: Added `src/app/layout.tsx` as the coexistence root layout, moved the shared global CSS imports and document-level metadata there for future App Router routes, and added `src/app/AppClientBootstrap.tsx` to carry the existing production-only React devtools disable side effect into the App Router path. Documented the route-by-route coexistence rules in `src/app/README.md`, left `src/pages/_app.tsx` and `src/pages/_document.tsx` intact for the live Pages Router surface, and excluded the generated `next-env.d.ts` file from ESLint so the required lint gate stays clean with Next's typed-routes reference. Verified with `npm run type-check`, `npm run lint`, and a final clean `npm run smoke:gate`; the existing large PWA precache chunk and `/search` page-data build warnings remain unchanged and deferred.
+9. `[ ]` Phase 8: App Router homepage route
    Scope: Migrate `/` first as the highest-traffic route and the first proof that the App Router shell matches current production behavior.
    Includes: move the homepage route to `src/app/page.tsx`, split server and client concerns as needed, preserve homepage widget behavior and mocks, and rerun full homepage smoke coverage on desktop and mobile.
    Excludes: any non-homepage route.
    Notes: Follow the migration guide's low-churn path when needed by moving the old page body into a Client Component and importing it into the new App Router page.
-9. `[ ]` Phase 9: App Router content-page route family
-   Scope: Migrate the content-backed static page family currently served by `src/pages/[page].tsx`.
-   Includes: replace `getStaticPaths` with `generateStaticParams`, replace `getStaticProps` with App Router-compatible server data loading, preserve sidebar/static data parity, and smoke-test several representative page slugs.
-   Excludes: search, news, bulletins, and events.
-   Notes: This phase moves many URLs at once, so verification should cover a representative sample of content pages rather than only one slug.
-10. `[ ]` Phase 10: App Router search route
+10. `[ ]` Phase 9: App Router content-page route family
+    Scope: Migrate the content-backed static page family currently served by `src/pages/[page].tsx`.
+    Includes: replace `getStaticPaths` with `generateStaticParams`, replace `getStaticProps` with App Router-compatible server data loading, preserve sidebar/static data parity, and smoke-test several representative page slugs.
+    Excludes: search, news, bulletins, and events.
+    Notes: This phase moves many URLs at once, so verification should cover a representative sample of content pages rather than only one slug.
+11. `[ ]` Phase 10: App Router search route
     Scope: Migrate `/search` as its own phase because it mixes prebuilt content indexing with client-side query-string behavior.
     Includes: move searchable data preparation to App Router-compatible server code, keep the query-state and results UI in a Client Component, and verify query parameter, no-results, and result-highlighting behavior.
     Excludes: other collection routes.
     Notes: Preserve the current URL-driven search behavior exactly before moving on.
-11. `[ ]` Phase 11: App Router low-complexity informational routes
+12. `[ ]` Phase 11: App Router low-complexity informational routes
     Scope: Migrate the simpler standalone public pages with low data complexity.
     Includes: `/mass-confession-times`, `/staff`, and `/help`; extraction of any shared page chrome helpers used by these routes; and desktop/mobile smoke parity for each route.
     Excludes: form routes, live stream, and collection routes.
     Notes: Keep this phase intentionally small and only move these routes once the homepage, content pages, and search are stable.
-12. `[ ]` Phase 12: App Router form-driven public routes
+13. `[ ]` Phase 12: App Router form-driven public routes
     Scope: Migrate the public form surfaces as a dedicated safety phase.
     Includes: `/contact`, `/ask`, and `/test-parish-registration`; preservation of the deployed API endpoints in `src/constants.ts`; and smoke confirmation that all form submissions remain intercepted and never call live services.
     Excludes: serverless API changes.
     Notes: These routes stay grouped because the smoke harness already treats them as one shared non-destructive behavior class.
-13. `[ ]` Phase 13: App Router live-stream route
+14. `[ ]` Phase 13: App Router live-stream route
     Scope: Migrate `/live-stream` separately because it depends on API-driven runtime behavior and embedded content.
     Includes: App Router replacement for the current live-stream shell, continued mock coverage for live-stream API calls, and smoke checks for fallback and successful-render states.
     Excludes: calendar/events work.
     Notes: Keep this isolated so live-stream-specific regressions are not conflated with forms or calendar behavior.
-14. `[ ]` Phase 14: App Router events route
+15. `[ ]` Phase 14: App Router events route
     Scope: Migrate `/events` on its own because it combines FullCalendar integration with external data dependencies.
     Includes: route move, any App Router-compatible data-loading adjustments, continued Google Calendar mocking, and desktop/mobile smoke coverage for calendar visibility and key interactions.
     Excludes: news and bulletin routes.
     Notes: Do not mix this with the later FullCalendar dependency-upgrade phase; this is router migration only.
-15. `[ ]` Phase 15: App Router news route family
+16. `[ ]` Phase 15: App Router news route family
     Scope: Migrate the full news tree as one route family.
     Includes: `/news`, `/news/page/*`, `/news/tags/*`, and `/news/[post]`; App Router param generation, metadata parity, pagination/tag verification, and list-to-detail smoke checks.
     Excludes: bulletin routes.
     Notes: Treat the news tree as one migration unit because its list and detail routes share data-loading conventions.
-16. `[ ]` Phase 16: App Router bulletin route family
+17. `[ ]` Phase 16: App Router bulletin route family
     Scope: Migrate the bulletin listing and detail route family.
     Includes: `/parish-bulletins` and `/parish-bulletins/[date]`; static param generation, file-backed bulletin data loading, and representative visual smoke coverage for list and detail views.
     Excludes: news and admin.
     Notes: Keep bulletins separate from news so file-backed rendering regressions are easier to isolate.
-17. `[ ]` Phase 17: App Router special and CMS-adjacent routes
+18. `[ ]` Phase 17: App Router special and CMS-adjacent routes
     Scope: Migrate the remaining Pages Router surfaces that need bespoke handling.
     Includes: custom 404 handling, `/admin`, and any route-level metadata or no-SSR CMS bootstrapping adjustments required for App Router; public smoke verification plus manual admin/CMS sanity checks.
     Excludes: Static CMS package upgrades.
     Notes: `/admin` should move late because it is outside the public smoke baseline and may need a client-only wrapper under App Router.
-18. `[ ]` Phase 18: Pages Router cleanup and removal
+19. `[ ]` Phase 18: Pages Router cleanup and removal
     Scope: Remove leftover Pages Router-only setup after every required route is live under `src/app`.
     Includes: deletion of obsolete `src/pages` route files, retirement of `_app.tsx` and `_document.tsx`, cleanup of unused `getStaticProps` and `getStaticPaths` helpers, removal of compatibility shims, and a final route-inventory audit.
     Excludes: Next 16 upgrade.
     Notes: This phase is complete only when the production route surface no longer depends on the Pages Router.
-19. `[ ]` Phase 19: Core runtime hop from Next 15 to Next 16
+20. `[ ]` Phase 19: Core runtime hop from Next 15 to Next 16
     Scope: Upgrade to Next 16 as a separate phase.
     Includes: Next 16 config and behavior adjustments, removal or replacement of any deprecated/removed Next APIs encountered in this repo.
     Excludes: PWA/build add-on upgrades.
     Notes: Because `next.config.mjs` uses `output: 'export'`, a custom `webpack` function, and `next-remove-imports`, the first Next 16 adoption should stay on an explicit webpack-compatible build path until proven stable.
-20. `[ ]` Phase 20: Upgrade Next-coupled build add-ons
+21. `[ ]` Phase 20: Upgrade Next-coupled build add-ons
     Scope: Upgrade the packages that are tightly coupled to the Next build pipeline after Next 16 is stable.
     Includes: `@ducanh2912/next-pwa`, `next-remove-imports`, `@svgr/webpack`, `yaml-loader`, `raw-loader`, and related `next.config.mjs` changes.
     Excludes: MUI and application feature libraries.
     Notes: Keep bundler-mode decisions explicit in this phase.
-21. `[ ]` Phase 21: MUI main stack from v5 to v6
+22. `[ ]` Phase 21: MUI main stack from v5 to v6
     Scope: Upgrade the core Material UI stack one major step.
     Includes: `@mui/material`, `@mui/system`, `@mui/icons-material`, Emotion packages, and any directly coupled theming/styling fixes.
     Excludes: MUI v7 and MUI X pickers v8.
     Notes: Audit `@mui/base` carefully here because it is currently on a beta track and may need migration, replacement, or removal rather than a simple bump.
-22. `[ ]` Phase 22: MUI main stack from v6 to v7
+23. `[ ]` Phase 22: MUI main stack from v6 to v7
     Scope: Upgrade Material UI another major step after v6 is stable.
     Includes: exports-field package layout changes, grid/grid2 rename issues, removed deprecated APIs, theme behavior differences, and any resulting import or styling fixes.
     Excludes: date pickers.
     Notes: Keep this phase isolated from the pickers upgrade.
-23. `[ ]` Phase 23: Date stack and MUI X pickers
+24. `[ ]` Phase 23: Date stack and MUI X pickers
     Scope: Upgrade `@mui/x-date-pickers` from v7 to v8 together with `date-fns` from v3 to v4.
     Includes: adapter import changes, picker API changes, slot/theme updates, and any application fixes needed for the date stack.
     Excludes: unrelated MUI components.
     Notes: This is where current `AdapterDateFnsV3` usage is expected to change.
-24. `[ ]` Phase 24: FullCalendar family
+25. `[ ]` Phase 24: FullCalendar family
     Scope: Upgrade the FullCalendar ecosystem one major version at a time, with all `@fullcalendar/*` packages kept in lockstep.
     Includes: custom mobile view plugin fixes, Google Calendar integration verification, and event interaction regression checks.
     Excludes: unrelated utility packages.
     Notes: If multiple major hops are required, keep them as explicit substeps inside this phase and verify after each hop.
-25. `[ ]` Phase 25: Remaining public-site utility batches
+26. `[ ]` Phase 25: Remaining public-site utility batches
     Scope: Upgrade the remaining public-site libraries in small logical batches.
     Includes: content/data parsing libraries, UI widget libraries, SEO/schema libraries, and general utilities.
     Excludes: developer toolchain and CMS-adjacent packages.
     Notes: Keep each package to one major hop at a time and use official migration docs or release notes at execution time.
-26. `[ ]` Phase 26: Developer toolchain modernization
+27. `[ ]` Phase 26: Developer toolchain modernization
     Scope: Upgrade the local toolchain after the runtime and main UI stack are stable.
     Includes: ESLint 8 to 9, `@typescript-eslint` packages, TypeScript, Prettier, and removal of deprecated `babel-eslint`.
     Excludes: CMS-adjacent runtime packages.
     Notes: Doing this late keeps lint/type noise from obscuring framework regressions.
-27. `[ ]` Phase 27: CMS-adjacent packages, excluding Static CMS
+28. `[ ]` Phase 27: CMS-adjacent packages, excluding Static CMS
     Scope: Upgrade packages that are outside the public smoke suite and will still need manual CMS checks.
     Includes: TinyMCE, `@dnd-kit`, and any other CMS-adjacent libraries except `@staticcms/*`.
     Excludes: `@staticcms/*` entirely.
     Notes: After this phase, public smoke tests still run, but CMS validation remains manual by design.
-28. `[ ]` Phase 28: Final dependency sweep
+29. `[ ]` Phase 28: Final dependency sweep
     Scope: Re-run outdated dependency inventory and pick up leftovers.
     Includes: remaining minors, patches, and any still-unfinished single-major packages that fit the already-established grouping rules.
     Excludes: new scope expansion.

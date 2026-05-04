@@ -1,5 +1,16 @@
 import { test as base, expect } from '@playwright/test';
 
+import type { Request } from '@playwright/test';
+
+const CHURCH_API_BASE_URL = 'https://api.stjosephchurchbluffton.org/.netlify/functions';
+const CONTACT_ENDPOINT = `${CHURCH_API_BASE_URL}/contact`;
+const FLOCKNOTES_ENDPOINT = `${CHURCH_API_BASE_URL}/flocknotes`;
+const LIVE_ENDPOINT = `${CHURCH_API_BASE_URL}/live`;
+const PARISH_REGISTRATION_ENDPOINT = `${CHURCH_API_BASE_URL}/parish-registration`;
+const READINGS_ENDPOINT = `${CHURCH_API_BASE_URL}/readings`;
+const READINGS_PODCAST_ENDPOINT = `${CHURCH_API_BASE_URL}/readings-podcast`;
+const MOCK_SOUND_CLOUD_URL = 'https://w.soundcloud.com/player?mock-daily-readings=1';
+
 const MOCK_READINGS_RSS = `<?xml version="1.0" encoding="UTF-8"?>
 <rss>
   <channel>
@@ -26,6 +37,20 @@ const MOCK_READINGS_RSS = `<?xml version="1.0" encoding="UTF-8"?>
   </channel>
 </rss>`;
 
+const MOCK_FLOCKNOTES_RSS = `<?xml version="1.0" encoding="UTF-8"?>
+<rss>
+  <channel>
+    <title>St. Joseph Flocknote</title>
+    <link>https://stjosephcatholicchurch95.flocknote.com/</link>
+    <item>
+      <title>Smoke Test Newsletter Note</title>
+      <link>https://stjosephcatholicchurch95.flocknote.com/note/12345678</link>
+      <description><![CDATA[Smoke-test Flocknote content for deterministic Playwright runs.]]></description>
+      <pubDate>Mon, 04 May 2026 09:00:00 -0400</pubDate>
+    </item>
+  </channel>
+</rss>`;
+
 const MOCK_GOOGLE_CALENDAR = {
   items: [
     {
@@ -44,41 +69,140 @@ const MOCK_GOOGLE_CALENDAR = {
   kind: 'calendar#events'
 };
 
-export const test = base.extend<{ isMobileProject: boolean }>({
+interface CapturedSubmission {
+  body: unknown;
+  method: string;
+  url: string;
+}
+
+export interface SmokeApiMockState {
+  interceptedRequests: {
+    googleCalendar: number;
+  };
+  submissions: {
+    contact: CapturedSubmission[];
+    parishRegistration: CapturedSubmission[];
+  };
+  unexpectedChurchApiRequests: string[];
+}
+
+function createMockHtml(title: string, bodyText: string) {
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title></head><body>${bodyText}</body></html>`;
+}
+
+function parseRequestBody(request: Request) {
+  const postData = request.postData();
+
+  if (!postData) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(postData) as unknown;
+  } catch {
+    return postData;
+  }
+}
+
+function captureSubmission(submissions: CapturedSubmission[], request: Request) {
+  submissions.push({
+    body: parseRequestBody(request),
+    method: request.method(),
+    url: request.url()
+  });
+}
+
+export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMockState }>({
   isMobileProject: async ({}, use, testInfo) => {
     await use(testInfo.project.name.startsWith('mobile-'));
   },
-  page: async ({ page }, use) => {
-    await page.route('https://api.stjosephchurchbluffton.org/.netlify/functions/live', async (route) => {
-      const isLiveStreamPage = page.url().includes('/live-stream');
-
-      await route.fulfill({
-        body: JSON.stringify({
-          isStreaming: isLiveStreamPage,
-          url: isLiveStreamPage ? 'about:blank' : ''
-        }),
-        contentType: 'application/json',
-        status: 200
-      });
+  smokeApi: async ({}, use) => {
+    await use({
+      interceptedRequests: {
+        googleCalendar: 0
+      },
+      submissions: {
+        contact: [],
+        parishRegistration: []
+      },
+      unexpectedChurchApiRequests: []
     });
+  },
+  page: async ({ page, smokeApi }, use) => {
+    await page.route(`${CHURCH_API_BASE_URL}/**`, async (route) => {
+      const request = route.request();
+      const requestUrl = request.url().split('?')[0];
 
-    await page.route('https://api.stjosephchurchbluffton.org/.netlify/functions/readings', async (route) => {
-      await route.fulfill({
-        body: MOCK_READINGS_RSS,
-        contentType: 'application/xml; charset=utf-8',
-        status: 200
-      });
-    });
+      switch (requestUrl) {
+        case CONTACT_ENDPOINT:
+          captureSubmission(smokeApi.submissions.contact, request);
+          await route.fulfill({
+            body: '',
+            contentType: 'text/plain; charset=utf-8',
+            status: 204
+          });
+          return;
+        case FLOCKNOTES_ENDPOINT:
+          await route.fulfill({
+            body: MOCK_FLOCKNOTES_RSS,
+            contentType: 'application/xml; charset=utf-8',
+            status: 200
+          });
+          return;
+        case LIVE_ENDPOINT: {
+          const isLiveStreamPage = page.url().includes('/live-stream');
 
-    await page.route('https://api.stjosephchurchbluffton.org/.netlify/functions/readings-podcast', async (route) => {
-      await route.fulfill({
-        body: 'null',
-        contentType: 'application/json',
-        status: 200
-      });
+          await route.fulfill({
+            body: JSON.stringify({
+              isStreaming: isLiveStreamPage,
+              url: isLiveStreamPage ? 'about:blank' : ''
+            }),
+            contentType: 'application/json',
+            status: 200
+          });
+          return;
+        }
+        case PARISH_REGISTRATION_ENDPOINT:
+          captureSubmission(smokeApi.submissions.parishRegistration, request);
+          await route.fulfill({
+            body: JSON.stringify({
+              message: 'Mock parish registration accepted.'
+            }),
+            contentType: 'application/json',
+            status: 200
+          });
+          return;
+        case READINGS_ENDPOINT:
+          await route.fulfill({
+            body: MOCK_READINGS_RSS,
+            contentType: 'application/xml; charset=utf-8',
+            status: 200
+          });
+          return;
+        case READINGS_PODCAST_ENDPOINT:
+          await route.fulfill({
+            body: JSON.stringify({
+              url: 'https://soundcloud.com/st-joseph-catholic-church/daily-readings-smoke-test'
+            }),
+            contentType: 'application/json',
+            status: 200
+          });
+          return;
+        default:
+          smokeApi.unexpectedChurchApiRequests.push(`${request.method()} ${request.url()}`);
+          await route.fulfill({
+            body: JSON.stringify({
+              message: 'Unexpected church API request reached the smoke-test fallback.'
+            }),
+            contentType: 'application/json',
+            status: 503
+          });
+      }
     });
 
     await page.route('https://www.googleapis.com/calendar/v3/calendars/**', async (route) => {
+      smokeApi.interceptedRequests.googleCalendar += 1;
+
       await route.fulfill({
         body: JSON.stringify(MOCK_GOOGLE_CALENDAR),
         contentType: 'application/json',
@@ -88,7 +212,26 @@ export const test = base.extend<{ isMobileProject: boolean }>({
 
     await page.route('https://www.facebook.com/**', async (route) => {
       await route.fulfill({
-        body: '<!doctype html><html><body>Facebook embed mock</body></html>',
+        body: createMockHtml('Facebook Embed Mock', 'Facebook embed mock'),
+        contentType: 'text/html; charset=utf-8',
+        status: 200
+      });
+    });
+
+    await page.route('https://w.soundcloud.com/**', async (route) => {
+      const requestUrl = new URL(route.request().url());
+
+      if (requestUrl.searchParams.get('mock-daily-readings') !== '1') {
+        await route.fulfill({
+          body: createMockHtml('SoundCloud Mock Blocked', 'Unexpected SoundCloud request'),
+          contentType: 'text/html; charset=utf-8',
+          status: 503
+        });
+        return;
+      }
+
+      await route.fulfill({
+        body: createMockHtml('SoundCloud Mock Player', 'Daily Readings audio mock'),
         contentType: 'text/html; charset=utf-8',
         status: 200
       });
@@ -127,6 +270,8 @@ export const test = base.extend<{ isMobileProject: boolean }>({
     });
 
     await use(page);
+
+    expect(smokeApi.unexpectedChurchApiRequests).toEqual([]);
   }
 });
 

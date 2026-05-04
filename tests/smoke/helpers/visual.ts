@@ -11,6 +11,7 @@ interface StableScreenshotOptions {
   mask?: Locator[];
   maxDiffPixelRatio?: number;
   maxDiffPixels?: number;
+  timeout?: number;
 }
 
 export async function waitForVisualReady(page: Page) {

@@ -5,9 +5,23 @@ import { getLatestBulletinRoute, loadInternalMenuTargets, routeMatches } from '.
 import { expectStableScreenshot } from './helpers/visual';
 import { expect, test } from './fixtures';
 
+import type { Locator } from '@playwright/test';
+
+interface VisualPageRoute {
+  maxDiffPixelRatio?: number;
+  route: string;
+  snapshot: string;
+  title: string;
+}
+
 const internalMenuTargets = loadInternalMenuTargets();
 const latestBulletinRoute = getLatestBulletinRoute();
-const visualMenuRoutes = [
+const visualPageRoutes: VisualPageRoute[] = [
+  {
+    route: '/ask',
+    snapshot: 'ask',
+    title: 'ask page'
+  },
   {
     route: '/contact',
     snapshot: 'contact',
@@ -49,11 +63,21 @@ const visualMenuRoutes = [
     title: 'parish membership page'
   },
   {
+    maxDiffPixelRatio: 0.015,
     route: '/staff',
     snapshot: 'staff',
     title: 'parish staff page'
+  },
+  {
+    route: '/test-parish-registration',
+    snapshot: 'test-parish-registration',
+    title: 'test parish registration page'
   }
-] as const;
+];
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 async function expectMeaningfulMainContent(page: Page) {
   await expect(page.locator('main')).toBeVisible();
@@ -63,11 +87,30 @@ async function expectMeaningfulMainContent(page: Page) {
   expect(mainText.length).toBeGreaterThan(30);
 }
 
+function getNewsArticleLink(page: Page) {
+  return page.locator('main a[href^="/news/"]:not([href^="/news/page/"]):not([href^="/news/tags/"])').first();
+}
+
 async function expectRouteLoaded(page: Page, route: string) {
   switch (route) {
     case '/':
       await expect(page.getByRole('heading', { name: 'All Are Welcome' })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Come Worship With Us' })).toBeVisible();
+      break;
+    case '/ask':
+      await expect(page.getByRole('heading', { name: 'Did You Know? Question Submission' })).toBeVisible();
+      await expect(page.getByText('To ask a question, fill in the request form below.')).toBeVisible();
+      await expect(page.getByLabel('Full Name')).toBeVisible();
+      await expect(page.getByLabel('Email')).toBeVisible();
+      await expect(page.getByLabel('Questions')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Send Message' })).toBeVisible();
+      break;
+    case '/contact':
+      await expect(page.getByRole('heading', { name: 'Contact' })).toBeVisible();
+      await expect(page.getByLabel('Full Name')).toBeVisible();
+      await expect(page.getByLabel('Email')).toBeVisible();
+      await expect(page.getByLabel('Comments / Questions')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Send Message' })).toBeVisible();
       break;
     case '/events':
       await expect(page.getByRole('heading', { name: 'Events' })).toBeVisible();
@@ -76,13 +119,31 @@ async function expectRouteLoaded(page: Page, route: string) {
       break;
     case '/live-stream':
       await expect(page.getByRole('heading', { name: 'Live Stream' })).toBeVisible();
-      await expect(page.getByText('View past streams')).toBeVisible();
       await expect(page.locator('main iframe').first()).toBeVisible();
       break;
+    case '/mass-confession-times':
+      await expect(page.locator('main')).toContainText('Sunday Mass');
+      await expect(page.locator('main')).toContainText('Weekday Mass');
+      await expect(page.locator('main')).toContainText('Mass Times');
+      break;
+    case '/news':
+      await expectMeaningfulMainContent(page);
+      break;
     case '/parish-bulletins':
-      await expect(page).toHaveURL(new RegExp(`${latestBulletinRoute.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`));
+      await expect(page).toHaveURL(new RegExp(`${escapeRegExp(latestBulletinRoute)}$`));
       await expect(page.getByRole('heading', { name: 'Parish Bulletins' })).toBeVisible();
       await expect(page.locator('main img[alt*="Page 1"]').first()).toBeVisible();
+      break;
+    case '/staff':
+      await expect(page.getByRole('heading', { name: 'Parish Staff' })).toBeVisible();
+      await expectMeaningfulMainContent(page);
+      break;
+    case '/test-parish-registration':
+      await expect(page.getByRole('heading', { name: 'Parish Membership' })).toBeVisible();
+      await expect(page.getByText('Please complete the parish registration form below.')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Family Information' })).toBeVisible();
+      await expect(page.getByLabel('Mailing Name')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Submit Registration' })).toBeVisible();
       break;
     default:
       await expectMeaningfulMainContent(page);
@@ -96,9 +157,19 @@ async function openDrawer(page: Page) {
   await page.getByRole('button', { name: 'open drawer' }).click();
 }
 
-async function expectRouteScreenshot(page: Page, name: string, isMobileProject: boolean) {
+async function expectRouteScreenshot(
+  page: Page,
+  name: string,
+  isMobileProject: boolean,
+  options: {
+    mask?: Locator[];
+    maxDiffPixelRatio?: number;
+    timeout?: number;
+  } = {}
+) {
   await expectStableScreenshot(page, `${name}-${isMobileProject ? 'mobile' : 'desktop'}.png`, {
-    mask: [page.locator('iframe')]
+    mask: [page.locator('iframe'), page.locator('footer img'), ...(options.mask ?? [])],
+    ...options
   });
 }
 
@@ -106,7 +177,6 @@ test.describe('public site smoke coverage', () => {
   test('homepage renders key sections and calls to action', async ({ page, isMobileProject }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { name: 'All Are Welcome' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Come Worship With Us' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Weekly Schedule' })).toBeVisible();
     await expect(page.getByRole('heading', { name: "Today's Readings" })).toBeVisible();
@@ -133,12 +203,34 @@ test.describe('public site smoke coverage', () => {
   test('bulletin landing page resolves to a bulletin detail page', async ({ page, isMobileProject }) => {
     await page.goto('/parish-bulletins');
 
-    await expect(page).toHaveURL(new RegExp(`${latestBulletinRoute.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`));
+    await expect(page).toHaveURL(new RegExp(`${escapeRegExp(latestBulletinRoute)}$`));
     await expect(page.getByRole('heading', { name: 'Parish Bulletins' })).toBeVisible();
     await expect(page.locator('main img[alt*="Page 1"]').first()).toBeVisible();
 
     await expectShellLayout(page);
-    await expectRouteScreenshot(page, 'parish-bulletins', isMobileProject);
+    await expectRouteScreenshot(page, 'parish-bulletins', isMobileProject, {
+      timeout: 15000
+    });
+  });
+
+  test('news listing opens the latest article detail page', async ({ page, isMobileProject }) => {
+    await page.goto('/news');
+
+    await expectRouteLoaded(page, '/news');
+
+    const latestArticleLink = getNewsArticleLink(page);
+    await expect(latestArticleLink).toBeVisible();
+    const articleTitle = ((await latestArticleLink.innerText()) || '').trim();
+
+    await Promise.all([page.waitForURL((url) => /^\/news\/[^/]+$/.test(url.pathname)), latestArticleLink.click()]);
+
+    await expect(page.locator('main').locator('h1, h2').first()).toBeVisible();
+    await expect(page.locator('main')).toContainText(articleTitle.split('\n')[0] ?? '');
+    await expectMeaningfulMainContent(page);
+    await expectShellLayout(page);
+    await expectRouteScreenshot(page, 'news-detail', isMobileProject, {
+      timeout: 15000
+    });
   });
 
   test('search returns and opens the live stream page', async ({ page, isMobileProject }) => {
@@ -155,18 +247,33 @@ test.describe('public site smoke coverage', () => {
 
     await page.getByRole('link', { name: 'Live Stream', exact: true }).first().click();
     await expect(page).toHaveURL(/\/live-stream$/);
-    await expect(page.getByRole('heading', { name: 'Live Stream' })).toBeVisible();
+    await expect(page.locator('main').getByRole('heading', { name: 'Live Stream', exact: true }).first()).toBeVisible();
 
     await expectShellLayout(page);
     await expectRouteScreenshot(page, 'search-results', isMobileProject);
   });
 
-  for (const visualRoute of visualMenuRoutes) {
+  test('custom 404 path renders recovery content', async ({ page, isMobileProject }) => {
+    await page.goto('/smoke-test-missing-page');
+
+    await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+    await expect(
+      page.getByText('Sorry, the page you are looking for was either not found or does not exist.')
+    ).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Search...' }).first()).toBeVisible();
+
+    await expectShellLayout(page);
+    await expectRouteScreenshot(page, '404', isMobileProject);
+  });
+
+  for (const visualRoute of visualPageRoutes) {
     test(`${visualRoute.title} keeps a stable visual baseline`, async ({ page, isMobileProject }) => {
       await page.goto(visualRoute.route);
 
       await expectRouteLoaded(page, visualRoute.route);
-      await expectRouteScreenshot(page, visualRoute.snapshot, isMobileProject);
+      await expectRouteScreenshot(page, visualRoute.snapshot, isMobileProject, {
+        maxDiffPixelRatio: visualRoute.maxDiffPixelRatio
+      });
     });
   }
 

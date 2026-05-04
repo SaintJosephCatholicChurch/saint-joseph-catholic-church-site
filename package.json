@@ -14,6 +14,7 @@
     "local-cms": "npx @staticcms/proxy-server@^4",
     "redirects": "ts-node --project ./tsconfig.scripts.json ./scripts/generate-redirects.ts",
     "prettier": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --write",
+    "smoke:gate": "npm run type-check && npm run build && npm run smoke:test",
     "smoke:install": "playwright install",
     "smoke:serve": "npm run build && npm run smoke:serve:static",
     "smoke:serve:static": "node ./scripts/serve-export.mjs --root out --port 4173",

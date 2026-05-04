@@ -14,8 +14,14 @@
     "local-cms": "npx @staticcms/proxy-server@^4",
     "redirects": "ts-node --project ./tsconfig.scripts.json ./scripts/generate-redirects.ts",
     "prettier": "prettier \"src/**/*.{js,jsx,ts,tsx}\" --write",
+    "smoke:install": "playwright install",
+    "smoke:serve": "npm run build && npm run smoke:serve:static",
+    "smoke:serve:static": "node ./scripts/serve-export.mjs --root out --port 4173",
+    "smoke:test": "playwright test",
+    "smoke:test:update": "playwright test --update-snapshots",
     "start": "next start",
-    "type-check": "tsc --watch"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --watch"
   },
   "dependencies": {
     "@dnd-kit/core": "6.1.0",
@@ -69,6 +75,7 @@
     "webp-converter": "2.3.3"
   },
   "devDependencies": {
+    "@playwright/test": "1.58.2",
     "@babel/core": "7.24.4",
     "@emotion/eslint-plugin": "11.11.0",
     "@next/eslint-plugin-next": "14.2.2",

@@ -1,425 +1,154 @@
-# Parish Registration Form Plan
-
-This plan is for implementing a production-ready parish registration flow that replaces the current PDF-only workflow while fitting the existing architecture in this workspace.
-
-It covers both repositories:
-
-- `saint-joseph-catholic-church-site`
-- `church-website-serverless-api`
-
-## 1) Current State And Constraints
-
-### Website repo reality
-
-- The public site is a Next.js Pages Router app with `output: 'export'` in `next.config.mjs`.
-- The current parish membership page is content-driven via `content/pages/parish-membership.mdx` and linked from `content/menu.json`.
-- Existing forms on the site are client-side React components that post directly to the separate API host at `https://api.stjosephchurchbluffton.org/.netlify/functions/...`.
-- The current contact and ask forms use MUI form controls already present in the site repo. Reusing those is lower risk than introducing a second form library.
-
-### Backend reality
-
-- The actual email-sending logic lives in the separate `church-website-serverless-api` repo as Netlify functions.
-- `contact.mjs` uses `nodemailer` and shared CORS handling via `netlify/functions/util/response.mjs`.
-- Current cross-origin form submissions avoid preflight by using `mode: 'no-cors'`, which means the frontend cannot inspect the real success/failure response.
-
-### Architectural implication
-
-- Despite the request mentioning a Next.js API route, that is not the best fit for the current production setup.
-- Because the site uses static export, features that require dynamic request handling are not available in the website build output. Next.js static export only supports static `GET` route handlers and does not support request-dependent route handlers, server actions, rewrites, or other server-only features. Source: Next.js Static Exports docs, https://nextjs.org/docs/app/guides/static-exports
-- Recommended implementation: keep the form UI in the site repo and add a new Netlify function in the serverless repo for submission validation, PDF generation, and email delivery.
-
-## 2) What Exists Today That Will Be Replaced
-
-The current parish membership experience is a static content page that tells users to call the office or download a PDF:
-
-- `content/pages/parish-membership.mdx`
-- `public/files/parishregistrationform.pdf`
-
-The menu already points to `/parish-membership`, so the safest migration is to preserve that URL and replace the page implementation behind it.
-
-## 3) PDF Field Audit And Required Scope
-
-Text extracted from `public/files/parishregistrationform.pdf` shows the existing paper form includes these fields and labels in addition to the prompt's field list:
-
-- `Env#`
-- `Add2`
-- adult `Role` (Head of House, Husband, Wife, etc.)
-- adult `First Language`
-- adult `(Maiden) & Birthplace`
-- adult `Catholic?` separate from sacrament checkboxes/dates
-- child `H.S. Grad Yr`
-- wording differences such as `First Name(s)` and `First Name / Nickname`
-
-Decision: all fields from the current PDF must be retained in the new system. The web UI may use clearer labels where helpful, but every paper-form field must exist in both the submission payload and the generated PDF.
-
-## 4) Recommended End State
-
-### User-facing behavior
-
-- `/parish-membership` becomes a real registration page instead of a PDF download page.
-- The page renders a mobile-first web form with clear sections:
-  - Family Information
-  - Adult Member 1
-  - Adult Member 2
-  - Children / Dependents
-  - Additional Notes / Priest Visit
-- Submission shows actual loading, success, and failure states.
-- On success, the parish office receives:
-  - a structured summary email
-  - a generated PDF attachment that mirrors the existing form layout closely enough for office use
-
-There will be no legacy PDF fallback link on the page. The new experience completely replaces the old PDF-download workflow.
-
-### Technical shape
-
-- Frontend stays in `saint-joseph-catholic-church-site`.
-- Submission endpoint, validation, PDF generation, and email delivery live in `church-website-serverless-api`.
-- The frontend uses standard CORS-enabled `fetch`, not `no-cors`, so it can surface real errors.
-- The PDF is generated on the server with `pdf-lib`.
-
-## 5) File-Level Plan
-
-## Phase A: Replace The Parish Membership Page In The Site Repo
-
-### A1. Preserve URL and navigation
-
-- Add a dedicated page component at `src/pages/parish-membership.tsx`.
-- Keep the existing menu item in `content/menu.json` unchanged so the `/parish-membership` route remains stable.
-- Either:
-  - leave `content/pages/parish-membership.mdx` in place but note it is now shadowed by the dedicated route, or
-  - replace its content with an editor note if the team wants to avoid CMS confusion.
-
-Preferred option: keep the MDX file for now and document in code comments or plan notes that the explicit page route now owns this slug. That is the least disruptive change.
-
-### A2. Add a custom page view and form component
-
-Proposed new site files:
-
-- `src/pages/parish-membership.tsx`
-- `src/components/pages/custom/parish-membership/ParishRegistrationView.tsx`
-- `src/components/pages/custom/parish-membership/ParishRegistrationForm.tsx`
-- `src/components/pages/custom/parish-membership/parishRegistration.types.ts`
-- `src/components/pages/custom/parish-membership/parishRegistration.constants.ts`
-- `src/components/pages/custom/parish-membership/parishRegistration.initialState.ts`
-- `src/components/pages/custom/parish-membership/parishRegistration.validation.ts`
-
-Keep this structure small and boring. Avoid over-abstracting repeated field markup until after the first working version exists.
-
-### A3. Match site conventions
-
-- Use the existing `PageLayout`, `Container`, and MUI `TextField`, `Select`, `Button`, `FormControl`, and checkbox/radio controls already used elsewhere.
-- Follow current style conventions: single quotes, concise functions, styled components via MUI `styled`, and no unrelated refactors.
-- Do not introduce a new form library.
-
-### A4. Form data model
-
-Use a single payload shape that matches the requested contract and is easy to extend:
-
-- `family`
-- `adults`
-- `children`
-- `additional`
-
-Recommended shape:
-
-- `family.registrationDate`
-- `family.envelopeNumber`
-- `family.lastName`
-- `family.firstNames`
-- `family.mailingName`
-- `family.address`
-- `family.addressLine2`
-- `family.city`
-- `family.state`
-- `family.zip`
-- `family.homePhone`
-- `family.emergencyPhone`
-- `family.familyEmail`
-- `adults[0..1]`
-- `children[]`
-- `additional.priestVisitRequested`
-- `additional.priestVisitDetails`
-
-Each adult/child record should contain normalized sacrament data instead of ad hoc booleans spread through the tree. Recommended shape:
-
-- `sacraments.baptism.received`
-- `sacraments.baptism.date`
-- `sacraments.eucharist.received`
-- `sacraments.eucharist.date`
-- `sacraments.reconciliation.received`
-- `sacraments.reconciliation.date`
-- `sacraments.confirmation.received`
-- `sacraments.confirmation.date`
-
-This will keep PDF rendering and email summary generation predictable.
-
-Because all paper-form fields must remain, the model should also explicitly retain:
-
-- `adults[n].role`
-- `adults[n].gender`
-- `adults[n].dateOfBirth`
-- `adults[n].maritalStatus`
-- `adults[n].validCatholicMarriage`
-- `adults[n].parishStatus`
-- `adults[n].occupationEmployer`
-- `adults[n].workPhoneOrCell`
-- `adults[n].email`
-- `adults[n].firstLanguage`
-- `adults[n].maidenName`
-- `adults[n].birthplace`
-- `adults[n].isCatholic`
-- `children[n].firstName`
-- `children[n].lastName`
-- `children[n].gender`
-- `children[n].birthdate`
-- `children[n].relationshipToHeadOfHousehold`
-- `children[n].school`
-- `children[n].highSchoolGraduationYear`
-- `children[n].firstLanguage`
-- `children[n].isCatholic`
-
-Note: the prompt asked for a simplified `children` shape, but the confirmed requirement is to retain every field from the current PDF. The implementation should therefore prefer PDF fidelity over simplifying the child/adult record structure.
-
-### A5. Controlled form behavior
-
-- Use a single top-level state object with small helper updaters for:
-  - family fields
-  - adult field updates by index
-  - child add/update/remove
-  - sacrament toggles and dates
-- Auto-fill registration date with today's date on initial render.
-- Keep two fixed adult panels.
-- Keep children as a dynamic array with add/remove actions.
-- Include the adult `Role` field explicitly in the UI.
-- Preserve every current paper-form field in the UI, even if some are tucked behind secondary labels or grouped rows for readability.
-
-### A6. Validation rules
-
-- Required fields at minimum:
-  - `family.lastName`
-  - `family.address`
-  - `family.familyEmail`
-- Preserve all other paper-form fields as present in the payload even when optional.
-- Validate email format.
-- Normalize date inputs to a single `YYYY-MM-DD` representation in the frontend payload.
-- If a sacrament date is entered, ensure the corresponding `received` value is true.
-- If `priestVisitRequested` is false, clear or ignore `priestVisitDetails`.
-
-Recommended UX:
-
-- inline field-level error text after submit attempt
-- disable submit during request
-- success message after a `200` response
-- visible error banner if submission fails
-
-### A7. Frontend endpoint integration
-
-- Add a new constant in `src/constants.ts` for the new endpoint, for example:
-  - `PARISH_REGISTRATION_URL = 'https://api.stjosephchurchbluffton.org/.netlify/functions/parish-registration'`
-- Use normal `fetch` with `Content-Type: application/json`.
-- Parse the response body and surface actual server errors to the user.
-
-Do not use `mode: 'no-cors'` here because the required UX depends on seeing the real result.
-
-## Phase B: Add A New Netlify Function In The Serverless API Repo
-
-### B1. New function entry point
-
-Add:
-
-- `netlify/functions/parish-registration.mjs`
-
-Responsibilities:
-
-1. Handle `OPTIONS` for preflight.
-2. Accept `POST` JSON.
-3. Validate and sanitize the submission.
-4. Generate the PDF.
-5. Send the email with PDF attachment.
-6. Return structured JSON success/failure responses.
-
-### B2. Update shared response handling for real CORS
-
-Current response handling only sets `access-control-allow-origin`.
-
-For this feature, update `netlify/functions/util/response.mjs` so cross-origin JSON form posts work cleanly:
-
-- add `access-control-allow-methods`
-- add `access-control-allow-headers`
-- optionally add a helper for JSON responses
-
-The new function should reply successfully to `OPTIONS` requests.
-
-This is required because `application/json` POST requests from `www.stjosephchurchbluffton.org` to `api.stjosephchurchbluffton.org` will preflight.
-
-### B3. Break the serverless logic into small helpers
-
-Proposed helper files:
-
-- `netlify/functions/util/parish-registration/validate.mjs`
-- `netlify/functions/util/parish-registration/sanitize.mjs`
-- `netlify/functions/util/parish-registration/pdf.mjs`
-- `netlify/functions/util/parish-registration/email.mjs`
-- `netlify/functions/util/parish-registration/summary.mjs`
-
-Keep helpers pure where possible so they are easy to test manually and reason about.
-
-## Phase C: Validation And Sanitization Strategy
-
-### C1. Input validation on the server
-
-The server must treat all incoming values as untrusted.
-
-Validate:
-
-- object shape
-- required fields
-- adults array length is exactly `2`
-- children is an array
-- all date strings are either empty or valid `YYYY-MM-DD`
-- email fields are syntactically valid
-- boolean-like fields are normalized to real booleans
-
-Reject malformed input with `400` and a readable JSON error body.
-
-### C2. Sanitization
-
-- Trim strings.
-- Collapse obviously redundant whitespace.
-- Escape all user content before inserting it into the HTML email body.
-- Keep raw strings safe for PDF output by avoiding HTML rendering entirely inside PDF generation.
-
-This is an improvement over the existing contact form pattern, which interpolates raw user content into HTML.
-
-## Phase D: PDF Generation
-
-### D1. Dependency choice
-
-- Add `pdf-lib` to `church-website-serverless-api/package.json`.
-
-Reason:
-
-- lightweight enough for a serverless function
-- Node-compatible
-- sufficient for a structured office PDF without needing HTML-to-PDF rendering
-
-### D2. Rendering strategy
-
-Do not attempt pixel-perfect recreation on the first pass.
-
-Instead:
-
-1. Create a clean sectioned PDF that mirrors the paper form's information hierarchy.
-2. Preserve the familiar labels where possible.
-3. Use consistent typography and spacing.
-4. Allow the document to flow onto additional pages if the family has many children.
-
-Recommended section order:
-
-1. Header with parish name and submission date
-2. Family information
-3. Adult member 1
-4. Adult member 2
-5. Children / dependents table or stacked entries
-6. Priest visit section
-
-### D3. Handling the full field set
-
-Because every current paper-form field must remain, the PDF helper should be driven by a central field map so the rendered labels can stay close to the original form while the web UI uses cleaner wording where appropriate.
-
-That means:
-
-- centralize field-to-label mapping in one file
-- keep PDF layout code separate from validation code
-- allow UI labels and PDF labels to diverge while writing to the same payload fields
-- keep the original paper-form labels available for the generated PDF where they help office familiarity
-
-## Phase E: Email Delivery
-
-### E1. Reuse the existing mail transport approach
-
-- Reuse the same `nodemailer` transport pattern already used in `contact.mjs`.
-- Keep credentials environment-driven:
-  - `GMAIL_USERNAME`
-  - `GMAIL_PASSWORD`
-- Add `PARISH_REGISTRATION_EMAIL` as the required recipient configuration for this feature.
-- Allow `PARISH_REGISTRATION_EMAIL` to be a comma-separated list and split/trim it server-side before passing to `nodemailer`.
-
-Do not route parish registration mail through `CONTACT_EMAIL`.
-
-### E2. Email contents
-
-Send:
-
-- subject like `New Parish Registration Submission`
-- HTML summary body with section headings
-- attached PDF, for example `parish-registration-YYYY-MM-DD-lastname.pdf`
-
-The body should summarize the submission in a way the office can scan quickly without opening the attachment.
-
-### E3. Reply-to behavior
-
-- Set `replyTo` to `family.familyEmail` when present and valid.
-- If desired later, this can be expanded to include adult email addresses in the summary body rather than as multiple reply-to addresses.
-
-## Phase F: Content And UX Migration
-
-### F1. Replace the old content message
-
-The new page should still explain what parish registration is for, but it should no longer send users away to download a PDF as the primary action.
-
-Recommended content flow:
-
-- short introductory paragraph
-- note that the office will receive the registration directly
-- registration form
-
-### F2. Rollout strategy
-
-Replace the old PDF-download workflow directly. No fallback PDF link is required on the new page.
-
-## 6) Proposed Implementation Order
-
-1. Confirm unresolved field questions listed below.
-2. Add the new frontend page and typed form model in the site repo.
-3. Add the new serverless function skeleton with proper CORS and JSON responses.
-4. Add server-side validation and sanitization.
-5. Add PDF generation helper and verify output locally.
-6. Add email summary + attachment delivery.
-7. Wire the site form to the endpoint and validate end-to-end.
-8. Update the parish membership page copy and keep a temporary PDF fallback link.
-9. Run final validation.
-
-## 7) Validation Checklist
-
-### Website repo
-
-- `npm run lint`
-- `npm run build`
-- smoke test `/parish-membership` locally
-- confirm mobile layout for at least narrow and desktop widths
-
-### Serverless repo
-
-- `npm run live`
-- manual POST to the new function with a sample payload
-- verify `OPTIONS` response for CORS preflight
-- verify email sends and PDF attachment opens
-
-### End-to-end
-
-- submit a realistic family with two adults and at least two children
-- verify success state in browser
-- verify validation errors on missing last name, address, and family email
-- verify the office email body is readable
-- verify the PDF is readable and complete
-- verify multi-child submissions do not truncate PDF content
-
-## 8) Confirmed Decisions
-
-1. All fields from the current paper PDF must remain in the new web form and generated PDF.
-2. All fields should appear in the new experience; cleaner UI labels are allowed.
-3. Adult `Role` is required and should stay in the UI and payload.
-4. A clean multi-page generated PDF is acceptable.
-5. Submission emails must go to `PARISH_REGISTRATION_EMAIL`, and that variable must support a comma-separated recipient list.
-6. The new page fully replaces the PDF-download workflow with no fallback link.
+## Plan: Incremental Site Dependency Upgrades
+
+This plan is organized into explicit phases that can be completed one at a time. The intended execution model is: implement exactly one phase, run that phase’s verification, mark that phase complete in this plan, and stop. A later prompt such as "implement the next phase" should mean: find the first unchecked phase, execute only that phase’s scope, update this plan to mark it done, and then stop without starting the following phase.
+
+**Execution rule**
+
+- Complete exactly one phase per implementation run.
+- Do not begin work from a later phase until every earlier phase is marked complete.
+- When a phase finishes, update this plan by changing that phase from `[ ]` to `[x]` and add any important notes under that phase.
+- If a phase reveals more work than expected, split that phase into substeps, but do not silently spill work into the next phase.
+
+**Phases**
+
+1. `[x]` Phase 1: Build the smoke-test baseline
+   Scope: Add Playwright to `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site` with explicit desktop and mobile projects across Chromium, Firefox, and WebKit; create a production-like `webServer` flow that builds the static export and serves the generated output; add a one-shot typecheck and the visual-regression helpers needed for later gates.
+   Includes: cross-browser setup, desktop and mobile viewport/device setup, test config, deterministic serving strategy, screenshot and snapshot utilities, layout assertion helpers, non-watch TypeScript verification, package scripts, test helpers and fixtures.
+   Excludes: dependency upgrades.
+   Notes: Implemented with `playwright.config.ts`, `scripts/serve-export.mjs`, and baseline fixtures/helpers under `tests/smoke/`; added six explicit desktop/mobile browser projects, a one-shot `type-check`, and smoke scripts for browser install, static serving, and test execution. Verified with `npm run type-check`, `npm run smoke:install -- chromium firefox webkit`, and `npm run smoke:test:update`; this generated initial proof snapshots for the custom `404` shell only, while network interception and broader route coverage remain intentionally deferred to Phases 2 and 3.
+2. `[ ]` Phase 2: Make external dependencies deterministic
+   Scope: Intercept or mock the public-site network dependencies used by smoke tests so the suite is stable, non-destructive, and visually consistent enough for screenshot comparison.
+   Includes: mock-only handling for contact, ask, and parish-registration form submissions so they never hit the real deployed endpoints or send real emails; interception for daily-readings RSS and SoundCloud requests; interception for live-stream API calls; interception for Google Calendar-backed event requests; stabilization or masking of inherently dynamic embed surfaces where needed so layout and screenshot assertions stay trustworthy.
+   Excludes: real backend/serverless calls, CMS coverage.
+   Notes: This phase must guarantee that public form smoke tests cannot trigger real emails.
+3. `[ ]` Phase 3: Cover the public-site smoke journeys
+   Scope: Add the actual smoke scenarios for the public site on both desktop and mobile viewports.
+   Includes: homepage and global navigation, responsive drawer/header/footer behavior, `/mass-confession-times`, `/events`, `/news` list plus one article, `/parish-bulletins` list plus one detail page, `/search`, `/staff`, `/live-stream`, `/contact`, `/ask`, `/test-parish-registration`, and a custom 404 path; per-route assertions that key content is present and visible; best-effort layout and visual assertions using screenshots or snapshots to detect content disappearing, major spacing shifts, broken responsive behavior, obvious color/theme drift, and other user-noticeable regressions.
+   Excludes: CMS/admin routes.
+   Notes: This phase should validate major UX continuity at a high-confidence level, not just happy-path functionality.
+4. `[ ]` Phase 4: Freeze and verify the baseline gate
+   Scope: Make the baseline operational and documented before any dependency changes begin.
+   Includes: full static export build, full desktop-and-mobile cross-browser smoke run, approval of the initial visual baselines, baseline script cleanup, documentation of intentional exclusions or masked regions, and confirmation that the smoke gate is the required precondition for every upgrade phase.
+   Excludes: dependency changes.
+   Notes: After this phase, the repo should have a repeatable pre-upgrade verification gate that is strong enough to catch both functional and user-visible layout regressions.
+5. `[ ]` Phase 5: React preflight to 18.3
+   Scope: Upgrade `react` and `react-dom` from 18.2 to 18.3 and align `@types/react` and `@types/react-dom`, while staying on Next 14.
+   Includes: runtime package bump, type package bump, fixes for any new React warnings that surface during the baseline gate.
+   Excludes: Next major upgrade.
+   Notes: This phase is meant to surface React 19 issues early with minimal framework churn.
+6. `[ ]` Phase 6: Core runtime hop from Next 14 to Next 15 and React 19
+   Scope: Upgrade the main runtime one major step.
+   Includes: `next`, `react`, `react-dom`, `eslint-config-next`, and `@next/eslint-plugin-next`; use the official Next 15 and React 19 migration guides and codemods where they reduce churn.
+   Excludes: Next 16 and Next-coupled plugin upgrades.
+   Notes: Keep this hop isolated so any runtime regressions are attributable.
+7. `[ ]` Phase 7: Core runtime hop from Next 15 to Next 16
+   Scope: Upgrade to Next 16 as a separate phase.
+   Includes: Next 16 config and behavior adjustments, removal or replacement of any deprecated/removed Next APIs encountered in this repo.
+   Excludes: PWA/build add-on upgrades.
+   Notes: Because `next.config.mjs` uses `output: 'export'`, a custom `webpack` function, and `next-remove-imports`, the first Next 16 adoption should stay on an explicit webpack-compatible build path until proven stable.
+8. `[ ]` Phase 8: Upgrade Next-coupled build add-ons
+   Scope: Upgrade the packages that are tightly coupled to the Next build pipeline after Next 16 is stable.
+   Includes: `@ducanh2912/next-pwa`, `next-remove-imports`, `@svgr/webpack`, `yaml-loader`, `raw-loader`, and related `next.config.mjs` changes.
+   Excludes: MUI and application feature libraries.
+   Notes: Keep bundler-mode decisions explicit in this phase.
+9. `[ ]` Phase 9: MUI main stack from v5 to v6
+   Scope: Upgrade the core Material UI stack one major step.
+   Includes: `@mui/material`, `@mui/system`, `@mui/icons-material`, Emotion packages, and any directly coupled theming/styling fixes.
+   Excludes: MUI v7 and MUI X pickers v8.
+   Notes: Audit `@mui/base` carefully here because it is currently on a beta track and may need migration, replacement, or removal rather than a simple bump.
+10. `[ ]` Phase 10: MUI main stack from v6 to v7
+    Scope: Upgrade Material UI another major step after v6 is stable.
+    Includes: exports-field package layout changes, grid/grid2 rename issues, removed deprecated APIs, theme behavior differences, and any resulting import or styling fixes.
+    Excludes: date pickers.
+    Notes: Keep this phase isolated from the pickers upgrade.
+11. `[ ]` Phase 11: Date stack and MUI X pickers
+    Scope: Upgrade `@mui/x-date-pickers` from v7 to v8 together with `date-fns` from v3 to v4.
+    Includes: adapter import changes, picker API changes, slot/theme updates, and any application fixes needed for the date stack.
+    Excludes: unrelated MUI components.
+    Notes: This is where current `AdapterDateFnsV3` usage is expected to change.
+12. `[ ]` Phase 12: FullCalendar family
+    Scope: Upgrade the FullCalendar ecosystem one major version at a time, with all `@fullcalendar/*` packages kept in lockstep.
+    Includes: custom mobile view plugin fixes, Google Calendar integration verification, and event interaction regression checks.
+    Excludes: unrelated utility packages.
+    Notes: If multiple major hops are required, keep them as explicit substeps inside this phase and verify after each hop.
+13. `[ ]` Phase 13: Remaining public-site utility batches
+    Scope: Upgrade the remaining public-site libraries in small logical batches.
+    Includes: content/data parsing libraries, UI widget libraries, SEO/schema libraries, and general utilities.
+    Excludes: developer toolchain and CMS-adjacent packages.
+    Notes: Keep each package to one major hop at a time and use official migration docs or release notes at execution time.
+14. `[ ]` Phase 14: Developer toolchain modernization
+    Scope: Upgrade the local toolchain after the runtime and main UI stack are stable.
+    Includes: ESLint 8 to 9, `@typescript-eslint` packages, TypeScript, Prettier, and removal of deprecated `babel-eslint`.
+    Excludes: CMS-adjacent runtime packages.
+    Notes: Doing this late keeps lint/type noise from obscuring framework regressions.
+15. `[ ]` Phase 15: CMS-adjacent packages, excluding Static CMS
+    Scope: Upgrade packages that are outside the public smoke suite and will still need manual CMS checks.
+    Includes: TinyMCE, `@dnd-kit`, and any other CMS-adjacent libraries except `@staticcms/*`.
+    Excludes: `@staticcms/*` entirely.
+    Notes: After this phase, public smoke tests still run, but CMS validation remains manual by design.
+16. `[ ]` Phase 16: Final dependency sweep
+    Scope: Re-run outdated dependency inventory and pick up leftovers.
+    Includes: remaining minors, patches, and any still-unfinished single-major packages that fit the already-established grouping rules.
+    Excludes: new scope expansion.
+    Notes: If a high-impact group still has another major remaining, create a new explicit phase instead of folding it into cleanup.
+
+**Per-phase completion checklist**
+
+1. Read the official migration guide or release notes for that phase’s dependency group before implementation.
+2. Implement only the current unchecked phase.
+3. Run that phase’s verification steps.
+4. Update this plan by marking the phase `[x]` and adding concise notes about what changed, any follow-up constraints, and any intentionally deferred work.
+5. Stop after completing that one phase.
+
+**Guide checkpoints**
+
+- Playwright Installation: https://playwright.dev/docs/intro
+- React 19 Upgrade Guide: https://react.dev/blog/2024/04/25/react-19-upgrade-guide
+- Next.js 15 Upgrade Guide: https://nextjs.org/docs/app/guides/upgrading/version-15
+- Next.js 16 Upgrade Guide: https://nextjs.org/docs/app/guides/upgrading/version-16
+- Material UI v6 Guide: https://mui.com/material-ui/migration/upgrade-to-v6/
+- Material UI v7 Guide: https://mui.com/material-ui/migration/upgrade-to-v7/
+- MUI X Pickers v7 to v8 Guide: https://mui.com/x/migration/migration-pickers-v7/
+- ESLint v9 Migration Guide: https://eslint.org/docs/latest/use/migrate-to-9.0.0
+- For later utility batches, use the official release notes or migration guide for each package at the moment that batch is executed.
+
+**Relevant files**
+
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\package.json` — dependency inventory, scripts, and future smoke-test and verification commands.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\next.config.mjs` — static export, webpack customization, PWA wrapping, and the highest-risk Next 16 config surface.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\global.d.ts` — type augmentation surface that may need React or package-layout adjustments later.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\constants.ts` — external API endpoints used by public forms.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\pages\custom\contact\ContactForm.tsx` — mock-only public form smoke target.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\pages\custom\ask\AskForm.tsx` — mock-only public form smoke target.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\pages\custom\parish-membership\ParishRegistrationForm.tsx` — mock-only form smoke target and server response behavior surface.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\widgets\DailyReadings.tsx` — third-party network-dependent homepage widget to stabilize in smoke tests.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\events\CalendarView.tsx` — FullCalendar and Google Calendar integration surface.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\pages\custom\live-stream\LiveStreamView.tsx` — live-stream shell behavior.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\pages\custom\live-stream\useLiveStreamUrl.ts` — API-driven live-stream URL fetching.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\pages\` — route inventory for the public smoke scenarios.
+
+**Verification**
+
+1. Phase 1 through Phase 4 gate: install Playwright browsers, run the static export build, serve the generated site, and run the full desktop-and-mobile Chromium/Firefox/WebKit smoke suite with network interception enabled for all email- or submission-producing form flows.
+2. Phase 1 through Phase 4 gate: require visual/layout assertions on key routes in addition to route-level functional checks, using screenshots or snapshots plus structural visibility assertions to catch content disappearance, major spacing shifts, broken responsiveness, and obvious style drift.
+3. Phase 5 and later gate: fresh install, targeted dependency upgrade, one-shot TypeScript check, ESLint, static export build, then the full visual smoke suite.
+4. Next 16 gate: explicitly verify the chosen bundler mode. If webpack is retained initially, keep it explicit in scripts until the custom webpack config and plugins are either removed or proven under Turbopack.
+5. MUI and FullCalendar gates: in addition to the global smoke suite, pay extra attention to forms, navigation, calendar rendering, layout breakpoints, and visible component styling because those are the most likely UX regressions for these groups.
+6. CMS-adjacent gate: run the public smoke suite and then perform your manual CMS verification before moving on, because those packages are intentionally outside the Playwright scope.
+
+**Decisions**
+
+- Scope is the site repo only. The serverless API repo is excluded from this plan.
+- The smoke suite should be cross-browser from the start: Chromium, Firefox, and WebKit.
+- The smoke suite should cover both desktop and mobile viewports from the start.
+- The smoke gate should include visual/layout checks, not just functional assertions, so upgrade regressions that users would notice are caught early.
+- `@staticcms/*` stays out of this effort entirely.
+- Public smoke tests should stub unstable third-party dependencies rather than rely on live network services, and form smoke tests must never call the live contact or parish-registration endpoints.
+- Next 16 should be adopted conservatively because the current site still relies on static export plus custom webpack configuration.
+
+**Further Considerations**
+
+1. If a later dependency batch turns out to contain more major hops than expected, split that phase again rather than broadening a single implementation run.
+2. If `@mui/base` is unused in application code, removing it may be lower risk than carrying it through multiple framework upgrades.
+3. If the Playwright suite becomes slow in daily work, keep the full desktop-and-mobile cross-browser visual suite as the release gate and allow a narrower fast path for local iteration while preserving the full gate for phase completion.
+4. Visual baselines should only be updated intentionally after manual review, not casually regenerated during dependency upgrades, or the suite will stop protecting against detrimental UI drift.

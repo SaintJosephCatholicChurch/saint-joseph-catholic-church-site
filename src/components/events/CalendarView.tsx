@@ -39,7 +39,7 @@ const StyledCalendarWrapper = styled('div')(
 );
 
 const CalendarView = () => {
-  const calendarRef = useRef<FullCalendar>();
+  const calendarRef = useRef<FullCalendar | null>(null);
 
   const [api, setApi] = useState<CalendarApi | undefined>();
   const [title, setTitle] = useState<string | undefined>();

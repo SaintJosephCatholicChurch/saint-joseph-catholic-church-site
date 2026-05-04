@@ -113,12 +113,12 @@ function captureSubmission(submissions: CapturedSubmission[], request: Request) 
 
 export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMockState }>({
   // eslint-disable-next-line no-empty-pattern
-  isMobileProject: async ({}, use, testInfo) => {
-    await use(testInfo.project.name.startsWith('mobile-'));
+  isMobileProject: async ({}, applyFixture, testInfo) => {
+    await applyFixture(testInfo.project.name.startsWith('mobile-'));
   },
   // eslint-disable-next-line no-empty-pattern
-  smokeApi: async ({}, use) => {
-    await use({
+  smokeApi: async ({}, applyFixture) => {
+    await applyFixture({
       interceptedRequests: {
         googleCalendar: 0
       },
@@ -129,7 +129,7 @@ export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMo
       unexpectedChurchApiRequests: []
     });
   },
-  page: async ({ page, smokeApi }, use) => {
+  page: async ({ page, smokeApi }, applyFixture) => {
     await page.route(`${CHURCH_API_BASE_URL}/**`, async (route) => {
       const request = route.request();
       const requestUrl = request.url().split('?')[0];
@@ -270,7 +270,7 @@ export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMo
       installStabilityStyles();
     });
 
-    await use(page);
+    await applyFixture(page);
 
     expect(smokeApi.unexpectedChurchApiRequests).toEqual([]);
   }

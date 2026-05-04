@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 
 import { isNotEmpty } from '../../util/string.util';
 import PageContentView from '../pages/PageContentView';
@@ -22,11 +22,6 @@ interface PostSummaryProps {
 }
 
 const PostSummary = memo(({ post }: PostSummaryProps) => {
-  const [html, setHtml] = useState<string>('');
-  useEffect(() => {
-    setHtml(post.summary);
-  }, [post.summary]);
-
   return (
     <Button
       LinkComponent={Link}
@@ -56,7 +51,7 @@ const PostSummary = memo(({ post }: PostSummaryProps) => {
       <PostDateAuthorLine date={post.date} disableMargin />
       <Box>
         <PageContentView>
-          <div dangerouslySetInnerHTML={{ __html: sanitizeHtmlImages(html) }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHtmlImages(post.summary) }} />
         </PageContentView>
       </Box>
       <StyledReadMore className="read-more">Read More</StyledReadMore>

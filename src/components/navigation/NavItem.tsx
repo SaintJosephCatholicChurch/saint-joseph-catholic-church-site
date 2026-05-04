@@ -55,9 +55,9 @@ interface NavItemProps {
 const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
-  const wrapperRef = useRef<HTMLDivElement>();
-  const buttonRef = useRef<HTMLButtonElement>();
-  const activeMenuItemRef = useRef<HTMLButtonElement>();
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const activeMenuItemRef = useRef<HTMLButtonElement | null>(null);
   const [keyboardSelectedIndex, setKeyboardSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
 

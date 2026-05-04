@@ -58,7 +58,7 @@ const StyledViewCalendarLink = styled(StyledLink)(
 );
 
 const UpcomingEvents = memo(() => {
-  const calendarRef = useRef<FullCalendar>();
+  const calendarRef = useRef<FullCalendar | null>(null);
 
   const isMediumOrBiggerScreen = useMediaQueryUp('md');
 

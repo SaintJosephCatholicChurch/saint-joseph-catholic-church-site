@@ -125,6 +125,7 @@ async function expectRouteLoaded(page: Page, route: string) {
       await expect(page.locator('main')).toContainText('Mass Times');
       break;
     case '/news':
+      await expect(getNewsArticleLink(page)).toBeVisible();
       await expectMeaningfulMainContent(page);
       break;
     case '/parish-bulletins':

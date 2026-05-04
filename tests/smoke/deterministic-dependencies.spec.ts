@@ -1,5 +1,4 @@
 import { CONTACT_URL, PARISH_REGISTRATION_URL } from '../../src/constants';
-
 import { expect, test } from './fixtures';
 
 import type { ParishRegistrationFormData } from '../../src/components/pages/custom/parish-membership/parishRegistration.types';

@@ -15,7 +15,7 @@ Run `npm run build`
 
 Run `npm run smoke:install -- chromium firefox webkit` once on a machine before the first smoke run.
 
-Use `npm run smoke:gate` as the required pre-upgrade gate before starting any dependency phase in `plan.md`. That command runs the one-shot TypeScript check, verifies the static export build, and then runs the full desktop-and-mobile Chromium, Firefox, and WebKit Playwright smoke suite against the exported site.
+Use `npm run smoke:gate` as the required pre-upgrade gate before starting any dependency phase in `plan.md`. That command runs the one-shot TypeScript check, requires a clean ESLint pass with no unresolved findings, verifies the static export build, and then runs the full desktop-and-mobile Chromium, Firefox, and WebKit Playwright smoke suite against the exported site.
 
 Use `npm run smoke:test:update` only when intentionally approving visual baseline changes after manual review. Snapshot updates are not part of normal upgrade runs.
 

@@ -9,7 +9,6 @@ const LIVE_ENDPOINT = `${CHURCH_API_BASE_URL}/live`;
 const PARISH_REGISTRATION_ENDPOINT = `${CHURCH_API_BASE_URL}/parish-registration`;
 const READINGS_ENDPOINT = `${CHURCH_API_BASE_URL}/readings`;
 const READINGS_PODCAST_ENDPOINT = `${CHURCH_API_BASE_URL}/readings-podcast`;
-const MOCK_SOUND_CLOUD_URL = 'https://w.soundcloud.com/player?mock-daily-readings=1';
 
 const MOCK_READINGS_RSS = `<?xml version="1.0" encoding="UTF-8"?>
 <rss>
@@ -113,9 +112,11 @@ function captureSubmission(submissions: CapturedSubmission[], request: Request) 
 }
 
 export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMockState }>({
+  // eslint-disable-next-line no-empty-pattern
   isMobileProject: async ({}, use, testInfo) => {
     await use(testInfo.project.name.startsWith('mobile-'));
   },
+  // eslint-disable-next-line no-empty-pattern
   smokeApi: async ({}, use) => {
     await use({
       interceptedRequests: {

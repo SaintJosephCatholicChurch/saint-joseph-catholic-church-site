@@ -1,11 +1,9 @@
-import { type Page } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 
 import { expectShellLayout } from './helpers/layout';
 import { getLatestBulletinRoute, loadInternalMenuTargets, routeMatches } from './helpers/site';
 import { expectStableScreenshot } from './helpers/visual';
 import { expect, test } from './fixtures';
-
-import type { Locator } from '@playwright/test';
 
 interface VisualPageRoute {
   maxDiffPixelRatio?: number;

@@ -125,6 +125,7 @@ module.exports = {
         }
       },
       rules: {
+        'import/no-named-as-default-member': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': [0],
         'react/require-default-props': 0,

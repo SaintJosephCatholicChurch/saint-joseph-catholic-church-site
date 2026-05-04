@@ -51,7 +51,8 @@ const StyledWhereToFindUsSection = styled('div')`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  background: linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%),
+  background:
+    linear-gradient(183.55deg, #f1f1f1 3%, rgba(241, 241, 241, 0) 30%),
     url(${homePageData.schedule_section.schedule_background}), #c7c7c7;
   margin-top: 48px;
 `;

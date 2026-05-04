@@ -56,7 +56,12 @@ async function fromStorageToEditor(
   return { result: newValue, cache };
 }
 
-function useStorageToEditor(input: string, collection: CollectionWithDefaults<HtmlField>, field: HtmlField, entry: Entry) {
+function useStorageToEditor(
+  input: string,
+  collection: CollectionWithDefaults<HtmlField>,
+  field: HtmlField,
+  entry: Entry
+) {
   const [html, setHtml] = useState<string>('');
   const [fileCheckCache, setFileCheckCache] = useState<Record<string, boolean>>({});
 
@@ -84,7 +89,7 @@ function useStorageToEditor(input: string, collection: CollectionWithDefaults<Ht
 }
 
 const EditorPreview = ({ value, field, collection, entry }: WidgetPreviewProps<string, HtmlField>) => {
-  const sanitizedHtml = field?.sanitize_preview ?? false ? DOMPurify.sanitize(value) : value;
+  const sanitizedHtml = (field?.sanitize_preview ?? false) ? DOMPurify.sanitize(value) : value;
   const html = useStorageToEditor(sanitizedHtml, collection, field, entry);
 
   return useMemo(

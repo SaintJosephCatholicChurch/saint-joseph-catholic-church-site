@@ -12394,9 +12394,9 @@
                                 break;
                               }
 
-                              (_step7$value = _slicedToArray(_step7.value, 2)),
+                              ((_step7$value = _slicedToArray(_step7.value, 2)),
                                 (fontName = _step7$value[0]),
-                                (font = _step7$value[1]);
+                                (font = _step7$value[1]));
                               descriptor = font.get('FontDescriptor');
 
                               if (descriptor instanceof _primitives.Dict) {
@@ -12867,7 +12867,7 @@
                         while (1) {
                           switch ((_context5.prev = _context5.next)) {
                             case 0:
-                              (catalog = this.catalog), (linearization = this.linearization), (xref = this.xref);
+                              ((catalog = this.catalog), (linearization = this.linearization), (xref = this.xref));
                               ref = _primitives.Ref.get(linearization.objectNumberFirst, 0);
                               _context5.prev = 2;
                               _context5.next = 5;
@@ -13084,7 +13084,7 @@
                           switch ((_context7.prev = _context7.next)) {
                             case 0:
                               recoveryMode = _args7.length > 0 && _args7[0] !== undefined ? _args7[0] : false;
-                              (catalog = this.catalog), (pdfManager = this.pdfManager);
+                              ((catalog = this.catalog), (pdfManager = this.pdfManager));
                               catalog.setActualNumPages();
                               _context7.prev = 3;
                               _context7.next = 6;
@@ -13181,11 +13181,11 @@
 
                               try {
                                 for (_iterator11.s(); !(_step11 = _iterator11.n()).done; ) {
-                                  (_step11$value = _slicedToArray(_step11.value, 2)),
+                                  ((_step11$value = _slicedToArray(_step11.value, 2)),
                                     (pageIndex = _step11$value[0]),
                                     (_step11$value$ = _slicedToArray(_step11$value[1], 2)),
                                     (pageDict = _step11$value$[0]),
-                                    (ref = _step11$value$[1]);
+                                    (ref = _step11$value$[1]));
                                   promise = void 0;
 
                                   if (pageDict instanceof Error) {
@@ -31797,7 +31797,7 @@
 
                             case 19:
                               font = _context4.sent;
-                              (_this$_computeFontSiz = this._computeFontSize(
+                              ((_this$_computeFontSiz = this._computeFontSize(
                                 totalHeight - defaultPadding,
                                 totalWidth - 2 * hPadding,
                                 value,
@@ -31806,7 +31806,7 @@
                               )),
                                 (_this$_computeFontSiz2 = _slicedToArray(_this$_computeFontSiz, 2)),
                                 (defaultAppearance = _this$_computeFontSiz2[0]),
-                                (fontSize = _this$_computeFontSiz2[1]);
+                                (fontSize = _this$_computeFontSiz2[1]));
                               descent = font.descent;
 
                               if (isNaN(descent)) {
@@ -31929,9 +31929,9 @@
                                   return this;
                                 }
                               };
-                              (_this$data$defaultApp = this.data.defaultAppearanceData),
+                              ((_this$data$defaultApp = this.data.defaultAppearanceData),
                                 (fontName = _this$data$defaultApp.fontName),
-                                (fontSize = _this$data$defaultApp.fontSize);
+                                (fontSize = _this$data$defaultApp.fontSize));
                               _context5.next = 5;
                               return evaluator.handleSetFont(
                                 this._fieldResources.mergedResources,
@@ -34798,12 +34798,12 @@
                           while (1) {
                             switch ((_context.prev = _context.next)) {
                               case 0:
-                                (cs = _ref.cs),
+                                ((cs = _ref.cs),
                                   (xref = _ref.xref),
                                   (_ref$resources = _ref.resources),
                                   (resources = _ref$resources === void 0 ? null : _ref$resources),
                                   (pdfFunctionFactory = _ref.pdfFunctionFactory),
-                                  (localColorSpaceCache = _ref.localColorSpaceCache);
+                                  (localColorSpaceCache = _ref.localColorSpaceCache));
                                 parsedColorSpace = this._parse(cs, xref, resources, pdfFunctionFactory);
 
                                 this._cache(cs, xref, localColorSpaceCache, parsedColorSpace);
@@ -36638,8 +36638,8 @@
                                 return _context2.abrupt('return', null);
 
                               case 5:
-                                (standardFontNameToFileName = (0, _standard_fonts.getFontNameToFileMap)()),
-                                  (filename = standardFontNameToFileName[name]);
+                                ((standardFontNameToFileName = (0, _standard_fonts.getFontNameToFileMap)()),
+                                  (filename = standardFontNameToFileName[name]));
 
                                 if (!(this.options.standardFontDataUrl !== null)) {
                                   _context2.next = 20;
@@ -36949,14 +36949,14 @@
                           while (1) {
                             switch ((_context4.prev = _context4.next)) {
                               case 0:
-                                (resources = _ref2.resources),
+                                ((resources = _ref2.resources),
                                   (image = _ref2.image),
                                   (_ref2$isInline = _ref2.isInline),
                                   (isInline = _ref2$isInline === void 0 ? false : _ref2$isInline),
                                   (operatorList = _ref2.operatorList),
                                   (cacheKey = _ref2.cacheKey),
                                   (localImageCache = _ref2.localImageCache),
-                                  (localColorSpaceCache = _ref2.localColorSpaceCache);
+                                  (localColorSpaceCache = _ref2.localColorSpaceCache));
                                 dict = image.dict;
                                 imageRef = dict.objId;
                                 w = dict.get('W', 'Width');
@@ -37072,7 +37072,7 @@
                                 return _context4.abrupt('return');
 
                               case 42:
-                                (objId = 'img_'.concat(this.idFactory.createObjId())), (cacheGlobally = false);
+                                ((objId = 'img_'.concat(this.idFactory.createObjId())), (cacheGlobally = false));
 
                                 if (this.parsingType3Font) {
                                   objId = ''.concat(this.idFactory.getDocId(), '_type3_').concat(objId);
@@ -37425,14 +37425,14 @@
                         while (1) {
                           switch ((_context5.prev = _context5.next)) {
                             case 0:
-                              (resources = _ref3.resources),
+                              ((resources = _ref3.resources),
                                 (gState = _ref3.gState),
                                 (operatorList = _ref3.operatorList),
                                 (cacheKey = _ref3.cacheKey),
                                 (task = _ref3.task),
                                 (stateManager = _ref3.stateManager),
                                 (localGStateCache = _ref3.localGStateCache),
-                                (localColorSpaceCache = _ref3.localColorSpaceCache);
+                                (localColorSpaceCache = _ref3.localColorSpaceCache));
                               gStateRef = gState.objId;
                               isSimpleGState = true;
                               gStateObj = [];
@@ -40007,9 +40007,9 @@
                                   break;
                                 }
 
-                                (_properties$cidSystem = properties.cidSystemInfo),
+                                ((_properties$cidSystem = properties.cidSystemInfo),
                                   (registry = _properties$cidSystem.registry),
-                                  (ordering = _properties$cidSystem.ordering);
+                                  (ordering = _properties$cidSystem.ordering));
                                 ucs2CMapName = _primitives.Name.get(''.concat(registry, '-').concat(ordering, '-UCS2'));
                                 _context8.next = 11;
                                 return _cmap.CMapFactory.create({
@@ -40586,7 +40586,7 @@
                           while (1) {
                             switch ((_context9.prev = _context9.next)) {
                               case 0:
-                                (descriptor = _ref15.descriptor),
+                                ((descriptor = _ref15.descriptor),
                                   (dict = _ref15.dict),
                                   (baseDict = _ref15.baseDict),
                                   (composite = _ref15.composite),
@@ -40594,7 +40594,7 @@
                                   (firstChar = _ref15.firstChar),
                                   (lastChar = _ref15.lastChar),
                                   (toUnicode = _ref15.toUnicode),
-                                  (cssFontInfo = _ref15.cssFontInfo);
+                                  (cssFontInfo = _ref15.cssFontInfo));
                                 isType3Font = type === 'Type3';
 
                                 if (descriptor) {
@@ -43587,7 +43587,7 @@
             b += a;
           }
 
-          return (b % 65521 << 16) | a % 65521;
+          return ((b % 65521) << 16) | (a % 65521);
         }
 
         var Parser = /*#__PURE__*/ (function () {
@@ -78923,13 +78923,13 @@
                         while (1) {
                           switch ((_context.prev = _context.next)) {
                             case 0:
-                              (xref = _ref2.xref),
+                              ((xref = _ref2.xref),
                                 (res = _ref2.res),
                                 (image = _ref2.image),
                                 (_ref2$isInline = _ref2.isInline),
                                 (isInline = _ref2$isInline === void 0 ? false : _ref2$isInline),
                                 (pdfFunctionFactory = _ref2.pdfFunctionFactory),
-                                (localColorSpaceCache = _ref2.localColorSpaceCache);
+                                (localColorSpaceCache = _ref2.localColorSpaceCache));
                               imageData = image;
                               smaskData = null;
                               maskData = null;
@@ -80766,9 +80766,9 @@
                                   visitedNodes.put(pagesRef);
                                 }
 
-                                (xref = this.xref),
+                                ((xref = this.xref),
                                   (pageKidsCountCache = this.pageKidsCountCache),
-                                  (pageIndexCache = this.pageIndexCache);
+                                  (pageIndexCache = this.pageIndexCache));
                                 currentPageIndex = 0;
 
                               case 6:
@@ -81041,7 +81041,7 @@
                                   visitedNodes.put(pagesRef);
                                 }
 
-                                (map = new Map()), (xref = this.xref), (pageIndexCache = this.pageIndexCache);
+                                ((map = new Map()), (xref = this.xref), (pageIndexCache = this.pageIndexCache));
                                 pageIndex = 0;
 
                               case 9:
@@ -81051,7 +81051,7 @@
                                 }
 
                                 queueItem = queue[queue.length - 1];
-                                (currentNode = queueItem.currentNode), (posInKids = queueItem.posInKids);
+                                ((currentNode = queueItem.currentNode), (posInKids = queueItem.posInKids));
                                 kids = currentNode.getRaw('Kids');
 
                                 if (!(kids instanceof _primitives.Ref)) {
@@ -84003,7 +84003,7 @@
                               return _context.abrupt('return', undefined);
 
                             case 2:
-                              (keys = this.keys), (dict = this.dict);
+                              ((keys = this.keys), (dict = this.dict));
                               this.refSet = new _primitives.RefSet();
                               nodesToVisit = [];
 
@@ -99637,7 +99637,7 @@
                                       }
                                     };
 
-                                    (i = startIndex), (ii = contentAreas.length);
+                                    ((i = startIndex), (ii = contentAreas.length));
 
                                   case 21:
                                     if (!(i < ii)) {

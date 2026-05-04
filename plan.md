@@ -7,6 +7,7 @@ This plan is organized into explicit phases that can be completed one at a time.
 - Complete exactly one phase per implementation run.
 - Do not begin work from a later phase until every earlier phase is marked complete.
 - When a phase finishes, update this plan by changing that phase from `[ ]` to `[x]` and add any important notes under that phase.
+- Do not mark a phase complete until its required lint command has been run and all lint findings for the site repo have been resolved.
 - If a phase reveals more work than expected, split that phase into substeps, but do not silently spill work into the next phase.
 
 **Phases**
@@ -30,12 +31,12 @@ This plan is organized into explicit phases that can be completed one at a time.
    Scope: Make the baseline operational and documented before any dependency changes begin.
    Includes: full static export build, full desktop-and-mobile cross-browser smoke run, approval of the initial visual baselines, baseline script cleanup, documentation of intentional exclusions or masked regions, and confirmation that the smoke gate is the required precondition for every upgrade phase.
    Excludes: dependency changes.
-   Notes: Added a dedicated `npm run smoke:gate` script so the pre-upgrade gate is one command covering `type-check`, static export build, and the full Playwright desktop/mobile cross-browser suite. Documented the gate in `README.md`, including the rule that every later dependency phase starts from this smoke gate, the masked screenshot regions (`iframe` embeds and the shared footer logo), the intentional CMS/admin exclusion, the single-project mobile drawer sweep, and the requirement that snapshot updates happen only after manual review. Verified with `npm run smoke:gate`; the full baseline suite passed cleanly with the existing approved snapshots.
-5. `[ ]` Phase 5: React preflight to 18.3
+   Notes: Added a dedicated `npm run smoke:gate` script so the pre-upgrade gate is one command covering `type-check`, a clean `lint` pass, static export build, and the full Playwright desktop/mobile cross-browser suite. Documented the gate in `README.md`, including the rule that every later dependency phase starts from this smoke gate, the masked screenshot regions (`iframe` embeds and the shared footer logo), the intentional CMS/admin exclusion, the single-project mobile drawer sweep, and the requirement that snapshot updates happen only after manual review. Verified with `npm run smoke:gate`; the full baseline suite passed cleanly with the existing approved snapshots.
+5. `[x]` Phase 5: React preflight to 18.3
    Scope: Upgrade `react` and `react-dom` from 18.2 to 18.3 and align `@types/react` and `@types/react-dom`, while staying on Next 14.
    Includes: runtime package bump, type package bump, fixes for any new React warnings that surface during the baseline gate.
    Excludes: Next major upgrade.
-   Notes: This phase is meant to surface React 19 issues early with minimal framework churn.
+   Notes: Upgraded `react` and `react-dom` to `18.3.1`, moved `@types/react` to `18.3.26`, and added an explicit `@types/react-dom` pin at `18.3.7` while keeping `next` on `14.2.2`. Cleared narrow smoke-test verification blockers in `tests/smoke/fixtures.ts`, `tests/smoke/deterministic-dependencies.spec.ts`, the TinyMCE CMS plugin registrations, and the Playwright baseline type imports so the Phase 5 verification could run lint-clean. Verified with `npm install`, `npm run type-check`, `npm run lint`, and a final clean `npm run smoke:test` after the production build path.
 6. `[ ]` Phase 6: Core runtime hop from Next 14 to Next 15 and React 19
    Scope: Upgrade the main runtime one major step.
    Includes: `next`, `react`, `react-dom`, `eslint-config-next`, and `@next/eslint-plugin-next`; use the official Next 15 and React 19 migration guides and codemods where they reduce churn.
@@ -156,7 +157,7 @@ This plan is organized into explicit phases that can be completed one at a time.
 
 1. Read the official migration guide or release notes for that phase’s dependency group before implementation.
 2. Implement only the current unchecked phase.
-3. Run that phase’s verification steps.
+3. Run that phase’s verification steps, including the required lint command, and resolve every lint finding before moving on.
 4. Update this plan by marking the phase `[x]` and adding concise notes about what changed, any follow-up constraints, and any intentionally deferred work.
 5. Stop after completing that one phase.
 
@@ -198,7 +199,7 @@ This plan is organized into explicit phases that can be completed one at a time.
 
 1. Phase 1 through Phase 4 gate: install Playwright browsers, run the static export build, serve the generated site, and run the full desktop-and-mobile Chromium/Firefox/WebKit smoke suite with network interception enabled for all email- or submission-producing form flows.
 2. Phase 1 through Phase 4 gate: require visual/layout assertions on key routes in addition to route-level functional checks, using screenshots or snapshots plus structural visibility assertions to catch content disappearance, major spacing shifts, broken responsiveness, and obvious style drift.
-3. Phase 5 and later gate: fresh install, targeted dependency upgrade, one-shot TypeScript check, ESLint, static export build, then the full visual smoke suite.
+3. Phase 5 and later gate: fresh install, targeted dependency upgrade, one-shot TypeScript check, a clean ESLint run with no unresolved findings, static export build, then the full visual smoke suite.
 4. App Router migration gates, Phases 7 through 18: after each route-family move, run the most targeted smoke coverage for the migrated route immediately, then rerun the full visual smoke suite before marking the phase complete.
 5. App Router cleanup gate, Phase 18: verify that no required production route still depends on `src/pages/`, that removing `_app.tsx` and `_document.tsx` does not change the exported site behavior, and that static export output remains intact.
 6. Next 16 gate: explicitly verify the chosen bundler mode. If webpack is retained initially, keep it explicit in scripts until the custom webpack config and plugins are either removed or proven under Turbopack.

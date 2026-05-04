@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${port}`;
+const reuseExistingServer = process.env.PLAYWRIGHT_REUSE_SERVER === 'true';
 
 export default defineConfig({
   testDir: './tests/smoke',
@@ -74,7 +75,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run smoke:serve',
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer,
     stdout: 'pipe',
     stderr: 'pipe',
     timeout: 180000

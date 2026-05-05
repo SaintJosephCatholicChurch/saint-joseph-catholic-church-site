@@ -9,7 +9,6 @@ import {
   faNewspaper,
   faTag
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CMS from '@staticcms/lite';
 import { useEffect } from 'react';
 
@@ -26,9 +25,29 @@ import EditorControl from './widgets/editor/EditorControl';
 import EditorPreview from './widgets/editor/EditorPreview';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
 import '@staticcms/lite/dist/main.css';
 
 let cmsInitialized = false;
+
+const CmsFontAwesomeIcon = ({ icon }: { icon: IconDefinition }) => {
+  const [width, height, , , svgPathData] = icon.icon;
+  const paths = Array.isArray(svgPathData) ? svgPathData : [svgPathData];
+
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ width: '1.25rem', height: '1.25rem' }}
+    >
+      {paths.map((path, index) => (
+        <path key={`${icon.iconName}-${index}`} fill="currentColor" d={path} />
+      ))}
+    </svg>
+  );
+};
 
 const CMSView = () => {
   useEffect(() => {
@@ -64,15 +83,15 @@ const CMSView = () => {
     CMS.registerPreviewTemplate('staff', StaffPreview);
     CMS.registerPreviewTemplate('menu', NavigationPreview);
 
-    CMS.registerIcon('house', () => <FontAwesomeIcon icon={faHouse} size="lg" />);
-    CMS.registerIcon('church', () => <FontAwesomeIcon icon={faChurch} size="lg" />);
-    CMS.registerIcon('tag', () => <FontAwesomeIcon icon={faTag} size="lg" />);
-    CMS.registerIcon('file-lines', () => <FontAwesomeIcon icon={faFileLines} size="lg" />);
-    CMS.registerIcon('gear', () => <FontAwesomeIcon icon={faGear} size="lg" />);
-    CMS.registerIcon('calendar-days', () => <FontAwesomeIcon icon={faCalendarDays} size="lg" />);
-    CMS.registerIcon('clipboard-question', () => <FontAwesomeIcon icon={faClipboardQuestion} size="lg" />);
-    CMS.registerIcon('newspaper', () => <FontAwesomeIcon icon={faNewspaper} size="lg" />);
-    CMS.registerIcon('circle-question', () => <FontAwesomeIcon icon={faCircleQuestion} size="lg" />);
+    CMS.registerIcon('house', () => <CmsFontAwesomeIcon icon={faHouse} />);
+    CMS.registerIcon('church', () => <CmsFontAwesomeIcon icon={faChurch} />);
+    CMS.registerIcon('tag', () => <CmsFontAwesomeIcon icon={faTag} />);
+    CMS.registerIcon('file-lines', () => <CmsFontAwesomeIcon icon={faFileLines} />);
+    CMS.registerIcon('gear', () => <CmsFontAwesomeIcon icon={faGear} />);
+    CMS.registerIcon('calendar-days', () => <CmsFontAwesomeIcon icon={faCalendarDays} />);
+    CMS.registerIcon('clipboard-question', () => <CmsFontAwesomeIcon icon={faClipboardQuestion} />);
+    CMS.registerIcon('newspaper', () => <CmsFontAwesomeIcon icon={faNewspaper} />);
+    CMS.registerIcon('circle-question', () => <CmsFontAwesomeIcon icon={faCircleQuestion} />);
 
     CMS.registerAdditionalLink({
       id: 'events',

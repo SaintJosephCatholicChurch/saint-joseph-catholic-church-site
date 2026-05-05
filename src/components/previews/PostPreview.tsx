@@ -1,11 +1,11 @@
 import { styled } from '@mui/material/styles';
-import { useMediaAsset } from '@staticcms/core';
+import { useMediaAsset } from '@staticcms/lite';
 import { parseISO } from 'date-fns';
 import { useMemo } from 'react';
 
 import PostView from '../posts/PostView';
 
-import type { Entry, TemplatePreviewComponent } from '@staticcms/core';
+import type { Entry, TemplatePreviewComponent } from '@staticcms/lite';
 import type { PostContentData } from '../../interface';
 
 const StyledBlogPostPreview = styled('div')`

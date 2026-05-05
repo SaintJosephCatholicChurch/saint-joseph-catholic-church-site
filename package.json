@@ -47,7 +47,7 @@
     "@mui/material": "^5.18.0",
     "@mui/system": "^5.18.0",
     "@mui/x-date-pickers": "7.2.0",
-    "@staticcms/core": "4.1.4",
+    "@staticcms/lite": "2.0.1",
     "@svgr/webpack": "8.1.0",
     "@tinymce/tinymce-react": "4.3.0",
     "date-fns": "3.6.0",

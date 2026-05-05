@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 import ScheduleWidget from './TimesWidgetControl';
 
-import type { WidgetControlProps } from '@staticcms/core';
+import type { WidgetControlProps } from '@staticcms/lite';
 import type { FC } from 'react';
 import type { Times } from '../../../interface';
 import type { TimesField } from '../../config';

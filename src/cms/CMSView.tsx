@@ -10,7 +10,7 @@ import {
   faTag
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CMS from '@staticcms/core';
+import CMS from '@staticcms/lite';
 import { useEffect } from 'react';
 
 import ChurchDetailsPreview from '../components/previews/ChurchDetailsPreview';
@@ -26,12 +26,19 @@ import EditorControl from './widgets/editor/EditorControl';
 import EditorPreview from './widgets/editor/EditorPreview';
 import ScheduleWidget from './widgets/times/TimesWidget';
 
-import '@staticcms/core/dist/main.css';
+import '@staticcms/lite/dist/main.css';
+
+let cmsInitialized = false;
 
 const CMSView = () => {
   useEffect(() => {
+    if (cmsInitialized) {
+      return;
+    }
+
     const root = document.getElementById('cms');
     if (root) {
+      cmsInitialized = true;
       return;
     }
 
@@ -39,6 +46,7 @@ const CMSView = () => {
       config.local_backend = true;
     }
 
+    cmsInitialized = true;
     CMS.init({ config });
 
     CMS.registerWidget('times', ScheduleWidget);

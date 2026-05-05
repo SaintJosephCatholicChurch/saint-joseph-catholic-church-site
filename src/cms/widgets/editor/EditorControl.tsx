@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { useGetMediaAsset, useMediaInsert } from '@staticcms/core';
+import { useGetMediaAsset, useMediaInsert } from '@staticcms/lite';
 import { useCallback, useMemo, useRef } from 'react';
 
 import { IMAGE_EXTENSION_REGEX } from '../../../constants';
@@ -8,7 +8,7 @@ import { isNotNullish } from '../../../util/null.util';
 import { isNotEmpty } from '../../../util/string.util';
 import BundledEditor from './BundledEditor';
 
-import type { MediaPath, WidgetControlProps } from '@staticcms/core';
+import type { MediaPath, WidgetControlProps } from '@staticcms/lite';
 import type { FC } from 'react';
 import type { Editor as TinyMCEEditor } from 'tinymce/tinymce';
 import type { HtmlField } from '../../config';

@@ -12,15 +12,15 @@ import { REDIRECTS } from '../../constants';
 import type { SidebarProps } from '../../lib/sidebar';
 
 export const AdminPageView = () => {
-  const CMSViewNoSSR = useMemo(
+  const AdminShellNoSSR = useMemo(
     () =>
-      dynamic(() => import('../../cms/CMSView'), {
+      dynamic(() => import('../../admin/AdminShell'), {
         ssr: false
       }),
     []
   );
 
-  return <CMSViewNoSSR key="admin" />;
+  return <AdminShellNoSSR key="admin" />;
 };
 
 export const NotFoundPageView = ({ ...sidebarProps }: SidebarProps) => {

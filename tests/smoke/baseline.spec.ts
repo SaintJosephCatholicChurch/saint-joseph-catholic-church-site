@@ -251,7 +251,7 @@ test.describe('public site smoke coverage', () => {
     }
 
     await expect(page).toHaveURL(/\/search\?q=live(%20|\+)stream/);
-    await expect(page.getByRole('heading', { name: 'Search', exact: true })).toBeVisible();
+    await expect(page.locator('main').getByRole('heading', { level: 1, name: 'Search', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Live Stream', exact: true }).first()).toBeVisible();
 
     await page.getByRole('link', { name: 'Live Stream', exact: true }).first().click();

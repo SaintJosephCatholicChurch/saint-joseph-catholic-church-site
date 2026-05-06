@@ -27,6 +27,11 @@ export async function waitForVisualReady(page: Page) {
       });
     });
   });
+
+  const dailyReadingsHeading = page.getByRole('heading', { name: "Today's Readings", exact: true });
+  if ((await dailyReadingsHeading.count()) > 0) {
+    await expect(page.getByText('Acts 1:1-11').first()).toBeVisible({ timeout: 5000 });
+  }
 }
 
 export async function expectStableScreenshot(page: Page, name: string, options: StableScreenshotOptions = {}) {

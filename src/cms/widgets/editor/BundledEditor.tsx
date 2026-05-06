@@ -41,7 +41,6 @@ import 'tinymce/plugins/quickbars';
 import 'tinymce/plugins/save';
 import 'tinymce/plugins/searchreplace';
 import 'tinymce/plugins/table';
-import 'tinymce/plugins/template';
 import 'tinymce/plugins/visualblocks';
 import 'tinymce/plugins/visualchars';
 import 'tinymce/plugins/wordcount';
@@ -87,10 +86,12 @@ export default function BundledEditor(props: BundleEditorProps) {
       <Editor
         init={{
           ...init,
+          license_key: 'gpl' as never,
           skin: false,
           promotion: false,
           content_style: [contentCss, contentUiCss, init.content_style || ''].join('\n')
         }}
+        tinymceScriptSrc={[]}
         {...rest}
       />
     </Box>

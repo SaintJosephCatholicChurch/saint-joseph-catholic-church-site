@@ -6,12 +6,7 @@ import {
   YES_NO_OPTIONS
 } from './parishRegistration.constants';
 
-import type {
-  ParishRegistrationFormData,
-  SacramentKey,
-  SacramentRecord,
-  ValidationErrors
-} from './parishRegistration.types';
+import type { ParishRegistrationFormData, SacramentRecord, ValidationErrors } from './parishRegistration.types';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
@@ -163,7 +158,7 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     }
 
     SACRAMENT_FIELDS.forEach(({ key }) => {
-      const sacramentKey = key as SacramentKey;
+      const sacramentKey = key;
       const sacrament = adult.sacraments[sacramentKey];
 
       if (isNotEmpty(sacrament.date) && !isValidDateString(sacrament.date)) {
@@ -221,7 +216,7 @@ export const validateParishRegistration = (formData: ParishRegistrationFormData)
     }
 
     SACRAMENT_FIELDS.forEach(({ key }) => {
-      const sacramentKey = key as SacramentKey;
+      const sacramentKey = key;
       const sacrament = child.sacraments[sacramentKey];
 
       if (isNotEmpty(sacrament.date) && !isValidDateString(sacrament.date)) {

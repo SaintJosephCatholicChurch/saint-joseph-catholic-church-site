@@ -6,58 +6,73 @@ import HelpHeadingLink from './HelpHeadingLink';
 const StyledContent = styled('main')`
   font-size: 16px;
   line-height: 20px;
-  padding-bottom: 40px;
+  padding: 28px;
+  border: 1px solid rgba(127, 35, 44, 0.12);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 244, 236, 0.96));
+  box-shadow: 0 18px 40px rgba(57, 33, 24, 0.08);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 
   p + strong,
   ul + strong {
-    margin-top: 16px;
+    margin-top: 18px;
   }
 
   p {
     margin: 0;
-    line-height: 1.5;
+    color: #414349;
+    line-height: 1.7;
   }
 
   ul {
     list-style: disc;
-    padding-left: 40px;
+    padding-left: 28px;
     margin: 0;
   }
 
   li {
     margin: 0;
-    line-height: 1.5;
+    color: #414349;
+    line-height: 1.7;
   }
 
   strong {
-    font-weight: bold;
+    color: #26282c;
+    font-weight: 700;
   }
 
   a {
-    color: #bf303c;
+    color: #7f232c;
+    text-underline-offset: 0.18em;
+
     &:hover {
-      color: #822129;
+      color: #5c1820;
       text-decoration: underline;
       cursor: pointer;
     }
   }
 
   h2 {
-    font-size: 36px;
-    font-weight: 700;
-    margin: 24px 0 4px;
-    line-height: 40px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-size: clamp(2rem, 4vw, 2.4rem);
+    font-weight: 600;
+    margin: 28px 0 6px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #1f2022;
   }
 
   h3 {
-    font-size: 24px;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-size: clamp(1.35rem, 3vw, 1.6rem);
     font-weight: 500;
-    margin: 16px 0 2px;
-    line-height: 28px;
+    margin: 18px 0 2px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: #2f3136;
   }
 
   h4,
@@ -71,15 +86,20 @@ const StyledContent = styled('main')`
   }
 
   > *:last-child {
-    padding-bottom: 40px;
+    padding-bottom: 24px;
   }
 
   code {
     font-size: 85%;
     padding: 0.2em 0.4em;
     margin: 0px;
-    border-radius: 3px;
-    background-color: rgba(175, 184, 193, 0.2);
+    border-radius: 4px;
+    color: #5c1820;
+    background-color: rgba(127, 35, 44, 0.08);
+  }
+
+  @media (max-width: 900px) {
+    padding: 22px 18px;
   }
 `;
 
@@ -96,7 +116,11 @@ const HelpContent = () => {
         the lost data.
       </p>
       <HelpHeading variant="h2">Church Details</HelpHeading>
-      <p>This section controls general details about the chruch.</p>
+      <p>
+        This section controls general details about the church. It has three tabs:{' '}
+        <strong>General Church Details</strong>, <strong>Mass &amp; Confession Times</strong>, and{' '}
+        <strong>Staff</strong>.
+      </p>
       <HelpHeading variant="h3">General Church Details</HelpHeading>
       <p>This section includes:</p>
       <ul>
@@ -257,8 +281,12 @@ const HelpContent = () => {
           <strong>PDF</strong> - The PDF bulletin file.
         </li>
       </ul>
-      <HelpHeading variant="h2">News Posts</HelpHeading>
-      <p>This section controls the News page and all the posts that appear on it.</p>
+      <HelpHeading variant="h2">News</HelpHeading>
+      <p>
+        This section controls the News page. It has two tabs: <strong>News Posts</strong> and <strong>Tags</strong>.
+      </p>
+      <HelpHeading variant="h3">News Posts</HelpHeading>
+      <p>This tab controls all the posts that appear on the News page.</p>
       <p>This section includes:</p>
       <ul>
         <li>
@@ -279,6 +307,18 @@ const HelpContent = () => {
           <strong>Body</strong> - The content of the post.
         </li>
       </ul>
+      <HelpHeading variant="h3">Tags</HelpHeading>
+      <p>
+        This tab controls all of the tags for grouping similar posts. You must create a tag here for it to appear in{' '}
+        <HelpHeadingLink>News Posts</HelpHeadingLink>.
+      </p>
+      <p>This section includes:</p>
+      <ul>
+        <li>
+          <strong>Tag</strong> - The name of the tag. It appears directly under the image (or title if no image) of a
+          news post with a <code>#</code> symbol in front. Tags can be clicked to show all posts with that tag.
+        </li>
+      </ul>
       <HelpHeading variant="h2">Pages</HelpHeading>
       <p>This section controls all general pages not covered by another section of the admin page.</p>
       <p>This section includes:</p>
@@ -296,23 +336,14 @@ const HelpContent = () => {
           <strong>Body</strong> - The content of the page.
         </li>
       </ul>
-      <HelpHeading variant="h2">Tags</HelpHeading>
-      <p>
-        This section controls all of the tags for grouping simliar posts. You must create a tag here for it to appear in{' '}
-        <HelpHeadingLink>News Posts</HelpHeadingLink>.
-      </p>
-      <p>This section includes:</p>
-      <ul>
-        <li>
-          <strong>Tag</strong> - The name of the tag. It appears directly under the image (or title if no image) of a
-          news post with a <code>#</code> symbol in front. Tags can be clicked to show all posts with that tag.
-        </li>
-      </ul>
       <HelpHeading variant="h2">Site Config</HelpHeading>
-      <p>This section controls all site configuration related items including the navigation menus.</p>
+      <p>
+        This section controls all site configuration related items. It has three tabs:{' '}
+        <strong>General Site Config</strong>, <strong>Menu &amp; Logo</strong>, and <strong>Site Styles</strong>.
+      </p>
       <HelpHeading variant="h3">General Site Config</HelpHeading>
       <p>
-        This section controls all of the meta and{' '}
+        This tab controls all of the meta and{' '}
         <a href="https://searchengineland.com/guide/what-is-seo">SEO (Search Engine Optimzation)</a>.
       </p>
       <p>This section includes:</p>
@@ -369,7 +400,7 @@ const HelpContent = () => {
       <strong>Menu Items</strong>
       <p>
         This section controls the top navigation menu (desktop) and the pull out navigation drawer (tablet and mobile).
-        You can reorder them by dragging the items. Children CANNOT be dragged to the top level though.
+        You can add, edit, remove, and reorder the menu items directly in the admin without editing JSON.
       </p>
       <ul>
         <li>

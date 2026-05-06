@@ -22,3 +22,7 @@ declare module '!!raw-loader!*.css' {
   const value: string;
   export default value;
 }
+
+declare module 'lodash/escapeRegExp' {
+  export default function escapeRegExp(value: string): string;
+}

@@ -291,31 +291,29 @@ const DailyReadingsView = memo(
         <StyledDailyReadings $isFullWidth={isFullWidth}>
           <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
           {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
-          {readings.readings.map((reading, index) => (
-            <>
-              {reading.link !== undefined ? (
-                <StyledDailyReading
-                  key={`reading-${index}`}
-                  href={reading.link}
-                  target="_blank"
-                  $isFullWidth={isFullWidth}
-                  $isAlternate={reading.alternate}
-                >
-                  <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-                  <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
-                </StyledDailyReading>
-              ) : (
-                <StyledDailyReadingNoLink
-                  key={`reading-${index}`}
-                  $isFullWidth={isFullWidth}
-                  $isAlternate={reading.alternate}
-                >
-                  <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
-                  <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
-                </StyledDailyReadingNoLink>
-              )}
-            </>
-          ))}
+          {readings.readings.map((reading, index) =>
+            reading.link !== undefined ? (
+              <StyledDailyReading
+                key={`reading-${index}`}
+                href={reading.link}
+                target="_blank"
+                $isFullWidth={isFullWidth}
+                $isAlternate={reading.alternate}
+              >
+                <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+                <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+              </StyledDailyReading>
+            ) : (
+              <StyledDailyReadingNoLink
+                key={`reading-${index}`}
+                $isFullWidth={isFullWidth}
+                $isAlternate={reading.alternate}
+              >
+                <StyledDailyReadingTitle>{reading.title}</StyledDailyReadingTitle>
+                <StyledDailyReadingDescription>{reading.description}</StyledDailyReadingDescription>
+              </StyledDailyReadingNoLink>
+            )
+          )}
         </StyledDailyReadings>
         {soundCloudIFrame}
       </StyledDailyReadingsWrapper>

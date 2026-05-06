@@ -27,7 +27,6 @@ import type { FeaturedLink, FeaturedPage, HomePageData, PostContent, Times } fro
 
 const StyledHomepageView = styled('div')`
   width: 100%;
-  margin-top: 64px;
 `;
 
 const StyledSectionWrapper = styled('div')`

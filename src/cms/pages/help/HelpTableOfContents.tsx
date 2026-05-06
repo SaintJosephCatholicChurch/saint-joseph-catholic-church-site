@@ -95,16 +95,34 @@ const useIntersectionObserver = (setActiveId: (activeId: string) => void) => {
   }, [setActiveId]);
 };
 
-const StyledNav = styled('nav')`
-  width: 280px;
-  min-width: 280px;
-  padding: 0 16px 16px;
+const StyledNav = styled('nav')(
+  ({ theme }) => `
+  width: 100%;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgba(127, 35, 44, 0.12);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 244, 236, 0.96));
+  box-shadow: 0 18px 40px rgba(57, 33, 24, 0.08);
   align-self: flex-start;
-  position: -webkit-sticky; /* Safari */
+  position: -webkit-sticky;
   position: sticky;
-  top: 0;
-  max-height: calc(100vh - 70px);
-  overflow: auto;
+  top: 20px;
+
+  ${theme.breakpoints.down('lg')} {
+    position: static;
+    order: -1;
+  }
+`
+);
+
+const StyledTitle = styled('p')`
+  margin: 0 0 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8b5f1c;
 `;
 
 const HelpTableOfContents = () => {
@@ -114,6 +132,7 @@ const HelpTableOfContents = () => {
 
   return (
     <StyledNav aria-label="Table of contents">
+      <StyledTitle>Help Sections</StyledTitle>
       <HelpHeadings headings={nestedHeadings} activeId={activeId} />
     </StyledNav>
   );

@@ -39,11 +39,11 @@ The active admin surface is now part of this plan. That means dependencies used 
    Includes: `@mui/x-date-pickers` and `date-fns` together, `date-fns-tz` if needed for compatibility, adapter import changes, and picker API fixes.
    Excludes: FullCalendar major changes.
    Notes: Upgraded `@mui/x-date-pickers` to `8.28.4` and `date-fns` to `4.1.0`, and switched the public and admin `LocalizationProvider` imports from `AdapterDateFnsV3` to the v8 `AdapterDateFns` path. The existing `DateCalendar` and `TimePicker` call sites continued to type-check without additional picker API changes, and `date-fns-tz` was not needed for compatibility in this phase. After manual review of a small mobile Chromium date-picker rendering drift on `/events`, refreshed the approved `events-mobile` snapshot for that one project. Verified with `npm install`, `npm run type-check`, the focused Playwright rerun for the mobile Chromium events baseline, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`). The existing lint baseline remains 8 warnings with no errors.
-6. `[ ]` Phase 6: FullCalendar family
+6. `[x]` Phase 6: FullCalendar family
    Scope: Upgrade the FullCalendar ecosystem in lockstep after the shared date stack is stable.
    Includes: all `@fullcalendar/*` packages, the custom mobile and upcoming-event plugins, Google Calendar integration, and any event-rendering fixes required by the upgrade.
    Excludes: unrelated MUI or admin-editor packages.
-   Notes: If multiple major hops are required, keep them as explicit substeps inside this phase and verify after each hop.
+   Notes: Upgraded `@fullcalendar/core`, `@fullcalendar/daygrid`, `@fullcalendar/google-calendar`, `@fullcalendar/list`, `@fullcalendar/react`, and `@fullcalendar/timegrid` in lockstep from `6.1.11` to `6.1.20`. Reviewed the official FullCalendar v6 upgrade documentation before implementation and confirmed the current public calendar surfaces and custom mobile/upcoming plugins stay within the existing v6 React/plugin contract, so this phase completed without source-level compatibility edits. Verified with `npm install`, focused `npm run type-check`, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`). The existing lint baseline remains 8 warnings with no errors.
 7. `[ ]` Phase 7: Admin editor stack
    Scope: Upgrade the rich-text and editor packages that are concentrated in the admin and CMS surfaces.
    Includes: `tinymce`, `@tinymce/tinymce-react`, `@ephox/katamari`, the bundled editor code under `src/cms/widgets/editor/`, the custom TinyMCE plugins, and the admin HTML/document editors.

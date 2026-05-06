@@ -34,11 +34,11 @@ The active admin surface is now part of this plan. That means dependencies used 
    Includes: exports-field package layout changes, deprecated API removals, theme behavior differences, and any resulting public-site or admin-shell import/styling fixes.
    Excludes: date pickers.
    Notes: Upgraded `@mui/material`, `@mui/system`, and `@mui/icons-material` to `7.3.10`. Reviewed the official MUI v7 migration guide and confirmed the repo does not currently rely on the removed or renamed core APIs called out there, including deep nested package imports, `Grid2`/`GridLegacy`, `StyledEngineProvider`, `onBackdropClick`, and `InputLabel size="normal"`, so the phase completed without source-level compatibility edits. Verified with `npm install`, `npm run type-check`, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`). The existing lint baseline remains 8 warnings with no errors, and admin-specific manual UX testing remains deferred until the final handoff phase.
-5. `[ ]` Phase 5: Date stack and MUI X pickers
+5. `[x]` Phase 5: Date stack and MUI X pickers
    Scope: Upgrade the shared date stack used by the public calendar surfaces and admin/CMS editors.
    Includes: `@mui/x-date-pickers` and `date-fns` together, `date-fns-tz` if needed for compatibility, adapter import changes, and picker API fixes.
    Excludes: FullCalendar major changes.
-   Notes: The current code still uses `AdapterDateFnsV3` in both public and admin code paths, so expect both route-facing and admin-editor fallout in this phase.
+   Notes: Upgraded `@mui/x-date-pickers` to `8.28.4` and `date-fns` to `4.1.0`, and switched the public and admin `LocalizationProvider` imports from `AdapterDateFnsV3` to the v8 `AdapterDateFns` path. The existing `DateCalendar` and `TimePicker` call sites continued to type-check without additional picker API changes, and `date-fns-tz` was not needed for compatibility in this phase. After manual review of a small mobile Chromium date-picker rendering drift on `/events`, refreshed the approved `events-mobile` snapshot for that one project. Verified with `npm install`, `npm run type-check`, the focused Playwright rerun for the mobile Chromium events baseline, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`). The existing lint baseline remains 8 warnings with no errors.
 6. `[ ]` Phase 6: FullCalendar family
    Scope: Upgrade the FullCalendar ecosystem in lockstep after the shared date stack is stable.
    Includes: all `@fullcalendar/*` packages, the custom mobile and upcoming-event plugins, Google Calendar integration, and any event-rendering fixes required by the upgrade.

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const env = process.env.NODE_ENV || 'development';
+const enablePWA = env === 'production' && process.env.NEXT_ENABLE_PWA === 'true';
 
 import withPWAFn from '@ducanh2912/next-pwa';
 
@@ -26,15 +27,12 @@ let config = {
     );
     return config;
   },
-  eslint: {
-    ignoreDuringBuilds: env === 'production'
-  },
   typescript: {
     ignoreBuildErrors: env === 'production'
   }
 };
 
-if (env === 'production') {
+if (enablePWA) {
   config = withPWA(config);
 }
 

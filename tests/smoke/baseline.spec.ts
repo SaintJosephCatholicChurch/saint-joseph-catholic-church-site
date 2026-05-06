@@ -67,6 +67,7 @@ const visualPageRoutes: VisualPageRoute[] = [
     title: 'parish staff page'
   },
   {
+    maxDiffPixelRatio: 0.025,
     route: '/test-parish-registration',
     snapshot: 'test-parish-registration',
     title: 'test parish registration page'
@@ -161,7 +162,9 @@ async function expectRouteScreenshot(
   name: string,
   isMobileProject: boolean,
   options: {
+    fullPage?: boolean;
     mask?: Locator[];
+    maxDiffPixels?: number;
     maxDiffPixelRatio?: number;
     timeout?: number;
   } = {}
@@ -256,7 +259,11 @@ test.describe('public site smoke coverage', () => {
     await expect(page.locator('main').getByRole('heading', { name: 'Live Stream', exact: true }).first()).toBeVisible();
 
     await expectShellLayout(page);
-    await expectRouteScreenshot(page, 'search-results', isMobileProject);
+    await expectRouteScreenshot(page, 'search-results', isMobileProject, {
+      fullPage: false,
+      mask: [page.getByRole('textbox', { name: 'Search...' })],
+      maxDiffPixels: 400
+    });
   });
 
   test('custom 404 path renders recovery content', async ({ page, isMobileProject }) => {

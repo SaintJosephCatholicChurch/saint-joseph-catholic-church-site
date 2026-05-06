@@ -13,18 +13,10 @@ let config = {
   output: 'export',
   images: { unoptimized: true },
   webpack: (config) => {
-    config.module.rules.push(
-      ...[
-        {
-          test: /\.yml$/,
-          use: 'yaml-loader'
-        },
-        {
-          test: /\.svg$/,
-          use: '@svgr/webpack'
-        }
-      ]
-    );
+    config.module.rules.push({
+      resourceQuery: /raw/,
+      type: 'asset/source'
+    });
     return config;
   },
   typescript: {

@@ -30,17 +30,14 @@ function useElementSize<T extends HTMLElement = HTMLDivElement>(): [(node: T | n
       x: ref?.getBoundingClientRect().left || 0,
       y: ref?.getBoundingClientRect().top || 0
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref?.offsetHeight, ref?.offsetWidth]);
+  }, [ref]);
 
   useEventListener('resize', handleSize);
   useEventListener('orientationchange', handleSize);
 
   useIsomorphicLayoutEffect(() => {
     handleSize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref?.offsetHeight, ref?.offsetWidth]);
+  }, [handleSize]);
 
   return [setRef, size];
 }

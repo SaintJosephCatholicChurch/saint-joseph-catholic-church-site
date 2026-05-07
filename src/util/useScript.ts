@@ -18,8 +18,8 @@ export const useScript = <T = unknown>(
     script.src = url;
     script.async = true;
     script.onload = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-      setLib({ [name]: window[name as any] as unknown as T });
+      const windowWithNamedExports = window as Window & Record<string, T | undefined>;
+      setLib({ [name]: windowWithNamedExports[name] ?? null });
       setLoaded(true);
     };
 

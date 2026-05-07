@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { useEffect } from 'react';
 
 import type ScheduleTabChangeEvent from './events/ScheduleTabChangeEvent';

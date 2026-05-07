@@ -12,8 +12,8 @@ import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import { styled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FixedSizeList } from 'react-window';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { List, useListRef } from 'react-window';
 
 import getContainerQuery from '../../../../util/container.util';
 import { isNotNullish } from '../../../../util/null.util';
@@ -23,7 +23,7 @@ import PageTitle from '../../PageTitle';
 import BulletListButton from './BulletListButton';
 import { getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
 
-import type { ListChildComponentProps } from 'react-window';
+import type { RowComponentProps } from 'react-window';
 import type { Bulletin, BulletinPDFData } from '../../../../interface';
 
 const MARGIN_TOP = 215;
@@ -337,25 +337,26 @@ const StyledImage = styled('img')(
   `
 );
 
-const BulletinListRowFactory = (bulletin: Bulletin) => {
-  const BulletinListRow = (props: ListChildComponentProps<Bulletin[]>) => {
-    const { index, style, data } = props;
+interface BulletinListRowProps {
+  bulletins: Bulletin[];
+  selectedPdf: string;
+}
 
-    return (
-      <BulletListButton
-        key={`bulletin-${index}`}
-        style={style}
-        bulletin={data[index]}
-        selected={data[index].pdf === bulletin.pdf}
-      />
-    );
-  };
+const BulletinListRow = ({ index, style, bulletins, selectedPdf }: RowComponentProps<BulletinListRowProps>) => {
+  const activeBulletin = bulletins[index];
 
-  return BulletinListRow;
+  return (
+    <BulletListButton
+      key={`bulletin-${index}`}
+      style={style}
+      bulletin={activeBulletin}
+      selected={activeBulletin.pdf === selectedPdf}
+    />
+  );
 };
 
 // TODO Implement virtualization for the select in the future
-// const BulletinSelectRow = (props: ListChildComponentProps<Bulletin[]>) => {
+// const BulletinSelectRow = (props: RowComponentProps<BulletinListRowProps>) => {
 //   const { index, style, data } = props;
 
 //   return (
@@ -426,8 +427,6 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
     setWidth((height / 11) * 8.5);
   }, [height]);
 
-  const BulletinRow = useMemo(() => BulletinListRowFactory(bulletin), [bulletin]);
-
   const bulletinMenuItems = useMemo(
     () =>
       bulletins?.map((aBulletin, index) => (
@@ -440,13 +439,13 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
 
   const title = useFormattedBulletinTitle(bulletin);
 
-  const listRef = useRef<FixedSizeList<Bulletin[]>>(null);
+  const listRef = useListRef(null);
   useEffect(() => {
     if (bulletin != null && listRef.current) {
-      listRef.current.scrollToItem(
-        bulletins.findIndex((b) => b.pdf === bulletin.pdf),
-        'start'
-      ); // 'start' aligns the item to the top of the visible area
+      listRef.current.scrollToRow({
+        index: bulletins.findIndex((b) => b.pdf === bulletin.pdf),
+        align: 'start'
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -463,17 +462,22 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
             }
           }}
         >
-          <FixedSizeList
-            ref={listRef}
-            height={height}
-            width="100%"
-            itemSize={60}
-            itemCount={bulletins?.length ?? 0}
+          <List
+            listRef={listRef}
+            defaultHeight={height}
+            rowComponent={BulletinListRow}
+            rowCount={bulletins?.length ?? 0}
+            rowHeight={60}
+            rowProps={{
+              bulletins: bulletins ?? [],
+              selectedPdf: bulletin.pdf
+            }}
             overscanCount={5}
-            itemData={bulletins ?? []}
-          >
-            {BulletinRow}
-          </FixedSizeList>
+            style={{
+              height,
+              width: '100%'
+            }}
+          ></List>
         </Box>
         <StyledSelectWrapper>
           <FormControl fullWidth>

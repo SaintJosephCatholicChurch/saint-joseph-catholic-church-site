@@ -8,7 +8,7 @@ import { memo } from 'react';
 
 import { useFormattedBulletinDate, useFormattedBulletinUrlDate } from './util';
 
-import type { ListChildComponentProps } from 'react-window';
+import type { CSSProperties } from 'react';
 import type { Bulletin } from '../../../../interface';
 
 const StyledListItemWrapper = styled('div')`
@@ -25,7 +25,7 @@ interface BulletListButtonProps {
   bulletin: Bulletin;
   selected: boolean;
   openInNewWindow?: boolean;
-  style: ListChildComponentProps['style'];
+  style: CSSProperties;
 }
 
 const BulletListButton = memo(({ bulletin, selected, openInNewWindow = false, style }: BulletListButtonProps) => {

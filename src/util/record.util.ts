@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export function mapRecord<V, O>(input: Record<string, V>, converter: (value: V) => O): Record<string, O>;
 export function mapRecord<V, O>(input: undefined, converter: (value: V) => O): undefined;
 export function mapRecord<V, O>(

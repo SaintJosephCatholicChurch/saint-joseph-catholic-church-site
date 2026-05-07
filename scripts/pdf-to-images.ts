@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="types.d.ts" />
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -9,7 +8,6 @@ import { PDFExtract } from 'pdf.js-extract';
 import webp from 'webp-converter';
 
 import { fetchBulletins } from '../src/lib/bulletins';
-// eslint-disable-next-line import/default
 import pdfImg from '../src/util/pdf/pdf-img-convert';
 
 import type { PDFExtractOptions } from 'pdf.js-extract';

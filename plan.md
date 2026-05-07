@@ -69,11 +69,11 @@ The active admin surface is now part of this plan. That means dependencies used 
     Includes: TypeScript, Node and React type packages, Playwright, `@npmcli/git`, `node-gyp`, and the remaining safe developer-utility upgrades surfaced by `npm outdated`.
     Excludes: runtime library changes and any lint-target broadening that would require unrelated source cleanup.
     Notes: Kept TypeScript on the conservative supported line for Next 16 by upgrading from `5.4.5` to `5.9.3` instead of taking the current 6.x major, and confirmed the existing React type packages were already current while `@types/node` remained on the current Node 24 line. Upgraded the remaining Phase 11 developer utilities in scope: `@playwright/test` to `1.59.1`, `@npmcli/git` to `7.0.2`, `node-gyp` to `12.3.0`, `netlify-cli` to `24.11.3`, `@babel/core` to `7.29.0`, and `fs-extra` to `11.3.5`. Verified on Node `v24.14.0` with `npm install`, `npm run type-check`, a focused `@npmcli/git` ESM import probe plus `npx playwright --version`, `npx playwright install`, a targeted rerun of the transient `mobile-firefox` bulletin-detail smoke case, a reviewed WebKit snapshot refresh for the Playwright browser-rendering drift, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`).
-12. `[ ]` Phase 12: Final dependency sweep and admin handoff
+12. `[x]` Phase 12: Final dependency sweep and admin handoff
     Scope: Re-run the outdated inventory, finish any leftovers, and prepare the repo for manual admin validation.
     Includes: remaining minors and patches, removal of proven-unused dependencies, verification that no stale upgrade placeholders remain in `package.json`, and a concise admin manual-test checklist for the post-upgrade work.
     Excludes: new feature work.
-    Notes: This is where deferred admin verification becomes required before resuming work on the new admin area. The goal is to finish the dependency program first, then do the hands-on admin pass once instead of mixing that manual work into every phase.
+    Notes: Reviewed the Next.js `v16.2.5` and React `v19.2.6` release notes before implementation, then completed the remaining same-major sweep by upgrading `next`, `eslint-config-next`, and `@next/eslint-plugin-next` to `16.2.5` and `react`/`react-dom` to `19.2.6`. Removed the proven-unused top-level `date-fns-tz`, `is-hotkey`, and `react-rss` dependencies after confirming they had no direct source imports and were only present as root dependencies, while keeping other utility packages such as `canvas`, `node-fetch`, `is-url`, and `webp-converter` because they are still referenced by the PDF and bulletin tooling. Added the dedicated admin handoff checklist in `admin-manual-test-checklist.md`, confirmed `package.json` contains no stale placeholder version strings, and re-ran `npm outdated` to verify only deferred major upgrades remain. Verified on Node `v24.14.0` with `npm install`, `npm run type-check`, a post-sweep `npm outdated`, and a final clean `npm run smoke:gate` (`133 passed`, `5 skipped`). The existing lint baseline remains 8 warnings with no errors, and the new admin area should not resume until the manual checklist is completed.
 
 **Per-phase completion checklist**
 
@@ -130,5 +130,4 @@ The active admin surface is now part of this plan. That means dependencies used 
 **Further considerations**
 
 1. If a later dependency batch turns out to contain more major hops than expected, split that phase again rather than broadening a single implementation run.
-2. `raw-loader` is still part of the CMS editor path and needs an intentional replacement or retention decision before loader cleanup is complete.
-3. Visual baselines should only be updated intentionally after manual review, not casually regenerated during dependency upgrades, or the suite will stop protecting against detrimental UI drift.
+2. Visual baselines should only be updated intentionally after manual review, not casually regenerated during dependency upgrades, or the suite will stop protecting against detrimental UI drift.

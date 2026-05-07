@@ -14,8 +14,7 @@ export function hasWindowObject() {
 
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    __REACT_DEVTOOLS_GLOBAL_HOOK__: any;
+    __REACT_DEVTOOLS_GLOBAL_HOOK__: Record<string, unknown>;
   }
 }
 
@@ -30,11 +29,9 @@ export function disableReactDevTools() {
     for (const prop in window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
       if (prop === 'renderers') {
         // prevents console error when dev tools try to iterate of renderers
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop] = new Map();
         continue;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop] = isFunction(window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop])
         ? Function.prototype
         : null;

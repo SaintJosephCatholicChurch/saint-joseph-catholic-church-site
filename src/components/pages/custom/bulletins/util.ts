@@ -6,7 +6,7 @@ import type { Bulletin } from '../../../../interface';
 export function getFormattedBulletinDate(bulletin: Bulletin) {
   try {
     return format(parse(bulletin.date, 'yyyy-MM-dd', new Date()), 'MMM dd, yyyy');
-  } catch (e) {
+  } catch {
     return 'N/A';
   }
 }

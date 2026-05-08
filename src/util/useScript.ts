@@ -18,8 +18,8 @@ export const useScript = <T = unknown>(
     script.src = url;
     script.async = true;
     script.onload = () => {
-      const windowWithNamedExports = window as Window & Record<string, T | undefined>;
-      setLib({ [name]: windowWithNamedExports[name] ?? null });
+      const windowWithNamedExports = window as unknown as Record<string, unknown>;
+      setLib({ [name]: (windowWithNamedExports[name] as T | undefined) ?? null });
       setLoaded(true);
     };
 

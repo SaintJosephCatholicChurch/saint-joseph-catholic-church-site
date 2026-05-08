@@ -2,23 +2,16 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { createPreviewAdminBackend, createConnectedAdminBackend } from './services/adminBackends';
+import { createConnectedAdminBackend } from './services/adminBackends';
 
 import type { ReactNode } from 'react';
-import type {
-  AdminAuthAdapter,
-  AdminAuthSession,
-  AdminAuthStatus,
-  AdminBackendMode,
-  AdminRepoClient
-} from './services/adminTypes';
+import type { AdminAuthAdapter, AdminAuthSession, AdminAuthStatus, AdminRepoClient } from './services/adminTypes';
 
 type AdminAuthContextValue = {
   authStatus: AdminAuthStatus;
   error: string | null;
   login: () => Promise<void>;
   logout: () => Promise<void>;
-  mode: AdminBackendMode;
   repoClient: AdminRepoClient | null;
   restoreSession: () => Promise<void>;
   session: AdminAuthSession | null;
@@ -34,14 +27,8 @@ function buildErrorMessage(error: unknown) {
   return 'The admin service layer hit an unexpected error.';
 }
 
-export function AdminAuthProvider({ children, mode }: { children: ReactNode; mode: AdminBackendMode }) {
-  const backend = useMemo<AdminAuthAdapter>(() => {
-    if (mode === 'preview') {
-      return createPreviewAdminBackend();
-    }
-
-    return createConnectedAdminBackend();
-  }, [mode]);
+export function AdminAuthProvider({ children }: { children: ReactNode }) {
+  const backend = useMemo<AdminAuthAdapter>(() => createConnectedAdminBackend(), []);
 
   const [authStatus, setAuthStatus] = useState<AdminAuthStatus>('restoring');
   const [session, setSession] = useState<AdminAuthSession | null>(null);
@@ -102,12 +89,11 @@ export function AdminAuthProvider({ children, mode }: { children: ReactNode; mod
       error,
       login,
       logout,
-      mode,
       repoClient,
       restoreSession,
       session
     }),
-    [authStatus, error, login, logout, mode, repoClient, restoreSession, session]
+    [authStatus, error, login, logout, repoClient, restoreSession, session]
   );
 
   return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;

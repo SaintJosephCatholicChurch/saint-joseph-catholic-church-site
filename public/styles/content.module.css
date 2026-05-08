@@ -1,6 +1,16 @@
 .content {
-  font-family: 'Open Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
-    Cantarell, 'Helvetica Neue', sans-serif;
+  font-family:
+    'Open Sans',
+    'Roboto',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen-Sans,
+    Ubuntu,
+    Cantarell,
+    'Helvetica Neue',
+    sans-serif;
   color: #222;
   font-weight: 200;
 }
@@ -156,16 +166,6 @@
     font-size: 14px;
   }
 }
-
-/* .content h2::before {
-  position: absolute;
-  margin-left: -1em;
-  font-weight: 300;
-  font-size: 1.5rem;
-  color: #4f4f4f;
-  display: none;
-  content: '#';
-} */
 
 .content pre {
   display: block;

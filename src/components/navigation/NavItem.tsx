@@ -213,6 +213,7 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const url = useMemo(() => {
     return getMenuLinkUrl(item);
   }, [item]);
+  const isExternalLink = !isEmpty(url) && url.startsWith('http');
 
   const [selected, setSelected] = useState(false);
 
@@ -233,13 +234,16 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const wrappedLink = useMemo(
     () => (
       <Button
-        LinkComponent={!isEmpty(url) ? Link : undefined}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        target={!isEmpty(url) && url?.startsWith('http') ? '_blank' : undefined}
-        href={!isEmpty(url) ? url : undefined}
+        LinkComponent={!isEmpty(url) && !isExternalLink ? Link : undefined}
+        href={!isEmpty(url) && !isExternalLink ? url : undefined}
         ref={buttonRef}
-        onClick={handleOnClick(item)}
+        onClick={(event) => {
+          handleOnClick(item)(event);
+
+          if (isExternalLink) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
+        }}
         onKeyDown={handleOnKeyDown}
         tabIndex={0}
         size="large"
@@ -300,7 +304,18 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
         </StyledUnderlineWrapper>
       </Button>
     ),
-    [debouncedIsOpen, handleOnClick, handleOnKeyDown, inCMS, item, selected, size, theme.breakpoints, url]
+    [
+      debouncedIsOpen,
+      handleOnClick,
+      handleOnKeyDown,
+      inCMS,
+      isExternalLink,
+      item,
+      selected,
+      size,
+      theme.breakpoints,
+      url
+    ]
   );
 
   return (

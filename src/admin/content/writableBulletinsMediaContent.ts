@@ -4,6 +4,7 @@ import {
   siteContentAdapters,
   type StoredContentValue
 } from './contentRepository';
+import { loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { Bulletin } from '../../interface';
 import type { AdminRepoClient, RepoDirectoryEntry } from '../services/adminTypes';
@@ -62,7 +63,14 @@ export interface BulletinMediaContent {
   mediaAssets: Record<MediaFolderId, MediaAsset[]>;
 }
 
+const BULLETIN_MEDIA_CACHE_KEY = 'bulletin-media-content';
+const BULLETIN_SESSION_KEY_PREFIX = 'admin-bulletin-content';
+
 const IMAGE_FILE_REGEX = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
+
+function buildBulletinStorageKey(repoClient: AdminRepoClient) {
+  return `${BULLETIN_SESSION_KEY_PREFIX}:${repoClient.getRepoLabel()}`;
+}
 
 function getFolderConfig(folderId: MediaFolderId) {
   const folder = MEDIA_FOLDERS.find((item) => item.folderId === folderId);
@@ -143,6 +151,16 @@ function toMediaAssets(folderId: MediaFolderId, entries: RepoDirectoryEntry[]) {
     .sort((left, right) => left.name.localeCompare(right.name));
 }
 
+function toBulletinEntries(entries: RepoDirectoryEntry[]) {
+  return entries
+    .filter((entry) => entry.type === 'file' && entry.path.endsWith('.json'))
+    .sort((left, right) => left.path.localeCompare(right.path));
+}
+
+function sortBulletins(bulletins: StoredContentValue<Bulletin>[]) {
+  return [...bulletins].sort((left, right) => right.value.date.localeCompare(left.value.date));
+}
+
 function buildBulletinId(path: string) {
   return `bulletin:${path}`;
 }
@@ -203,24 +221,77 @@ export function createBulletinSummaries(content: BulletinMediaContent): Bulletin
   }));
 }
 
-export async function loadBulletinMediaContent(repoClient: AdminRepoClient): Promise<BulletinMediaContent> {
-  const repository = new ChurchSiteContentRepository(repoClient);
-  const [bulletins, sharedAssets, staffAssets, bulletinAssets] = await Promise.all([
-    repository.listBulletins(),
-    repoClient.listFiles(SITE_MEDIA_RULES.shared.folderPath),
-    repoClient.listFiles(SITE_MEDIA_RULES.staff.folderPath),
-    repoClient.listFiles(SITE_MEDIA_RULES.bulletins.folderPath)
-  ]);
+function readStoredBulletins(repoClient: AdminRepoClient) {
+  if (typeof window === 'undefined') {
+    return new Map<string, StoredContentValue<Bulletin>>();
+  }
 
-  return {
-    bulletins,
-    loadedAt: new Date().toISOString(),
-    mediaAssets: {
-      bulletins: toMediaAssets('bulletins', bulletinAssets),
-      shared: toMediaAssets('shared', sharedAssets),
-      staff: toMediaAssets('staff', staffAssets)
+  try {
+    const rawValue = window.sessionStorage.getItem(buildBulletinStorageKey(repoClient));
+    if (!rawValue) {
+      return new Map<string, StoredContentValue<Bulletin>>();
     }
-  };
+
+    const storedBulletins = JSON.parse(rawValue) as StoredContentValue<Bulletin>[];
+    return new Map(storedBulletins.map((bulletin) => [bulletin.path, bulletin]));
+  } catch {
+    window.sessionStorage.removeItem(buildBulletinStorageKey(repoClient));
+    return new Map<string, StoredContentValue<Bulletin>>();
+  }
+}
+
+function writeStoredBulletins(repoClient: AdminRepoClient, bulletins: StoredContentValue<Bulletin>[]) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(buildBulletinStorageKey(repoClient), JSON.stringify(bulletins));
+  } catch {
+    window.sessionStorage.removeItem(buildBulletinStorageKey(repoClient));
+  }
+}
+
+function setBulletinMediaContent(repoClient: AdminRepoClient, content: BulletinMediaContent) {
+  writeStoredBulletins(repoClient, content.bulletins);
+  return setSharedContentResource(repoClient, BULLETIN_MEDIA_CACHE_KEY, content);
+}
+
+export async function loadBulletinMediaContent(repoClient: AdminRepoClient): Promise<BulletinMediaContent> {
+  return loadSharedContentResource(repoClient, BULLETIN_MEDIA_CACHE_KEY, async () => {
+    const repository = new ChurchSiteContentRepository(repoClient);
+    const [bulletinEntries, sharedAssets, staffAssets, bulletinAssets] = await Promise.all([
+      repoClient.listFiles(siteContentAdapters.bulletins.folderPath),
+      repoClient.listFiles(SITE_MEDIA_RULES.shared.folderPath),
+      repoClient.listFiles(SITE_MEDIA_RULES.staff.folderPath),
+      repoClient.listFiles(SITE_MEDIA_RULES.bulletins.folderPath)
+    ]);
+
+    const storedBulletins = readStoredBulletins(repoClient);
+    const bulletins = sortBulletins(
+      await Promise.all(
+        toBulletinEntries(bulletinEntries).map((entry) => {
+          const storedBulletin = storedBulletins.get(entry.path);
+
+          if (storedBulletin && storedBulletin.sha && entry.sha === storedBulletin.sha) {
+            return storedBulletin;
+          }
+
+          return repository.readBulletin(entry.path);
+        })
+      )
+    );
+
+    return setBulletinMediaContent(repoClient, {
+      bulletins,
+      loadedAt: new Date().toISOString(),
+      mediaAssets: {
+        bulletins: toMediaAssets('bulletins', bulletinAssets),
+        shared: toMediaAssets('shared', sharedAssets),
+        staff: toMediaAssets('staff', staffAssets)
+      }
+    });
+  });
 }
 
 export async function saveBulletin(
@@ -248,7 +319,7 @@ export async function saveBulletin(
     throw new Error(`A bulletin for ${date} already exists.`);
   }
 
-  await repository.writeBulletin({
+  const savedResult = await repository.writeBulletin({
     message: buildBulletinCommitMessage(date, !input.bulletin),
     path: nextPath,
     sha: currentPath === nextPath ? input.bulletin?.sha : undefined,
@@ -267,7 +338,26 @@ export async function saveBulletin(
     });
   }
 
-  return repository.readBulletin(nextPath);
+  const savedBulletin = {
+    path: savedResult.path,
+    sha: savedResult.sha,
+    value: {
+      date,
+      name,
+      pdf
+    }
+  };
+  const remainingBulletins = input.content.bulletins.filter(
+    (bulletin) => bulletin.path !== currentPath && bulletin.path !== nextPath
+  );
+
+  setBulletinMediaContent(repoClient, {
+    ...input.content,
+    bulletins: sortBulletins([...remainingBulletins, savedBulletin]),
+    loadedAt: new Date().toISOString()
+  });
+
+  return savedBulletin;
 }
 
 export async function uploadMediaAsset(
@@ -290,9 +380,6 @@ export async function uploadMediaAsset(
     sha: input.replaceAsset?.sha
   });
 
-  const entries = await repoClient.listFiles(getFolderConfig(input.folderId).rule.folderPath);
-  const matchingEntry = entries.find((entry) => entry.type === 'file' && entry.path === path);
-
   const fallbackAsset: MediaAsset = {
     folderId: input.folderId,
     id: `${input.folderId}:${path}`,
@@ -301,6 +388,20 @@ export async function uploadMediaAsset(
     path,
     publicPath: buildPublicPath(input.folderId, fileName)
   };
+  const cachedContent = await loadBulletinMediaContent(repoClient);
+  const nextAssets = [
+    ...cachedContent.mediaAssets[input.folderId].filter((asset) => asset.path !== path),
+    fallbackAsset
+  ].sort((left, right) => left.name.localeCompare(right.name));
 
-  return matchingEntry ? toMediaAsset(input.folderId, matchingEntry) : fallbackAsset;
+  setBulletinMediaContent(repoClient, {
+    ...cachedContent,
+    loadedAt: new Date().toISOString(),
+    mediaAssets: {
+      ...cachedContent.mediaAssets,
+      [input.folderId]: nextAssets
+    }
+  });
+
+  return fallbackAsset;
 }

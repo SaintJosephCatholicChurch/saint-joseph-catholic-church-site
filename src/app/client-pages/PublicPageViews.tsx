@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useMemo } from 'react';
 
 import contentStyles from '../../../public/styles/content.module.css';
-import { EXTRA_EXTRA_SMALL_BREAKPOINT, LARGE_BREAKPOINT, PAGE, SEARCH_RESULTS_TO_SHOW } from '../../constants';
+import { EXTRA_EXTRA_SMALL_BREAKPOINT, SEARCH_RESULTS_TO_SHOW } from '../../constants';
 import { MAX_APP_WIDTH } from '../../constants';
 import AppPageShell from '../AppPageShell';
 import MobileScheduleTabPanel from '../../components/schedule/MobileSchedulePanel';

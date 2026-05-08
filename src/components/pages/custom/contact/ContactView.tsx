@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
@@ -186,12 +187,10 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                 </StyledChurchDetailSection>
                 <StyledChurchDetailSection>
                   {churchDetails.contacts?.map((contact, index) => (
-                    <>
-                      <StyledChurchDetailTitle key={`contact-${index}-title`}>{contact.title}</StyledChurchDetailTitle>
-                      <StyledChurchDetailContent key={`contact-${index}-link`}>
-                        {contact.name}
-                      </StyledChurchDetailContent>
-                    </>
+                    <Fragment key={`contact-${index}`}>
+                      <StyledChurchDetailTitle>{contact.title}</StyledChurchDetailTitle>
+                      <StyledChurchDetailContent>{contact.name}</StyledChurchDetailContent>
+                    </Fragment>
                   ))}
                 </StyledChurchDetailSection>
                 <StyledSocialLinks>

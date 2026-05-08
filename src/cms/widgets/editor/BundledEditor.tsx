@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
 import Box from '@mui/material/Box';
 import { Editor } from '@tinymce/tinymce-react';
 import { useEffect } from 'react';
 
 // TinyMCE so the global var exists
-// eslint-disable-next-line no-unused-vars
 import 'tinymce/tinymce';
 // DOM model
 import 'tinymce/models/dom/model';
@@ -20,7 +18,6 @@ import 'tinymce/skins/ui/oxide/skin.min.css';
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
-import 'tinymce/plugins/autoresize';
 import 'tinymce/plugins/autosave';
 import 'tinymce/plugins/charmap';
 import 'tinymce/plugins/code';
@@ -56,13 +53,30 @@ import './plugins/telephone-autolink';
 
 import type { IAllProps } from '@tinymce/tinymce-react';
 
-// Content styles, including inline UI like fake cursors
-import contentCss from 'tinymce/skins/content/default/content.min.css?raw';
-import contentUiCss from 'tinymce/skins/ui/oxide/content.min.css?raw';
-
 interface BundleEditorProps extends Partial<IAllProps> {
   onOpenMediaLibrary: (forImage: boolean) => void;
   theme: 'light' | 'dark';
+}
+
+const BUNDLED_CONTENT_CSS = [
+  '/vendor/tinymce/skins/content/default/content.min.css',
+  '/vendor/tinymce/skins/ui/oxide/content.min.css'
+];
+
+function normalizeContentCss(
+  contentCss: IAllProps['init'] extends undefined ? never : NonNullable<IAllProps['init']>['content_css']
+): string[] {
+  if (!contentCss) {
+    return [];
+  }
+
+  if (contentCss === true) {
+    return [];
+  }
+
+  return Array.isArray(contentCss)
+    ? contentCss.filter((entry): entry is string => typeof entry === 'string')
+    : [contentCss];
 }
 
 export default function BundledEditor(props: BundleEditorProps) {
@@ -73,8 +87,6 @@ export default function BundledEditor(props: BundleEditorProps) {
     createCmsFilePlugin({ onOpenMediaLibrary });
   }, [onOpenMediaLibrary]);
 
-  // note that skin and content_css is disabled to avoid the normal
-  // loading process and is instead loaded as a string via content_style
   return (
     <Box
       sx={{
@@ -89,7 +101,8 @@ export default function BundledEditor(props: BundleEditorProps) {
           license_key: 'gpl' as never,
           skin: false,
           promotion: false,
-          content_style: [contentCss, contentUiCss, init.content_style || ''].join('\n')
+          content_css: [...BUNDLED_CONTENT_CSS, ...normalizeContentCss(init?.content_css)],
+          content_style: init?.content_style
         }}
         tinymceScriptSrc={[]}
         {...rest}

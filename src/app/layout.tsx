@@ -2,7 +2,6 @@ import 'normalize.css';
 import '../../public/styles/global.css';
 
 import config from '../lib/config';
-
 import AppClientBootstrap from './AppClientBootstrap';
 
 import type { Metadata, Viewport } from 'next';

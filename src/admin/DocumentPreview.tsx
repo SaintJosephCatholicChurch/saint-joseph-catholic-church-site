@@ -24,32 +24,33 @@ interface DocumentPreviewProps {
   kind: DocumentKind;
 }
 
-export function DocumentPreview({ draft, kind }: DocumentPreviewProps) {
-  if (kind === 'page') {
-    const pageDraft = draft as PageDraft;
+function isPostDraft(draft: PageDraft | PostDraft): draft is PostDraft {
+  return 'image' in draft && 'tags' in draft;
+}
 
+export function DocumentPreview({ draft, kind }: DocumentPreviewProps) {
+  if (kind === 'page' || !isPostDraft(draft)) {
     return (
-      <AdminPagePreviewFrame framePadding="12px 0" maxWidth={DOCUMENT_PREVIEW_MAX_WIDTH}>
-        <PageTitle title={pageDraft.title || 'Untitled page'} />
+      <AdminPagePreviewFrame framePadding="12px 12px" maxWidth={DOCUMENT_PREVIEW_MAX_WIDTH}>
+        <PageTitle title={draft.title || 'Untitled page'} />
         <PageContentView>
-          <PreviewBody html={pageDraft.body} />
+          <PreviewBody html={draft.body} />
         </PageContentView>
       </AdminPagePreviewFrame>
     );
   }
 
-  const postDraft = draft as PostDraft;
-  const parsedDate = parseISO(postDraft.date);
+  const parsedDate = parseISO(draft.date);
   const previewDate = isValid(parsedDate) ? parsedDate : new Date();
-  const tags = postDraft.tags
+  const tags = draft.tags
     .split(/\r?\n|,/g)
     .map((tag) => tag.trim())
     .filter(Boolean);
 
   return (
-    <AdminPagePreviewFrame framePadding="12px 0" maxWidth={DOCUMENT_PREVIEW_MAX_WIDTH}>
-      <PostView title={postDraft.title || 'Untitled news post'} date={previewDate} image={postDraft.image} tags={tags}>
-        <PreviewBody html={postDraft.body} />
+    <AdminPagePreviewFrame framePadding="12px 12px" maxWidth={DOCUMENT_PREVIEW_MAX_WIDTH}>
+      <PostView title={draft.title || 'Untitled news post'} date={previewDate} image={draft.image} tags={tags}>
+        <PreviewBody html={draft.body} />
       </PostView>
     </AdminPagePreviewFrame>
   );

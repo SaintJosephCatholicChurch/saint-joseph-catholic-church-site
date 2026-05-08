@@ -62,7 +62,8 @@ const SearchBox = memo(({ disableMargin = false, value: controlledValue = '' }: 
       method="get"
       onSubmit={(event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        submitSearch(`${new FormData(event.currentTarget).get('q') ?? ''}`);
+        const searchQuery = new FormData(event.currentTarget).get('q');
+        submitSearch(typeof searchQuery === 'string' ? searchQuery : '');
       }}
     >
       <TextField

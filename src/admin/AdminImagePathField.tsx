@@ -46,6 +46,7 @@ export function AdminImagePathField({
               display: 'block',
               maxHeight: previewHeight,
               maxWidth: '100%',
+              width: '100%',
               objectFit: 'contain',
               backgroundColor: '#f4efe7'
             }}

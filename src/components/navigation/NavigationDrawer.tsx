@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import { styled, useTheme } from '@mui/material/styles';
@@ -46,6 +47,59 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }
   );
 
   const container = useModalContainer();
+
+  if (inCMS) {
+    return (
+      <Box
+        sx={{
+          display: 'none',
+          inset: 0,
+          pointerEvents: mobileOpen ? 'auto' : 'none',
+          position: 'absolute',
+          zIndex: theme.zIndex.drawer,
+          [getContainerQuery(theme.breakpoints.down('md'), inCMS)]: {
+            display: 'block'
+          }
+        }}
+      >
+        <Box
+          onClick={onMobileOpenToggle}
+          sx={{
+            backgroundColor: 'rgba(34, 17, 17, 0.2)',
+            inset: 0,
+            opacity: mobileOpen ? 1 : 0,
+            position: 'absolute',
+            transition: theme.transitions.create('opacity', {
+              duration: theme.transitions.duration.enteringScreen
+            })
+          }}
+        />
+        <Box
+          aria-hidden={!mobileOpen}
+          role="dialog"
+          sx={{
+            backgroundColor: '#bc2f3b',
+            bottom: 0,
+            boxShadow: '0 24px 40px rgba(34, 17, 17, 0.24)',
+            boxSizing: 'border-box',
+            left: 0,
+            maxWidth: DRAWER_WIDTH,
+            overflowY: 'auto',
+            position: 'absolute',
+            top: 0,
+            transform: mobileOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: theme.transitions.create('transform', {
+              duration: theme.transitions.duration.enteringScreen,
+              easing: theme.transitions.easing.easeOut
+            }),
+            width: 'min(80%, 240px)'
+          }}
+        >
+          {drawer}
+        </Box>
+      </Box>
+    );
+  }
 
   return container ? (
     <SwipeableDrawer

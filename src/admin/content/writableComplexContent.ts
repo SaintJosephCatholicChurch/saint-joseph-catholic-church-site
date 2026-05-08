@@ -7,6 +7,7 @@ import {
   type StoredContentValue,
   type TimesContentFile
 } from './contentRepository';
+import { loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { FeaturedLink, FeaturedPage, HomePageData, Times } from '../../interface';
 import type { AdminRepoClient } from '../services/adminTypes';
@@ -89,6 +90,76 @@ export interface ComplexContent {
   loadedAt: string;
   staff: StoredContentValue<StaffContentFile>;
   times: StoredContentValue<TimesContentFile>;
+}
+
+const COMPLEX_SECTION_CACHE_KEY_PREFIX = 'complex-content';
+
+function getComplexSectionCacheKey(sectionId: ComplexSectionId) {
+  return `${COMPLEX_SECTION_CACHE_KEY_PREFIX}:${sectionId}`;
+}
+
+function createEmptyComplexContent(): ComplexContent {
+  return {
+    homepage: {
+      path: SITE_CONTENT_PATHS.homepage,
+      value: {
+        daily_readings: {
+          daily_readings_background: '',
+          subtitle: '',
+          title: ''
+        },
+        daily_readings_background: '',
+        featured: [],
+        invitation_text: '',
+        live_stream_button: {
+          title: '',
+          url: ''
+        },
+        newsletter: {
+          bannerSubtitle: '',
+          bannerTitle: '',
+          rssFeedUrl: '',
+          signupButtonText: '',
+          signupLink: ''
+        },
+        schedule_section: {
+          schedule_background: '',
+          title: ''
+        },
+        slides: []
+      }
+    },
+    loadedAt: new Date().toISOString(),
+    staff: {
+      path: SITE_CONTENT_PATHS.staff,
+      value: {
+        staff: []
+      }
+    },
+    times: {
+      path: SITE_CONTENT_PATHS.times,
+      value: {
+        times: []
+      }
+    }
+  };
+}
+
+async function loadComplexSection(repoClient: AdminRepoClient, sectionId: ComplexSectionId) {
+  return loadSharedContentResource(repoClient, getComplexSectionCacheKey(sectionId), async () => {
+    const repository = new ChurchSiteContentRepository(repoClient);
+
+    switch (sectionId) {
+      case 'homepage':
+        return repository.readHomepage();
+      case 'times':
+        return repository.readTimes();
+      case 'staff':
+        return repository.readStaff();
+      default:
+        throw new Error('Unsupported complex section.');
+    }
+  });
 }
 
 function cloneValue<TValue>(value: TValue): TValue {
@@ -279,20 +350,32 @@ export function createComplexDraft(content: ComplexContent): ComplexDraft {
   };
 }
 
-export async function loadComplexContent(repoClient: AdminRepoClient): Promise<ComplexContent> {
-  const repository = new ChurchSiteContentRepository(repoClient);
-  const [homepage, times, staff] = await Promise.all([
-    repository.readHomepage(),
-    repository.readTimes(),
-    repository.readStaff()
-  ]);
+export async function loadComplexContent(
+  repoClient: AdminRepoClient,
+  sectionIds: ComplexSectionId[] = COMPLEX_WRITABLE_SECTIONS.map((section) => section.id)
+): Promise<ComplexContent> {
+  const uniqueSectionIds = [...new Set(sectionIds)];
+  const content = createEmptyComplexContent();
+  const loadedSections = await Promise.all(uniqueSectionIds.map((sectionId) => loadComplexSection(repoClient, sectionId)));
 
-  return {
-    homepage,
-    loadedAt: new Date().toISOString(),
-    staff,
-    times
-  };
+  uniqueSectionIds.forEach((sectionId, index) => {
+    switch (sectionId) {
+      case 'homepage':
+        content.homepage = loadedSections[index] as ComplexContent['homepage'];
+        break;
+      case 'times':
+        content.times = loadedSections[index] as ComplexContent['times'];
+        break;
+      case 'staff':
+        content.staff = loadedSections[index] as ComplexContent['staff'];
+        break;
+      default:
+        break;
+    }
+  });
+
+  content.loadedAt = new Date().toISOString();
+  return content;
 }
 
 export async function saveComplexSection(
@@ -304,30 +387,55 @@ export async function saveComplexSection(
   }
 ): Promise<ComplexContent> {
   const repository = new ChurchSiteContentRepository(repoClient);
+  let nextContent = input.content;
 
   switch (input.sectionId) {
     case 'homepage': {
-      await repository.writeHomepage({
+      const result = await repository.writeHomepage({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.homepage.sha,
         value: buildHomepageValue(input.draft.homepage)
       });
+      nextContent = {
+        ...input.content,
+        homepage: {
+          path: result.path,
+          sha: result.sha,
+          value: buildHomepageValue(input.draft.homepage)
+        }
+      };
       break;
     }
     case 'times': {
-      await repository.writeTimes({
+      const result = await repository.writeTimes({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.times.sha,
         value: buildTimesValue(input.draft.times)
       });
+      nextContent = {
+        ...input.content,
+        times: {
+          path: result.path,
+          sha: result.sha,
+          value: buildTimesValue(input.draft.times)
+        }
+      };
       break;
     }
     case 'staff': {
-      await repository.writeStaff({
+      const result = await repository.writeStaff({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.staff.sha,
         value: buildStaffValue(input.draft.staff)
       });
+      nextContent = {
+        ...input.content,
+        staff: {
+          path: result.path,
+          sha: result.sha,
+          value: buildStaffValue(input.draft.staff)
+        }
+      };
       break;
     }
     default: {
@@ -335,5 +443,10 @@ export async function saveComplexSection(
     }
   }
 
-  return loadComplexContent(repoClient);
+  setSharedContentResource(repoClient, getComplexSectionCacheKey(input.sectionId), nextContent[input.sectionId]);
+
+  return {
+    ...nextContent,
+    loadedAt: new Date().toISOString()
+  };
 }

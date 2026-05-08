@@ -56,7 +56,7 @@ export const NewsPostPageView = ({ title, image, dateString, tags, content, ...s
   );
 };
 
-export const NewsTagPageView = ({ posts, tag, pagination, page }: NewsTagProps) => {
+export const NewsTagPageView = ({ posts, tag, pagination }: NewsTagProps) => {
   const title = `#${tag}`;
 
   return (

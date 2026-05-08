@@ -1,18 +1,31 @@
 'use client';
 
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { AdminSelectableCard, AdminSurfacePanel } from './components/AdminCards';
+import {
+  AdminCompactActionBar,
+  AdminDetailTabs,
+  AdminListSidebar,
+  AdminRecordHeader,
+  AdminRecordWorkspacePanel,
+  AdminSidebarListBody,
+  AdminStatusStack
+} from './components/AdminWorkspace';
 import { AdminHtmlEditor } from './AdminHtmlEditor';
 import { AdminImagePathField } from './AdminImagePathField';
 import { AdminMediaLibrary } from './AdminMediaLibrary';
@@ -23,6 +36,7 @@ import {
   createPageDraft,
   createPostDocument,
   createPostDraft,
+  ensureDocumentLoaded,
   loadDocumentContent,
   savePageDocument,
   savePostDocument,
@@ -110,72 +124,102 @@ const CLOSED_CREATE_DIALOG: CreateDialogState = {
   title: ''
 };
 
+const DOCUMENT_SELECTION_QUERY_PARAM = 'entry';
+
 function DocumentListCard({
   active,
+  compact = false,
   item,
   onSelect
 }: {
   active: boolean;
+  compact?: boolean;
   item: DocumentSummary;
   onSelect: (documentId: string) => void;
 }) {
+  const metadata = [
+    item.kind === 'page' ? `/${item.slug}` : `/news/${item.slug}`,
+    item.kind === 'post' ? formatDate(item.date) : null
+  ]
+    .filter(Boolean)
+    .join(' • ');
+
   return (
-    <Button
-      variant={active ? 'contained' : 'outlined'}
-      color="inherit"
+    <AdminSelectableCard
+      active={active}
       onClick={() => onSelect(item.id)}
       sx={{
-        alignItems: 'flex-start',
-        background: active
-          ? 'linear-gradient(135deg, #7f232c 0%, #5c1820 100%)'
-          : 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.92))',
-        borderColor: active ? '#7f232c' : 'rgba(127, 35, 44, 0.16)',
-        borderRadius: '4px',
-        color: active ? '#ffffff' : '#222222',
         flexShrink: 0,
-        justifyContent: 'flex-start',
-        px: 2,
-        py: 1.5,
-        textAlign: 'left',
-        textTransform: 'none',
-        transition: 'transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease',
-        '&:hover': {
-          background: active ? 'linear-gradient(135deg, #6c1d26 0%, #49131a 100%)' : 'rgba(127, 35, 44, 0.05)',
-          borderColor: '#7f232c',
-          transform: 'translateY(-1px)'
-        }
+        px: compact ? 1.5 : 2,
+        py: compact ? 1.125 : 1.5
       }}
     >
-      <Stack spacing={0.25} sx={{ minWidth: 0, overflow: 'hidden', width: '100%' }}>
-        <Typography sx={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {item.title}
-        </Typography>
-        <Typography
-          sx={{
-            color: active ? 'rgba(255,255,255,0.8)' : '#616169',
-            fontSize: '0.82rem',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
+      {compact ? (
+        <Stack
+          direction={{ sm: 'row', xs: 'column' }}
+          spacing={{ sm: 1.25, xs: 0.25 }}
+          alignItems={{ sm: 'center', xs: 'flex-start' }}
+          justifyContent="space-between"
+          sx={{ minWidth: 0, overflow: 'hidden', width: '100%' }}
         >
-          {item.kind === 'page' ? `/${item.slug}` : `/news/${item.slug}`}
-        </Typography>
-        {item.kind === 'post' ? (
           <Typography
             sx={{
-              color: active ? 'rgba(255,255,255,0.7)' : '#9b8b7e',
-              fontSize: '0.78rem',
+              flex: 1,
+              fontWeight: 700,
+              minWidth: 0,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap'
             }}
           >
-            {formatDate(item.date)}
+            {item.title}
           </Typography>
-        ) : null}
-      </Stack>
-    </Button>
+          <Typography
+            sx={{
+              color: active ? 'rgba(255,255,255,0.8)' : '#6a5448',
+              flexShrink: 0,
+              fontSize: '0.76rem',
+              maxWidth: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {metadata}
+          </Typography>
+        </Stack>
+      ) : (
+        <Stack spacing={0.25} sx={{ minWidth: 0, overflow: 'hidden', width: '100%' }}>
+          <Typography sx={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.title}
+          </Typography>
+          <Typography
+            sx={{
+              color: active ? 'rgba(255,255,255,0.8)' : '#616169',
+              fontSize: '0.82rem',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {item.kind === 'page' ? `/${item.slug}` : `/news/${item.slug}`}
+          </Typography>
+          {item.kind === 'post' ? (
+            <Typography
+              sx={{
+                color: active ? 'rgba(255,255,255,0.7)' : '#9b8b7e',
+                fontSize: '0.78rem',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {formatDate(item.date)}
+            </Typography>
+          ) : null}
+        </Stack>
+      )}
+    </AdminSelectableCard>
   );
 }
 
@@ -185,16 +229,68 @@ export function DocumentContentEditor({
   repoClient,
   showIntroAlert = true
 }: DocumentContentEditorProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isCompactLayout = useMediaQuery(theme.breakpoints.down('xl'));
+  const isMobileRecordLayout = useMediaQuery(theme.breakpoints.down('md'));
+  const routedDocumentId = searchParams.get(DOCUMENT_SELECTION_QUERY_PARAM);
   const [editorState, setEditorState] = useState<DocumentEditorState>(INITIAL_EDITOR_STATE);
   const [filterTerm, setFilterTerm] = useState('');
   const [mediaPickerMode, setMediaPickerMode] = useState<'body-file' | 'body-image' | 'hero-image' | null>(null);
+  const [mobileDetailPanel, setMobileDetailPanel] = useState<'editor' | 'preview'>('editor');
   const [pendingEditorAsset, setPendingEditorAsset] = useState<MediaAsset | null>(null);
   const [pageDrafts, setPageDrafts] = useState<Record<string, PageDraft>>({});
   const [postDrafts, setPostDrafts] = useState<Record<string, PostDraft>>({});
   const [createDialog, setCreateDialog] = useState<CreateDialogState>(CLOSED_CREATE_DIALOG);
+
   const visibleKinds = useMemo<DocumentKind[]>(
     () => (allowedKinds && allowedKinds.length > 0 ? allowedKinds : ['page', 'post']),
     [allowedKinds]
+  );
+  const visibleKindsKey = visibleKinds.join('|');
+  const routedDocumentIdRef = useRef(routedDocumentId);
+  const visibleKindsRef = useRef(visibleKinds);
+
+  useEffect(() => {
+    routedDocumentIdRef.current = routedDocumentId;
+  }, [routedDocumentId]);
+
+  useEffect(() => {
+    visibleKindsRef.current = visibleKinds;
+  }, [visibleKinds]);
+
+  function syncDraftsFromContent(content: DocumentContent) {
+    setPageDrafts(
+      Object.fromEntries(content.pages.map((document) => [`page:${document.path}`, createPageDraft(document)]))
+    );
+    setPostDrafts(
+      Object.fromEntries(content.posts.map((document) => [`post:${document.path}`, createPostDraft(document)]))
+    );
+  }
+
+  const buildSelectionHref = useCallback(
+    (documentId: string | null) => {
+      const nextParams = new URLSearchParams(searchParams.toString());
+
+      if (documentId) {
+        nextParams.set(DOCUMENT_SELECTION_QUERY_PARAM, documentId);
+      } else {
+        nextParams.delete(DOCUMENT_SELECTION_QUERY_PARAM);
+      }
+
+      const query = nextParams.toString();
+      return query ? `${pathname}?${query}` : pathname;
+    },
+    [pathname, searchParams]
+  );
+
+  const replaceSelectionInUrl = useCallback(
+    (documentId: string | null) => {
+      router.replace(buildSelectionHref(documentId), { scroll: false });
+    },
+    [buildSelectionHref, router]
   );
 
   useEffect(() => {
@@ -210,28 +306,22 @@ export function DocumentContentEditor({
       try {
         const content = await loadDocumentContent(repoClient);
         const summaries = createDocumentSummaries(content);
+        const currentVisibleKinds = visibleKindsRef.current;
+        const selectedDocumentId =
+          currentSelectionRef(summaries) ||
+          summaries.find((summary) => currentVisibleKinds.includes(summary.kind))?.id ||
+          null;
 
         if (cancelled) {
           return;
         }
 
-        setPageDrafts(
-          Object.fromEntries(content.pages.map((document) => [`page:${document.path}`, createPageDraft(document)]))
-        );
-        setPostDrafts(
-          Object.fromEntries(content.posts.map((document) => [`post:${document.path}`, createPostDraft(document)]))
-        );
+        syncDraftsFromContent(content);
         setEditorState((currentState) => ({
           ...currentState,
           content,
           error: null,
-          selectedDocumentId:
-            currentState.selectedDocumentId &&
-            summaries.some(
-              (summary) => summary.id === currentState.selectedDocumentId && visibleKinds.includes(summary.kind)
-            )
-              ? currentState.selectedDocumentId
-              : summaries.find((summary) => visibleKinds.includes(summary.kind))?.id || null,
+          selectedDocumentId,
           status: 'success'
         }));
       } catch (error) {
@@ -247,12 +337,28 @@ export function DocumentContentEditor({
       }
     }
 
+    function currentSelectionRef(summaries: DocumentSummary[]) {
+      const currentRoutedDocumentId = routedDocumentIdRef.current;
+      const currentVisibleKinds = visibleKindsRef.current;
+
+      if (
+        currentRoutedDocumentId &&
+        summaries.some(
+          (summary) => summary.id === currentRoutedDocumentId && currentVisibleKinds.includes(summary.kind)
+        )
+      ) {
+        return currentRoutedDocumentId;
+      }
+
+      return null;
+    }
+
     void loadContent();
 
     return () => {
       cancelled = true;
     };
-  }, [repoClient, visibleKinds]);
+  }, [repoClient, visibleKindsKey]);
 
   const summaries = useMemo(
     () => (editorState.content ? createDocumentSummaries(editorState.content) : []),
@@ -278,8 +384,10 @@ export function DocumentContentEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterTokens.join('\x00'), visibleSummaries]
   );
+  const preferredSelectedDocumentId = routedDocumentId || editorState.selectedDocumentId;
   const activeSummary =
-    filteredSummaries.find((summary) => summary.id === editorState.selectedDocumentId) || filteredSummaries[0] || null;
+    filteredSummaries.find((summary) => summary.id === preferredSelectedDocumentId) ||
+    (!isCompactLayout || Boolean(routedDocumentId) ? filteredSummaries[0] || null : null);
   const activePage =
     activeSummary?.kind === 'page'
       ? editorState.content?.pages.find((document) => `page:${document.path}` === activeSummary.id) || null
@@ -300,6 +408,72 @@ export function DocumentContentEditor({
         : null;
   const isDirty = activeDraft && pristineDraft ? JSON.stringify(activeDraft) !== JSON.stringify(pristineDraft) : false;
   const isSaving = editorState.saveStatus === 'saving';
+  const showListViewOnly = isCompactLayout && !routedDocumentId;
+  const showDenseListCards = isCompactLayout;
+  const showActiveListSelection = !isCompactLayout || Boolean(routedDocumentId);
+  useEffect(() => {
+    if (!editorState.content || !activeSummary) {
+      return;
+    }
+
+    const activeDocument = activeSummary.kind === 'page' ? activePage : activePost;
+    if (!activeDocument || activeDocument.body) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function hydrateDocument() {
+      try {
+        const nextContent = await ensureDocumentLoaded(repoClient, editorState.content, activeSummary.id);
+
+        if (cancelled || nextContent === editorState.content) {
+          return;
+        }
+
+        syncDraftsFromContent(nextContent);
+        setEditorState((currentState) => ({
+          ...currentState,
+          content: nextContent,
+          error: null,
+          status: 'success'
+        }));
+      } catch (error) {
+        if (cancelled) {
+          return;
+        }
+
+        setEditorState((currentState) => ({
+          ...currentState,
+          error: buildErrorMessage(error),
+          status: 'error'
+        }));
+      }
+    }
+
+    void hydrateDocument();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activePage, activePost, activeSummary, editorState.content, repoClient]);
+
+  const documentEditorActions = (
+    <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ flexShrink: 0 }}>
+      <IconButton
+        aria-label="Reset"
+        title="Reset"
+        onClick={resetActiveDraft}
+        disabled={!isDirty || isSaving}
+        size="small"
+      >
+        <RestartAltIcon fontSize="small" />
+      </IconButton>
+      <Button variant="contained" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
+        Save
+      </Button>
+    </Stack>
+  );
 
   function openCreateDialog() {
     const today = new Date().toISOString().slice(0, 10);
@@ -339,22 +513,19 @@ export function DocumentContentEditor({
       const result: { content: DocumentContent; newId: string } =
         kind === 'page'
           ? await createPageDocument(repoClient, {
+              content: editorState.content,
               date: createDialog.date,
               slug: createDialog.slug,
               title: createDialog.title
             })
           : await createPostDocument(repoClient, {
+              content: editorState.content,
               date: createDialog.date,
               slug: createDialog.slug,
               title: createDialog.title
             });
 
-      setPageDrafts(
-        Object.fromEntries(result.content.pages.map((document) => [`page:${document.path}`, createPageDraft(document)]))
-      );
-      setPostDrafts(
-        Object.fromEntries(result.content.posts.map((document) => [`post:${document.path}`, createPostDraft(document)]))
-      );
+      syncDraftsFromContent(result.content);
       setEditorState((current) => ({
         ...current,
         content: result.content,
@@ -364,6 +535,8 @@ export function DocumentContentEditor({
         selectedDocumentId: result.newId,
         status: 'success'
       }));
+      setMobileDetailPanel('editor');
+      replaceSelectionInUrl(result.newId);
       setCreateDialog(CLOSED_CREATE_DIALOG);
 
       try {
@@ -396,6 +569,7 @@ export function DocumentContentEditor({
   }
 
   function selectDocument(documentId: string) {
+    setMobileDetailPanel('editor');
     setEditorState((currentState) => ({
       ...currentState,
       saveError: null,
@@ -403,6 +577,12 @@ export function DocumentContentEditor({
       saveStatus: 'idle',
       selectedDocumentId: documentId
     }));
+    replaceSelectionInUrl(documentId);
+  }
+
+  function returnToDocumentList() {
+    setMobileDetailPanel('editor');
+    replaceSelectionInUrl(null);
   }
 
   function updateActivePageDraft(nextValue: Partial<PageDraft>) {
@@ -483,32 +663,30 @@ export function DocumentContentEditor({
     }));
 
     try {
+      let content = editorState.content;
+
       if (activeSummary.kind === 'page' && activePage && activePageDraft) {
-        await savePageDocument(repoClient, {
+        content = await savePageDocument(repoClient, {
+          content,
           document: activePage,
           draft: activePageDraft
         });
       }
 
       if (activeSummary.kind === 'post' && activePost && activePostDraft) {
-        await savePostDocument(repoClient, {
+        content = await savePostDocument(repoClient, {
+          content,
           document: activePost,
           draft: activePostDraft
         });
       }
 
-      const content = await loadDocumentContent(repoClient);
-      setPageDrafts(
-        Object.fromEntries(content.pages.map((document) => [`page:${document.path}`, createPageDraft(document)]))
-      );
-      setPostDrafts(
-        Object.fromEntries(content.posts.map((document) => [`post:${document.path}`, createPostDraft(document)]))
-      );
+      syncDraftsFromContent(content);
       setEditorState((currentState) => ({
         ...currentState,
         content,
         saveError: null,
-        saveMessage: `${activeSummary.kind === 'page' ? 'Page' : 'News post'} saved to the repository-backed admin draft.`,
+        saveMessage: `${activeSummary.kind === 'page' ? 'Page' : 'News post'} saved.`,
         saveStatus: 'success',
         status: 'success'
       }));
@@ -532,6 +710,25 @@ export function DocumentContentEditor({
   }
 
   useEffect(() => {
+    if (!editorState.content || !routedDocumentId) {
+      return;
+    }
+
+    if (!visibleSummaries.some((summary) => summary.id === routedDocumentId)) {
+      return;
+    }
+
+    if (routedDocumentId === editorState.selectedDocumentId) {
+      return;
+    }
+
+    setEditorState((currentState) => ({
+      ...currentState,
+      selectedDocumentId: routedDocumentId
+    }));
+  }, [editorState.content, editorState.selectedDocumentId, routedDocumentId, visibleSummaries]);
+
+  useEffect(() => {
     if (filteredSummaries.length === 0) {
       return;
     }
@@ -540,11 +737,17 @@ export function DocumentContentEditor({
       return;
     }
 
+    const fallbackDocumentId = filteredSummaries[0].id;
+
     setEditorState((currentState) => ({
       ...currentState,
-      selectedDocumentId: filteredSummaries[0].id
+      selectedDocumentId: fallbackDocumentId
     }));
-  }, [editorState.selectedDocumentId, filteredSummaries]);
+
+    if (routedDocumentId) {
+      replaceSelectionInUrl(fallbackDocumentId);
+    }
+  }, [editorState.selectedDocumentId, filteredSummaries, replaceSelectionInUrl, routedDocumentId]);
 
   if (editorState.status === 'loading' && !editorState.content) {
     return (
@@ -639,282 +842,339 @@ export function DocumentContentEditor({
 
   return (
     <Stack spacing={2} sx={{ display: 'flex', flex: 1, minHeight: 0 }}>
-      {showIntroAlert ? (
-        <>
-          <Alert severity="info">
-            Phase 8 keeps pages and news on the existing frontmatter-plus-body contract, but this admin path only
-            supports HTML body editing. MDX imports, JSX components, and expression blocks are rejected on save.
-          </Alert>
-          <Alert severity="info">
-            Phase 9 now adds shared-media browsing, upload, and direct asset insertion for both document bodies and news
-            hero images.
-          </Alert>
-        </>
-      ) : null}
-      {editorState.saveMessage ? <Alert severity="success">{editorState.saveMessage}</Alert> : null}
-      {editorState.saveError ? <Alert severity="error">{editorState.saveError}</Alert> : null}
-      {editorState.status === 'loading' ? <LinearProgress /> : null}
+      <AdminStatusStack
+        errorMessage={editorState.saveError}
+        loading={editorState.status === 'loading'}
+        successMessage={editorState.saveMessage}
+      >
+        {showIntroAlert ? (
+          <Stack spacing={2}>
+            <Alert severity="info">
+              Phase 8 keeps pages and news on the existing frontmatter-plus-body contract, but this admin path only
+              supports HTML body editing. MDX imports, JSX components, and expression blocks are rejected on save.
+            </Alert>
+            <Alert severity="info">
+              Phase 9 now adds shared-media browsing, upload, and direct asset insertion for both document bodies and
+              news hero images.
+            </Alert>
+          </Stack>
+        ) : null}
+      </AdminStatusStack>
 
       <Stack direction={{ xl: 'row', xs: 'column' }} spacing={2} alignItems="stretch" sx={{ flex: 1, minHeight: 0 }}>
-        <Stack
-          spacing={1.5}
-          sx={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.84), rgba(250,245,238,0.92))',
-            border: '1px solid rgba(127, 35, 44, 0.12)',
-            borderRadius: '4px',
-            boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            flexShrink: 0,
-            height: { xl: '100%', xs: 'auto' },
-            maxHeight: { xl: '100%', xs: 'none' },
-            minHeight: 0,
-            overflow: 'hidden',
-            p: 2,
-            pb: 0,
-            width: { xl: 360, xs: '100%' }
-          }}
-        >
-          {visibleKinds.length === 1 ? (
-            <Button fullWidth onClick={openCreateDialog} size="small" variant="contained">
-              New {visibleKinds[0] === 'page' ? 'Page' : 'Post'}
-            </Button>
-          ) : null}
-          <TextField
-            label="Filter entries"
-            size="small"
-            value={filterTerm}
-            onChange={(event) => setFilterTerm(event.target.value)}
-            fullWidth
-          />
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography
-              sx={{ color: '#9b9b9b', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}
-            >
-              Entries
-            </Typography>
-            <Typography sx={{ color: '#616169', fontSize: '0.9rem' }}>{filteredSummaries.length}</Typography>
-          </Stack>
-          <Divider />
-          {filteredSummaries.length === 0 ? <Alert severity="info">No entries match the current filter.</Alert> : null}
-          {filteredSummaries.length > 0 ? (
-            <Box
-              sx={{
-                flex: 1,
-                minHeight: 0,
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1.5,
-                paddingTop: 0.25
-              }}
-            >
-              {filteredSummaries.map((item) => (
-                <DocumentListCard
-                  key={item.id}
-                  active={item.id === activeSummary.id}
-                  item={item}
-                  onSelect={selectDocument}
-                />
-              ))}
-            </Box>
-          ) : null}
-        </Stack>
-
-        {activeSummary && activeDraft ? (
-          <Stack
-            direction={{ lg: 'row', xs: 'column' }}
-            spacing={2}
-            sx={{ flex: 1, minHeight: 0, minWidth: 0 }}
-            alignItems="stretch"
+        {!isCompactLayout || showListViewOnly ? (
+          <AdminListSidebar
+            actions={
+              visibleKinds.length === 1 ? (
+                <Button fullWidth onClick={openCreateDialog} size="small" variant="contained">
+                  New {visibleKinds[0] === 'page' ? 'Page' : 'Post'}
+                </Button>
+              ) : null
+            }
+            filter={
+              <TextField
+                label="Filter entries"
+                size="small"
+                value={filterTerm}
+                onChange={(event) => setFilterTerm(event.target.value)}
+                fullWidth
+              />
+            }
+            summaryLabel="Entries"
+            summaryValue={filteredSummaries.length}
+            emptyState={
+              filteredSummaries.length === 0 ? (
+                <Alert severity="info">No entries match the current filter.</Alert>
+              ) : null
+            }
+            sx={{
+              height: { xl: '100%', xs: 'auto' },
+              maxHeight: { xl: '100%', xs: 'none' },
+              pb: isCompactLayout ? 2 : 0,
+              width: { xl: 360, xs: '100%' }
+            }}
           >
-            <Stack
-              spacing={2}
-              sx={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.94))',
-                border: '1px solid rgba(127, 35, 44, 0.12)',
-                borderRadius: '4px',
-                boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
-                display: 'flex',
-                flex: { lg: '0 0 440px', xs: '1 1 auto' },
-                height: { lg: '100%', xs: 'auto' },
-                minWidth: 0,
-                overflow: 'hidden',
-                width: { lg: 440, xs: '100%' }
-              }}
-            >
-              <Box
+            {filteredSummaries.length > 0 ? (
+              <AdminSidebarListBody dense={showDenseListCards}>
+                {filteredSummaries.map((item) => (
+                  <DocumentListCard
+                    key={item.id}
+                    active={showActiveListSelection && item.id === activeSummary?.id}
+                    compact={showDenseListCards}
+                    item={item}
+                    onSelect={selectDocument}
+                  />
+                ))}
+              </AdminSidebarListBody>
+            ) : null}
+          </AdminListSidebar>
+        ) : null}
+
+        {!showListViewOnly ? (
+          activeSummary && activeDraft ? (
+            <Stack spacing={2} sx={{ flex: 1, minHeight: 0, minWidth: 0 }}>
+              {isCompactLayout ? (
+                <Stack spacing={1.5}>
+                  <AdminCompactActionBar actions={documentEditorActions} onBack={returnToDocumentList} />
+                  {isMobileRecordLayout ? (
+                    <AdminDetailTabs
+                      value={mobileDetailPanel}
+                      onChange={(nextPanel) => setMobileDetailPanel(nextPanel as 'editor' | 'preview')}
+                      tabs={[
+                        { label: 'Editor', value: 'editor' },
+                        { label: 'Preview', value: 'preview' }
+                      ]}
+                    />
+                  ) : null}
+                </Stack>
+              ) : null}
+
+              {isMobileRecordLayout ? (
+                mobileDetailPanel === 'editor' ? (
+                  <AdminRecordWorkspacePanel panelSx={{ minWidth: 0 }} contentSx={{ overflowY: 'visible' }}>
+                    <Stack spacing={2}>
+                      <AdminRecordHeader
+                        actions={!isCompactLayout ? documentEditorActions : null}
+                        title={activeSummary.kind === 'page' ? 'Page editor' : 'News editor'}
+                      />
+
+                      {activeSummary.kind === 'page' ? (
+                        <Stack spacing={2}>
+                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
+                            <TextField
+                              label="Slug"
+                              value={activePageDraft?.slug || ''}
+                              onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                              fullWidth
+                            />
+                            <TextField
+                              label="Publish date"
+                              type="date"
+                              value={activePageDraft?.date || ''}
+                              onChange={(event) => updateActivePageDraft({ date: event.target.value })}
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+                            />
+                          </Stack>
+                          <TextField
+                            label="Title"
+                            value={activePageDraft?.title || ''}
+                            onChange={(event) => updateActivePageDraft({ title: event.target.value })}
+                            fullWidth
+                          />
+                          <Stack spacing={1}>
+                            <Typography sx={{ fontWeight: 700 }}>Body</Typography>
+                            <AdminHtmlEditor
+                              assetToInsert={pendingEditorAsset}
+                              onAssetInserted={handleEditorAssetInserted}
+                              value={activePageDraft?.body || ''}
+                              onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
+                              onOpenMediaLibrary={openMediaPicker}
+                            />
+                          </Stack>
+                        </Stack>
+                      ) : (
+                        <Stack spacing={2}>
+                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
+                            <TextField label="Slug" value={activePostDraft?.slug || ''} fullWidth disabled />
+                            <TextField
+                              label="Publish date"
+                              type="date"
+                              value={activePostDraft?.date || ''}
+                              onChange={(event) => updateActivePostDraft({ date: event.target.value })}
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+                            />
+                          </Stack>
+                          <TextField
+                            label="Title"
+                            value={activePostDraft?.title || ''}
+                            onChange={(event) => updateActivePostDraft({ title: event.target.value })}
+                            fullWidth
+                          />
+                          <Stack direction={{ xs: 'column' }} spacing={2}>
+                            <Stack spacing={1.5} sx={{ flex: 1 }} width="100%">
+                              <AdminImagePathField
+                                buttonLabel="Select image"
+                                onSelectImage={() => setMediaPickerMode('hero-image')}
+                                previewAlt={activePostDraft?.title || 'Hero image preview'}
+                                value={activePostDraft?.image || ''}
+                              />
+                            </Stack>
+                            <TextField
+                              label="Tags"
+                              value={activePostDraft?.tags || ''}
+                              onChange={(event) => updateActivePostDraft({ tags: event.target.value })}
+                              helperText="Separate tags with commas or line breaks."
+                              fullWidth
+                            />
+                          </Stack>
+                          <Stack spacing={1}>
+                            <Typography sx={{ fontWeight: 700 }}>Body</Typography>
+                            <AdminHtmlEditor
+                              assetToInsert={pendingEditorAsset}
+                              onAssetInserted={handleEditorAssetInserted}
+                              value={activePostDraft?.body || ''}
+                              onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
+                              onOpenMediaLibrary={openMediaPicker}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                    </Stack>
+                  </AdminRecordWorkspacePanel>
+                ) : (
+                  <Stack
+                    spacing={1.5}
+                    sx={{
+                      flex: 1,
+                      minHeight: 0,
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      width: '100%'
+                    }}
+                  >
+                    <DocumentPreview draft={activeDraft} kind={activeSummary.kind} />
+                  </Stack>
+                )
+              ) : (
+                <Stack direction="row" spacing={2} sx={{ flex: 1, minHeight: 0, minWidth: 0 }} alignItems="stretch">
+                  <AdminRecordWorkspacePanel
+                    panelSx={{
+                      flex: { md: '0 0 430px', xs: '1 1 auto' },
+                      height: '100%',
+                      minWidth: 0,
+                      width: { md: 430, xs: '100%' }
+                    }}
+                    contentSx={{ overflowY: 'auto' }}
+                  >
+                    <Stack spacing={2}>
+                      <AdminRecordHeader
+                        actions={!isCompactLayout ? documentEditorActions : null}
+                        title={activeSummary.kind === 'page' ? 'Page editor' : 'News editor'}
+                      />
+
+                      {activeSummary.kind === 'page' ? (
+                        <Stack spacing={2}>
+                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
+                            <TextField
+                              label="Slug"
+                              value={activePageDraft?.slug || ''}
+                              onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                              fullWidth
+                            />
+                            <TextField
+                              label="Publish date"
+                              type="date"
+                              value={activePageDraft?.date || ''}
+                              onChange={(event) => updateActivePageDraft({ date: event.target.value })}
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+                            />
+                          </Stack>
+                          <TextField
+                            label="Title"
+                            value={activePageDraft?.title || ''}
+                            onChange={(event) => updateActivePageDraft({ title: event.target.value })}
+                            fullWidth
+                          />
+                          <Stack spacing={1}>
+                            <Typography sx={{ fontWeight: 700 }}>Body</Typography>
+                            <AdminHtmlEditor
+                              assetToInsert={pendingEditorAsset}
+                              onAssetInserted={handleEditorAssetInserted}
+                              value={activePageDraft?.body || ''}
+                              onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
+                              onOpenMediaLibrary={openMediaPicker}
+                            />
+                          </Stack>
+                        </Stack>
+                      ) : (
+                        <Stack spacing={2}>
+                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
+                            <TextField label="Slug" value={activePostDraft?.slug || ''} fullWidth disabled />
+                            <TextField
+                              label="Publish date"
+                              type="date"
+                              value={activePostDraft?.date || ''}
+                              onChange={(event) => updateActivePostDraft({ date: event.target.value })}
+                              fullWidth
+                              InputLabelProps={{ shrink: true }}
+                            />
+                          </Stack>
+                          <TextField
+                            label="Title"
+                            value={activePostDraft?.title || ''}
+                            onChange={(event) => updateActivePostDraft({ title: event.target.value })}
+                            fullWidth
+                          />
+                          <Stack direction={{ xs: 'column' }} spacing={2}>
+                            <Stack spacing={1.5} sx={{ flex: 1 }} width="100%">
+                              <AdminImagePathField
+                                buttonLabel="Select image"
+                                onSelectImage={() => setMediaPickerMode('hero-image')}
+                                previewAlt={activePostDraft?.title || 'Hero image preview'}
+                                value={activePostDraft?.image || ''}
+                              />
+                            </Stack>
+                            <TextField
+                              label="Tags"
+                              value={activePostDraft?.tags || ''}
+                              onChange={(event) => updateActivePostDraft({ tags: event.target.value })}
+                              helperText="Separate tags with commas or line breaks."
+                              fullWidth
+                            />
+                          </Stack>
+                          <Stack spacing={1}>
+                            <Typography sx={{ fontWeight: 700 }}>Body</Typography>
+                            <AdminHtmlEditor
+                              assetToInsert={pendingEditorAsset}
+                              onAssetInserted={handleEditorAssetInserted}
+                              value={activePostDraft?.body || ''}
+                              onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
+                              onOpenMediaLibrary={openMediaPicker}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                    </Stack>
+                  </AdminRecordWorkspacePanel>
+
+                  <Stack
+                    spacing={1.5}
+                    sx={{
+                      flex: 1,
+                      height: '100%',
+                      minHeight: 0,
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      width: '100%'
+                    }}
+                  >
+                    <DocumentPreview draft={activeDraft} kind={activeSummary.kind} />
+                  </Stack>
+                </Stack>
+              )}
+            </Stack>
+          ) : (
+            <Stack spacing={2} sx={{ flex: 1, minWidth: 0 }}>
+              <AdminSurfacePanel
+                spacing={2}
                 sx={{
-                  display: 'flex',
-                  flex: 1,
-                  flexDirection: 'column',
-                  minHeight: 0,
-                  overflowY: { lg: 'auto', xs: 'visible' },
                   p: { md: 2.5, xs: 2 }
                 }}
               >
-                <Stack spacing={2}>
-                  <Stack
-                    direction={{ sm: 'row', xs: 'column' }}
-                    spacing={1.5}
-                    justifyContent="space-between"
-                    alignItems={{ sm: 'flex-start', xs: 'stretch' }}
-                  >
-                    <div>
-                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-                        {activeSummary.kind === 'page' ? 'Page editor' : 'News editor'}
-                      </Typography>
-                      <Typography sx={{ color: '#616169', lineHeight: 1.6, mt: 1 }}>
-                        {activeSummary.kind === 'page'
-                          ? 'Edit the page slug, title, publish date, and HTML body while keeping the existing page contract intact.'
-                          : 'Edit the news title, image, publish date, tags, and HTML body while preserving the file-based slug contract.'}
-                      </Typography>
-                    </div>
-                    {isDirty ? (
-                      <Button
-                        disabled={isSaving}
-                        onClick={() => void handleSave()}
-                        sx={{ flexShrink: 0 }}
-                        variant="contained"
-                      >
-                        Save {activeSummary.kind === 'page' ? 'page' : 'news post'}
-                      </Button>
-                    ) : null}
-                  </Stack>
-
-                  {activeSummary.kind === 'page' ? (
-                    <Stack spacing={2}>
-                      <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                        <TextField
-                          label="Slug"
-                          value={activePageDraft?.slug || ''}
-                          onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
-                          fullWidth
-                        />
-                        <TextField
-                          label="Publish date"
-                          type="date"
-                          value={activePageDraft?.date || ''}
-                          onChange={(event) => updateActivePageDraft({ date: event.target.value })}
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                        />
-                      </Stack>
-                      <TextField
-                        label="Title"
-                        value={activePageDraft?.title || ''}
-                        onChange={(event) => updateActivePageDraft({ title: event.target.value })}
-                        fullWidth
-                      />
-                      <Stack spacing={1}>
-                        <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                        <AdminHtmlEditor
-                          assetToInsert={pendingEditorAsset}
-                          onAssetInserted={handleEditorAssetInserted}
-                          value={activePageDraft?.body || ''}
-                          onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
-                          onOpenMediaLibrary={openMediaPicker}
-                        />
-                      </Stack>
-                    </Stack>
-                  ) : (
-                    <Stack spacing={2}>
-                      <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                        <TextField label="Slug" value={activePostDraft?.slug || ''} fullWidth disabled />
-                        <TextField
-                          label="Publish date"
-                          type="date"
-                          value={activePostDraft?.date || ''}
-                          onChange={(event) => updateActivePostDraft({ date: event.target.value })}
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                        />
-                      </Stack>
-                      <TextField
-                        label="Title"
-                        value={activePostDraft?.title || ''}
-                        onChange={(event) => updateActivePostDraft({ title: event.target.value })}
-                        fullWidth
-                      />
-                      <Stack direction={{ xs: 'column' }} spacing={2}>
-                        <Stack spacing={1.5} sx={{ flex: 1 }} width="100%">
-                          <AdminImagePathField
-                            buttonLabel="Select image"
-                            onSelectImage={() => setMediaPickerMode('hero-image')}
-                            previewAlt={activePostDraft?.title || 'Hero image preview'}
-                            value={activePostDraft?.image || ''}
-                          />
-                        </Stack>
-                        <TextField
-                          label="Tags"
-                          value={activePostDraft?.tags || ''}
-                          onChange={(event) => updateActivePostDraft({ tags: event.target.value })}
-                          helperText="Separate tags with commas or line breaks."
-                          fullWidth
-                        />
-                      </Stack>
-                      <Stack spacing={1}>
-                        <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                        <AdminHtmlEditor
-                          assetToInsert={pendingEditorAsset}
-                          onAssetInserted={handleEditorAssetInserted}
-                          value={activePostDraft?.body || ''}
-                          onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
-                          onOpenMediaLibrary={openMediaPicker}
-                        />
-                      </Stack>
-                    </Stack>
-                  )}
-
-                  <Divider />
-                  <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="flex-end">
-                    <Button variant="outlined" onClick={resetActiveDraft} disabled={!isDirty || isSaving}>
-                      Reset
-                    </Button>
-                    <Button variant="contained" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
-                      Save {activeSummary.kind === 'page' ? 'page' : 'news post'}
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Box>
+                <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                  No matching entries
+                </Typography>
+                <Typography sx={{ color: '#616169', lineHeight: 1.7 }}>
+                  Adjust the filter to show an existing page or post. The list stays available so you can refine the
+                  current search without losing the editor layout.
+                </Typography>
+              </AdminSurfacePanel>
             </Stack>
-
-            <Stack
-              spacing={1.5}
-              sx={{
-                flex: 1,
-                height: { lg: '100%', xs: 'auto' },
-                minHeight: 0,
-                minWidth: 0,
-                overflow: 'hidden',
-                width: '100%'
-              }}
-            >
-              <DocumentPreview draft={activeDraft} kind={activeSummary.kind} />
-            </Stack>
-          </Stack>
-        ) : (
-          <Stack spacing={2} sx={{ flex: 1, minWidth: 0 }}>
-            <Stack
-              spacing={2}
-              sx={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.94))',
-                border: '1px solid rgba(127, 35, 44, 0.12)',
-                borderRadius: '4px',
-                boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
-                p: { md: 2.5, xs: 2 }
-              }}
-            >
-              <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-                No matching entries
-              </Typography>
-              <Typography sx={{ color: '#616169', lineHeight: 1.7 }}>
-                Adjust the filter to show an existing page or post. The list stays available so you can refine the
-                current search without losing the editor layout.
-              </Typography>
-            </Stack>
-          </Stack>
-        )}
+          )
+        ) : null}
       </Stack>
 
       <Dialog fullWidth maxWidth="lg" onClose={() => setMediaPickerMode(null)} open={Boolean(mediaPickerMode)}>

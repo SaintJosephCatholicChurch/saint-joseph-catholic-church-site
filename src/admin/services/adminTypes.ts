@@ -1,4 +1,4 @@
-export type AdminBackendMode = 'connected' | 'preview';
+export type AdminBackendMode = 'connected';
 
 export type AdminAuthStatus = 'restoring' | 'unauthenticated' | 'authenticating' | 'authenticated' | 'error';
 
@@ -10,6 +10,7 @@ export interface AdminUser {
 }
 
 export interface AdminAuthSession {
+  authScope: string;
   branch: string;
   mode: AdminBackendMode;
   repo: string;

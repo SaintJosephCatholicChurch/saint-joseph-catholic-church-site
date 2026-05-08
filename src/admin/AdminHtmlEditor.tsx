@@ -28,17 +28,6 @@ const StyledEditorRoot = styled('div')`
     border-bottom: 1px solid rgba(127, 35, 44, 0.12);
   }
 
-  & .tox .tox-toolbar__primary,
-  & .tox .tox-toolbar__overflow,
-  & .tox .tox-menubar {
-    background: transparent;
-  }
-
-  & .tox .tox-edit-area__iframe,
-  & .tox .tox-edit-area::before {
-    background: #fffdf9;
-  }
-
   & .tox .tox-statusbar {
     border-top: 1px solid rgba(127, 35, 44, 0.08);
     background: rgba(248, 241, 232, 0.86);
@@ -130,7 +119,6 @@ export function AdminHtmlEditor({
               'advlist',
               'anchor',
               'autolink',
-              'autoresize',
               'bible-autolink',
               'charmap',
               'code',
@@ -152,7 +140,35 @@ export function AdminHtmlEditor({
               'blocks | bold italic forecolor | alignnone alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | admin-insert-image admin-insert-file | removeformat | code',
             body_class: 'content editor',
             content_css: ['/styles/global.css', '/styles/content.module.css'],
+            content_style: `
+              html {
+                background-color: transparent;
+              }
+
+              body.mce-content-body {
+                background: #fffdf9;
+                color: #222222;
+                caret-color: #222222;
+              }
+
+              body.mce-content-body,
+              body.mce-content-body p,
+              body.mce-content-body div,
+              body.mce-content-body li,
+              body.mce-content-body td,
+              body.mce-content-body th {
+                color: #222222;
+              }
+
+              body.mce-content-body img,
+              body.mce-content-body video,
+              body.mce-content-body iframe,
+              body.mce-content-body .mce-preview-object {
+                pointer-events: none;
+              }
+            `,
             resize: false,
+            height: 720,
             elementpath: false,
             branding: false,
             invalid_styles: 'width height',

@@ -7,7 +7,7 @@ export const ADMIN_REPOSITORY = {
 export const ADMIN_AUTH = {
   baseUrl: 'https://api.netlify.com',
   authEndpoint: 'auth',
-  authScope: '',
+  authScope: 'repo',
   siteId: ''
 } as const;
 

@@ -40,6 +40,12 @@ const StyledTabPanels = styled('div')`
   position: relative;
 `;
 
+const StyledTabsRail = styled('div')`
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(241, 241, 241, 0.75);
+`;
+
 interface ScheduleProps {
   times: Times[];
   onChange: (times: Times[]) => void;
@@ -127,28 +133,30 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
         <StyledScheduleWidgetContent>
           <DndContext onDragEnd={handleDragEnd}>
             <SortableContext items={internalValue}>
-              <Tabs
-                orientation="vertical"
-                variant="standard"
-                value={value}
-                aria-label="Vertical tabs example"
-                scrollButtons={false}
-                sx={{
-                  backgroundColor: 'rgba(241, 241, 241, 0.75)',
-                  '& .MuiTabs-indicator': {
-                    backgroundColor: '#8D6D26',
-                    width: '4px'
-                  }
-                }}
-              >
-                {internalValue.map((timeSchedule, index) => (
-                  <SortableCategoryTab
-                    key={`time-schedule-${timeSchedule.id}`}
-                    timeSchedule={timeSchedule}
-                    index={index}
-                    onClick={handleTabClick}
-                  />
-                ))}
+              <StyledTabsRail>
+                <Tabs
+                  orientation="vertical"
+                  variant="standard"
+                  value={value}
+                  aria-label="Vertical tabs example"
+                  scrollButtons={false}
+                  sx={{
+                    backgroundColor: 'transparent',
+                    '& .MuiTabs-indicator': {
+                      backgroundColor: '#8D6D26',
+                      width: '4px'
+                    }
+                  }}
+                >
+                  {internalValue.map((timeSchedule, index) => (
+                    <SortableCategoryTab
+                      key={`time-schedule-${timeSchedule.id}`}
+                      timeSchedule={timeSchedule}
+                      index={index}
+                      onClick={handleTabClick}
+                    />
+                  ))}
+                </Tabs>
                 <Button
                   onClick={handleAddTimes}
                   sx={{
@@ -160,13 +168,15 @@ const Schedule = ({ times: rawTimes, onChange }: ScheduleProps) => {
                     minHeight: '80px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'flex-start'
+                    justifyContent: 'flex-start',
+                    borderRadius: 0,
+                    borderTop: '1px solid rgba(223, 223, 227, 1)'
                   }}
                 >
                   <AddIcon />
                   <Box>Add Category</Box>
                 </Button>
-              </Tabs>
+              </StyledTabsRail>
             </SortableContext>
           </DndContext>
           <StyledTabPanels>

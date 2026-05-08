@@ -78,13 +78,6 @@ const StyledSubmittedMessage = styled(
   `
 );
 
-interface ContactBody {
-  name: string;
-  email: string;
-  subject: string;
-  comment: string;
-}
-
 interface ContactFormProps {
   disableForm?: boolean;
 }
@@ -97,10 +90,14 @@ const ContactForm = ({ disableForm = false }: ContactFormProps) => {
     const submitForm = async () => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const name = `${formData.get('name') ?? ''}`.trim();
-      const email = `${formData.get('email') ?? ''}`.trim();
-      const subject = `${formData.get('subject') ?? 'Comment / Question'}`.trim();
-      const comment = `${formData.get('comment') ?? ''}`.trim();
+      const getFieldValue = (fieldName: string) => {
+        const value = formData.get(fieldName);
+        return typeof value === 'string' ? value.trim() : '';
+      };
+      const name = getFieldValue('name');
+      const email = getFieldValue('email');
+      const subject = getFieldValue('subject') || 'Comment / Question';
+      const comment = getFieldValue('comment');
 
       if (!name || !email || !comment) {
         return;

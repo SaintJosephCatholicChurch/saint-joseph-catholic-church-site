@@ -315,7 +315,7 @@ const CalendarHeader = ({ title, api, isSmallScreen }: CalendarHeaderProps) => {
             <DateCalendar
               value={date}
               onChange={(newDate) => {
-                setDate(newDate as Date);
+                setDate(newDate);
               }}
               sx={{ width: '280px' }}
             />

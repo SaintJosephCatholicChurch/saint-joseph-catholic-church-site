@@ -638,7 +638,7 @@ const ParishRegistrationForm = () => {
           </StyledSacramentTopBlock>
           <StyledSacramentSecondaryGrid>
             {SACRAMENT_FIELDS.slice(1).map(({ key, questionLabel, dateLabel }) => {
-              const sacramentKey = key as SacramentKey;
+              const sacramentKey = key;
               const sacrament = member.sacraments[sacramentKey];
               const receivedError = getFieldError(
                 errors,

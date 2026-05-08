@@ -1,18 +1,32 @@
 'use client';
 
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { AdminSelectableCard } from './components/AdminCards';
+import {
+  AdminCompactActionBar,
+  AdminListSidebar,
+  AdminRecordHeader,
+  AdminRecordWorkspacePanel,
+  AdminSidebarListBody,
+  AdminStatusStack
+} from './components/AdminWorkspace';
+import { AdminFilePathField } from './AdminFilePathField';
 import { AdminMediaLibrary } from './AdminMediaLibrary';
 import {
   createEmptyBulletinDraft,
@@ -43,6 +57,7 @@ interface BulletinEditorState {
 }
 
 const NEW_BULLETIN_ID = '__new_bulletin__';
+const BULLETIN_SELECTION_QUERY_PARAM = 'entry';
 
 const INITIAL_EDITOR_STATE: BulletinEditorState = {
   content: null,
@@ -76,64 +91,101 @@ function formatDate(dateStr: string): string {
 
 function BulletinListCard({
   active,
+  compact = false,
   item,
   onSelect
 }: {
   active: boolean;
+  compact?: boolean;
   item: BulletinSummary;
   onSelect: (bulletinId: string) => void;
 }) {
+  const formattedDate = formatDate(item.date) || 'No date';
+
   return (
-    <Button
-      color="inherit"
+    <AdminSelectableCard
+      active={active}
       onClick={() => onSelect(item.id)}
       sx={{
-        alignItems: 'flex-start',
-        background: active
-          ? 'linear-gradient(135deg, #7f232c 0%, #5c1820 100%)'
-          : 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.92))',
-        borderColor: active ? '#7f232c' : 'rgba(127, 35, 44, 0.16)',
-        borderRadius: '4px',
-        color: active ? '#ffffff' : '#222222',
         flexShrink: 0,
-        justifyContent: 'flex-start',
-        px: 2,
-        py: 1.5,
-        textAlign: 'left',
-        textTransform: 'none',
-        transition: 'transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease',
-        '&:hover': {
-          background: active ? 'linear-gradient(135deg, #6c1d26 0%, #49131a 100%)' : 'rgba(127, 35, 44, 0.05)',
-          borderColor: '#7f232c',
-          transform: 'translateY(-1px)'
-        }
+        px: compact ? 1.5 : 2,
+        py: compact ? 1.125 : 1.5
       }}
-      variant={active ? 'contained' : 'outlined'}
     >
-      <Box sx={{ width: '100%', overflow: 'hidden' }}>
-        <Typography
-          sx={{
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
+      {compact ? (
+        <Stack
+          direction="row"
+          spacing={1.25}
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ minWidth: 0, width: '100%' }}
         >
-          {[formatDate(item.date), item.name].filter(Boolean).join(' — ') || 'No date or title'}
-        </Typography>
-        <Typography
-          sx={{
-            color: active ? 'inherit' : '#6a5448',
-            fontSize: '0.85rem',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-        >
-          {item.pdf ? item.pdf.split('/').pop() || item.pdf : 'No linked PDF'}
-        </Typography>
-      </Box>
-    </Button>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+            <Typography
+              sx={{
+                flexShrink: 0,
+                fontWeight: 700,
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {formattedDate}
+            </Typography>
+            {item.name ? (
+              <Typography
+                sx={{
+                  color: active ? 'rgba(255,255,255,0.82)' : '#6a5448',
+                  fontSize: '0.8rem',
+                  minWidth: 0,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {item.name}
+              </Typography>
+            ) : null}
+          </Stack>
+          <Typography
+            sx={{
+              color: active ? 'rgba(255,255,255,0.8)' : '#6a5448',
+              flex: '0 1 40%',
+              fontSize: '0.76rem',
+              minWidth: 0,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              textAlign: 'right',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {item.pdf ? item.pdf.split('/').pop() || item.pdf : 'No linked PDF'}
+          </Typography>
+        </Stack>
+      ) : (
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+          <Typography
+            sx={{
+              fontWeight: 700,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {[formatDate(item.date), item.name].filter(Boolean).join(' — ') || 'No date or title'}
+          </Typography>
+          <Typography
+            sx={{
+              color: active ? 'inherit' : '#6a5448',
+              fontSize: '0.85rem',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {item.pdf ? item.pdf.split('/').pop() || item.pdf : 'No linked PDF'}
+          </Typography>
+        </Box>
+      )}
+    </AdminSelectableCard>
   );
 }
 
@@ -151,11 +203,39 @@ function createDraftForSelection(content: BulletinMediaContent | null, bulletinI
 }
 
 export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditorProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isCompactLayout = useMediaQuery(theme.breakpoints.down('xl'));
+  const routedBulletinId = searchParams.get(BULLETIN_SELECTION_QUERY_PARAM);
   const [editorState, setEditorState] = useState<BulletinEditorState>(INITIAL_EDITOR_STATE);
   const [draft, setDraft] = useState<BulletinDraft>(createEmptyBulletinDraft());
-  const [mediaLibraryOpen, setMediaLibraryOpen] = useState(false);
   const [pdfPickerOpen, setPdfPickerOpen] = useState(false);
   const selectedBulletinIdRef = useRef(INITIAL_EDITOR_STATE.selectedBulletinId);
+
+  const buildSelectionHref = useCallback(
+    (bulletinId: string | null) => {
+      const nextParams = new URLSearchParams(searchParams.toString());
+
+      if (bulletinId) {
+        nextParams.set(BULLETIN_SELECTION_QUERY_PARAM, bulletinId);
+      } else {
+        nextParams.delete(BULLETIN_SELECTION_QUERY_PARAM);
+      }
+
+      const query = nextParams.toString();
+      return query ? `${pathname}?${query}` : pathname;
+    },
+    [pathname, searchParams]
+  );
+
+  const replaceSelectionInUrl = useCallback(
+    (bulletinId: string | null) => {
+      router.replace(buildSelectionHref(bulletinId), { scroll: false });
+    },
+    [buildSelectionHref, router]
+  );
 
   useEffect(() => {
     selectedBulletinIdRef.current = editorState.selectedBulletinId;
@@ -179,11 +259,13 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
         }
 
         const summaries = createBulletinSummaries(content);
+        const preferredBulletinId = routedBulletinId || selectedBulletinIdRef.current;
         const selectedBulletinId =
-          selectedBulletinIdRef.current !== NEW_BULLETIN_ID &&
-          summaries.some((summary) => summary.id === selectedBulletinIdRef.current)
-            ? selectedBulletinIdRef.current
-            : summaries[0]?.id || NEW_BULLETIN_ID;
+          preferredBulletinId === NEW_BULLETIN_ID
+            ? NEW_BULLETIN_ID
+            : preferredBulletinId !== NEW_BULLETIN_ID && summaries.some((summary) => summary.id === preferredBulletinId)
+              ? preferredBulletinId
+              : summaries[0]?.id || NEW_BULLETIN_ID;
 
         setEditorState((currentState) => ({
           ...currentState,
@@ -211,7 +293,7 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
     return () => {
       cancelled = true;
     };
-  }, [repoClient]);
+  }, [repoClient, routedBulletinId]);
 
   const summaries = useMemo(
     () => (editorState.content ? createBulletinSummaries(editorState.content) : []),
@@ -221,6 +303,25 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   const pristineDraft = activeBulletin ? createBulletinDraft(activeBulletin) : createEmptyBulletinDraft();
   const isDirty = JSON.stringify(draft) !== JSON.stringify(pristineDraft);
   const isSaving = editorState.saveStatus === 'saving';
+  const showListViewOnly = isCompactLayout && !routedBulletinId;
+  const showDenseListCards = isCompactLayout;
+  const showActiveListSelection = !isCompactLayout || Boolean(routedBulletinId);
+  const bulletinEditorActions = (
+    <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ flexShrink: 0 }}>
+      <IconButton
+        aria-label="Reset"
+        title="Reset"
+        onClick={() => setDraft(pristineDraft)}
+        disabled={!isDirty || isSaving}
+        size="small"
+      >
+        <RestartAltIcon fontSize="small" />
+      </IconButton>
+      <Button disabled={!isDirty || isSaving} onClick={() => void handleSave()} variant="contained">
+        Save
+      </Button>
+    </Stack>
+  );
 
   function selectBulletin(bulletinId: string) {
     setEditorState((currentState) => ({
@@ -231,6 +332,11 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       selectedBulletinId: bulletinId
     }));
     setDraft(createDraftForSelection(editorState.content, bulletinId));
+    replaceSelectionInUrl(bulletinId);
+  }
+
+  function returnToBulletinList() {
+    replaceSelectionInUrl(null);
   }
 
   function updateDraft(nextValue: Partial<BulletinDraft>) {
@@ -290,10 +396,11 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       const nextSelectedBulletinId = `bulletin:${savedBulletin.path}`;
 
       await refreshContent({ selectedBulletinId: nextSelectedBulletinId });
+      replaceSelectionInUrl(nextSelectedBulletinId);
       setEditorState((currentState) => ({
         ...currentState,
         saveError: null,
-        saveMessage: `${activeBulletin ? 'Bulletin metadata updated' : 'Bulletin created'} in the repository-backed admin draft.`,
+        saveMessage: 'Bulletin saved.',
         saveStatus: 'success'
       }));
 
@@ -328,6 +435,57 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
     }
   }
 
+  useEffect(() => {
+    if (!editorState.content || !routedBulletinId) {
+      return;
+    }
+
+    if (routedBulletinId !== NEW_BULLETIN_ID && !summaries.some((summary) => summary.id === routedBulletinId)) {
+      return;
+    }
+
+    if (routedBulletinId === editorState.selectedBulletinId) {
+      return;
+    }
+
+    setEditorState((currentState) => ({
+      ...currentState,
+      selectedBulletinId: routedBulletinId
+    }));
+    setDraft(createDraftForSelection(editorState.content, routedBulletinId));
+  }, [editorState.content, editorState.selectedBulletinId, routedBulletinId, summaries]);
+
+  useEffect(() => {
+    if (summaries.length > 0) {
+      if (editorState.selectedBulletinId === NEW_BULLETIN_ID) {
+        return;
+      }
+
+      if (summaries.some((summary) => summary.id === editorState.selectedBulletinId)) {
+        return;
+      }
+
+      const fallbackBulletinId = summaries[0].id;
+      setEditorState((currentState) => ({
+        ...currentState,
+        selectedBulletinId: fallbackBulletinId
+      }));
+
+      if (routedBulletinId) {
+        replaceSelectionInUrl(fallbackBulletinId);
+      }
+
+      return;
+    }
+
+    if (editorState.selectedBulletinId !== NEW_BULLETIN_ID) {
+      setEditorState((currentState) => ({
+        ...currentState,
+        selectedBulletinId: NEW_BULLETIN_ID
+      }));
+    }
+  }, [editorState.selectedBulletinId, replaceSelectionInUrl, routedBulletinId, summaries]);
+
   if (editorState.status === 'loading' && !editorState.content) {
     return (
       <Stack spacing={2}>
@@ -345,111 +503,56 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
 
   return (
     <Stack spacing={2} sx={{ display: 'flex', flex: 1, minHeight: 0 }}>
-      {editorState.saveMessage ? <Alert severity="success">{editorState.saveMessage}</Alert> : null}
-      {editorState.saveError ? <Alert severity="error">{editorState.saveError}</Alert> : null}
-      {editorState.status === 'loading' ? <LinearProgress /> : null}
+      <AdminStatusStack
+        errorMessage={editorState.saveError}
+        loading={editorState.status === 'loading'}
+        successMessage={editorState.saveMessage}
+      />
 
       <Stack direction={{ xl: 'row', xs: 'column' }} spacing={2} alignItems="stretch" sx={{ flex: 1, minHeight: 0 }}>
-        <Stack
-          spacing={1.5}
-          sx={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.84), rgba(250,245,238,0.92))',
-            border: '1px solid rgba(127, 35, 44, 0.12)',
-            borderRadius: '4px',
-            boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            flexShrink: 0,
-            height: { xl: '100%', xs: 'auto' },
-            maxHeight: { xl: '100%', xs: 'none' },
-            minHeight: 0,
-            overflow: 'hidden',
-            p: 2,
-            width: { xl: 340, xs: '100%' }
-          }}
-        >
-          <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="space-between">
-            <Button onClick={() => selectBulletin(NEW_BULLETIN_ID)} variant="contained" size="small" fullWidth>
-              New bulletin
-            </Button>
-          </Stack>
-          <Divider />
-          {summaries.length === 0 ? <Alert severity="info">No bulletins are available yet.</Alert> : null}
-          {summaries.length > 0 ? (
-            <Box
-              sx={{
-                flex: 1,
-                minHeight: 0,
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1.5,
-                paddingTop: 0.25
-              }}
-            >
-              {summaries.map((item) => (
-                <BulletinListCard
-                  key={item.id}
-                  active={item.id === editorState.selectedBulletinId}
-                  item={item}
-                  onSelect={selectBulletin}
-                />
-              ))}
-            </Box>
-          ) : null}
-        </Stack>
-
-        <Stack spacing={2} sx={{ flex: 1, minHeight: 0, minWidth: 0 }}>
-          <Stack
-            spacing={2}
+        {!isCompactLayout || showListViewOnly ? (
+          <AdminListSidebar
+            actions={
+              <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="space-between">
+                <Button onClick={() => selectBulletin(NEW_BULLETIN_ID)} variant="contained" size="small" fullWidth>
+                  New bulletin
+                </Button>
+              </Stack>
+            }
+            emptyState={summaries.length === 0 ? <Alert severity="info">No bulletins are available yet.</Alert> : null}
             sx={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.94))',
-              border: '1px solid rgba(127, 35, 44, 0.12)',
-              borderRadius: '4px',
-              boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
-              display: 'flex',
-              flex: 1,
-              minHeight: 0,
-              overflow: 'hidden'
+              height: { xl: '100%', xs: 'auto' },
+              maxHeight: { xl: '100%', xs: 'none' },
+              width: { xl: 340, xs: '100%' }
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                flex: 1,
-                flexDirection: 'column',
-                minHeight: 0,
-                overflowY: { xl: 'auto', xs: 'visible' },
-                p: { md: 2.5, xs: 2 }
-              }}
-            >
+            {summaries.length > 0 ? (
+              <AdminSidebarListBody dense={showDenseListCards}>
+                {summaries.map((item) => (
+                  <BulletinListCard
+                    key={item.id}
+                    active={showActiveListSelection && item.id === editorState.selectedBulletinId}
+                    compact={showDenseListCards}
+                    item={item}
+                    onSelect={selectBulletin}
+                  />
+                ))}
+              </AdminSidebarListBody>
+            ) : null}
+          </AdminListSidebar>
+        ) : null}
+
+        {!showListViewOnly ? (
+          <Stack spacing={2} sx={{ flex: 1, minHeight: 0, minWidth: 0 }}>
+            {isCompactLayout ? (
+              <AdminCompactActionBar actions={bulletinEditorActions} onBack={returnToBulletinList} />
+            ) : null}
+            <AdminRecordWorkspacePanel panelSx={{ flex: 1 }} contentSx={{ overflowY: { xl: 'auto', xs: 'visible' } }}>
               <Stack spacing={2}>
-                <Stack
-                  direction={{ sm: 'row', xs: 'column' }}
-                  spacing={1.5}
-                  justifyContent="space-between"
-                  alignItems={{ sm: 'flex-start', xs: 'stretch' }}
-                >
-                  <div>
-                    <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-                      {activeBulletin ? 'Bulletin editor' : 'New bulletin'}
-                    </Typography>
-                    <Typography sx={{ color: '#616169', lineHeight: 1.7, mt: 1 }}>
-                      Edit the JSON metadata that backs the bulletin archive and link it to a PDF stored in
-                      public/bulletins.
-                    </Typography>
-                  </div>
-                  {isDirty ? (
-                    <Button
-                      disabled={isSaving}
-                      onClick={() => void handleSave()}
-                      sx={{ flexShrink: 0 }}
-                      variant="contained"
-                    >
-                      Save bulletin
-                    </Button>
-                  ) : null}
-                </Stack>
+                <AdminRecordHeader
+                  actions={!isCompactLayout ? bulletinEditorActions : null}
+                  title={activeBulletin ? 'Bulletin editor' : 'New bulletin'}
+                />
 
                 <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
                   <TextField
@@ -469,57 +572,31 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
                 </Stack>
 
                 <Stack spacing={1.5}>
-                  <TextField
-                    label="Linked PDF"
+                  <Typography sx={{ fontWeight: 700 }}>Linked PDF</Typography>
+                  <AdminFilePathField
+                    buttonLabel="Select PDF"
+                    onSelectFile={() => setPdfPickerOpen(true)}
+                    openLabel="Open PDF"
                     value={draft.pdf}
-                    onChange={(event) => updateDraft({ pdf: event.target.value })}
-                    helperText="Bulletin PDFs must stay under /bulletins."
-                    fullWidth
                   />
-                  <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5}>
-                    <Button onClick={() => setPdfPickerOpen(true)} variant="outlined">
-                      Browse bulletin files
-                    </Button>
-                    <Button onClick={() => setMediaLibraryOpen(true)} variant="outlined">
-                      Manage media
-                    </Button>
-                    {draft.pdf ? (
-                      <Button color="inherit" href={draft.pdf} rel="noreferrer" target="_blank" variant="outlined">
-                        Open linked PDF
-                      </Button>
-                    ) : null}
-                  </Stack>
+                  <Typography sx={{ color: '#6a5448', fontSize: '0.82rem', lineHeight: 1.6 }}>
+                    Bulletin PDFs must stay under /bulletins. Use the picker to select an existing PDF or upload a new
+                    one.
+                  </Typography>
                 </Stack>
-
-                <Divider />
-                <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="flex-end">
-                  {!activeBulletin ? (
-                    <Typography sx={{ color: '#6a5448', flex: 1, lineHeight: 1.6 }}>
-                      A new bulletin metadata file will be created from the selected date.
-                    </Typography>
-                  ) : null}
-                  <Button disabled={!isDirty || isSaving} onClick={() => setDraft(pristineDraft)} variant="outlined">
-                    Reset
-                  </Button>
-                  <Button disabled={!isDirty || isSaving} onClick={() => void handleSave()} variant="contained">
-                    Save bulletin
-                  </Button>
-                </Stack>
+                {!activeBulletin ? (
+                  <Typography sx={{ color: '#6a5448', lineHeight: 1.6 }}>
+                    A new bulletin metadata file will be created from the selected date.
+                  </Typography>
+                ) : null}
               </Stack>
-            </Box>
+            </AdminRecordWorkspacePanel>
           </Stack>
-        </Stack>
+        ) : null}
       </Stack>
 
-      <Dialog fullWidth maxWidth="lg" onClose={() => setMediaLibraryOpen(false)} open={mediaLibraryOpen}>
-        <DialogTitle>Manage media</DialogTitle>
-        <DialogContent dividers>
-          <AdminMediaLibrary onChange={handleMediaChanged} repoClient={repoClient} title="Media library" />
-        </DialogContent>
-      </Dialog>
-
       <Dialog fullWidth maxWidth="lg" onClose={() => setPdfPickerOpen(false)} open={pdfPickerOpen}>
-        <DialogTitle>Select bulletin PDF</DialogTitle>
+        <DialogTitle>Select or upload bulletin PDF</DialogTitle>
         <DialogContent dividers>
           <AdminMediaLibrary
             allowedFolderIds={['bulletins']}
@@ -530,8 +607,8 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
             }}
             repoClient={repoClient}
             selectionFilter="files"
-            selectionLabel="Use selected bulletin file"
-            title="Bulletin file browser"
+            selectionLabel="Use selected PDF"
+            title="Bulletin PDF selector"
           />
         </DialogContent>
       </Dialog>

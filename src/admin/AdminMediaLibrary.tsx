@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect, useMemo, useState } from 'react';
 
+import { AdminSelectableCard, AdminSurfacePanel } from './components/AdminCards';
 import {
   loadBulletinMediaContent,
   MEDIA_FOLDERS,
@@ -91,31 +92,14 @@ function AssetButton({
   onSelect: (assetId: string) => void;
 }) {
   return (
-    <Button
-      color="inherit"
+    <AdminSelectableCard
+      active={active}
+      activeShadow
       onClick={() => onSelect(asset.id)}
       sx={{
-        alignItems: 'flex-start',
-        background: active
-          ? 'linear-gradient(135deg, #7f232c 0%, #5c1820 100%)'
-          : 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.92))',
-        borderColor: active ? '#7f232c' : 'rgba(127, 35, 44, 0.16)',
-        borderRadius: '4px',
-        boxShadow: active ? '0 18px 28px rgba(92, 24, 32, 0.18)' : 'none',
-        color: active ? '#ffffff' : '#222222',
-        justifyContent: 'flex-start',
         px: 2,
-        py: 1.5,
-        textAlign: 'left',
-        textTransform: 'none',
-        transition: 'transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease',
-        '&:hover': {
-          background: active ? 'linear-gradient(135deg, #6c1d26 0%, #49131a 100%)' : 'rgba(127, 35, 44, 0.05)',
-          borderColor: '#7f232c',
-          transform: 'translateY(-1px)'
-        }
+        py: 1.5
       }}
-      variant={active ? 'contained' : 'outlined'}
     >
       <Stack spacing={0.5} sx={{ width: '100%' }}>
         {asset.kind === 'image' ? (
@@ -139,7 +123,7 @@ function AssetButton({
           {asset.kind === 'image' ? 'Image' : 'File'}
         </Typography>
       </Stack>
-    </Button>
+    </AdminSelectableCard>
   );
 }
 
@@ -324,13 +308,10 @@ export function AdminMediaLibrary({
       </Stack>
 
       <Stack direction={{ xl: 'row', xs: 'column' }} spacing={2} alignItems="flex-start">
-        <Stack
+        <AdminSurfacePanel
+          tone="sidebar"
           spacing={1.5}
           sx={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.84), rgba(250,245,238,0.92))',
-            border: '1px solid rgba(127, 35, 44, 0.12)',
-            borderRadius: '4px',
-            boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
             flexShrink: 0,
             p: 2,
             width: { xl: 360, xs: '100%' }
@@ -351,15 +332,11 @@ export function AdminMediaLibrary({
               />
             ))
           )}
-        </Stack>
+        </AdminSurfacePanel>
 
-        <Stack
+        <AdminSurfacePanel
           spacing={2}
           sx={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(250,245,238,0.94))',
-            border: '1px solid rgba(127, 35, 44, 0.12)',
-            borderRadius: '4px',
-            boxShadow: '0 18px 40px rgba(57, 33, 24, 0.08)',
             flex: 1,
             minWidth: 0,
             p: { md: 2.5, xs: 2 }
@@ -458,7 +435,7 @@ export function AdminMediaLibrary({
               ) : null}
             </Stack>
           </Stack>
-        </Stack>
+        </AdminSurfacePanel>
       </Stack>
     </Stack>
   );

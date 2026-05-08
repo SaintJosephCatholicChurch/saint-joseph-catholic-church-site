@@ -5,6 +5,7 @@ import {
   type StoredContentValue,
   type TagContentFile
 } from './contentRepository';
+import { loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { ChurchDetails, MenuData, MenuItem, MenuLink, SiteConfig, StylesConfig } from '../../interface';
 import type { AdminRepoClient } from '../services/adminTypes';
@@ -107,6 +108,94 @@ export interface StructuredContent {
   siteConfig: StoredContentValue<SiteConfig>;
   styles: StoredContentValue<StylesConfig>;
   tags: StoredContentValue<TagContentFile>;
+}
+
+const STRUCTURED_SECTION_CACHE_KEY_PREFIX = 'structured-content';
+
+function getStructuredSectionCacheKey(sectionId: StructuredSectionId) {
+  return `${STRUCTURED_SECTION_CACHE_KEY_PREFIX}:${sectionId}`;
+}
+
+function createEmptyStructuredContent(): StructuredContent {
+  return {
+    churchDetails: {
+      path: SITE_CONTENT_PATHS.churchDetails,
+      value: {
+        additional_emails: [],
+        additional_phones: [],
+        address: '',
+        city: '',
+        contacts: [],
+        email: '',
+        facebook_page: '',
+        google_map_location: '',
+        mission_statement: '',
+        name: '',
+        online_giving_url: '',
+        phone: '',
+        state: '',
+        vision_statement: '',
+        zipcode: ''
+      }
+    },
+    loadedAt: new Date().toISOString(),
+    menu: {
+      path: SITE_CONTENT_PATHS.menu,
+      value: {
+        logo: {
+          primary: '',
+          secondary: ''
+        },
+        menu_items: [],
+        online_giving_button_text: ''
+      }
+    },
+    siteConfig: {
+      path: SITE_CONTENT_PATHS.config,
+      value: {
+        base_url: '',
+        posts_per_page: 10,
+        privacy_policy_url: '',
+        site_description: '',
+        site_image: '',
+        site_keywords: [],
+        site_title: ''
+      }
+    },
+    styles: {
+      path: SITE_CONTENT_PATHS.styles,
+      value: {
+        footer_background: ''
+      }
+    },
+    tags: {
+      path: SITE_CONTENT_PATHS.tags,
+      value: {
+        tags: []
+      }
+    }
+  };
+}
+
+async function loadStructuredSection(repoClient: AdminRepoClient, sectionId: StructuredSectionId) {
+  return loadSharedContentResource(repoClient, getStructuredSectionCacheKey(sectionId), async () => {
+    const repository = new ChurchSiteContentRepository(repoClient);
+
+    switch (sectionId) {
+      case 'churchDetails':
+        return repository.readChurchDetails();
+      case 'siteConfig':
+        return repository.readSiteConfig();
+      case 'menu':
+        return repository.readMenu();
+      case 'tags':
+        return repository.readTags();
+      case 'styles':
+        return repository.readStyles();
+      default:
+        throw new Error('Unsupported structured section.');
+    }
+  });
 }
 
 function splitNonEmptyLines(value: string) {
@@ -345,24 +434,38 @@ export function createStructuredDraft(content: StructuredContent): StructuredDra
   };
 }
 
-export async function loadStructuredContent(repoClient: AdminRepoClient): Promise<StructuredContent> {
-  const repository = new ChurchSiteContentRepository(repoClient);
-  const [churchDetails, siteConfig, menu, tags, styles] = await Promise.all([
-    repository.readChurchDetails(),
-    repository.readSiteConfig(),
-    repository.readMenu(),
-    repository.readTags(),
-    repository.readStyles()
-  ]);
+export async function loadStructuredContent(
+  repoClient: AdminRepoClient,
+  sectionIds: StructuredSectionId[] = STRUCTURED_WRITABLE_SECTIONS.map((section) => section.id)
+): Promise<StructuredContent> {
+  const uniqueSectionIds = [...new Set(sectionIds)];
+  const content = createEmptyStructuredContent();
+  const loadedSections = await Promise.all(uniqueSectionIds.map((sectionId) => loadStructuredSection(repoClient, sectionId)));
 
-  return {
-    churchDetails,
-    loadedAt: new Date().toISOString(),
-    menu,
-    siteConfig,
-    styles,
-    tags
-  };
+  uniqueSectionIds.forEach((sectionId, index) => {
+    switch (sectionId) {
+      case 'churchDetails':
+        content.churchDetails = loadedSections[index] as StructuredContent['churchDetails'];
+        break;
+      case 'siteConfig':
+        content.siteConfig = loadedSections[index] as StructuredContent['siteConfig'];
+        break;
+      case 'menu':
+        content.menu = loadedSections[index] as StructuredContent['menu'];
+        break;
+      case 'tags':
+        content.tags = loadedSections[index] as StructuredContent['tags'];
+        break;
+      case 'styles':
+        content.styles = loadedSections[index] as StructuredContent['styles'];
+        break;
+      default:
+        break;
+    }
+  });
+
+  content.loadedAt = new Date().toISOString();
+  return content;
 }
 
 export async function saveStructuredSection(
@@ -374,46 +477,87 @@ export async function saveStructuredSection(
   }
 ): Promise<StructuredContent> {
   const repository = new ChurchSiteContentRepository(repoClient);
+  let nextContent = input.content;
 
   switch (input.sectionId) {
     case 'churchDetails': {
-      await repository.writeChurchDetails({
+      const result = await repository.writeChurchDetails({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.churchDetails.sha,
         value: buildChurchDetailsValue(input.draft.churchDetails)
       });
+      nextContent = {
+        ...input.content,
+        churchDetails: {
+          path: result.path,
+          sha: result.sha,
+          value: buildChurchDetailsValue(input.draft.churchDetails)
+        }
+      };
       break;
     }
     case 'siteConfig': {
-      await repository.writeSiteConfig({
+      const result = await repository.writeSiteConfig({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.siteConfig.sha,
         value: buildSiteConfigValue(input.draft.siteConfig)
       });
+      nextContent = {
+        ...input.content,
+        siteConfig: {
+          path: result.path,
+          sha: result.sha,
+          value: buildSiteConfigValue(input.draft.siteConfig)
+        }
+      };
       break;
     }
     case 'menu': {
-      await repository.writeMenu({
+      const result = await repository.writeMenu({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.menu.sha,
         value: buildMenuValue(input.draft.menu)
       });
+      nextContent = {
+        ...input.content,
+        menu: {
+          path: result.path,
+          sha: result.sha,
+          value: buildMenuValue(input.draft.menu)
+        }
+      };
       break;
     }
     case 'tags': {
-      await repository.writeTags({
+      const result = await repository.writeTags({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.tags.sha,
         value: buildTagsValue(input.draft.tags)
       });
+      nextContent = {
+        ...input.content,
+        tags: {
+          path: result.path,
+          sha: result.sha,
+          value: buildTagsValue(input.draft.tags)
+        }
+      };
       break;
     }
     case 'styles': {
-      await repository.writeStyles({
+      const result = await repository.writeStyles({
         message: buildCommitMessage(input.sectionId),
         sha: input.content.styles.sha,
         value: buildStylesValue(input.draft.styles)
       });
+      nextContent = {
+        ...input.content,
+        styles: {
+          path: result.path,
+          sha: result.sha,
+          value: buildStylesValue(input.draft.styles)
+        }
+      };
       break;
     }
     default: {
@@ -421,5 +565,10 @@ export async function saveStructuredSection(
     }
   }
 
-  return loadStructuredContent(repoClient);
+  setSharedContentResource(repoClient, getStructuredSectionCacheKey(input.sectionId), nextContent[input.sectionId]);
+
+  return {
+    ...nextContent,
+    loadedAt: new Date().toISOString()
+  };
 }

@@ -81,7 +81,7 @@ const StyledContent = styled('main')`
     margin: 0;
   }
 
-  h2:first-child {
+  h2:first-of-type {
     margin-top: 0;
   }
 

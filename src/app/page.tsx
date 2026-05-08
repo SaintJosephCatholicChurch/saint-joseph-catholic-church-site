@@ -1,6 +1,5 @@
 import config from '../lib/config';
 import { getSidebarProps } from '../lib/sidebar';
-
 import HomepagePage from './HomepagePage';
 
 import type { Metadata } from 'next';

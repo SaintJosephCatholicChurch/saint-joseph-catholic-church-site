@@ -87,12 +87,6 @@ const StyledFirstRow = styled('div')(
 `
 );
 
-interface AskFormBody {
-  name: string;
-  email: string;
-  comment: string;
-}
-
 const AskForm = () => {
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -101,9 +95,13 @@ const AskForm = () => {
     const submitForm = async () => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const name = `${formData.get('name') ?? ''}`.trim();
-      const email = `${formData.get('email') ?? ''}`.trim();
-      const comment = `${formData.get('comment') ?? ''}`.trim();
+      const getFieldValue = (fieldName: string) => {
+        const value = formData.get(fieldName);
+        return typeof value === 'string' ? value.trim() : '';
+      };
+      const name = getFieldValue('name');
+      const email = getFieldValue('email');
+      const comment = getFieldValue('comment');
 
       if (!name || !email || !comment) {
         return;

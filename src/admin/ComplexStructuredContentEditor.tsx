@@ -12,7 +12,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Menu from '@mui/material/Menu';
@@ -27,8 +26,9 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import { CSS } from '@dnd-kit/utilities';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Fragment, useEffect, useId, useState, type MouseEvent } from 'react';
+import { Fragment, useEffect, useId, useMemo, useState, type MouseEvent } from 'react';
 
+import { AdminRepeaterCard, AdminSectionCard } from './components/AdminCards';
 import ScheduleWidget from '../cms/widgets/times/TimesWidgetControl';
 import { AdminImagePathField } from './AdminImagePathField';
 import { AdminMediaLibrary } from './AdminMediaLibrary';
@@ -138,68 +138,6 @@ function getSectionLabel(sectionId: ComplexSectionId) {
   }
 }
 
-function StructuredSectionCard({
-  actions,
-  children,
-  description,
-  headerActions,
-  title
-}: {
-  actions?: React.ReactNode;
-  children: React.ReactNode;
-  description?: string;
-  headerActions: React.ReactNode;
-  title: string;
-}) {
-  return (
-    <Stack
-      spacing={2}
-      sx={{
-        background: '#ffffff',
-        border: '1px solid rgba(191, 48, 60, 0.12)',
-        borderRadius: '4px',
-        padding: { md: 2.5, xs: 2 }
-      }}
-    >
-      <Stack direction={{ md: 'row', xs: 'column' }} spacing={1.5} alignItems="center" justifyContent="space-between">
-        <div>
-          <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-            {title}
-          </Typography>
-          {description && <Typography sx={{ color: '#616169', lineHeight: 1.7, mt: 1 }}>{description}</Typography>}
-        </div>
-        <Stack direction="row" spacing={1} alignItems="center" sx={{ alignSelf: { md: 'flex-start', xs: 'stretch' } }}>
-          {headerActions}
-        </Stack>
-      </Stack>
-      {children}
-      {actions ? (
-        <>
-          <Divider />
-          {actions}
-        </>
-      ) : null}
-    </Stack>
-  );
-}
-
-function RepeaterCard({ children, title }: { children: React.ReactNode; title: string }) {
-  return (
-    <Stack
-      spacing={2}
-      sx={{
-        border: '1px solid rgba(191, 48, 60, 0.12)',
-        borderRadius: '4px',
-        padding: 2,
-        background: '#fbfaf8'
-      }}
-    >
-      <Typography sx={{ fontWeight: 700 }}>{title}</Typography>
-      {children}
-    </Stack>
-  );
-}
-
 function SortableAccordionRepeaterCard({
   children,
   defaultExpanded = false,
@@ -300,48 +238,6 @@ function SortableAccordionRepeaterCard({
   );
 }
 
-function HomepageEditorGroup({
-  actions,
-  children,
-  description,
-  title
-}: {
-  actions?: React.ReactNode;
-  children: React.ReactNode;
-  description?: string;
-  title: string;
-}) {
-  return (
-    <Stack
-      spacing={2}
-      sx={{
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,245,238,0.96))',
-        border: '1px solid rgba(191, 48, 60, 0.12)',
-        borderRadius: '4px',
-        padding: 2
-      }}
-    >
-      <div>
-        <Stack
-          direction={{ sm: 'row', xs: 'column' }}
-          spacing={1.5}
-          alignItems={{ sm: 'center', xs: 'stretch' }}
-          justifyContent="space-between"
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {title}
-          </Typography>
-          {actions}
-        </Stack>
-        {description ? (
-          <Typography sx={{ color: '#616169', lineHeight: 1.6, mt: 0.75 }}>{description}</Typography>
-        ) : null}
-      </div>
-      {children}
-    </Stack>
-  );
-}
-
 export function ComplexStructuredContentEditor({
   onSaved,
   repoClient,
@@ -354,12 +250,20 @@ export function ComplexStructuredContentEditor({
   const [imagePickerTarget, setImagePickerTarget] = useState<ImagePickerTarget>(null);
   const slideIdPrefix = useId();
   const slideDragSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
-  const visibleSectionIds = visibleSections || COMPLEX_WRITABLE_SECTIONS.map((section) => section.id);
+  const visibleSectionIds = useMemo(
+    () => visibleSections || COMPLEX_WRITABLE_SECTIONS.map((section) => section.id),
+    [visibleSections]
+  );
+  const visibleSectionIdsKey = visibleSectionIds.join('|');
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadContent() {
+      const requestedSectionIds = visibleSectionIdsKey
+        ? (visibleSectionIdsKey.split('|') as ComplexSectionId[])
+        : [];
+
       setEditorState((currentState) => ({
         ...currentState,
         error: null,
@@ -367,7 +271,7 @@ export function ComplexStructuredContentEditor({
       }));
 
       try {
-        const content = await loadComplexContent(repoClient);
+        const content = await loadComplexContent(repoClient, requestedSectionIds);
 
         if (cancelled) {
           return;
@@ -398,7 +302,7 @@ export function ComplexStructuredContentEditor({
     return () => {
       cancelled = true;
     };
-  }, [repoClient]);
+  }, [repoClient, visibleSectionIdsKey]);
 
   function updateDraft<TKey extends keyof ComplexDraft>(sectionId: TKey, value: ComplexDraft[TKey]) {
     setEditorState((currentState) => {
@@ -414,7 +318,7 @@ export function ComplexStructuredContentEditor({
         },
         saveError: null,
         saveMessage: null,
-        saveSectionId: sectionId as ComplexSectionId,
+        saveSectionId: sectionId,
         saveStatus: 'idle'
       };
     });
@@ -445,7 +349,7 @@ export function ComplexStructuredContentEditor({
         content,
         draft: createComplexDraft(content),
         saveError: null,
-        saveMessage: `${getSectionLabel(sectionId)} saved to the repository-backed admin draft.`,
+        saveMessage: `${getSectionLabel(sectionId)} saved.`,
         saveSectionId: sectionId,
         saveStatus: 'success',
         status: 'success'
@@ -497,7 +401,7 @@ export function ComplexStructuredContentEditor({
   const staffDraft = editorState.draft.staff;
   const timesDraft = editorState.draft.times;
 
-  function renderSectionHeaderActions(sectionId: ComplexSectionId, saveLabel: string) {
+  function renderSectionHeaderActions(sectionId: ComplexSectionId, _saveLabel: string) {
     const sectionIsDirty = isDirty(sectionId);
     const sectionIsSaving = editorState.saveSectionId === sectionId && isSaving;
 
@@ -514,21 +418,10 @@ export function ComplexStructuredContentEditor({
         </IconButton>
         <Button
           variant="contained"
-          color={sectionIsDirty || sectionIsSaving ? 'primary' : 'secondary'}
           onClick={() => void handleSave(sectionId)}
           disabled={!sectionIsDirty || sectionIsSaving}
-          sx={
-            !sectionIsDirty && !sectionIsSaving
-              ? {
-                  '&.Mui-disabled': {
-                    backgroundColor: 'rgba(156, 39, 176, 0.12)',
-                    color: 'secondary.main'
-                  }
-                }
-              : undefined
-          }
         >
-          {sectionIsSaving ? 'Saving' : sectionIsDirty ? saveLabel : 'In Sync'}
+          Save
         </Button>
       </>
     );
@@ -665,10 +558,7 @@ export function ComplexStructuredContentEditor({
               width: { lg: 460, xs: '100%' }
             }}
           >
-            <StructuredSectionCard
-              title="Homepage"
-              headerActions={renderSectionHeaderActions('homepage', 'Save homepage')}
-            >
+            <AdminSectionCard title="Homepage" headerActions={renderSectionHeaderActions('homepage', 'Save homepage')}>
               <Stack spacing={2}>
                 <Tabs
                   value={homepageTab}
@@ -684,7 +574,7 @@ export function ComplexStructuredContentEditor({
                 </Tabs>
 
                 {homepageTab === 'hero' ? (
-                  <HomepageEditorGroup title="Hero and livestream">
+                  <AdminSectionCard title="Hero and livestream">
                     <TextField
                       label="Invitation text"
                       value={homepageDraft.invitationText}
@@ -711,12 +601,12 @@ export function ComplexStructuredContentEditor({
                         fullWidth
                       />
                     </Stack>
-                  </HomepageEditorGroup>
+                  </AdminSectionCard>
                 ) : null}
 
                 {homepageTab === 'sections' ? (
                   <Stack spacing={2}>
-                    <HomepageEditorGroup title="Schedule and daily readings">
+                    <AdminSectionCard title="Schedule and daily readings">
                       <TextField
                         label="Schedule section title"
                         value={homepageDraft.scheduleSectionTitle}
@@ -755,9 +645,9 @@ export function ComplexStructuredContentEditor({
                         multiline
                         minRows={2}
                       />
-                    </HomepageEditorGroup>
+                    </AdminSectionCard>
 
-                    <HomepageEditorGroup title="Newsletter banner">
+                    <AdminSectionCard title="Newsletter banner">
                       <TextField
                         label="Newsletter banner title"
                         value={homepageDraft.newsletterBannerTitle}
@@ -803,14 +693,14 @@ export function ComplexStructuredContentEditor({
                         }
                         fullWidth
                       />
-                    </HomepageEditorGroup>
+                    </AdminSectionCard>
                   </Stack>
                 ) : null}
 
                 {homepageTab === 'slides' ? (
-                  <HomepageEditorGroup
+                  <AdminSectionCard
                     title="Slides"
-                    actions={
+                    headerActions={
                       <Button
                         startIcon={<AddIcon />}
                         variant="outlined"
@@ -889,13 +779,13 @@ export function ComplexStructuredContentEditor({
                         </Stack>
                       </SortableContext>
                     </DndContext>
-                  </HomepageEditorGroup>
+                  </AdminSectionCard>
                 ) : null}
 
                 {homepageTab === 'featured' ? (
-                  <HomepageEditorGroup
+                  <AdminSectionCard
                     title="Featured items"
-                    actions={
+                    headerActions={
                       <Fragment>
                         <Button
                           aria-controls={isFeaturedMenuOpen ? 'homepage-featured-add-menu' : undefined}
@@ -931,7 +821,7 @@ export function ComplexStructuredContentEditor({
                   >
                     <Stack spacing={2}>
                       {homepageDraft.featured.map((item, index) => (
-                        <RepeaterCard
+                        <AdminRepeaterCard
                           key={`homepage-featured-${index}`}
                           title={`Featured ${index + 1}: ${item.type === 'featured_page' ? 'Page' : 'Link'}`}
                         >
@@ -1005,13 +895,13 @@ export function ComplexStructuredContentEditor({
                           >
                             Remove featured item
                           </Button>
-                        </RepeaterCard>
+                        </AdminRepeaterCard>
                       ))}
                     </Stack>
-                  </HomepageEditorGroup>
+                  </AdminSectionCard>
                 ) : null}
               </Stack>
-            </StructuredSectionCard>
+            </AdminSectionCard>
           </Stack>
 
           <Stack spacing={1.5} sx={{ flex: 1, minWidth: 0, minHeight: 0, overflow: 'hidden', width: '100%' }}>
@@ -1021,42 +911,27 @@ export function ComplexStructuredContentEditor({
       ) : null}
 
       {shouldRenderSection('times') ? (
-        <StructuredSectionCard
-          title="Times"
-          description="The existing schedule widget now runs inside the site-owned admin flow for content/times.json."
-          headerActions={renderSectionHeaderActions('times', 'Save times')}
-        >
+        <AdminSectionCard title="Times" headerActions={renderSectionHeaderActions('times', 'Save times')}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={2}>
-              <Typography sx={{ color: '#5d4a40', lineHeight: 1.7 }}>
-                This reuses the existing schedule editor logic while moving the load and save path into the first-party
-                admin services.
-              </Typography>
               <div>
                 <ScheduleWidget times={timesDraft} onChange={(times) => updateDraft('times', times)} />
               </div>
             </Stack>
           </LocalizationProvider>
-        </StructuredSectionCard>
+        </AdminSectionCard>
       ) : null}
 
       {shouldRenderSection('staff') ? (
-        <StructuredSectionCard
-          title="Staff"
-          description="Parish staff cards from content/staff.json. Image paths and ordering are editable here."
-          headerActions={renderSectionHeaderActions('staff', 'Save staff')}
-        >
-          <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="space-between">
-            <Typography sx={{ color: '#5d4a40', lineHeight: 1.7 }}>
-              Reorder by moving cards in the list order here, then save the updated JSON contract.
-            </Typography>
+        <AdminSectionCard title="Staff" headerActions={renderSectionHeaderActions('staff', 'Save staff')}>
+          <Stack direction={{ sm: 'row', xs: 'column' }} spacing={1.5} justifyContent="flex-end">
             <Button variant="outlined" onClick={() => updateDraft('staff', [...staffDraft, { ...EMPTY_STAFF_ENTRY }])}>
               Add staff entry
             </Button>
           </Stack>
           <Stack spacing={2}>
             {staffDraft.map((entry, index) => (
-              <RepeaterCard key={`staff-entry-${index}`} title={`Staff ${index + 1}`}>
+              <AdminRepeaterCard key={`staff-entry-${index}`} title={`Staff ${index + 1}`}>
                 <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
                   <TextField
                     label="Name"
@@ -1088,10 +963,10 @@ export function ComplexStructuredContentEditor({
                 >
                   Remove staff entry
                 </Button>
-              </RepeaterCard>
+              </AdminRepeaterCard>
             ))}
           </Stack>
-        </StructuredSectionCard>
+        </AdminSectionCard>
       ) : null}
 
       <Dialog fullWidth maxWidth="lg" onClose={() => setImagePickerTarget(null)} open={Boolean(imagePickerTarget)}>

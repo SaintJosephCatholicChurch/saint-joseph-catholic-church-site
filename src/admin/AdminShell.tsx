@@ -28,7 +28,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 
 import Help from '../cms/pages/help/Help';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuthProvider';
@@ -37,7 +37,7 @@ import { ComplexStructuredContentEditor } from './ComplexStructuredContentEditor
 import { DocumentContentEditor } from './DocumentContentEditor';
 import { StructuredContentEditor } from './StructuredContentEditor';
 
-import type { AdminBackendMode, AdminRepoClient } from './services/adminTypes';
+import type { AdminRepoClient } from './services/adminTypes';
 
 type AdminViewId = 'bulletins' | 'church' | 'events' | 'help' | 'homepage' | 'news' | 'pages' | 'siteConfig';
 
@@ -457,7 +457,8 @@ const TabbedViewBody = styled('div')`
   flex: 1;
   height: 100%;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const SidebarBody = styled('div', {
@@ -620,7 +621,10 @@ function ChurchDetailsView({
   return (
     <TabbedView>
       <TabbedViewTabs
+        allowScrollButtonsMobile
+        scrollButtons="auto"
         value={tab}
+        variant="scrollable"
         onChange={(_, next: number) => setTab(next)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
@@ -663,7 +667,10 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
   return (
     <TabbedView>
       <TabbedViewTabs
+        allowScrollButtonsMobile
+        scrollButtons="auto"
         value={tab}
+        variant="scrollable"
         onChange={(_, next: number) => setTab(next)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
@@ -832,7 +839,7 @@ function AdminLoginPage({
   );
 }
 
-function AdminShellSurface({ mode }: { mode: AdminBackendMode }) {
+function AdminShellSurface() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -846,26 +853,37 @@ function AdminShellSurface({ mode }: { mode: AdminBackendMode }) {
   const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  function buildAdminHref(nextMode: AdminBackendMode, nextViewId = activeView.id) {
-    const nextParams = new URLSearchParams(searchParams.toString());
-    nextParams.set('view', nextViewId);
+  const buildAdminHref = useCallback(
+    (nextViewId = activeView.id) => {
+      const nextParams = new URLSearchParams(searchParams.toString());
+      nextParams.set('view', nextViewId);
 
-    if (nextMode === 'preview') {
-      nextParams.set('mode', 'preview');
-    } else {
+      if (nextViewId !== activeView.id) {
+        nextParams.delete('entry');
+      }
+
       nextParams.delete('mode');
+
+      const query = nextParams.toString();
+      return query ? `${pathname}?${query}` : pathname;
+    },
+    [activeView.id, pathname, searchParams]
+  );
+
+  useEffect(() => {
+    if (!searchParams.has('mode')) {
+      return;
     }
 
-    const query = nextParams.toString();
-    return query ? `${pathname}?${query}` : pathname;
-  }
+    router.replace(buildAdminHref(), { scroll: false });
+  }, [buildAdminHref, router, searchParams]);
 
   function handleSelectView(viewId: AdminViewId) {
     setMobileSidebarOpen(false);
     if (desktopSidebarExpanded) {
       setDesktopSidebarExpanded(false);
     }
-    router.replace(buildAdminHref(mode, viewId), { scroll: false });
+    router.replace(buildAdminHref(viewId), { scroll: false });
   }
 
   function openMobileSidebar() {
@@ -1049,13 +1067,7 @@ function AdminShellSurface({ mode }: { mode: AdminBackendMode }) {
               <PanelBody>
                 {authStatus === 'restoring' || authStatus === 'authenticating' ? <PanelLoadingProgress /> : null}
                 {error ? <Alert severity="error">{error}</Alert> : null}
-                {!canRenderActiveView ? (
-                  <Alert severity="info">
-                    {mode === 'connected'
-                      ? 'Sign in to open this collection.'
-                      : 'Start a preview session to inspect this collection without touching the real repository.'}
-                  </Alert>
-                ) : null}
+                {!canRenderActiveView ? <Alert severity="info">Sign in to open this collection.</Alert> : null}
                 {canRenderActiveView ? renderAdminView(activeView.id, repoClient, noopSaved) : null}
               </PanelBody>
             </MainPanel>
@@ -1067,14 +1079,11 @@ function AdminShellSurface({ mode }: { mode: AdminBackendMode }) {
 }
 
 export default function AdminShell() {
-  const searchParams = useSearchParams();
-  const mode = searchParams.get('mode') === 'preview' ? 'preview' : 'connected';
-
   return (
     <ThemeProvider theme={ADMIN_THEME}>
       <CssBaseline />
-      <AdminAuthProvider mode={mode}>
-        <AdminShellSurface mode={mode} />
+      <AdminAuthProvider>
+        <AdminShellSurface />
       </AdminAuthProvider>
     </ThemeProvider>
   );

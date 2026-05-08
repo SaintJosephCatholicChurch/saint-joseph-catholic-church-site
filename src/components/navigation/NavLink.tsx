@@ -17,16 +17,13 @@ interface NavLinkProps {
 const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, onKeyDown }, ref) => {
   const url = useMenuLinkUrl(link);
   const { title } = link;
+  const isExternalLink = url?.startsWith('http') ?? false;
 
   return (
     <Button
-      LinkComponent={Link}
+      LinkComponent={!isExternalLink ? Link : undefined}
       ref={ref}
-      href={url}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      target={url?.startsWith('http') ? '_blank' : undefined}
-      rel={url?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      href={!isExternalLink ? url : undefined}
       sx={{
         color: '#680b12',
         padding: 0,
@@ -36,7 +33,13 @@ const NavLink = forwardRef<HTMLButtonElement, NavLinkProps>(({ link, onClick, on
         },
         width: '100%'
       }}
-      onClick={onClick}
+      onClick={(event) => {
+        onClick(event);
+
+        if (isExternalLink && url) {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      }}
       onKeyDown={onKeyDown}
     >
       <MenuItem

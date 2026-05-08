@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import useEventListener from './useEventListener';
 
@@ -11,17 +11,17 @@ export default function useDebouncedScroll(
 ) {
   const [debouncedValue, setDebouncedValue] = useState(ref.current?.scrollLeft ?? 0);
   const scrollVariable = useMemo(() => (direction === 'vertical' ? 'scrollTop' : 'scrollLeft'), [direction]);
+  const scrollingRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  let scrolling = false;
-  let timer: NodeJS.Timeout | undefined;
   const debounceScroll = (currentScroll: number) => {
-    if (timer) {
-      clearTimeout(timer);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
 
-    timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       const newScroll = ref.current?.[scrollVariable] ?? 0;
-      if (!scrolling && currentScroll === newScroll) {
+      if (!scrollingRef.current && currentScroll === newScroll) {
         setDebouncedValue(currentScroll);
       } else {
         debounceScroll(newScroll);
@@ -34,13 +34,22 @@ export default function useDebouncedScroll(
   };
 
   const handleScrollEnd = () => {
-    scrolling = false;
+    scrollingRef.current = false;
     handleScroll();
   };
 
   const handleScrollStart = () => {
-    scrolling = true;
+    scrollingRef.current = true;
   };
+
+  useEffect(
+    () => () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    },
+    []
+  );
 
   useEventListener('mouseup', handleScroll, ref);
   useEventListener('touchstart', handleScrollStart, ref);

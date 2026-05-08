@@ -9,8 +9,16 @@ import type { Bulletin, BulletinPDFData } from '../interface';
 
 const pagesDirectory = join(process.cwd(), 'content/bulletins');
 
-let bulletinCache: BulletinPDFData[];
+let bulletinCache: Bulletin[];
 let metaCache: BulletinPDFData[];
+
+export function normalizeBulletinPdfPath(pdfPath: string): string {
+  const publicRelativePath = pdfPath
+    .replace(/\\/g, '/')
+    .replace(/^\/+/, '')
+    .replace(/^(?:public\/)+/, '');
+  return `/${publicRelativePath}`;
+}
 
 export function fetchBulletins(): Bulletin[] {
   if (bulletinCache && process.env.NODE_ENV !== 'development') {
@@ -27,7 +35,8 @@ export function fetchBulletins(): Bulletin[] {
   bulletinCache = fileNames
     .filter((it) => it.endsWith('.json'))
     .map((fileName) => {
-      return JSON.parse(readFileSync(join(pagesDirectory, fileName), 'utf8')) as BulletinPDFData;
+      const bulletin = JSON.parse(readFileSync(join(pagesDirectory, fileName), 'utf8')) as Bulletin;
+      return bulletin.pdf ? { ...bulletin, pdf: normalizeBulletinPdfPath(bulletin.pdf) } : bulletin;
     });
 
   return bulletinCache;
@@ -38,7 +47,13 @@ export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinP
     return undefined;
   }
 
-  const metaFullPath = join('public', bulletin.pdf.replace(/\.pdf$/g, ''), 'meta.json');
+  const metaFullPath = join(
+    'public',
+    normalizeBulletinPdfPath(bulletin.pdf)
+      .replace(/^\/+/, '')
+      .replace(/\.pdf$/g, ''),
+    'meta.json'
+  );
   return {
     title: getFormattedBulletinTitle(bulletin),
     slug: bulletin.date,

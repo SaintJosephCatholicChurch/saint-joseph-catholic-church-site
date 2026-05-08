@@ -8,7 +8,7 @@ import { join } from 'path';
 import { PDFExtract } from 'pdf.js-extract';
 import webp from 'webp-converter';
 
-import { fetchBulletins } from '../src/lib/bulletins';
+import { fetchBulletins, normalizeBulletinPdfPath } from '../src/lib/bulletins';
 // eslint-disable-next-line import/default
 import pdfImg from '../src/util/pdf/pdf-img-convert';
 
@@ -186,10 +186,11 @@ function fixCommonBulletinErrors(textContent: string) {
       continue;
     }
 
-    const pdfFullPath = join(publicPath, bulletin.pdf);
+    const normalizedPdfPath = normalizeBulletinPdfPath(bulletin.pdf);
+    const pdfFullPath = join(publicPath, normalizedPdfPath.replace(/^\/+/, ''));
 
-    const folderPath = bulletin.pdf.replace(/\.pdf$/g, '');
-    const folderFullPath = join(publicPath, folderPath);
+    const folderPath = normalizedPdfPath.replace(/\.pdf$/g, '');
+    const folderFullPath = join(publicPath, folderPath.replace(/^\/+/, ''));
     if (existsSync(folderFullPath)) {
       continue;
     }
@@ -213,7 +214,7 @@ function fixCommonBulletinErrors(textContent: string) {
           writeFileSync(imageFullPathJpg, images[i]);
           await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
           rmSync(imageFullPathJpg);
-          pageImages.push(join(folderPath, `${i + 1}.webp`).replace(/\\/g, '/'));
+          pageImages.push(`${folderPath}/${i + 1}.webp`);
         } catch (error: unknown) {
           if (error && error instanceof Error) {
             console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);

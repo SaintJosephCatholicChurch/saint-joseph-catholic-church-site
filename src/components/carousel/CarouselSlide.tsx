@@ -9,6 +9,11 @@ import {
 } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
+import {
+  createHomepageSlideFieldKey,
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { Slide } from '../../interface';
 const StyledCarouselSlide = styled('div')(
@@ -70,6 +75,7 @@ const StyledTitleWrapper = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 `;
 
 interface StyledTitleProps {
@@ -91,6 +97,7 @@ const StyledTitle = styled(
     display: flex;
     flex-direction: column;
     align-items: center;
+    pointer-events: auto;
     text-shadow: -1.5px 1.5px rgba(0,0,0,0.25);
 
     scale: 1;
@@ -114,12 +121,16 @@ const StyledTitle = styled(
 );
 
 interface CarouselSlideProps {
+  activeFieldKey?: HomepageFieldKey;
   slide: Slide;
+  slideIndex: number;
   active: boolean;
 }
 
-const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) => {
+const CarouselSlide = ({ activeFieldKey, slide: { image, title }, slideIndex, active }: CarouselSlideProps) => {
   const [isActive, setIsActive] = useState(false);
+  const imageFieldKey = createHomepageSlideFieldKey(slideIndex, 'image');
+  const titleFieldKey = createHomepageSlideFieldKey(slideIndex, 'title');
 
   useEffect(() => {
     setIsActive(active);
@@ -127,9 +138,20 @@ const CarouselSlide = ({ slide: { image, title }, active }: CarouselSlideProps) 
 
   return (
     <StyledCarouselSlide className="each-fade">
-      <StyledImage className="image-container" $image={image} />
+      <StyledImage
+        className="image-container"
+        $image={image}
+        {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
+        style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
+      />
       <StyledTitleWrapper>
-        <StyledTitle $active={isActive}>{title}</StyledTitle>
+        <StyledTitle
+          $active={isActive}
+          {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
+          style={getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey)}
+        >
+          {title}
+        </StyledTitle>
       </StyledTitleWrapper>
     </StyledCarouselSlide>
   );

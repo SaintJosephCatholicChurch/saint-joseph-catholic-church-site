@@ -45,14 +45,27 @@ interface LogoProps {
   size?: 'small' | 'normal';
   details: LogoDetails;
   inCMS: boolean;
+  primaryProps?: Record<string, string>;
+  secondaryProps?: Record<string, string>;
 }
 
-const Logo = ({ trigger = false, details: { primary, secondary }, size = 'normal', inCMS }: LogoProps) => {
+const Logo = ({
+  trigger = false,
+  details: { primary, secondary },
+  size = 'normal',
+  inCMS,
+  primaryProps,
+  secondaryProps
+}: LogoProps) => {
   return (
     <StyledHeaderLink href="/">
       <StyledLogoWrapper $trigger={trigger} $size={size} $inCMS={inCMS}>
-        <LogoPrimaryText inCMS={inCMS}>{primary}</LogoPrimaryText>
-        <LogoSecondaryText inCMS={inCMS}>{secondary}</LogoSecondaryText>
+        <div {...primaryProps}>
+          <LogoPrimaryText inCMS={inCMS}>{primary}</LogoPrimaryText>
+        </div>
+        <div {...secondaryProps}>
+          <LogoSecondaryText inCMS={inCMS}>{secondary}</LogoSecondaryText>
+        </div>
       </StyledLogoWrapper>
     </StyledHeaderLink>
   );

@@ -5,6 +5,7 @@ import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
+import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
 import Container from '../../../../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
 import PageTitle from '../../../../components/pages/PageTitle';
@@ -71,6 +72,11 @@ const StyledWhereToFindUsTitle = styled('h2')`
   font-size: 28px;
 `;
 
+const StyledMapWrapper = styled('div')`
+  position: relative;
+  width: 100%;
+`;
+
 const StyledMap = styled('iframe')(
   ({ theme }) => `
     border: 0;
@@ -128,12 +134,58 @@ const StyledSocialLinks = styled('div')`
   margin-top: 8px;
 `;
 
+const ACTIVE_PREVIEW_TARGET_STYLE = {
+  backgroundColor: 'rgba(188, 47, 59, 0.1)',
+  borderRadius: '4px',
+  boxShadow: 'inset 0 0 0 1px rgba(127, 35, 44, 0.24)'
+} as const;
+
+function getActivePreviewTargetStyle(fieldKey: string, activeFieldKey?: string) {
+  return activeFieldKey === fieldKey ? ACTIVE_PREVIEW_TARGET_STYLE : undefined;
+}
+
+interface ContactViewAdminSelection {
+  activeFieldKey?: string;
+  interactive?: boolean;
+}
+
 interface ContactViewProps {
+  adminSelection?: ContactViewAdminSelection;
   churchDetails: ChurchDetails;
   disableForm?: boolean;
 }
 
-const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
+function getPreviewLinkProps(
+  fieldKey: string,
+  adminSelection: ContactViewAdminSelection | undefined,
+  href: string,
+  options?: {
+    rel?: string;
+    target?: string;
+    title?: string;
+  }
+) {
+  const interactive = adminSelection?.interactive;
+
+  return {
+    ...getAdminPreviewFieldTargetProps(fieldKey),
+    href,
+    rel: options?.rel,
+    target: options?.target,
+    title: options?.title,
+    onClick: interactive
+      ? (event: React.MouseEvent<HTMLAnchorElement>) => {
+          event.preventDefault();
+        }
+      : undefined,
+    style: {
+      ...getActivePreviewTargetStyle(fieldKey, adminSelection?.activeFieldKey),
+      ...(interactive ? { cursor: 'pointer' } : null)
+    }
+  };
+}
+
+const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactViewProps) => {
   return (
     <>
       <StyledContactSection key="contact-section">
@@ -143,42 +195,101 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
             <StyledContactContent>
               <StyledContactDetails>
                 <StyledAddress>
-                  <Box>
+                  <Box
+                    {...getAdminPreviewFieldTargetProps('name')}
+                    sx={getActivePreviewTargetStyle('name', adminSelection?.activeFieldKey)}
+                  >
                     <strong>{churchDetails.name}</strong>
                   </Box>
-                  <Box>{churchDetails.address}</Box>
                   <Box>
-                    {churchDetails.city}, {churchDetails.state} {churchDetails.zipcode}
+                    <span
+                      {...getAdminPreviewFieldTargetProps('address')}
+                      style={getActivePreviewTargetStyle('address', adminSelection?.activeFieldKey)}
+                    >
+                      {churchDetails.address}
+                    </span>
+                  </Box>
+                  <Box>
+                    <span
+                      {...getAdminPreviewFieldTargetProps('city')}
+                      style={getActivePreviewTargetStyle('city', adminSelection?.activeFieldKey)}
+                    >
+                      {churchDetails.city}
+                    </span>
+                    {', '}
+                    <span
+                      {...getAdminPreviewFieldTargetProps('state')}
+                      style={getActivePreviewTargetStyle('state', adminSelection?.activeFieldKey)}
+                    >
+                      {churchDetails.state}
+                    </span>{' '}
+                    <span
+                      {...getAdminPreviewFieldTargetProps('zipcode')}
+                      style={getActivePreviewTargetStyle('zipcode', adminSelection?.activeFieldKey)}
+                    >
+                      {churchDetails.zipcode}
+                    </span>
                   </Box>
                 </StyledAddress>
                 <StyledChurchDetailSection>
-                  <StyledChurchDetailTitle>Church Phone</StyledChurchDetailTitle>
-                  <StyledChurchDetailsLink href={`tel:${churchDetails.phone}`}>
+                  <StyledChurchDetailTitle
+                    {...getAdminPreviewFieldTargetProps('phone')}
+                    style={getActivePreviewTargetStyle('phone', adminSelection?.activeFieldKey)}
+                  >
+                    Church Phone
+                  </StyledChurchDetailTitle>
+                  <StyledChurchDetailsLink
+                    {...getPreviewLinkProps('phone', adminSelection, `tel:${churchDetails.phone}`)}
+                  >
                     <PhoneEnabledIcon fontSize="small" />
                     {churchDetails.phone}
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_phones?.map((phone, index) => (
                     <>
-                      <StyledChurchDetailTitle key={`additional-phone-${index}-title`}>
+                      <StyledChurchDetailTitle
+                        key={`additional-phone-${index}-title`}
+                        {...getAdminPreviewFieldTargetProps('additionalPhones')}
+                        style={getActivePreviewTargetStyle('additionalPhones', adminSelection?.activeFieldKey)}
+                      >
                         {phone.name}:
                       </StyledChurchDetailTitle>
-                      <StyledChurchDetailsLink key={`additional-phone-${index}-link`} href={`tel:${phone.phone}`}>
+                      <StyledChurchDetailsLink
+                        key={`additional-phone-${index}-link`}
+                        {...getPreviewLinkProps('additionalPhones', adminSelection, `tel:${phone.phone}`)}
+                      >
                         <PhoneEnabledIcon fontSize="small" />
                         {phone.phone}
                       </StyledChurchDetailsLink>
                     </>
                   ))}
-                  <StyledChurchDetailTitle>Church Email</StyledChurchDetailTitle>
-                  <StyledChurchDetailsLink href={`mailto:${churchDetails.email}`} target="_blank" rel="noreferrer">
+                  <StyledChurchDetailTitle
+                    {...getAdminPreviewFieldTargetProps('email')}
+                    style={getActivePreviewTargetStyle('email', adminSelection?.activeFieldKey)}
+                  >
+                    Church Email
+                  </StyledChurchDetailTitle>
+                  <StyledChurchDetailsLink
+                    {...getPreviewLinkProps('email', adminSelection, `mailto:${churchDetails.email}`, {
+                      rel: 'noreferrer',
+                      target: '_blank'
+                    })}
+                  >
                     <EmailIcon fontSize="small" />
                     {churchDetails.email}
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_emails?.map((email, index) => (
                     <>
-                      <StyledChurchDetailTitle key={`additional-email-${index}-title`}>
+                      <StyledChurchDetailTitle
+                        key={`additional-email-${index}-title`}
+                        {...getAdminPreviewFieldTargetProps('additionalEmails')}
+                        style={getActivePreviewTargetStyle('additionalEmails', adminSelection?.activeFieldKey)}
+                      >
                         {email.name}
                       </StyledChurchDetailTitle>
-                      <StyledChurchDetailsLink key={`additional-email-${index}-link`} href={`mailto:${email.email}`}>
+                      <StyledChurchDetailsLink
+                        key={`additional-email-${index}-link`}
+                        {...getPreviewLinkProps('additionalEmails', adminSelection, `mailto:${email.email}`)}
+                      >
                         <EmailIcon fontSize="small" />
                         {email.email}
                       </StyledChurchDetailsLink>
@@ -188,17 +299,33 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
                 <StyledChurchDetailSection>
                   {churchDetails.contacts?.map((contact, index) => (
                     <Fragment key={`contact-${index}`}>
-                      <StyledChurchDetailTitle>{contact.title}</StyledChurchDetailTitle>
-                      <StyledChurchDetailContent>{contact.name}</StyledChurchDetailContent>
+                      <StyledChurchDetailTitle
+                        {...getAdminPreviewFieldTargetProps('contacts')}
+                        style={getActivePreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
+                      >
+                        {contact.title}
+                      </StyledChurchDetailTitle>
+                      <StyledChurchDetailContent
+                        {...getAdminPreviewFieldTargetProps('contacts')}
+                        style={getActivePreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
+                      >
+                        {contact.name}
+                      </StyledChurchDetailContent>
                     </Fragment>
                   ))}
                 </StyledChurchDetailSection>
                 <StyledSocialLinks>
                   <StyledChurchDetailsLink
-                    href={`https://www.facebook.com/${churchDetails.facebook_page}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={`Facebook - ${churchDetails.facebook_page}`}
+                    {...getPreviewLinkProps(
+                      'facebookPage',
+                      adminSelection,
+                      `https://www.facebook.com/${churchDetails.facebook_page}`,
+                      {
+                        rel: 'noreferrer',
+                        target: '_blank',
+                        title: `Facebook - ${churchDetails.facebook_page}`
+                      }
+                    )}
                   >
                     <FacebookIcon fontSize="large" />
                   </StyledChurchDetailsLink>
@@ -213,13 +340,26 @@ const ContactView = ({ churchDetails, disableForm }: ContactViewProps) => {
         <Container>
           <StyledWhereToFindUsContent>
             <StyledWhereToFindUsTitle>Where to Find Us</StyledWhereToFindUsTitle>
-            <StyledMap
-              src={churchDetails.google_map_location}
-              style={{ border: 0 }}
-              allowFullScreen={true}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            <StyledMapWrapper>
+              <StyledMap
+                src={churchDetails.google_map_location}
+                style={{ border: 0, pointerEvents: adminSelection?.interactive ? 'none' : undefined }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              {adminSelection?.interactive ? (
+                <Box
+                  {...getAdminPreviewFieldTargetProps('googleMapLocation')}
+                  sx={{
+                    ...getActivePreviewTargetStyle('googleMapLocation', adminSelection.activeFieldKey),
+                    cursor: 'pointer',
+                    inset: 0,
+                    position: 'absolute'
+                  }}
+                />
+              ) : null}
+            </StyledMapWrapper>
           </StyledWhereToFindUsContent>
         </Container>
       </StyledWhereToFindUsSection>

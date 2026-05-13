@@ -75,7 +75,7 @@ export function AdminStatusStack({ children, errorMessage, loading = false, succ
 interface AdminCompactActionBarProps {
   actions: ReactNode;
   backLabel?: string;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 export function AdminCompactActionBar({ actions, backLabel = 'Back', onBack }: AdminCompactActionBarProps) {
@@ -83,12 +83,14 @@ export function AdminCompactActionBar({ actions, backLabel = 'Back', onBack }: A
     <Stack
       direction={{ sm: 'row', xs: 'column' }}
       spacing={1.5}
-      justifyContent="space-between"
+      justifyContent={onBack ? 'space-between' : 'flex-end'}
       alignItems={{ sm: 'center', xs: 'stretch' }}
     >
-      <Button onClick={onBack} variant="outlined" color="inherit" startIcon={<ChevronLeftIcon />}>
-        {backLabel}
-      </Button>
+      {onBack ? (
+        <Button onClick={onBack} variant="outlined" color="inherit" startIcon={<ChevronLeftIcon />}>
+          {backLabel}
+        </Button>
+      ) : null}
       {actions}
     </Stack>
   );
@@ -125,6 +127,30 @@ export function AdminDetailTabs({ onChange, tabs, value }: AdminDetailTabsProps)
   );
 }
 
+interface AdminPreviewPaneProps extends Omit<StackProps, 'children'> {
+  children: ReactNode;
+}
+
+export function AdminPreviewPane({ children, sx, ...stackProps }: AdminPreviewPaneProps) {
+  return (
+    <Stack
+      spacing={1.5}
+      sx={{
+        flex: 1,
+        height: '100%',
+        minHeight: 0,
+        minWidth: 0,
+        overflow: 'hidden',
+        width: '100%',
+        ...sx
+      }}
+      {...stackProps}
+    >
+      {children}
+    </Stack>
+  );
+}
+
 interface AdminRecordHeaderProps {
   actions?: ReactNode;
   title: ReactNode;
@@ -132,18 +158,22 @@ interface AdminRecordHeaderProps {
 
 export function AdminRecordHeader({ actions, title }: AdminRecordHeaderProps) {
   return (
-    <Stack
-      direction={{ sm: 'row', xs: 'column' }}
-      spacing={1.5}
-      justifyContent="space-between"
-      alignItems={{ sm: 'flex-start', xs: 'stretch' }}
-    >
-      <div>
-        <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+    <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center" sx={{ minWidth: 0 }}>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography
+          variant="h6"
+          component="h3"
+          sx={{
+            fontWeight: 700,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        >
           {title}
         </Typography>
-      </div>
-      {actions}
+      </Box>
+      {actions ? <Box sx={{ display: 'flex', flexShrink: 0, alignItems: 'center' }}>{actions}</Box> : null}
     </Stack>
   );
 }
@@ -251,6 +281,7 @@ export function AdminRecordWorkspacePanel({ children, contentSx, panelSx }: Admi
           flex: 1,
           flexDirection: 'column',
           minHeight: 0,
+          overflowY: 'auto',
           p: { md: 2.5, xs: 2 },
           ...contentSx
         }}

@@ -16,11 +16,6 @@ export const ADMIN_SESSION_KEYS = {
   preview: 'site-admin-preview-session'
 } as const;
 
-export const LEGACY_ADMIN_SESSION_KEYS = {
-  connected: 'site-admin-migration-connected-session',
-  preview: 'site-admin-migration-preview-session'
-} as const;
-
 export const ADMIN_READ_PROBE = {
   filePath: 'content/config.json',
   folderPath: 'content'

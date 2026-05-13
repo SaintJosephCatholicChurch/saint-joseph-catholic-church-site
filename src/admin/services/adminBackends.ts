@@ -1,6 +1,7 @@
-import { ADMIN_AUTH, ADMIN_REPOSITORY, ADMIN_SESSION_KEYS, LEGACY_ADMIN_SESSION_KEYS } from '../adminConfig';
+import { ADMIN_AUTH, ADMIN_REPOSITORY, ADMIN_SESSION_KEYS } from '../adminConfig';
 import { GitHubRepoClient } from './githubRepoClient';
 import { NetlifyAuthError, NetlifyGitHubAuthenticator } from './netlifyGitHubAuth';
+import { PreviewRepoClient } from './previewRepoClient';
 
 import type { AdminAuthAdapter, AdminAuthSession, SessionStoreLike } from './adminTypes';
 
@@ -61,17 +62,6 @@ function clearStoredSessions(storage: SessionStoreLike | null, keys: string[]) {
   }
 }
 
-function readStoredSessionFromKeys(storage: SessionStoreLike | null, keys: string[]) {
-  for (const key of keys) {
-    const session = readStoredSession(storage, key);
-    if (session) {
-      return session;
-    }
-  }
-
-  return null;
-}
-
 function normalizeAuthScope(scope: string | null | undefined) {
   return (scope || '').trim();
 }
@@ -120,11 +110,7 @@ export function createConnectedAdminBackend(
       user
     };
 
-    clearStoredSessions(storage, [
-      LEGACY_ADMIN_SESSION_KEYS.connected,
-      ADMIN_SESSION_KEYS.preview,
-      LEGACY_ADMIN_SESSION_KEYS.preview
-    ]);
+    clearStoredSessions(storage, [ADMIN_SESSION_KEYS.preview]);
     writeStoredSession(storage, ADMIN_SESSION_KEYS.connected, session);
     return session;
   };
@@ -145,37 +131,73 @@ export function createConnectedAdminBackend(
       return buildSession(authResponse.token);
     },
     logout() {
-      clearStoredSessions(storage, [
-        ADMIN_SESSION_KEYS.connected,
-        LEGACY_ADMIN_SESSION_KEYS.connected,
-        ADMIN_SESSION_KEYS.preview,
-        LEGACY_ADMIN_SESSION_KEYS.preview
-      ]);
+      clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected, ADMIN_SESSION_KEYS.preview]);
       return Promise.resolve();
     },
     async restoreSession() {
-      clearStoredSessions(storage, [ADMIN_SESSION_KEYS.preview, LEGACY_ADMIN_SESSION_KEYS.preview]);
-
-      const storedSession = readStoredSessionFromKeys(storage, [
-        ADMIN_SESSION_KEYS.connected,
-        LEGACY_ADMIN_SESSION_KEYS.connected
-      ]);
+      const storedSession = readStoredSession(storage, ADMIN_SESSION_KEYS.connected);
 
       if (!storedSession?.token) {
         return null;
       }
 
       if (normalizeAuthScope(storedSession.authScope) !== normalizeAuthScope(ADMIN_AUTH.authScope)) {
-        clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected, LEGACY_ADMIN_SESSION_KEYS.connected]);
+        clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected]);
         return null;
       }
 
       try {
         return await buildSession(storedSession.token);
       } catch {
-        clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected, LEGACY_ADMIN_SESSION_KEYS.connected]);
+        clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected]);
         return null;
       }
+    }
+  };
+}
+
+export function createPreviewAdminBackend(
+  storage: SessionStoreLike | null = getDefaultBrowserStorage()
+): AdminAuthAdapter {
+  const createRepoClient = () => new PreviewRepoClient();
+
+  const buildSession = () => {
+    const session: AdminAuthSession = {
+      authScope: '',
+      branch: 'preview',
+      mode: 'preview',
+      repo: 'local-preview',
+      restoredAt: new Date().toISOString(),
+      token: '',
+      user: {
+        login: 'preview',
+        name: 'Preview mode'
+      }
+    };
+
+    clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected]);
+    writeStoredSession(storage, ADMIN_SESSION_KEYS.preview, session);
+    return session;
+  };
+
+  return {
+    mode: 'preview',
+    createRepoClient,
+    login() {
+      return Promise.resolve(buildSession());
+    },
+    logout() {
+      clearStoredSessions(storage, [ADMIN_SESSION_KEYS.preview]);
+      return Promise.resolve();
+    },
+    restoreSession() {
+      const storedSession = readStoredSession(storage, ADMIN_SESSION_KEYS.preview);
+
+      if (!storedSession || storedSession.mode !== 'preview') {
+        return Promise.resolve(null);
+      }
+
+      return Promise.resolve(buildSession());
     }
   };
 }

@@ -7,16 +7,25 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import { EXTRA_EXTRA_SMALL_BREAKPOINT, MAX_APP_WIDTH } from '../../constants';
 import getContainerQuery from '../../util/container.util';
+import transientOptions from '../../util/transientOptions';
 import Logo from '../logo/Logo';
 import GiveButton from './GiveButton';
 import NavigationItems from './NavigationItems';
 
 import type { MenuData } from '../../interface';
+import type { NavigationAdminSelection } from './Navigation';
 
-const StyledMobileSpacer = styled('div')(
-  ({ theme }) => `
+interface StyledMobileSpacerProps {
+  $inCMS: boolean;
+}
+
+const StyledMobileSpacer = styled(
+  'div',
+  transientOptions
+)<StyledMobileSpacerProps>(
+  ({ theme, $inCMS }) => `
     flex-grow: 1;
-    ${theme.breakpoints.up('md')} {
+    ${getContainerQuery(theme.breakpoints.up('md'), $inCMS)} {
       display: none;
     }
   `
@@ -26,17 +35,25 @@ const StyledDesktopSpacer = styled('div')`
   flex-grow: 1;
 `;
 
-const StyledGiveButtonOffset = styled('div')(
-  ({ theme }) => `
+interface StyledGiveButtonOffsetProps {
+  $inCMS: boolean;
+}
+
+const StyledGiveButtonOffset = styled(
+  'div',
+  transientOptions
+)<StyledGiveButtonOffsetProps>(
+  ({ theme, $inCMS }) => `
     width: 0;
 
-    ${theme.breakpoints.up(1524)} {
+    ${getContainerQuery(theme.breakpoints.up(1524), $inCMS)} {
       width: 162px;
     }
   `
 );
 
 interface NavigationBarProps {
+  adminSelection?: NavigationAdminSelection;
   menuDetails: MenuData;
   onlineGivingTitle: string;
   onlineGivingUrl: string;
@@ -45,6 +62,7 @@ interface NavigationBarProps {
 }
 
 const NavigationBar = ({
+  adminSelection,
   menuDetails,
   onlineGivingTitle,
   onlineGivingUrl,
@@ -66,7 +84,7 @@ const NavigationBar = ({
       }}
       position={inCMS ? 'absolute' : undefined}
     >
-      <StyledGiveButtonOffset />
+      <StyledGiveButtonOffset $inCMS={inCMS} />
       <StyledDesktopSpacer />
       <Toolbar
         sx={{
@@ -111,13 +129,30 @@ const NavigationBar = ({
         >
           <MenuIcon fontSize="large" />
         </IconButton>
-        <StyledMobileSpacer />
-        <Logo details={menuDetails.logo} trigger={trigger} inCMS={inCMS} />
+        <StyledMobileSpacer $inCMS={inCMS} />
+        <Logo
+          details={menuDetails.logo}
+          trigger={trigger}
+          inCMS={inCMS}
+          primaryProps={adminSelection?.logoPrimaryProps}
+          secondaryProps={adminSelection?.logoSecondaryProps}
+        />
         <StyledDesktopSpacer />
-        <NavigationItems menuDetails={menuDetails} inCMS={inCMS} />
+        <NavigationItems
+          disableNavigation={adminSelection?.disableMenuLinkNavigation}
+          menuDetails={menuDetails}
+          inCMS={inCMS}
+          getMenuItemProps={adminSelection?.getMenuItemProps}
+          getMenuLinkProps={adminSelection?.getMenuLinkProps}
+        />
       </Toolbar>
       <StyledDesktopSpacer />
-      <GiveButton title={onlineGivingTitle} onlineGivingUrl={onlineGivingUrl} inCMS={inCMS} />
+      <GiveButton
+        title={onlineGivingTitle}
+        onlineGivingUrl={onlineGivingUrl}
+        inCMS={inCMS}
+        selectionProps={adminSelection?.giveButtonProps}
+      />
     </AppBar>
   );
 };

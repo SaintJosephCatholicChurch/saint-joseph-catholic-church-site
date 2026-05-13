@@ -11,6 +11,7 @@ import Logo from '../logo/Logo';
 import MobileNavItem from './MobileNavItem';
 
 import type { MenuData } from '../../interface';
+import type { NavigationAdminSelection } from './Navigation';
 
 const DRAWER_WIDTH = 240;
 
@@ -20,13 +21,20 @@ const StyledDrawerContents = styled('div')`
 `;
 
 interface NavigationDrawerProps {
+  adminSelection?: NavigationAdminSelection;
   menuDetails: MenuData;
   mobileOpen: boolean;
   onMobileOpenToggle: () => void;
   inCMS: boolean;
 }
 
-const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }: NavigationDrawerProps) => {
+const NavigationDrawer = ({
+  adminSelection,
+  menuDetails,
+  mobileOpen,
+  onMobileOpenToggle,
+  inCMS
+}: NavigationDrawerProps) => {
   const theme = useTheme();
 
   const iOS = useMemo(() => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent), []);
@@ -37,13 +45,20 @@ const NavigationDrawer = ({ menuDetails, mobileOpen, onMobileOpenToggle, inCMS }
         <Logo details={menuDetails.logo} inCMS={inCMS} />
         <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.8)', pt: 2 }} />
         <List>
-          {menuDetails.menu_items.map((item) => (
-            <MobileNavItem key={`drawer-nav-item-${item.title}`} item={item} />
+          {menuDetails.menu_items.map((item, itemIndex) => (
+            <MobileNavItem
+              disableNavigation={adminSelection?.disableMenuLinkNavigation}
+              key={`drawer-nav-item-${item.title}`}
+              item={item}
+              selectionProps={adminSelection?.getMenuItemProps?.(itemIndex)}
+              getMenuLinkProps={adminSelection?.getMenuLinkProps}
+              itemIndex={itemIndex}
+            />
           ))}
         </List>
       </StyledDrawerContents>
     ),
-    [inCMS, menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
+    [adminSelection, inCMS, menuDetails.logo, menuDetails.menu_items, onMobileOpenToggle]
   );
 
   const container = useModalContainer();

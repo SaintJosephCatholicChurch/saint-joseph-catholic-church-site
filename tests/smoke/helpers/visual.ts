@@ -32,6 +32,11 @@ export async function waitForVisualReady(page: Page) {
   if ((await dailyReadingsHeading.count()) > 0) {
     await expect(page.getByText('Acts 1:1-11').first()).toBeVisible({ timeout: 5000 });
   }
+
+  const mainSearchBox = page.locator('main').getByRole('textbox', { name: 'Search...' }).first();
+  if ((await mainSearchBox.count()) > 0) {
+    await expect(mainSearchBox).toBeVisible({ timeout: 5000 });
+  }
 }
 
 export async function expectStableScreenshot(page: Page, name: string, options: StableScreenshotOptions = {}) {

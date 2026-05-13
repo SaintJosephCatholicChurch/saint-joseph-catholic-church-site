@@ -1,43 +1,70 @@
 'use client';
 
-import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+
+import { AdminSurfacePanel } from './components/AdminCards';
 
 import type { ReactNode } from 'react';
-
-const PreviewRoot = styled('div')`
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  justify-content: center;
-  border: 1px solid rgba(127, 35, 44, 0.12);
-  border-radius: 4px;
-  background: white;
-  box-shadow: 0 18px 40px rgba(57, 33, 24, 0.08);
-  overflow: hidden;
-  padding: 4px;
-`;
-
-const PreviewFrame = styled('div')`
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  color: #222;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 4px;
-  overflow: auto;
-  container: page / inline-size;
-`;
+import type { SxProps, Theme } from '@mui/material/styles';
 
 interface AdminPagePreviewFrameProps {
   children: ReactNode;
-  framePadding?: string;
-  maxWidth?: number | string;
+  pageSx?: SxProps<Theme>;
 }
 
-export function AdminPagePreviewFrame({ children, framePadding, maxWidth }: AdminPagePreviewFrameProps) {
+export function AdminPagePreviewFrame({ children, pageSx }: AdminPagePreviewFrameProps) {
   return (
-    <PreviewRoot>
-      <PreviewFrame style={{ maxWidth, padding: framePadding }}>{children}</PreviewFrame>
-    </PreviewRoot>
+    <AdminSurfacePanel
+      tone="plain"
+      sx={{
+        alignItems: 'stretch',
+        background: 'rgba(255, 255, 255, 0.92)',
+        borderRadius: '4px',
+        color: '#222',
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        height: '100%',
+        justifyContent: 'stretch',
+        margin: '0 auto',
+        minHeight: 0,
+        minWidth: 0,
+        overflow: 'hidden',
+        p: '4px',
+        width: '100%'
+      }}
+    >
+      <Box
+        sx={{
+          boxSizing: 'border-box',
+          display: 'flex',
+          justifyContent: 'center',
+          flex: 1,
+          minHeight: 0,
+          minWidth: 0,
+          overflowX: 'hidden',
+          overflowY: 'auto',
+          px: { md: 3, sm: 3, xs: 1.5 },
+          width: '100%'
+        }}
+      >
+        <Box
+          sx={{
+            boxSizing: 'border-box',
+            container: 'page / inline-size',
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            maxWidth: '100%',
+            minHeight: '100%',
+            minWidth: 0,
+            width: '100%',
+            ...pageSx
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    </AdminSurfacePanel>
   );
 }

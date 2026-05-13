@@ -1,4 +1,4 @@
-export type AdminBackendMode = 'connected';
+export type AdminBackendMode = 'connected' | 'preview';
 
 export type AdminAuthStatus = 'restoring' | 'unauthenticated' | 'authenticating' | 'authenticated' | 'error';
 

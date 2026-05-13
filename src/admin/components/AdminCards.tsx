@@ -1,9 +1,17 @@
 'use client';
 
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import type { ReactNode } from 'react';
 import type { ButtonProps } from '@mui/material/Button';
@@ -35,8 +43,9 @@ export function AdminSectionCard({ actions, children, description, headerActions
         border: '1px solid rgba(191, 48, 60, 0.12)',
         borderRadius: '4px',
         minWidth: 0,
-        padding: { md: 2.5, xs: 2 },
-        width: '100%'
+        padding: { md: 1.5, xs: 1 },
+        width: '100%',
+        height: '100%'
       }}
     >
       <Stack spacing={description ? 1 : 0}>
@@ -92,6 +101,179 @@ export function AdminRepeaterCard({ actions, children, title }: AdminRepeaterCar
       </Stack>
       {children}
     </Stack>
+  );
+}
+
+interface AdminSortableAccordionRepeaterCardProps {
+  active?: boolean;
+  children?: ReactNode;
+  defaultExpanded?: boolean;
+  dragHandleLabel?: string;
+  expanded?: boolean;
+  id: string;
+  onExpandedChange?: (expanded: boolean) => void;
+  onExpandedEntered?: () => void;
+  onSummaryClick?: () => void;
+  onRemove?: () => void;
+  preview?: ReactNode;
+  removeButtonLabel?: string;
+  summary?: ReactNode;
+  summaryActions?: ReactNode;
+  title: string;
+}
+
+export function AdminSortableAccordionRepeaterCard({
+  active = false,
+  children,
+  defaultExpanded = false,
+  dragHandleLabel,
+  expanded,
+  id,
+  onExpandedChange,
+  onExpandedEntered,
+  onSummaryClick,
+  onRemove,
+  preview,
+  removeButtonLabel = 'Remove item',
+  summary,
+  summaryActions,
+  title
+}: AdminSortableAccordionRepeaterCardProps) {
+  const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const shouldRenderDetails = Boolean(children) || Boolean(onRemove);
+  const expansionProps = typeof expanded === 'boolean' ? { expanded } : { defaultExpanded };
+
+  function handleSummaryClick(event: React.MouseEvent<HTMLDivElement>) {
+    if (!onSummaryClick) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    onSummaryClick();
+  }
+
+  return (
+    <Accordion
+      {...expansionProps}
+      disableGutters
+      onChange={(_event, nextExpanded) => onExpandedChange?.(nextExpanded)}
+      ref={setNodeRef}
+      slotProps={{
+        transition: {
+          onEntered: () => onExpandedEntered?.()
+        }
+      }}
+      sx={{
+        '&::before': { display: 'none' },
+        background: '#fbfaf8',
+        border: active ? '1px solid rgba(127, 35, 44, 0.42)' : '1px solid rgba(191, 48, 60, 0.12)',
+        borderRadius: '4px',
+        boxShadow: 'none',
+        opacity: isDragging ? 0.92 : 1,
+        overflow: 'hidden',
+        position: 'relative',
+        transform: CSS.Transform.toString(transform),
+        transition,
+        ...(active
+          ? {
+              boxShadow: '0 16px 30px rgba(92, 24, 32, 0.14)'
+            }
+          : null)
+      }}
+    >
+      <AccordionSummary
+        component="div"
+        expandIcon={onSummaryClick ? null : <ExpandMoreIcon />}
+        onClick={handleSummaryClick}
+        sx={{
+          '& .MuiAccordionSummary-content': { alignItems: 'center', margin: 0, minWidth: 0 },
+          cursor: onSummaryClick ? 'pointer' : 'default',
+          minHeight: 88,
+          px: 2,
+          py: 1.5
+        }}
+      >
+        <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0, width: '100%' }}>
+          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+            <IconButton
+              aria-label={dragHandleLabel || `Reorder ${title}`}
+              component="div"
+              edge="start"
+              size="small"
+              {...attributes}
+              {...listeners}
+              onClick={(event) => event.stopPropagation()}
+              sx={{ color: '#7a5d50', cursor: isDragging ? 'grabbing' : 'grab' }}
+            >
+              <DragIndicatorIcon fontSize="small" />
+            </IconButton>
+            {preview ? (
+              <Stack
+                alignItems="center"
+                justifyContent="center"
+                sx={{
+                  background: 'rgba(191, 48, 60, 0.04)',
+                  border: '1px solid rgba(191, 48, 60, 0.12)',
+                  borderRadius: '4px',
+                  flexShrink: 0,
+                  height: 56,
+                  overflow: 'hidden',
+                  width: 92
+                }}
+              >
+                {preview}
+              </Stack>
+            ) : null}
+            <Stack spacing={0.25} sx={{ flex: 1, minWidth: 0 }}>
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {title}
+              </Typography>
+              {summary ? (
+                <Typography
+                  sx={{
+                    color: '#6e5b53',
+                    lineHeight: 1.5,
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}
+                  variant="body2"
+                >
+                  {summary}
+                </Typography>
+              ) : null}
+            </Stack>
+          </Stack>
+          {summaryActions ? (
+            <Stack direction="row" spacing={1} alignItems="center" onClick={(event) => event.stopPropagation()}>
+              {summaryActions}
+            </Stack>
+          ) : null}
+        </Stack>
+      </AccordionSummary>
+      {shouldRenderDetails ? (
+        <AccordionDetails sx={{ px: 2, pb: 2, pt: 0 }}>
+          <Stack spacing={2}>
+            {children}
+            {onRemove ? (
+              <Button variant="outlined" color="inherit" onClick={onRemove}>
+                {removeButtonLabel}
+              </Button>
+            ) : null}
+          </Stack>
+        </AccordionDetails>
+      ) : null}
+    </Accordion>
   );
 }
 

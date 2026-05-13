@@ -11,19 +11,19 @@ import type { AdminRepoClient, RepoDirectoryEntry } from '../services/adminTypes
 
 export const MEDIA_FOLDERS = [
   {
-    description: 'Shared assets for pages, news, and general site content stored in public/files.',
+    description: 'Shared assets for pages, news, and general site content.',
     folderId: 'shared',
     label: 'Shared Files',
     rule: SITE_MEDIA_RULES.shared
   },
   {
-    description: 'Staff headshots and portrait images stored in public/staff.',
+    description: 'Staff headshots and portrait images.',
     folderId: 'staff',
     label: 'Staff Images',
     rule: SITE_MEDIA_RULES.staff
   },
   {
-    description: 'Bulletin PDFs and related bulletin assets stored in public/bulletins.',
+    description: 'Bulletin PDFs and related bulletin assets.',
     folderId: 'bulletins',
     label: 'Bulletin Assets',
     rule: SITE_MEDIA_RULES.bulletins

@@ -29,7 +29,7 @@ import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import { useSearchScores } from '../../util/search.util';
 import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
-import Help from '../../cms/pages/help/Help';
+import Help from '../../admin/help/Help';
 
 import type { SidebarProps } from '../../lib/sidebar';
 import type { ContentPageProps, SearchPageProps } from '../routeData';

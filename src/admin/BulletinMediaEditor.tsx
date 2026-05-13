@@ -26,8 +26,9 @@ import {
   AdminSidebarListBody,
   AdminStatusStack
 } from './components/AdminWorkspace';
-import { AdminFilePathField } from './AdminFilePathField';
-import { AdminMediaLibrary } from './AdminMediaLibrary';
+import { AdminDialogTitle } from './components/AdminDialogTitle';
+import { AdminFilePathField } from './components/AdminFilePathField';
+import { AdminMediaLibrary, AdminMediaLibraryViewToggle, type MediaLibraryViewMode } from './AdminMediaLibrary';
 import {
   createEmptyBulletinDraft,
   createBulletinDraft,
@@ -212,6 +213,7 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   const [editorState, setEditorState] = useState<BulletinEditorState>(INITIAL_EDITOR_STATE);
   const [draft, setDraft] = useState<BulletinDraft>(createEmptyBulletinDraft());
   const [pdfPickerOpen, setPdfPickerOpen] = useState(false);
+  const [mediaLibraryViewMode, setMediaLibraryViewMode] = useState<MediaLibraryViewMode>('list');
   const selectedBulletinIdRef = useRef(INITIAL_EDITOR_STATE.selectedBulletinId);
 
   const buildSelectionHref = useCallback(
@@ -596,10 +598,16 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       </Stack>
 
       <Dialog fullWidth maxWidth="lg" onClose={() => setPdfPickerOpen(false)} open={pdfPickerOpen}>
-        <DialogTitle>Select or upload bulletin PDF</DialogTitle>
+        <AdminDialogTitle
+          actions={<AdminMediaLibraryViewToggle value={mediaLibraryViewMode} onChange={setMediaLibraryViewMode} />}
+          onClose={() => setPdfPickerOpen(false)}
+        >
+          Select or upload bulletin PDF
+        </AdminDialogTitle>
         <DialogContent dividers>
           <AdminMediaLibrary
             allowedFolderIds={['bulletins']}
+            currentAssetPublicPath={draft.pdf || undefined}
             onChange={handleMediaChanged}
             onSelectAsset={(asset) => {
               updateDraft({ pdf: asset.publicPath });
@@ -608,7 +616,9 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
             repoClient={repoClient}
             selectionFilter="files"
             selectionLabel="Use selected PDF"
+            showHeader={false}
             title="Bulletin PDF selector"
+            viewMode={mediaLibraryViewMode}
           />
         </DialogContent>
       </Dialog>

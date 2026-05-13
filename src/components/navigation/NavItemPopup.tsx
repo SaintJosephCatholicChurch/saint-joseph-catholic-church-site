@@ -33,14 +33,26 @@ const StyledPopUpMenu = styled(
 );
 
 interface NavItemPopupProps {
+  disableNavigation?: boolean;
+  getMenuLinkProps?: (itemIndex: number, linkIndex: number) => Record<string, string>;
   item: MenuItem;
+  itemIndex: number;
   onClick: (link: MenuItem | MenuLink) => (_event: MouseEvent) => void;
   onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
   activeMenuItemRef: MutableRefObject<HTMLButtonElement>;
   keyboardSelectedIndex: number;
 }
 
-const NavItemPopup = ({ item, onClick, onKeyDown, activeMenuItemRef, keyboardSelectedIndex }: NavItemPopupProps) => {
+const NavItemPopup = ({
+  disableNavigation = false,
+  getMenuLinkProps,
+  item,
+  itemIndex,
+  onClick,
+  onKeyDown,
+  activeMenuItemRef,
+  keyboardSelectedIndex
+}: NavItemPopupProps) => {
   const { width: windowWidth } = useWindowSize();
   const [ref, { width, x }] = useElementSize();
 
@@ -62,9 +74,11 @@ const NavItemPopup = ({ item, onClick, onKeyDown, activeMenuItemRef, keyboardSel
         <NavLink
           ref={index === keyboardSelectedIndex ? activeMenuItemRef : undefined}
           key={`menu-${item.title}-link-${link.title}`}
+          disableNavigation={disableNavigation}
           link={link}
           onClick={onClick(link)}
           onKeyDown={onKeyDown}
+          selectionProps={getMenuLinkProps?.(itemIndex, index)}
         />
       ))}
     </StyledPopUpMenu>

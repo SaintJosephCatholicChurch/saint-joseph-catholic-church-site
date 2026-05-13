@@ -4,6 +4,11 @@ import { memo } from 'react';
 
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+import {
+  createHomepageFeaturedFieldKey,
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { FeaturedLink as FeaturedLinkData } from '../../interface';
 
@@ -34,13 +39,23 @@ const StyledSummary = styled('div')(
 );
 
 interface FeaturedLinkProps {
+  activeFieldKey?: HomepageFieldKey;
+  featuredIndex?: number;
   featuredLink?: FeaturedLinkData;
   isFullWidth?: boolean;
 }
 
 const FeaturedLink = memo(
-  ({ featuredLink: { title, url, image, summary }, isFullWidth = false }: FeaturedLinkProps) => {
+  ({
+    activeFieldKey,
+    featuredIndex = 0,
+    featuredLink: { title, url, image, summary },
+    isFullWidth = false
+  }: FeaturedLinkProps) => {
     const theme = useTheme();
+    const titleFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'title');
+    const imageFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'image');
+    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'summary');
 
     if (isEmpty(title) || isEmpty(url)) {
       return null;
@@ -50,6 +65,7 @@ const FeaturedLink = memo(
       <div>
         <Button
           component="a"
+          {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
           href={url}
           target={
             /^https:\/\/[a-z]+\.stjosephchurchbluffton\.org\//.test(url) && !/\.[a-z]{1,4}$/.test(url)
@@ -66,14 +82,34 @@ const FeaturedLink = memo(
             padding: '0 8px 8px',
             alignItems: 'flex-start',
             justifyContent: 'flex-start',
+            ...getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey),
             [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
               gap: '12px'
             }
           }}
         >
-          <StyledTitle>{title}</StyledTitle>
-          {isNotEmpty(image) ? <StyledImage src={image} alt={title} /> : null}
-          {isNotEmpty(summary) ? <StyledSummary>{summary}</StyledSummary> : null}
+          <StyledTitle
+            {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
+            style={getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey)}
+          >
+            {title}
+          </StyledTitle>
+          {isNotEmpty(image) ? (
+            <StyledImage
+              src={image}
+              alt={title}
+              {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
+              style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
+            />
+          ) : null}
+          {isNotEmpty(summary) ? (
+            <StyledSummary
+              {...({ ['data-admin-field-key']: summaryFieldKey } as Record<string, string>)}
+              style={getActiveHomepagePreviewTargetStyle(summaryFieldKey, activeFieldKey)}
+            >
+              {summary}
+            </StyledSummary>
+          ) : null}
         </Button>
       </div>
     );

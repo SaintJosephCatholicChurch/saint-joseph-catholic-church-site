@@ -7,6 +7,12 @@ import Tabs from '@mui/material/Tabs';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
+import { getAdminPreviewFieldTargetProps } from '../../admin/content-sections/components/adminPreviewSelection';
+import {
+  ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE,
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../admin/content-sections/homepage/fieldKeys';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
@@ -16,6 +22,32 @@ import ScheduleTabPanel from './ScheduleTabPanel';
 
 import type { SyntheticEvent } from 'react';
 import type { LiveStreamButton, Times } from '../../interface';
+
+interface ScheduleAdminSelection {
+  activePathKey?: string;
+}
+
+interface HomepageScheduleAdminSelection {
+  activeFieldKey?: HomepageFieldKey;
+  invitationTextFieldKey?: HomepageFieldKey;
+  liveStreamButtonFieldKey?: HomepageFieldKey;
+  massTimesTarget?: boolean;
+  scheduleTitleFieldKey?: HomepageFieldKey;
+}
+
+const ACTIVE_PREVIEW_TARGET_STYLE = {
+  backgroundColor: 'rgba(188, 47, 59, 0.1)',
+  boxShadow: 'inset 0 0 0 1px rgba(127, 35, 44, 0.24)',
+  borderRadius: '4px'
+} as const;
+
+function buildCategoryPath(categoryId?: string) {
+  return categoryId ? `category|${categoryId}|name` : undefined;
+}
+
+function getActivePreviewTargetStyle(pathKey: string | undefined, activePathKey?: string) {
+  return pathKey && activePathKey === pathKey ? ACTIVE_PREVIEW_TARGET_STYLE : undefined;
+}
 
 const StyledContainerContents = styled('div')`
   display: flex;
@@ -107,6 +139,9 @@ function a11yProps(index: number) {
 }
 
 interface ScheduleProps {
+  adminSelection?: ScheduleAdminSelection;
+  homepageAdminSelection?: HomepageScheduleAdminSelection;
+  inCMS?: boolean;
   times: Times[];
   title?: string;
   liveStreamButton?: LiveStreamButton;
@@ -117,6 +152,9 @@ interface ScheduleProps {
 }
 
 const Schedule = ({
+  adminSelection,
+  homepageAdminSelection,
+  inCMS = false,
   times,
   title,
   liveStreamButton,
@@ -127,6 +165,9 @@ const Schedule = ({
 }: ScheduleProps) => {
   const theme = useTheme();
   const [value, setValue] = useState(0);
+  const massTimesTargetProps = homepageAdminSelection?.massTimesTarget
+    ? ({ [ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE]: 'true' } as Record<string, string>)
+    : undefined;
 
   const handleChange = useCallback(
     (_event: SyntheticEvent, newValue: number) => {
@@ -147,46 +188,75 @@ const Schedule = ({
       <StyledHeader>
         {isNotEmpty(invitationText) ? (
           <>
-            <StyledHeaderText key="invitation-text">{invitationText}</StyledHeaderText>
+            <StyledHeaderText
+              key="invitation-text"
+              {...getAdminPreviewFieldTargetProps(homepageAdminSelection?.invitationTextFieldKey)}
+              style={getActiveHomepagePreviewTargetStyle(
+                homepageAdminSelection?.invitationTextFieldKey,
+                homepageAdminSelection?.activeFieldKey
+              )}
+            >
+              {invitationText}
+            </StyledHeaderText>
             <StyledHeaderBorder key="invitation-text-divider" />
           </>
         ) : null}
         {isNotEmpty(facebookPage) ? (
-          <HomepageLiveStream facebookPage={facebookPage} liveStreamButton={liveStreamButton} />
+          <HomepageLiveStream
+            activeFieldKey={homepageAdminSelection?.activeFieldKey}
+            buttonFieldKey={homepageAdminSelection?.liveStreamButtonFieldKey}
+            facebookPage={facebookPage}
+            liveStreamButton={liveStreamButton}
+          />
         ) : null}
-        <Button
-          LinkComponent={Link}
-          key="bulletin-button"
-          href="/parish-bulletins"
-          variant="text"
-          size="large"
-          startIcon={<NewspaperIcon />}
-          sx={{
-            fontSize: '18px',
-            color: '#bc2f3b',
-            '&:hover': {
-              backgroundColor: 'rgba(210, 76, 87, 0.1)',
-              color: '#d24c57'
-            },
-            '.MuiButton-startIcon > *:nth-of-type(1)': {
-              fontSize: '22px'
-            },
-            [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
-              fontSize: '14px',
+        {!inCMS ? (
+          <Button
+            LinkComponent={Link}
+            key="bulletin-button"
+            href="/parish-bulletins"
+            onClick={homepageAdminSelection ? (event) => event.preventDefault() : undefined}
+            variant="text"
+            size="large"
+            startIcon={<NewspaperIcon />}
+            sx={{
+              fontSize: '18px',
+              color: '#bc2f3b',
+              '&:hover': {
+                backgroundColor: 'rgba(210, 76, 87, 0.1)',
+                color: '#d24c57'
+              },
               '.MuiButton-startIcon > *:nth-of-type(1)': {
-                fontSize: '18px'
+                fontSize: '22px'
+              },
+              [getContainerQuery(theme.breakpoints.down(EXTRA_EXTRA_SMALL_BREAKPOINT))]: {
+                fontSize: '14px',
+                '.MuiButton-startIcon > *:nth-of-type(1)': {
+                  fontSize: '18px'
+                }
               }
-            }
-          }}
-        >
-          Bulletins
-        </Button>
-        {isNotEmpty(title) ? <StyledHeaderPreText key="title">{title}</StyledHeaderPreText> : null}
+            }}
+          >
+            Bulletins
+          </Button>
+        ) : null}
+        {isNotEmpty(title) ? (
+          <StyledHeaderPreText
+            key="title"
+            {...getAdminPreviewFieldTargetProps(homepageAdminSelection?.scheduleTitleFieldKey)}
+            style={getActiveHomepagePreviewTargetStyle(
+              homepageAdminSelection?.scheduleTitleFieldKey,
+              homepageAdminSelection?.activeFieldKey
+            )}
+          >
+            {title}
+          </StyledHeaderPreText>
+        ) : null}
       </StyledHeader>
       <List
         component="div"
         aria-labelledby="nested-list-subheader"
         disablePadding
+        {...massTimesTargetProps}
         sx={{
           width: '100%',
           [getContainerQuery(theme.breakpoints.up('md'))]: {
@@ -195,10 +265,15 @@ const Schedule = ({
         }}
       >
         {times.map((timeSchedule, index) => (
-          <MobileScheduleTabPanel key={`mobile-schedule-panel-${index}`} times={timeSchedule} index={index} />
+          <MobileScheduleTabPanel
+            key={`mobile-schedule-panel-${timeSchedule.id || index}`}
+            activePathKey={adminSelection?.activePathKey}
+            times={timeSchedule}
+            index={index}
+          />
         ))}
       </List>
-      <StyledTabsWrapper>
+      <StyledTabsWrapper {...massTimesTargetProps}>
         <Tabs
           orientation="vertical"
           variant="fullWidth"
@@ -214,40 +289,54 @@ const Schedule = ({
             }
           }}
         >
-          {times.map((timeSchedule, index) => (
-            <Tab
-              key={`time-schedule-${index}`}
-              label={timeSchedule.name}
-              {...a11yProps(index)}
-              sx={{
-                color: '#414141',
-                alignItems: 'flex-start',
-                fontWeight: 400,
-                fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
-                letterSpacing: 0,
-                textAlign: 'left',
-                '&.Mui-selected': {
-                  color: '#414141',
-                  backgroundColor: '#ffffff'
-                },
-                fontSize: '18px',
-                padding: '16px',
-                minHeight: '100px',
-                [getContainerQuery(theme.breakpoints.up('lg'))]: {
-                  fontSize: '24px',
-                  padding: '32px',
-                  minHeight: '124px'
-                },
-                '&:not(.Mui-selected):hover': {
-                  backgroundColor: 'rgba(241, 241, 241, 0.5)'
-                }
-              }}
-            />
-          ))}
+          {times.map((timeSchedule, index) =>
+            (() => {
+              const categoryPath = buildCategoryPath(timeSchedule.id);
+
+              return (
+                <Tab
+                  key={`time-schedule-${timeSchedule.id || index}`}
+                  label={timeSchedule.name}
+                  {...getAdminPreviewFieldTargetProps(categoryPath)}
+                  {...a11yProps(index)}
+                  sx={{
+                    ...getActivePreviewTargetStyle(categoryPath, adminSelection?.activePathKey),
+                    color: '#414141',
+                    alignItems: 'flex-start',
+                    fontWeight: 400,
+                    fontFamily: "'Oswald', Helvetica, Arial, sans-serif",
+                    letterSpacing: 0,
+                    textAlign: 'left',
+                    '&.Mui-selected': {
+                      color: '#414141',
+                      backgroundColor: '#ffffff'
+                    },
+                    fontSize: '18px',
+                    padding: '16px',
+                    minHeight: '100px',
+                    [getContainerQuery(theme.breakpoints.up('lg'))]: {
+                      fontSize: '24px',
+                      padding: '32px',
+                      minHeight: '124px'
+                    },
+                    '&:not(.Mui-selected):hover': {
+                      backgroundColor: 'rgba(241, 241, 241, 0.5)'
+                    }
+                  }}
+                />
+              );
+            })()
+          )}
         </Tabs>
         <StyledTabPanels>
           {times.map((timeSchedule, index) => (
-            <ScheduleTabPanel key={`schedule-tab-${index}`} value={value} index={index} times={timeSchedule} />
+            <ScheduleTabPanel
+              key={`schedule-tab-${timeSchedule.id || index}`}
+              activePathKey={adminSelection?.activePathKey}
+              value={value}
+              index={index}
+              times={timeSchedule}
+            />
           ))}
         </StyledTabPanels>
       </StyledTabsWrapper>

@@ -47,12 +47,24 @@ function isMenuItem(link: MenuItem | MenuLink): link is MenuItem {
 }
 
 interface NavItemProps {
+  disableNavigation?: boolean;
+  getMenuLinkProps?: (itemIndex: number, linkIndex: number) => Record<string, string>;
   item: MenuItem;
+  itemIndex: number;
   size?: 'small' | 'normal';
   inCMS: boolean;
+  selectionProps?: Record<string, string>;
 }
 
-const NavItem = ({ item, size, inCMS }: NavItemProps) => {
+const NavItem = ({
+  disableNavigation = false,
+  getMenuLinkProps,
+  item,
+  itemIndex,
+  size,
+  inCMS,
+  selectionProps
+}: NavItemProps) => {
   const theme = useTheme();
   const { pathname } = useLocation();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -213,6 +225,7 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const url = useMemo(() => {
     return getMenuLinkUrl(item);
   }, [item]);
+  const navigationDisabled = disableNavigation || Boolean(selectionProps);
   const isExternalLink = !isEmpty(url) && url.startsWith('http');
 
   const [selected, setSelected] = useState(false);
@@ -234,13 +247,14 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
   const wrappedLink = useMemo(
     () => (
       <Button
-        LinkComponent={!isEmpty(url) && !isExternalLink ? Link : undefined}
-        href={!isEmpty(url) && !isExternalLink ? url : undefined}
+        LinkComponent={!navigationDisabled && !isEmpty(url) && !isExternalLink ? Link : undefined}
+        href={!navigationDisabled && !isEmpty(url) && !isExternalLink ? url : undefined}
         ref={buttonRef}
+        {...selectionProps}
         onClick={(event) => {
           handleOnClick(item)(event);
 
-          if (isExternalLink) {
+          if (!navigationDisabled && isExternalLink) {
             window.open(url, '_blank', 'noopener,noreferrer');
           }
         }}
@@ -311,6 +325,7 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
       inCMS,
       isExternalLink,
       item,
+      navigationDisabled,
       selected,
       size,
       theme.breakpoints,
@@ -323,7 +338,10 @@ const NavItem = ({ item, size, inCMS }: NavItemProps) => {
       {wrappedLink}
       {item.menu_links?.length && debouncedIsOpen ? (
         <NavItemPopup
+          disableNavigation={navigationDisabled}
+          getMenuLinkProps={getMenuLinkProps}
           item={item}
+          itemIndex={itemIndex}
           onClick={handleOnClick}
           onKeyDown={handleMenuLinkKeyDown}
           activeMenuItemRef={activeMenuItemRef}

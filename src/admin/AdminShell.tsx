@@ -30,69 +30,92 @@ import Typography from '@mui/material/Typography';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 
-import Help from '../cms/pages/help/Help';
+import Help from './help/Help';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuthProvider';
 import { BulletinMediaEditor } from './BulletinMediaEditor';
-import { ComplexStructuredContentEditor } from './ComplexStructuredContentEditor';
-import { DocumentContentEditor } from './DocumentContentEditor';
-import { StructuredContentEditor } from './StructuredContentEditor';
+import { ContentEditor } from './ContentEditor';
+import { DocumentContentEditor } from './documents/DocumentContentEditor';
 
+import type { Theme } from '@mui/material/styles';
 import type { AdminRepoClient } from './services/adminTypes';
 
-type AdminViewId = 'bulletins' | 'church' | 'events' | 'help' | 'homepage' | 'news' | 'pages' | 'siteConfig';
+type AdminViewId = 'bulletins' | 'church' | 'help' | 'homepage' | 'news' | 'pages' | 'siteConfig';
+type ExternalAdminViewId = 'events';
 
 const ADMIN_PRIMARY = '#7f232c';
 const ADMIN_PRIMARY_DARK = '#5c1820';
 const ADMIN_GOLD = '#b88d49';
 const DESKTOP_SIDEBAR_COLLAPSED_WIDTH = 84;
 const DESKTOP_SIDEBAR_EXPANDED_WIDTH = 272;
+const EVENTS_CALENDAR_URL = 'https://calendar.google.com/';
 
-interface AdminView {
-  id: AdminViewId;
+interface BaseAdminView {
   icon: ReactNode;
   label: string;
   requiresAuth?: boolean;
 }
 
+interface InternalAdminView extends BaseAdminView {
+  id: AdminViewId;
+  kind: 'internal';
+}
+
+interface ExternalAdminView extends BaseAdminView {
+  href: string;
+  id: ExternalAdminViewId;
+  kind: 'external';
+}
+
+type AdminView = ExternalAdminView | InternalAdminView;
+
 const ADMIN_VIEWS: AdminView[] = [
   {
     id: 'church',
+    kind: 'internal',
     label: 'Church Details',
     icon: <ChurchOutlinedIcon fontSize="small" />
   },
   {
     id: 'homepage',
+    kind: 'internal',
     label: 'Homepage',
     icon: <HomeOutlinedIcon fontSize="small" />
   },
   {
     id: 'bulletins',
+    kind: 'internal',
     label: 'Bulletins',
     icon: <MenuBookOutlinedIcon fontSize="small" />
   },
   {
     id: 'news',
+    kind: 'internal',
     label: 'News',
     icon: <NewspaperOutlinedIcon fontSize="small" />
   },
   {
     id: 'pages',
+    kind: 'internal',
     label: 'Pages',
     icon: <DescriptionOutlinedIcon fontSize="small" />
   },
   {
     id: 'siteConfig',
+    kind: 'internal',
     label: 'Site Config',
     icon: <SettingsOutlinedIcon fontSize="small" />
   },
   {
     id: 'events',
+    href: EVENTS_CALENDAR_URL,
+    kind: 'external',
     label: 'Events',
     icon: <EventOutlinedIcon fontSize="small" />,
     requiresAuth: false
   },
   {
     id: 'help',
+    kind: 'internal',
     label: 'Help',
     icon: <HelpOutlineIcon fontSize="small" />,
     requiresAuth: false
@@ -100,7 +123,55 @@ const ADMIN_VIEWS: AdminView[] = [
 ];
 
 function parseAdminViewId(value: string | null): AdminViewId {
-  return ADMIN_VIEWS.some((view) => view.id === value) ? (value as AdminViewId) : 'news';
+  return ADMIN_VIEWS.some((view) => view.kind === 'internal' && view.id === value) ? (value as AdminViewId) : 'news';
+}
+
+function isInternalAdminView(view: AdminView): view is InternalAdminView {
+  return view.kind === 'internal';
+}
+
+interface NavigationItemProps {
+  $active: boolean;
+  $collapsed: boolean;
+}
+
+const CHURCH_VIEW_TABS = ['details', 'staff', 'times'] as const;
+const NEWS_VIEW_TABS = ['posts', 'tags'] as const;
+const SITE_CONFIG_VIEW_TABS = ['general', 'menu'] as const;
+
+type ChurchViewTabId = (typeof CHURCH_VIEW_TABS)[number];
+type NewsViewTabId = (typeof NEWS_VIEW_TABS)[number];
+type SiteConfigViewTabId = (typeof SITE_CONFIG_VIEW_TABS)[number];
+
+function useAdminViewTabState<TValue extends string>(
+  allowedValues: readonly TValue[],
+  defaultValue: TValue,
+  paramName: string
+): readonly [TValue, (nextValue: TValue) => void] {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const rawValue = searchParams.get(paramName);
+  const value = rawValue && allowedValues.includes(rawValue as TValue) ? (rawValue as TValue) : defaultValue;
+
+  const setValue = useCallback(
+    (nextValue: TValue) => {
+      const nextParams = new URLSearchParams(searchParams.toString());
+
+      if (nextValue === defaultValue) {
+        nextParams.delete(paramName);
+      } else {
+        nextParams.set(paramName, nextValue);
+      }
+
+      const query = nextParams.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [defaultValue, paramName, pathname, router, searchParams]
+  );
+
+  return [value, setValue] as const;
 }
 
 const ADMIN_THEME = createTheme({
@@ -215,8 +286,8 @@ const ShellRoot = styled('div')(
 
     &::before,
     &::after {
-      content: '';
       position: absolute;
+      content: '';
       inset: auto;
       pointer-events: none;
       z-index: -1;
@@ -464,20 +535,29 @@ const TabbedViewBody = styled('div')`
 const SidebarBody = styled('div', {
   shouldForwardProp: (prop) => prop !== '$collapsed'
 })<{ $collapsed: boolean }>(
-  ({ $collapsed }) => `
+  ({ $collapsed, theme }) => `
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 10px 8px 8px;
     align-items: ${$collapsed ? 'center' : 'stretch'};
+
+    ${theme.breakpoints.down('lg')} {
+      gap: 0;
+      padding: 8px 0 0;
+    }
   `
 );
 
 const NavigationList = styled('div')(
-  () => `
+  ({ theme }) => `
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  ${theme.breakpoints.down('lg')} {
+    gap: 0;
+  }
 `
 );
 
@@ -494,61 +574,85 @@ const SidebarHeader = styled('div', {
   `
 );
 
-const NavigationButton = styled('button', {
-  shouldForwardProp: (prop) => prop !== '$active' && prop !== '$collapsed'
-})<{ $active: boolean; $collapsed: boolean }>(
-  ({ $active, $collapsed, theme }) => `
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: ${$collapsed ? 'center' : 'flex-start'};
-    gap: ${$collapsed ? '0' : '12px'};
-    width: ${$collapsed ? '56px' : '100%'};
-    min-height: 56px;
-    border: 1px solid ${$active ? 'rgba(127, 35, 44, 0.22)' : 'rgba(127, 35, 44, 0.08)'};
-    border-radius: 4px;
-    background: ${
-      $active
-        ? 'linear-gradient(135deg, rgba(127, 35, 44, 0.12), rgba(184, 141, 73, 0.12))'
-        : 'rgba(255, 255, 255, 0.58)'
-    };
-    box-shadow: ${$active ? '0 16px 28px rgba(92, 24, 32, 0.08)' : 'none'};
-    color: inherit;
-    cursor: pointer;
-    text-align: left;
-    padding: ${$collapsed ? '0' : '12px 14px 12px 18px'};
-    transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+const navigationItemStyles = ({
+  $active,
+  $collapsed,
+  theme
+}: {
+  theme: Theme;
+} & NavigationItemProps) => `
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: ${$collapsed ? 'center' : 'flex-start'};
+  gap: ${$collapsed ? '0' : '12px'};
+  width: ${$collapsed ? '56px' : '100%'};
+  min-height: 56px;
+  border: 1px solid ${$active ? 'rgba(127, 35, 44, 0.22)' : 'rgba(127, 35, 44, 0.08)'};
+  border-radius: 4px;
+  background: ${
+    $active ? 'linear-gradient(135deg, rgba(127, 35, 44, 0.12), rgba(184, 141, 73, 0.12))' : 'rgba(255, 255, 255, 0.58)'
+  };
+  box-shadow: ${$active ? '0 16px 28px rgba(92, 24, 32, 0.08)' : 'none'};
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  padding: ${$collapsed ? '0' : '12px 14px 12px 18px'};
+  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px auto 4px 4px;
+    width: 4px;
+    background: ${$active ? ADMIN_PRIMARY : 'transparent'};
+  }
+
+  &:hover {
+    border-color: rgba(127, 35, 44, 0.22);
+    background: ${$active ? 'linear-gradient(135deg, rgba(127, 35, 44, 0.14), rgba(184, 141, 73, 0.14))' : 'rgba(127, 35, 44, 0.05)'};
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(127, 35, 44, 0.18);
+    outline-offset: 2px;
+  }
+
+  ${theme.breakpoints.down('lg')} {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+    scroll-snap-align: start;
+    justify-content: flex-start;
+    min-height: 48px;
+    gap: 12px;
+    border: 0;
+    border-radius: 0;
+    background: ${$active ? 'rgba(127, 35, 44, 0.08)' : 'transparent'};
+    box-shadow: none;
+    padding: 10px 16px;
 
     &::before {
-      content: '';
-      position: absolute;
-      inset: 4px auto 4px 4px;
-      width: 4px;
-      background: ${$active ? ADMIN_PRIMARY : 'transparent'};
+      display: none;
     }
 
     &:hover {
-      border-color: rgba(127, 35, 44, 0.22);
-      background: ${$active ? 'linear-gradient(135deg, rgba(127, 35, 44, 0.14), rgba(184, 141, 73, 0.14))' : 'rgba(127, 35, 44, 0.05)'};
-      transform: translateY(-1px);
+      background: ${$active ? 'rgba(127, 35, 44, 0.1)' : 'rgba(127, 35, 44, 0.05)'};
+      border-color: transparent;
+      transform: none;
     }
+  }
+`;
 
-    &:focus-visible {
-      outline: 3px solid rgba(127, 35, 44, 0.18);
-      outline-offset: 2px;
-    }
+const NavigationButton = styled('button', {
+  shouldForwardProp: (prop) => prop !== '$active' && prop !== '$collapsed'
+})<NavigationItemProps>(navigationItemStyles);
 
-    ${theme.breakpoints.down('lg')} {
-      width: 100%;
-      min-width: 220px;
-      flex: 0 0 220px;
-      scroll-snap-align: start;
-      justify-content: flex-start;
-      gap: 8px;
-      padding: 8px 12px 8px 16px;
-    }
-  `
-);
+const NavigationLink = styled('a', {
+  shouldForwardProp: (prop) => prop !== '$active' && prop !== '$collapsed'
+})<NavigationItemProps>(navigationItemStyles);
 
 const NavIcon = styled('span')<{ $active: boolean }>(
   ({ $active }) => `
@@ -562,20 +666,21 @@ const NavIcon = styled('span')<{ $active: boolean }>(
   `
 );
 
-const NavLabel = styled('span')`
-  display: block;
-  font-family: 'Oswald', Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-`;
+const NavLabel = styled('span')(
+  ({ theme }) => `
+    display: block;
+    font-family: 'Oswald', Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 
-const DetailCard = styled('div')`
-  border: 1px solid rgba(127, 35, 44, 0.12);
-  border-radius: 4px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(250, 245, 238, 0.92));
-  padding: 18px;
-`;
+    ${theme.breakpoints.down('lg')} {
+      font-family: ${theme.typography.fontFamily};
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+  `
+);
 
 const LoginWorkspace = styled('div')`
   display: flex;
@@ -617,7 +722,8 @@ function ChurchDetailsView({
   onSaved: () => Promise<void>;
   repoClient: AdminRepoClient | null;
 }) {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useAdminViewTabState(CHURCH_VIEW_TABS, 'details', 'churchTab');
+
   return (
     <TabbedView>
       <TabbedViewTabs
@@ -625,37 +731,27 @@ function ChurchDetailsView({
         scrollButtons="auto"
         value={tab}
         variant="scrollable"
-        onChange={(_, next: number) => setTab(next)}
+        onChange={(_, next: ChurchViewTabId) => setTab(next)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
-        <Tab label="General Church Details" />
-        <Tab label="Mass & Confession Times" />
-        <Tab label="Staff" />
+        <Tab label="General Church Details" value="details" />
+        <Tab label="Mass & Confession Times" value="times" />
+        <Tab label="Staff" value="staff" />
       </TabbedViewTabs>
       <TabbedViewBody>
-        {tab === 0 ? (
-          <StructuredContentEditor
+        {tab === 'details' ? (
+          <ContentEditor
             onSaved={onSaved}
             repoClient={repoClient}
             showIntroAlert={false}
             visibleSections={['churchDetails']}
           />
         ) : null}
-        {tab === 1 ? (
-          <ComplexStructuredContentEditor
-            onSaved={onSaved}
-            repoClient={repoClient}
-            showIntroAlert={false}
-            visibleSections={['times']}
-          />
+        {tab === 'times' ? (
+          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['times']} />
         ) : null}
-        {tab === 2 ? (
-          <ComplexStructuredContentEditor
-            onSaved={onSaved}
-            repoClient={repoClient}
-            showIntroAlert={false}
-            visibleSections={['staff']}
-          />
+        {tab === 'staff' ? (
+          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['staff']} />
         ) : null}
       </TabbedViewBody>
     </TabbedView>
@@ -663,7 +759,8 @@ function ChurchDetailsView({
 }
 
 function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>; repoClient: AdminRepoClient | null }) {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useAdminViewTabState(SITE_CONFIG_VIEW_TABS, 'general', 'siteConfigTab');
+
   return (
     <TabbedView>
       <TabbedViewTabs
@@ -671,37 +768,23 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
         scrollButtons="auto"
         value={tab}
         variant="scrollable"
-        onChange={(_, next: number) => setTab(next)}
+        onChange={(_, next: SiteConfigViewTabId) => setTab(next)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
-        <Tab label="General Site Config" />
-        <Tab label="Menu & Logo" />
-        <Tab label="Site Styles" />
+        <Tab label="General Site Config" value="general" />
+        <Tab label="Menu & Logo" value="menu" />
       </TabbedViewTabs>
       <TabbedViewBody>
-        {tab === 0 ? (
-          <StructuredContentEditor
+        {tab === 'general' ? (
+          <ContentEditor
             onSaved={onSaved}
             repoClient={repoClient}
             showIntroAlert={false}
             visibleSections={['siteConfig']}
           />
         ) : null}
-        {tab === 1 ? (
-          <StructuredContentEditor
-            onSaved={onSaved}
-            repoClient={repoClient}
-            showIntroAlert={false}
-            visibleSections={['menu']}
-          />
-        ) : null}
-        {tab === 2 ? (
-          <StructuredContentEditor
-            onSaved={onSaved}
-            repoClient={repoClient}
-            showIntroAlert={false}
-            visibleSections={['styles']}
-          />
+        {tab === 'menu' ? (
+          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['menu']} />
         ) : null}
       </TabbedViewBody>
     </TabbedView>
@@ -709,19 +792,20 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
 }
 
 function NewsView({ onSaved, repoClient }: { onSaved: () => Promise<void>; repoClient: AdminRepoClient | null }) {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useAdminViewTabState(NEWS_VIEW_TABS, 'posts', 'newsTab');
+
   return (
     <TabbedView>
       <TabbedViewTabs
         value={tab}
-        onChange={(_, next: number) => setTab(next)}
+        onChange={(_, next: NewsViewTabId) => setTab(next)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
-        <Tab label="News Posts" />
-        <Tab label="Tags" />
+        <Tab label="News Posts" value="posts" />
+        <Tab label="Tags" value="tags" />
       </TabbedViewTabs>
       <TabbedViewBody>
-        {tab === 0 ? (
+        {tab === 'posts' ? (
           <DocumentContentEditor
             allowedKinds={['post']}
             onSaved={onSaved}
@@ -729,13 +813,8 @@ function NewsView({ onSaved, repoClient }: { onSaved: () => Promise<void>; repoC
             showIntroAlert={false}
           />
         ) : null}
-        {tab === 1 ? (
-          <StructuredContentEditor
-            onSaved={onSaved}
-            repoClient={repoClient}
-            showIntroAlert={false}
-            visibleSections={['tags']}
-          />
+        {tab === 'tags' ? (
+          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['tags']} />
         ) : null}
       </TabbedViewBody>
     </TabbedView>
@@ -748,7 +827,7 @@ function renderAdminView(viewId: AdminViewId, repoClient: AdminRepoClient | null
       return <ChurchDetailsView onSaved={onSaved} repoClient={repoClient} />;
     case 'homepage':
       return (
-        <ComplexStructuredContentEditor
+        <ContentEditor
           onSaved={onSaved}
           repoClient={repoClient}
           showIntroAlert={false}
@@ -770,29 +849,6 @@ function renderAdminView(viewId: AdminViewId, repoClient: AdminRepoClient | null
       );
     case 'siteConfig':
       return <SiteConfigView onSaved={onSaved} repoClient={repoClient} />;
-    case 'events':
-      return (
-        <DetailCard>
-          <Stack spacing={2}>
-            <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-              Events (Google Calendar)
-            </Typography>
-            <Typography sx={{ color: '#5d4a40', lineHeight: 1.7 }}>
-              The legacy admin exposed Events as a direct link to Google Calendar. That shortcut is restored here.
-            </Typography>
-            <Button
-              color="primary"
-              href="https://calendar.google.com/"
-              rel="noreferrer"
-              sx={{ alignSelf: 'flex-start' }}
-              target="_blank"
-              variant="contained"
-            >
-              Open Google Calendar
-            </Button>
-          </Stack>
-        </DetailCard>
-      );
     case 'help':
       return <Help />;
     default:
@@ -828,7 +884,7 @@ function AdminLoginPage({
           sx={{ mt: '32px', width: '100%' }}
         >
           <Button variant="contained" onClick={() => void login()} disabled={isBusy}>
-            Login
+            Connect GitHub
           </Button>
           <Button variant="outlined" color="inherit" href="/">
             Return to site
@@ -843,9 +899,10 @@ function AdminShellSurface() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { authStatus, error, login, logout, repoClient, session } = useAdminAuth();
+  const { authStatus, error, login, logout, repoClient, session, startPreview } = useAdminAuth();
   const activeViewId = parseAdminViewId(searchParams.get('view'));
-  const activeView = ADMIN_VIEWS.find((view) => view.id === activeViewId) || ADMIN_VIEWS[0];
+  const contentViews = ADMIN_VIEWS.filter(isInternalAdminView);
+  const activeView = contentViews.find((view) => view.id === activeViewId) || contentViews[0];
   const isAuthenticated = Boolean(session);
   const requiresAuth = activeView.requiresAuth !== false;
   const canRenderActiveView = !requiresAuth || Boolean(repoClient);
@@ -871,12 +928,20 @@ function AdminShellSurface() {
   );
 
   useEffect(() => {
-    if (!searchParams.has('mode')) {
+    if (searchParams.get('mode') !== 'preview' || session || authStatus !== 'unauthenticated') {
+      return;
+    }
+
+    void startPreview();
+  }, [authStatus, searchParams, session, startPreview]);
+
+  useEffect(() => {
+    if (!searchParams.has('mode') || !session) {
       return;
     }
 
     router.replace(buildAdminHref(), { scroll: false });
-  }, [buildAdminHref, router, searchParams]);
+  }, [buildAdminHref, router, searchParams, session]);
 
   function handleSelectView(viewId: AdminViewId) {
     setMobileSidebarOpen(false);
@@ -898,6 +963,10 @@ function AdminShellSurface() {
     setDesktopSidebarExpanded((current) => !current);
   }
 
+  function handleFollowExternalLink() {
+    setMobileSidebarOpen(false);
+  }
+
   const collectionViews = ADMIN_VIEWS.filter((view) => view.requiresAuth !== false);
   const utilityViews = ADMIN_VIEWS.filter((view) => view.requiresAuth === false);
   const isDesktopSidebarCollapsed = !desktopSidebarExpanded;
@@ -906,19 +975,34 @@ function AdminShellSurface() {
     return (
       <NavigationList>
         {views.map((view) => {
-          const button = (
-            <NavigationButton
-              key={view.id}
-              type="button"
-              aria-label={view.label}
-              $active={view.id === activeView.id}
-              $collapsed={options.collapsed}
-              onClick={() => handleSelectView(view.id)}
-            >
-              <NavIcon $active={view.id === activeView.id}>{view.icon}</NavIcon>
-              {!options.collapsed ? <NavLabel>{view.label}</NavLabel> : null}
-            </NavigationButton>
-          );
+          const button =
+            view.kind === 'external' ? (
+              <NavigationLink
+                key={view.id}
+                href={view.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={view.label}
+                $active={false}
+                $collapsed={options.collapsed}
+                onClick={handleFollowExternalLink}
+              >
+                <NavIcon $active={false}>{view.icon}</NavIcon>
+                {!options.collapsed ? <NavLabel>{view.label}</NavLabel> : null}
+              </NavigationLink>
+            ) : (
+              <NavigationButton
+                key={view.id}
+                type="button"
+                aria-label={view.label}
+                $active={view.id === activeView.id}
+                $collapsed={options.collapsed}
+                onClick={() => handleSelectView(view.id)}
+              >
+                <NavIcon $active={view.id === activeView.id}>{view.icon}</NavIcon>
+                {!options.collapsed ? <NavLabel>{view.label}</NavLabel> : null}
+              </NavigationButton>
+            );
 
           return options.showTooltips ? (
             <Tooltip key={view.id} title={view.label} placement="right">
@@ -938,19 +1022,21 @@ function AdminShellSurface() {
       <Divider flexItem />
       {renderSidebarNavigation(utilityViews, { collapsed: false, showTooltips: false })}
       <Divider flexItem />
-      {session ? (
-        <Typography sx={{ color: '#616169', fontSize: '0.9rem', lineHeight: 1.5 }}>{session.user.name}</Typography>
-      ) : null}
-      <Button
-        variant="outlined"
-        color="inherit"
-        startIcon={<LogoutOutlinedIcon />}
-        onClick={() => void logout()}
-        disabled={!session}
-        fullWidth
-      >
-        Logout
-      </Button>
+      <Stack spacing={1.5} sx={{ px: 2, py: 2 }}>
+        {session ? (
+          <Typography sx={{ color: '#616169', fontSize: '0.9rem', lineHeight: 1.5 }}>{session.user.name}</Typography>
+        ) : null}
+        <Button
+          variant="outlined"
+          color="inherit"
+          startIcon={<LogoutOutlinedIcon />}
+          onClick={() => void logout()}
+          disabled={!session}
+          fullWidth
+        >
+          Logout
+        </Button>
+      </Stack>
     </SidebarBody>
   );
 

@@ -22,6 +22,12 @@ import DailyReadings from '../widgets/DailyReadings';
 import FeaturedLinkView from '../widgets/FeaturedLink';
 import FeaturedPageView from '../widgets/FeaturedPage';
 import RecentNews from '../widgets/recent-news/RecentNews';
+import {
+  HOMEPAGE_HERO_FIELD_KEYS,
+  HOMEPAGE_SECTION_FIELD_KEYS,
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { FeaturedLink, FeaturedPage, HomePageData, PostContent, Times } from '../../interface';
 
@@ -226,6 +232,9 @@ const StyledDailyReadingsSectionBackground = styled(
 );
 
 interface HomepageViewProps {
+  adminSelection?: {
+    activeFieldKey?: HomepageFieldKey;
+  };
   homePageData: HomePageData;
   times: Times[];
   recentPosts: PostContent[];
@@ -234,6 +243,7 @@ interface HomepageViewProps {
 
 const HomepageView = memo(
   ({
+    adminSelection,
     homePageData: {
       slides,
       schedule_section,
@@ -257,29 +267,68 @@ const HomepageView = memo(
       []
     );
 
-    const renderFeaturedLinkPage = useCallback((featuredContent: FeaturedLink | FeaturedPage, index: number) => {
-      if (featuredContent.type === 'featured_link') {
-        return <FeaturedLinkView key={`page-${index}`} featuredLink={featuredContent} isFullWidth />;
-      }
-      return <FeaturedPageView key={`page-${index}`} featuredPage={featuredContent} isFullWidth />;
-    }, []);
+    const renderFeaturedLinkPage = useCallback(
+      (featuredContent: FeaturedLink | FeaturedPage, index: number) => {
+        if (featuredContent.type === 'featured_link') {
+          return (
+            <FeaturedLinkView
+              key={`page-${index}`}
+              activeFieldKey={adminSelection?.activeFieldKey}
+              featuredIndex={index}
+              featuredLink={featuredContent}
+              isFullWidth
+            />
+          );
+        }
+        return (
+          <FeaturedPageView
+            key={`page-${index}`}
+            activeFieldKey={adminSelection?.activeFieldKey}
+            featuredIndex={index}
+            featuredPage={featuredContent}
+            isFullWidth
+          />
+        );
+      },
+      [adminSelection?.activeFieldKey]
+    );
 
     return (
       <StyledHomepageView>
-        <CarouselView slides={slides} details={schedule_section} />
+        <CarouselView activeFieldKey={adminSelection?.activeFieldKey} slides={slides} details={schedule_section} />
         <ScheduleWidget
+          homepageAdminSelection={{
+            activeFieldKey: adminSelection?.activeFieldKey,
+            invitationTextFieldKey: HOMEPAGE_HERO_FIELD_KEYS.invitationText,
+            liveStreamButtonFieldKey: HOMEPAGE_HERO_FIELD_KEYS.liveStreamButtonTitle,
+            massTimesTarget: true,
+            scheduleTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.scheduleSectionTitle
+          }}
           times={times}
           details={schedule_section}
           liveStreamButton={live_stream_button}
           invitationText={invitation_text}
           facebookPage={churchDetails.facebook_page}
         />
-        <StyledReadingsAndPageSectionWrapper>
+        <StyledReadingsAndPageSectionWrapper
+          {...({
+            ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground
+          } as Record<string, string>)}
+          style={getActiveHomepagePreviewTargetStyle(
+            HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground,
+            adminSelection?.activeFieldKey
+          )}
+        >
           <StyledDailyReadingsSectionBackground $background={daily_readings.daily_readings_background} />
           <Container>
             <StyledReadingsWidgetSectionContent>
               {featured.map((featuredContent, index) => renderFeaturedLinkPage(featuredContent, index))}
-              <DailyReadings dailyReadings={daily_readings} isFullWidth showSubtitle />
+              <DailyReadings
+                activeFieldKey={adminSelection?.activeFieldKey}
+                dailyReadings={daily_readings}
+                isFullWidth
+                showSubtitle
+              />
             </StyledReadingsWidgetSectionContent>
           </Container>
         </StyledReadingsAndPageSectionWrapper>
@@ -288,17 +337,44 @@ const HomepageView = memo(
             <StyledNewsletterSignupSectionContent>
               <StyledNewsletterBanner>
                 <StyledNewsletterBannerTitles>
-                  <StyledNewsletterBannerTitle>{newsletter.bannerTitle}</StyledNewsletterBannerTitle>
-                  <StyledNewsletterBannerSubtitle>{newsletter.bannerSubtitle}</StyledNewsletterBannerSubtitle>
+                  <StyledNewsletterBannerTitle
+                    {...({
+                      ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerTitle
+                    } as Record<string, string>)}
+                    style={getActiveHomepagePreviewTargetStyle(
+                      HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerTitle,
+                      adminSelection?.activeFieldKey
+                    )}
+                  >
+                    {newsletter.bannerTitle}
+                  </StyledNewsletterBannerTitle>
+                  <StyledNewsletterBannerSubtitle
+                    {...({
+                      ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerSubtitle
+                    } as Record<string, string>)}
+                    style={getActiveHomepagePreviewTargetStyle(
+                      HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerSubtitle,
+                      adminSelection?.activeFieldKey
+                    )}
+                  >
+                    {newsletter.bannerSubtitle}
+                  </StyledNewsletterBannerSubtitle>
                 </StyledNewsletterBannerTitles>
                 <StyledNewsletterSignupButtonWrapper>
                   <Button
+                    {...({
+                      ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupLink
+                    } as Record<string, string>)}
                     variant="contained"
                     size="large"
                     startIcon={<Image src="./flocknote-logo.png" alt="flocknote signup" width={32} height={32} />}
                     href={newsletter.signupLink}
                     target="_blank"
                     sx={{
+                      ...getActiveHomepagePreviewTargetStyle(
+                        HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupLink,
+                        adminSelection?.activeFieldKey
+                      ),
                       fontSize: '26px',
                       backgroundColor: '#bc2f3b',
                       '&:hover': {
@@ -325,7 +401,17 @@ const HomepageView = memo(
                       }
                     }}
                   >
-                    {newsletter.signupButtonText}
+                    <span
+                      {...({
+                        ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupButtonText
+                      } as Record<string, string>)}
+                      style={getActiveHomepagePreviewTargetStyle(
+                        HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupButtonText,
+                        adminSelection?.activeFieldKey
+                      )}
+                    >
+                      {newsletter.signupButtonText}
+                    </span>
                   </Button>
                 </StyledNewsletterSignupButtonWrapper>
               </StyledNewsletterBanner>

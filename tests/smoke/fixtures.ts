@@ -9,6 +9,7 @@ const LIVE_ENDPOINT = `${CHURCH_API_BASE_URL}/live`;
 const PARISH_REGISTRATION_ENDPOINT = `${CHURCH_API_BASE_URL}/parish-registration`;
 const READINGS_ENDPOINT = `${CHURCH_API_BASE_URL}/readings`;
 const READINGS_PODCAST_ENDPOINT = `${CHURCH_API_BASE_URL}/readings-podcast`;
+const SMOKE_FIXED_TIME = Date.UTC(2026, 4, 6, 12, 0, 0);
 
 const MOCK_READINGS_RSS = `<?xml version="1.0" encoding="UTF-8"?>
 <rss>
@@ -238,7 +239,35 @@ export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMo
       });
     });
 
-    await page.addInitScript(() => {
+    await page.addInitScript((fixedTime) => {
+      const RealDate = Date;
+
+      class FixedDate extends RealDate {
+        constructor(...args: unknown[]) {
+          if (args.length === 0) {
+            super(fixedTime);
+            return;
+          }
+
+          super(...(args as ConstructorParameters<DateConstructor>));
+        }
+
+        static now() {
+          return fixedTime;
+        }
+
+        static parse(value: string) {
+          return RealDate.parse(value);
+        }
+
+        static UTC(...args: Parameters<DateConstructor['UTC']>) {
+          return RealDate.UTC(...args);
+        }
+      }
+
+      Object.setPrototypeOf(FixedDate, RealDate);
+      globalThis.Date = FixedDate as DateConstructor;
+
       const installStabilityStyles = () => {
         if (document.querySelector('style[data-playwright-stability]')) {
           return;
@@ -268,7 +297,7 @@ export const test = base.extend<{ isMobileProject: boolean; smokeApi: SmokeApiMo
       }
 
       installStabilityStyles();
-    });
+    }, SMOKE_FIXED_TIME);
 
     await applyFixture(page);
 

@@ -180,9 +180,13 @@ function parseFeaturedPageReference(value: string) {
   };
 }
 
-function buildFeaturedPageReference(draft: HomepageFeaturedPageDraft) {
+function buildFeaturedPageReference(draft: HomepageFeaturedPageDraft, allowIncomplete = false) {
   const pageSlug = draft.pageSlug.trim();
   if (!pageSlug) {
+    if (allowIncomplete) {
+      return null;
+    }
+
     throw new Error('Featured page items require a page slug.');
   }
 
@@ -212,21 +216,35 @@ function createFeaturedDraft(value: FeaturedLink | FeaturedPage): HomepageFeatur
   };
 }
 
-function buildFeaturedValue(value: HomepageFeaturedDraft) {
+function buildFeaturedValue(value: HomepageFeaturedDraft, allowIncomplete = false) {
   if (value.type === 'featured_page') {
+    const pageReference = buildFeaturedPageReference(value, allowIncomplete);
+
+    if (!pageReference) {
+      return null;
+    }
+
     return {
       image: trimOptionalValue(value.image),
-      page: buildFeaturedPageReference(value),
+      page: pageReference,
       summary: trimOptionalValue(value.summary),
       type: value.type
     };
   }
 
   if (!value.title.trim()) {
+    if (allowIncomplete) {
+      return null;
+    }
+
     throw new Error('Featured link items require a title.');
   }
 
   if (!value.url.trim()) {
+    if (allowIncomplete) {
+      return null;
+    }
+
     throw new Error('Featured link items require a URL.');
   }
 
@@ -239,7 +257,9 @@ function buildFeaturedValue(value: HomepageFeaturedDraft) {
   };
 }
 
-function buildHomepageValue(draft: HomepageDraft) {
+function buildHomepageValue(draft: HomepageDraft, options?: { allowIncomplete?: boolean }) {
+  const allowIncomplete = options?.allowIncomplete === true;
+
   return siteContentAdapters.homepage.parse(
     JSON.stringify({
       daily_readings: {
@@ -248,7 +268,9 @@ function buildHomepageValue(draft: HomepageDraft) {
         title: draft.dailyReadingsTitle.trim()
       },
       daily_readings_background: draft.dailyReadingsBackground.trim(),
-      featured: draft.featured.map((entry) => buildFeaturedValue(entry)),
+      featured: draft.featured
+        .map((entry) => buildFeaturedValue(entry, allowIncomplete))
+        .filter((entry) => entry !== null),
       invitation_text: draft.invitationText.trim(),
       live_stream_button: {
         title: draft.liveStreamButtonTitle.trim(),
@@ -269,6 +291,10 @@ function buildHomepageValue(draft: HomepageDraft) {
         const image = slide.image.trim();
 
         if (!image) {
+          if (allowIncomplete) {
+            return null;
+          }
+
           throw new Error(`Homepage slide ${index + 1} requires an image path.`);
         }
 
@@ -276,14 +302,14 @@ function buildHomepageValue(draft: HomepageDraft) {
           image,
           title: trimOptionalValue(slide.title)
         };
-      })
+      }).filter((slide) => slide !== null)
     }),
     SITE_CONTENT_PATHS.homepage
   );
 }
 
 export function buildHomepagePreviewData(draft: HomepageDraft): HomePageData {
-  return buildHomepageValue(draft);
+  return buildHomepageValue(draft, { allowIncomplete: true });
 }
 
 function buildStaffValue(draft: StaffEntryDraft[]) {

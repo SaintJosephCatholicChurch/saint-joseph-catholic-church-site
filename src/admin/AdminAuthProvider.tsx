@@ -2,10 +2,10 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { createConnectedAdminBackend } from './services/adminBackends';
+import { createConnectedAdminBackend, createPreviewAdminBackend } from './services/adminBackends';
 
 import type { ReactNode } from 'react';
-import type { AdminAuthAdapter, AdminAuthSession, AdminAuthStatus, AdminRepoClient } from './services/adminTypes';
+import type { AdminAuthAdapter, AdminAuthSession, AdminAuthStatus, AdminBackendMode, AdminRepoClient } from './services/adminTypes';
 
 type AdminAuthContextValue = {
   authStatus: AdminAuthStatus;
@@ -15,6 +15,7 @@ type AdminAuthContextValue = {
   repoClient: AdminRepoClient | null;
   restoreSession: () => Promise<void>;
   session: AdminAuthSession | null;
+  startPreview: () => Promise<void>;
 };
 
 const AdminAuthContext = createContext<AdminAuthContextValue | null>(null);
@@ -28,18 +29,44 @@ function buildErrorMessage(error: unknown) {
 }
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
-  const backend = useMemo<AdminAuthAdapter>(() => createConnectedAdminBackend(), []);
+  const backends = useMemo<Record<AdminBackendMode, AdminAuthAdapter>>(
+    () => ({
+      connected: createConnectedAdminBackend(),
+      preview: createPreviewAdminBackend()
+    }),
+    []
+  );
 
   const [authStatus, setAuthStatus] = useState<AdminAuthStatus>('restoring');
   const [session, setSession] = useState<AdminAuthSession | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const getRequestedMode = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const value = new URLSearchParams(window.location.search).get('mode');
+    return value === 'preview' ? 'preview' : null;
+  }, []);
 
   const restoreSession = useCallback(async () => {
     setAuthStatus('restoring');
     setError(null);
 
     try {
-      const restoredSession = await backend.restoreSession();
+      const requestedMode = getRequestedMode();
+      const backendOrder: AdminBackendMode[] = requestedMode === 'preview' ? ['preview'] : ['connected', 'preview'];
+      let restoredSession: AdminAuthSession | null = null;
+
+      for (const mode of backendOrder) {
+        restoredSession = await backends[mode].restoreSession();
+
+        if (restoredSession) {
+          break;
+        }
+      }
+
       setSession(restoredSession);
       setAuthStatus(restoredSession ? 'authenticated' : 'unauthenticated');
     } catch (restoreError) {
@@ -47,7 +74,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       setAuthStatus('error');
       setError(buildErrorMessage(restoreError));
     }
-  }, [backend]);
+  }, [backends, getRequestedMode]);
 
   useEffect(() => {
     void restoreSession();
@@ -58,7 +85,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     setError(null);
 
     try {
-      const nextSession = await backend.login();
+      const nextSession = await backends.connected.login();
       setSession(nextSession);
       setAuthStatus('authenticated');
     } catch (loginError) {
@@ -66,22 +93,37 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       setAuthStatus('error');
       setError(buildErrorMessage(loginError));
     }
-  }, [backend]);
+  }, [backends]);
+
+  const startPreview = useCallback(async () => {
+    setAuthStatus('authenticating');
+    setError(null);
+
+    try {
+      const nextSession = await backends.preview.login();
+      setSession(nextSession);
+      setAuthStatus('authenticated');
+    } catch (previewError) {
+      setSession(null);
+      setAuthStatus('error');
+      setError(buildErrorMessage(previewError));
+    }
+  }, [backends]);
 
   const logout = useCallback(async () => {
-    await backend.logout();
+    await Promise.all([backends.connected.logout(), backends.preview.logout()]);
     setSession(null);
     setError(null);
     setAuthStatus('unauthenticated');
-  }, [backend]);
+  }, [backends]);
 
   const repoClient = useMemo<AdminRepoClient | null>(() => {
     if (!session) {
       return null;
     }
 
-    return backend.createRepoClient(session);
-  }, [backend, session]);
+    return backends[session.mode].createRepoClient(session);
+  }, [backends, session]);
 
   const value = useMemo<AdminAuthContextValue>(
     () => ({
@@ -91,9 +133,10 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       logout,
       repoClient,
       restoreSession,
-      session
+      session,
+      startPreview
     }),
-    [authStatus, error, login, logout, repoClient, restoreSession, session]
+    [authStatus, error, login, logout, repoClient, restoreSession, session, startPreview]
   );
 
   return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;

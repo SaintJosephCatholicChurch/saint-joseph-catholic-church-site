@@ -1,97 +1,62 @@
-## Plan: Admin UI Consolidation
+## Plan: Times Editor Modernization
 
-This follow-on plan starts from the current repo state after the completed dependency-upgrade sequence above. The goal is to reduce repeated admin CSS, stop page components from owning their own bespoke styling shells, and converge the remaining CMS-owned editing UI into the admin boundary.
+Replace the legacy Mass Times editor with a dedicated admin-native editor and preview workflow that behaves like the newer admin surfaces while borrowing TinaCMS's field-path mental model. The implementation should keep the existing `content/times.json` contract intact, but introduce a single-path drill-down editor, shared sortable repeater cards at every reorderable layer, and a non-iframe preview that can send selection intents back into the editor and focus the matching control.
 
-The intended end state is:
+**Steps**
 
-- `src/admin/` owns the canonical editing UI surface.
-- shared admin primitives handle the repeated cards, panels, lists, tabs, alerts, pickers, and preview shells.
-- page-level editor files mostly compose those primitives instead of declaring custom-styled wrappers inline.
-- the legacy `src/cms/` editing/help surface is either removed or reduced to short-lived compatibility shims while ownership flips to admin.
-
-**Execution rule**
-
-- Complete exactly one checkpoint at a time.
-- Update this plan as each checkpoint lands, including concise notes about what was extracted, what still remains duplicated, and any deliberate deferrals.
-- Validate the touched slice immediately after each checkpoint before widening scope.
-- Prefer admin-owned semantic primitives over a large low-level token dump.
-- Do not preserve a long-lived dual ownership model between `src/admin/` and `src/cms/`; admin is the target boundary.
-
-**Checkpoint progress**
-
-1. `[x]` Checkpoint 1: Admin foundation primitives
-   Scope: Establish the shared admin card and panel vocabulary implied by the current editor surfaces.
-   Includes: shared section cards, repeater cards, selectable list cards, workspace panels, and the first pass of removing duplicated wrapper styling from editor files.
-   Excludes: CMS ownership moves and deeper editor-state refactors.
-   Notes: Complete. `src/admin/components/AdminCards.tsx` now owns the shared section, repeater, selectable-card, and workspace-panel primitives, and the foundation-level wrapper duplication has been removed from `StructuredContentEditor.tsx`, `ComplexStructuredContentEditor.tsx`, `DocumentContentEditor.tsx`, `BulletinMediaEditor.tsx`, and `AdminMediaLibrary.tsx`. The local homepage card wrapper in `ComplexStructuredContentEditor.tsx` has been folded into `AdminSectionCard`, and the remaining duplicated preview chrome, support-field surfaces, and sortable-accordion details are intentionally deferred to later checkpoints. Validation passed with repo-wide `npm run type-check`, the repo lint script, a broader `npx cross-env NODE_ENV=development eslint "**/*.{ts,tsx}"` pass, and a live `/admin` route smoke check on the running dev server.
-2. `[x]` Checkpoint 2: Document and bulletin workspace standardization
-   Scope: Remove the duplicated list/detail shell and record-workspace styling shared by the document and bulletin editors.
-   Includes: list sidebars, record headers, action bars, mobile back flows, editor/preview tab chrome, loading/error/success alert stacks, and selection-card presentation.
-   Excludes: migrating TinyMCE or schedule/times ownership out of `src/cms/`.
-   Notes: Complete. `src/admin/components/AdminWorkspace.tsx` now owns the shared status stacks, compact back/action bars, detail tabs, list sidebar shell, scrollable sidebar list body, record header, and record workspace panel used by both `DocumentContentEditor.tsx` and `BulletinMediaEditor.tsx`, and the duplicated list/detail shell styling has been removed from both editors. Repo-wide `npm run type-check` and the broader `npx cross-env NODE_ENV=development eslint "**/*.{ts,tsx}"` pass are clean after the refactor. Validation covered connected-mode document selection-to-URL sync on the running `/admin` route, preview-mode document list filtering, mobile editor/preview tab switching, mobile back flow, and reversible save/reset behavior, plus preview-mode bulletin dirty/reset, reversible save, and back-to-list behavior.
-3. `[ ]` Checkpoint 3: Structured editor card and repeater consolidation
-   Scope: Finish moving the duplicated structured-editor wrapper logic into shared admin primitives.
-   Includes: structured section cards, repeater cards, sortable accordion repeater chrome, and any remaining page-local card styling in the structured editors.
-   Excludes: public-site preview redesigns.
-4. `[ ]` Checkpoint 4: Picker, preview, and support-surface standardization
-   Scope: Converge the helper surfaces that still carry one-off styling.
-   Includes: `AdminFilePathField.tsx`, `AdminImagePathField.tsx`, `AdminMediaLibrary.tsx`, `AdminPagePreviewFrame.tsx`, `DocumentPreview.tsx`, and the shared preview/tabs treatment used by the admin editors.
-   Excludes: changing content contracts or server behavior.
-5. `[ ]` Checkpoint 5: TinyMCE/editor ownership flip into admin
-   Scope: Move the shared rich-text editor implementation out of the CMS boundary.
-   Includes: `src/cms/widgets/editor/`, TinyMCE bundle/plugins/transforms, and the import seams currently used by `AdminHtmlEditor.tsx`.
-   Excludes: broad editor feature changes beyond the ownership move and any compatibility fixes required to keep current behavior.
-6. `[ ]` Checkpoint 6: Schedule/times ownership flip into admin
-   Scope: Move the schedule/times widget family out of the CMS boundary and make admin the canonical owner.
-   Includes: `src/cms/widgets/times/`, the schedule widget root currently imported by `ComplexStructuredContentEditor.tsx`, and any supporting types or utility seams required by the move.
-   Excludes: redesigning the schedule UX beyond the minimum standardization needed by the admin layer.
-7. `[ ]` Checkpoint 7: Help and remaining CMS surface migration
-   Scope: Fold the remaining CMS-owned help surface and any leftover admin-facing CMS pieces into the admin boundary.
-   Includes: the help pages currently consumed by `AdminShell.tsx`, import path cleanup, and deletion or deprecation of obsolete CMS entrypoints.
-   Excludes: public help or documentation rewrites outside the admin editing experience.
-8. `[ ]` Checkpoint 8: Boundary cleanup and final convergence
-   Scope: Remove obsolete duplication, collapse stale ownership seams, and finish the broad admin refactor.
-   Includes: deleting superseded `src/cms/` surfaces where appropriate, cleaning dead exports and duplicate helpers, and sweeping remaining page-local admin styling that should now compose shared primitives.
-   Excludes: unrelated public-site cleanup.
+1. [x] Phase 1 - Establish the new Times editing shell. Replace the current inline `ScheduleWidget` mount inside `src/admin/ComplexStructuredContentEditor.tsx` with a dedicated Times editor workspace that follows the modern admin layout pattern: editor pane plus preview pane on desktop, tabbed editor/preview on mobile, and section-level save/reset controls reused from the current complex editor flow. This phase depends on the existing `times` draft/load/save path already owned by `src/admin/content/writableComplexContent.ts`.
+2. [x] Phase 1 - Create a Times-specific editor controller module under `src/admin/times/` to own local Times UI state that should not leak into the persistence layer: active drill-down path, currently selected category, and focus intents. Keep URL query params limited to major panel state only unless a later requirement explicitly asks for deep-linkable Times paths.
+3. [x] Phase 2 - Introduce a stable field-path model for every editable Times node. Define a typed path/selection shape that can address category, section, section note, day, time, and time note nodes, plus container title fields versus leaf fields. The controller should derive breadcrumbs/back navigation from this path in the same spirit as TinaCMS breadcrumbs, where the active field path controls both the visible editor layer and the current focus target.
+4. [x] Phase 2 - Build the single-path drill-down editor flow. Replace the current nested collapse-stack UX in `src/admin/times/TimesWidgetControl.tsx` and its children with view-per-layer editors: categories view -> category detail -> section/day/time detail, each with an explicit back affordance and breadcrumb context. Clicking a non-drag area of a card should open the next layer; clicking back should return to the parent layer without losing edits.
+5. [x] Phase 2 - Standardize all reorderable surfaces on the shared admin sortable card pattern. Refactor every reorderable Times list so category, section, day, time, and time-note items all use `AdminSortableAccordionRepeaterCard` from `src/admin/components/AdminCards.tsx` rather than local Times drag-handle frames. Where needed, add thin Times-specific wrappers that compose the shared admin card instead of reintroducing bespoke drag primitives.
+6. [x] Phase 2 - Keep mutation logic centralized while refactoring UI layers. Reuse the existing immutable update and id-normalization behavior from the current Times components, but move it behind helper functions that operate on the active Times path so add/remove/reorder operations remain local, testable, and consistent across drill-down views.
+7. [x] Phase 3 - Add a dedicated Times homepage preview component under `src/admin/` that renders only the homepage Mass Times widget instead of the full homepage. Feed it the live homepage section styling from `buildHomepagePreviewData(editorState.draft.homepage)` together with the draft `times` array, fixing the current mismatch where `src/admin/HomepagePreview.tsx` still imports static live `times` data. The preview should use `AdminPagePreviewFrame` and simply render in the space provided by the shared split layout.
+8. [x] Phase 3 - Instrument the public schedule render tree for editor selection. Add optional admin-only selection props and/or stable data attributes to `src/components/schedule/Schedule.tsx`, `src/components/schedule/ScheduleTabPanel.tsx`, and `src/components/schedule/MobileSchedulePanel.tsx` so both desktop and mobile preview markup can resolve to stable Times field paths. Gate actual click-to-focus dispatch behind a preview-interactivity flag so the preview only emits selection intents when the editor and preview are simultaneously visible. Container clicks should resolve to container title inputs; leaf clicks should resolve to the exact leaf input when available.
+9. [x] Phase 3 - Implement preview-to-editor focus and scroll synchronization only for simultaneous editor/preview layouts. Add a lightweight field registry in the new Times editor controller so inputs register themselves by Times field path, interactive preview clicks set the active field path, drill-down navigation opens the correct layer, and the resolved input is scrolled into view and focused. On small-screen and lower tabbed layouts where editor and preview are not visible together, keep the preview passive and disable click-to-focus entirely. Mirror TinaCMS's model conceptually only in the interactive split-view state: preview click -> resolve field path -> update active path -> derive breadcrumbs -> focus matching field.
+10. [x] Phase 3 - Add editor-side active state styling. Highlight the currently selected card or field summary in the drill-down tree and, when preview interactivity is enabled, lightly highlight the active preview target to reinforce the connection between preview and editor without turning the preview into a heavy visual-editing overlay.
+11. [x] Phase 4 - Clean up or retire legacy Times-specific UI components that only existed to support the nested collapse editor. Preserve data-shape helpers and deletion confirmations where still useful, but remove or simplify old components whose only purpose was the relic accordion-within-accordion flow.
+12. [ ] Phase 4 - Run focused validation and manual QA. Automated validation is complete (`npm run type-check`, `npm run lint`, and `npm run build` all passed). Manual admin QA still needs to verify add/reorder/drill-down/back/delete flows, preview click-to-focus behavior in both viewport modes, and save/reload behavior against the unchanged `content/times.json` contract.
 
 **Relevant files**
 
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminShell.tsx` — admin shell/theme entry point and the current help import seam.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\components\AdminCards.tsx` — shared admin card and panel primitives introduced as the foundation layer.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\DocumentContentEditor.tsx` — list/detail workspace duplication and editor/preview split behavior.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\BulletinMediaEditor.tsx` — parallel record-workspace shell and selectable-card usage.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\StructuredContentEditor.tsx` — section-card and menu-repeater usage.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\ComplexStructuredContentEditor.tsx` — structured card usage plus the schedule/times import seam.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminMediaLibrary.tsx` — shared media workspace surface.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminFilePathField.tsx` — file-picker display surface.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminImagePathField.tsx` — image-picker display surface.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminPagePreviewFrame.tsx` — shared preview container surface.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\AdminHtmlEditor.tsx` — current admin wrapper around CMS-owned TinyMCE internals.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\cms\widgets\editor\BundledEditor.tsx` — current TinyMCE bundle ownership root.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\cms\widgets\editor\htmlTransforms.ts` — current editor transform seam imported by admin.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\cms\widgets\times\TimesWidgetControl.tsx` — current schedule/times ownership root.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\cms\pages\help\Help.tsx` — current help ownership root consumed by admin.
-- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\admin-manual-test-checklist.md` — manual regression checklist to reuse or expand for the final admin pass.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\ComplexStructuredContentEditor.tsx` - current owner of the Times section mount, save/reset wiring, and the place where the legacy Times editor will be swapped for the new workspace shell.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\content\writableComplexContent.ts` - source of truth for loading, cloning, preview-building, and saving the `times` section; also where homepage preview data and Times draft data currently diverge.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\components\AdminCards.tsx` - contains `AdminSortableAccordionRepeaterCard`, the shared drag/drop repeater primitive the new Times editor should use at every reorderable layer.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\components\AdminWorkspace.tsx` - reusable admin workspace primitives for split editor/preview layouts, mobile tabs, preview panes, record headers, and back/action patterns.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\HomepagePreview.tsx` - demonstrates the current homepage preview pattern and the existing bug where Times previewing still uses imported live data.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\times\TimesWidgetControl.tsx` - current top-level legacy Times editor entry point; likely replaced or heavily rewritten into the new controller/view architecture.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\times\TimesWidgetSections.tsx` - current section-level add/reorder/edit behavior to be preserved while changing the editor experience.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\times\TimesWidgetDays.tsx` - current day-level add/reorder/edit behavior to be preserved while changing the editor experience.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\times\TimesWidgetTimes.tsx` - current time-level add/reorder/edit behavior to be preserved while changing the editor experience.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\admin\times\TimesWidgetTimeNotes.tsx` - current note-level add/reorder/edit behavior to be preserved while changing the editor experience.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\homepage\HomepageView.tsx` - homepage composition that currently renders the Mass Times widget inside the full homepage view.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\schedule\ScheduleWidget.tsx` - the public homepage Mass Times wrapper whose visual contract the new Times preview should match.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\schedule\Schedule.tsx` - desktop and mobile schedule composition, including category tabs and mobile accordion rendering.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\schedule\ScheduleTabPanel.tsx` - desktop schedule content tree that will need stable selection metadata or callbacks.
+- `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site\src\components\schedule\MobileSchedulePanel.tsx` - mobile schedule content tree that will need stable selection metadata or callbacks for the mobile preview mode.
+- `c:\Users\KaneFreeman\Downloads\tinacms-main\tinacms-main\packages\tinacms\src\toolkit\tina-state.tsx` - reference for deriving breadcrumbs from an active field path.
+- `c:\Users\KaneFreeman\Downloads\tinacms-main\tinacms-main\packages\@tinacms\app\src\lib\graphql-reducer.ts` - reference for preview click events being translated into active field state.
+- `c:\Users\KaneFreeman\Downloads\tinacms-main\tinacms-main\packages\tinacms\src\react.tsx` - reference for quick-edit click capture and field selection behavior.
 
 **Verification**
 
-1. After each checkpoint, run the narrowest validation that can falsify the current refactor slice before widening scope.
-2. For visual/admin-only extractions where no narrower executable check exists, use file diagnostics plus a live route check in the running admin dev server.
-3. Checkpoint 2 must validate document selection in the URL, list filtering, mobile back flows, preview switching, and save/reset behavior.
-4. Checkpoint 3 must validate section saves, repeater add/remove/reorder flows, and structured preview rendering.
-5. Checkpoints 5 through 7 must validate that the moved help/editor/times surfaces still render and save through the admin route after ownership flips.
-6. Before marking the overall plan complete, run `npm run build`, `npm run smoke:gate`, and the manual admin checklist, then explicitly note any remaining pre-existing typecheck issues that are outside the refactor slice.
+1. [x] Run `npm run type-check` in `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site` after implementation.
+2. [x] Run `npm run lint` in `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site`, noting that the current repo lint script only covers `**/*.ts`, so it is a partial validation for this TSX-heavy change.
+3. [x] Run `npm run build` in `s:\Repositories\SaintJosephCatholicChurch\saint-joseph-catholic-church-site` to validate the admin and schedule component integration end-to-end.
+4. [ ] Manual admin QA in `npm run dev`: confirm category/section/day/time/note add, delete, reorder, drill-down, and back navigation all work without losing draft state.
+5. [ ] Manual preview QA in `npm run dev`: confirm preview clicks navigate to and focus the correct field only in simultaneous editor/preview layouts, and confirm the schedule preview renders naturally in the shared preview pane width. Also confirm that on small-screen and lower tabbed layouts, where editor and preview are not visible at the same time, click-to-focus is disabled and the preview remains passive.
+6. [ ] Manual save QA in `npm run dev`: save Times changes, refresh, and confirm the editor reloads the saved structure correctly and the homepage-style preview matches the edited draft.
 
 **Decisions**
 
-- The dependency-upgrade sequence above is complete; this section tracks the post-upgrade admin consolidation work.
-- Visual cleanup is allowed, but the goal is consistency and reuse, not an unrelated redesign.
-- `src/admin/` is the target ownership boundary for the editing UI.
-- The remaining admin-facing `src/cms/` surface may be deprecated or removed as part of this work instead of being preserved indefinitely.
-- Public content contracts, route URLs, and backend/serverless behavior stay out of scope unless a checkpoint explicitly requires a compatibility fix.
+- Use a single preview that renders naturally inside the shared preview pane width. Enable click-to-focus only when editor and preview are simultaneously visible; on small-screen and lower tabbed layouts the preview remains passive.
+- Use a strict single-path drill-down editor, not a split list/detail layout.
+- Container clicks in the preview should focus the container title field, while leaf clicks should focus the exact leaf field when possible.
+- Do not use an iframe-based visual editing bridge. Recreate the TinaCMS interaction model with local field-path state, local registration, and direct React callbacks.
+- Preserve the persisted `content/times.json` schema and the existing `ComplexStructuredContentEditor` save boundary unless a later requirement explicitly expands scope.
+- Keep scope focused on the Times editor and its preview experience. Do not broaden this work into a general admin visual editing framework unless a clean reusable abstraction naturally falls out of the Times implementation.
 
-**Further considerations**
+**Further Considerations**
 
-1. The highest-value abstractions are semantic workspace primitives, not raw style tokens. If a new abstraction does not remove meaningful duplication from multiple admin surfaces, it should probably stay local.
-2. Keep the page components readable. Shared hooks or helpers are useful only when they reduce repetition without obscuring content-specific save and validation logic.
-3. Remove `src/cms/` ownership in deliberate steps. The last phase should delete obsolete boundaries only after the admin route no longer depends on them and validation has passed.
+1. If the implementation naturally produces a reusable selection-path registry and preview-focus hook, factor it into a narrow admin utility only after the Times flow is working; do not start by generalizing it.
+2. If preview click hit-targets on the public schedule markup become too noisy, add admin-only wrappers or data attributes gated by optional props rather than changing the public interaction model.

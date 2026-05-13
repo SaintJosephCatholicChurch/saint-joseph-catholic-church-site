@@ -1,6 +1,5 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import js from '@eslint/js';
@@ -158,5 +157,5 @@ export default defineConfig([
       'import/no-unresolved': [0]
     }
   },
-  globalIgnores(['next-env.d.ts', 'src/util/pdf/**', 'next.config.js'])
+  globalIgnores(['next-env.d.ts', 'public/sw.js', 'public/workbox-*.js', 'src/util/pdf/**', 'next.config.js'])
 ]);

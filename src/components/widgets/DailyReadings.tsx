@@ -5,6 +5,11 @@ import { DAILY_READINGS_RSS, getFeed } from '../../lib/rss';
 import { getDailyReadingIFrameUrl } from '../../lib/soundcloud';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
+import {
+  HOMEPAGE_SECTION_FIELD_KEYS,
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { DailyReadings } from '../../interface';
 
@@ -178,13 +183,19 @@ interface FeedReading {
 const ENTRY_REGEX = /<h4>[ ]*([^\n]+)[ ]*<a[ ]*href="([^\n]+)[ ]*"[ \\]*>[ ]*([^\n]+)[ ]*<\/a>[ ]*<\/h4>/g;
 
 interface DailyReadingsViewProps {
+  activeFieldKey?: HomepageFieldKey;
   dailyReadings: DailyReadings;
   isFullWidth?: boolean;
   showSubtitle?: boolean;
 }
 
 const DailyReadingsView = memo(
-  ({ dailyReadings: { title, subtitle }, isFullWidth = false, showSubtitle = false }: DailyReadingsViewProps) => {
+  ({
+    activeFieldKey,
+    dailyReadings: { title, subtitle },
+    isFullWidth = false,
+    showSubtitle = false
+  }: DailyReadingsViewProps) => {
     const [readings, setReadings] = useState<ReadingsData | null>(null);
     const [soundCloudUrl, setSoundCloudUrl] = useState<string | null>(null);
 
@@ -283,14 +294,57 @@ const DailyReadingsView = memo(
     const readingsCount = useMemo(() => readings?.readings.length ?? 0, [readings?.readings.length]);
 
     if (readingsCount === 0) {
-      return <StyledDailyReadingsWrapper $readingsCount={readingsCount}>{soundCloudIFrame}</StyledDailyReadingsWrapper>;
+      return (
+        <StyledDailyReadingsWrapper
+          $readingsCount={readingsCount}
+          {...({ ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground } as Record<
+            string,
+            string
+          >)}
+          style={getActiveHomepagePreviewTargetStyle(
+            HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground,
+            activeFieldKey
+          )}
+        >
+          {soundCloudIFrame}
+        </StyledDailyReadingsWrapper>
+      );
     }
 
     return (
-      <StyledDailyReadingsWrapper $readingsCount={readingsCount}>
+      <StyledDailyReadingsWrapper
+        $readingsCount={readingsCount}
+        {...({ ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground } as Record<
+          string,
+          string
+        >)}
+        style={getActiveHomepagePreviewTargetStyle(HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground, activeFieldKey)}
+      >
         <StyledDailyReadings $isFullWidth={isFullWidth}>
-          <StyledDailyReadingsTitle>{title}</StyledDailyReadingsTitle>
-          {showSubtitle ? <StyledDailyReadingsSubtitle key="subtitle">{subtitle}</StyledDailyReadingsSubtitle> : null}
+          <StyledDailyReadingsTitle
+            {...({ ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsTitle } as Record<
+              string,
+              string
+            >)}
+            style={getActiveHomepagePreviewTargetStyle(HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsTitle, activeFieldKey)}
+          >
+            {title}
+          </StyledDailyReadingsTitle>
+          {showSubtitle ? (
+            <StyledDailyReadingsSubtitle
+              key="subtitle"
+              {...({ ['data-admin-field-key']: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsSubtitle } as Record<
+                string,
+                string
+              >)}
+              style={getActiveHomepagePreviewTargetStyle(
+                HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsSubtitle,
+                activeFieldKey
+              )}
+            >
+              {subtitle}
+            </StyledDailyReadingsSubtitle>
+          ) : null}
           {readings.readings.map((reading, index) =>
             reading.link !== undefined ? (
               <StyledDailyReading

@@ -10,6 +10,11 @@ import getContainerQuery from '../../../../util/container.util';
 import { isNotEmpty } from '../../../../util/string.util';
 import useElementSize from '../../../../util/useElementSize';
 import useLiveStreamUrl from './useLiveStreamUrl';
+import {
+  getActiveHomepagePreviewTargetStyle,
+  type HomepageFieldKey
+} from '../../../../admin/content-sections/homepage/fieldKeys';
+import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
 
 import type { LiveStreamButton } from '../../../../interface';
 
@@ -39,11 +44,18 @@ const StyledLiveStreamWrapper = styled('div')(
 );
 
 interface HomepageLiveStreamProps {
+  activeFieldKey?: HomepageFieldKey;
+  buttonFieldKey?: HomepageFieldKey;
   facebookPage: string;
   liveStreamButton?: LiveStreamButton;
 }
 
-const HomepageLiveStream = ({ facebookPage, liveStreamButton }: HomepageLiveStreamProps) => {
+const HomepageLiveStream = ({
+  activeFieldKey,
+  buttonFieldKey,
+  facebookPage,
+  liveStreamButton
+}: HomepageLiveStreamProps) => {
   const theme = useTheme();
   const { loading, url, isStreaming } = useLiveStreamUrl();
 
@@ -73,9 +85,11 @@ const HomepageLiveStream = ({ facebookPage, liveStreamButton }: HomepageLiveStre
           variant="contained"
           size="large"
           startIcon={<FacebookIcon />}
+          {...getAdminPreviewFieldTargetProps(buttonFieldKey)}
           href={`https://www.facebook.com/${facebookPage}/live`}
           target="_blank"
           sx={{
+            ...getActiveHomepagePreviewTargetStyle(buttonFieldKey, activeFieldKey),
             marginTop: '16px',
             fontSize: '20px',
             backgroundColor: '#bc2f3b',
@@ -102,11 +116,13 @@ const HomepageLiveStream = ({ facebookPage, liveStreamButton }: HomepageLiveStre
     <Button
       key="live-stream-button"
       LinkComponent={Link}
+      {...getAdminPreviewFieldTargetProps(buttonFieldKey)}
       href={liveStreamButton.url}
       variant="contained"
       size="large"
       startIcon={<LiveTvIcon />}
       sx={{
+        ...getActiveHomepagePreviewTargetStyle(buttonFieldKey, activeFieldKey),
         marginTop: '16px',
         fontSize: '20px',
         backgroundColor: '#bc2f3b',

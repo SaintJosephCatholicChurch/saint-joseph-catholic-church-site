@@ -7,17 +7,28 @@ import NavigationBar from './NavigationBar';
 import type { ChurchDetails, MenuData } from '@/interface';
 import type { FC } from 'react';
 
+export interface NavigationAdminSelection {
+  activePathKey?: string;
+  disableMenuLinkNavigation?: boolean;
+  getMenuItemProps?: (itemIndex: number) => Record<string, string>;
+  getMenuLinkProps?: (itemIndex: number, linkIndex: number) => Record<string, string>;
+  giveButtonProps?: Record<string, string>;
+  logoPrimaryProps?: Record<string, string>;
+  logoSecondaryProps?: Record<string, string>;
+}
+
 const StyledNavigation = styled('div')`
   display: flex;
 `;
 
 interface NavigationProps {
+  adminSelection?: NavigationAdminSelection;
   churchDetails: ChurchDetails;
   menuDetails: MenuData;
   inCMS?: boolean;
 }
 
-const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = false }) => {
+const Navigation: FC<NavigationProps> = ({ adminSelection, churchDetails, menuDetails, inCMS = false }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = useCallback(() => {
@@ -35,6 +46,7 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = f
   return (
     <StyledNavigation>
       <NavigationBar
+        adminSelection={adminSelection}
         menuDetails={menuDetails}
         onlineGivingTitle={menuDetails.online_giving_button_text}
         onlineGivingUrl={churchDetails.online_giving_url}
@@ -42,6 +54,7 @@ const Navigation: FC<NavigationProps> = ({ churchDetails, menuDetails, inCMS = f
         inCMS={inCMS}
       />
       <NavigationDrawerNoSSR
+        adminSelection={adminSelection}
         menuDetails={menuDetails}
         mobileOpen={mobileOpen}
         onMobileOpenToggle={handleDrawerToggle}

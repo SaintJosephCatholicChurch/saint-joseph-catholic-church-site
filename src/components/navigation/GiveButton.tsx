@@ -12,6 +12,7 @@ interface GiveButtonProps {
   onlineGivingUrl: string;
   size?: 'small' | 'normal';
   inCMS: boolean;
+  selectionProps?: Record<string, string>;
 }
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
@@ -23,15 +24,17 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)(
   `
 );
 
-const GiveButton = ({ title, onlineGivingUrl, size = 'normal', inCMS }: GiveButtonProps) => {
+const GiveButton = ({ title, onlineGivingUrl, size = 'normal', inCMS, selectionProps }: GiveButtonProps) => {
   const theme = useTheme();
   const trigger = useScrollTrigger({ disableHysteresis: true });
+  const hasOnlineGivingUrl = Boolean(onlineGivingUrl);
 
   return (
     <Button
-      href={onlineGivingUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={hasOnlineGivingUrl ? onlineGivingUrl : undefined}
+      target={hasOnlineGivingUrl ? '_blank' : undefined}
+      rel={hasOnlineGivingUrl ? 'noopener noreferrer' : undefined}
+      {...selectionProps}
       sx={{
         color: '#bf303c',
         backgroundColor: '#ffffff',

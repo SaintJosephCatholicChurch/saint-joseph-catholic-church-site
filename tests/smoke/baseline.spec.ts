@@ -252,11 +252,12 @@ test.describe('public site smoke coverage', () => {
 
     await expect(page).toHaveURL(/\/search\?q=live(%20|\+)stream/);
     await expect(page.locator('main').getByRole('heading', { level: 1, name: 'Search', exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Live Stream', exact: true }).first()).toBeVisible();
+    const liveStreamResultLink = page.locator('main').getByRole('link', { name: 'Live Stream', exact: true }).first();
+    await expect(liveStreamResultLink).toBeVisible();
 
-    await page.getByRole('link', { name: 'Live Stream', exact: true }).first().click();
-    await expect(page).toHaveURL(/\/live-stream$/);
+    await Promise.all([page.waitForURL(/\/live-stream$/), liveStreamResultLink.click()]);
     await expect(page.locator('main').getByRole('heading', { name: 'Live Stream', exact: true }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'View past streams', exact: true })).toBeVisible();
 
     await expectShellLayout(page);
     await expectRouteScreenshot(page, 'search-results', isMobileProject, {

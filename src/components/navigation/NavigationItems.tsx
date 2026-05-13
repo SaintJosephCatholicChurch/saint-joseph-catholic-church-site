@@ -29,16 +29,35 @@ const StyledDesktopNavItems = styled(
 );
 
 interface NavigationItemsProps {
+  disableNavigation?: boolean;
+  getMenuItemProps?: (itemIndex: number) => Record<string, string>;
+  getMenuLinkProps?: (itemIndex: number, linkIndex: number) => Record<string, string>;
   menuDetails: MenuData;
   size?: 'small' | 'normal';
   inCMS: boolean;
 }
 
-const NavigationItems = ({ menuDetails, size, inCMS }: NavigationItemsProps) => {
+const NavigationItems = ({
+  disableNavigation = false,
+  getMenuItemProps,
+  getMenuLinkProps,
+  menuDetails,
+  size,
+  inCMS
+}: NavigationItemsProps) => {
   return (
     <StyledDesktopNavItems $inCMS={inCMS}>
-      {menuDetails.menu_items.map((item) => (
-        <NavItem key={`nav-item-${item.title}`} item={item} size={size} inCMS={inCMS} />
+      {menuDetails.menu_items.map((item, itemIndex) => (
+        <NavItem
+          disableNavigation={disableNavigation}
+          key={`nav-item-${item.title}`}
+          item={item}
+          itemIndex={itemIndex}
+          size={size}
+          inCMS={inCMS}
+          selectionProps={getMenuItemProps?.(itemIndex)}
+          getMenuLinkProps={getMenuLinkProps}
+        />
       ))}
     </StyledDesktopNavItems>
   );

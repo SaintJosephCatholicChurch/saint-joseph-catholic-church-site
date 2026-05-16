@@ -131,12 +131,7 @@
                   "time": "8:00 AM",
                   "end_time": "",
                   "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
-                  "notes": [
-                    {
-                      "id": "49208a2a-763b-46ec-bd8f-b00b178da952",
-                      "note": "No Public Mass May 7, 2026"
-                    }
-                  ]
+                  "notes": []
                 }
               ],
               "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"
@@ -189,9 +184,18 @@
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
+        },
+        {
+          "id": "dd90e1e0-6ffb-4aa3-b811-29ca71f17584",
+          "name": ""
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
+    },
+    {
+      "id": "62969bc2-b5e2-4cea-8c8b-5a26712931f2",
+      "name": "Memorial Day",
+      "sections": []
     },
     {
       "name": "Parish Office Hours",
@@ -206,7 +210,21 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "8360144c-9e0a-4350-a3b5-480d73838add",
+                      "note": ""
+                    }
+                  ]
+                },
+                {
+                  "id": "edbaa928-23c9-4cd6-a2ef-006abd433006",
+                  "notes": [
+                    {
+                      "id": "0d769238-dac0-49dd-98f9-0f8aa9c5ce53",
+                      "note": "Parish Office Closed May 25-29, 2026"
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
@@ -457,47 +475,33 @@
       "name": "Stations of the Cross",
       "sections": [
         {
-          "id": "57c21468-9e74-468b-b395-462ddc360f12",
-          "name": "Stations of the Cross",
+          "id": "99704f3e-0d32-4803-b239-0062de0150e7",
+          "name": "Memorial Day - May 25, 2026",
           "days": [
             {
-              "id": "437e6fd3-7c01-4459-8541-2787160180da",
-              "day": "Fridays during Lent",
+              "id": "7689161d-a4ce-4e95-9f86-f1ea476bc656",
+              "day": "Mass",
               "times": [
                 {
-                  "id": "77c2ed87-7d7d-4e0d-944a-94d7feed9d03",
-                  "time": "7:00 PM"
+                  "id": "31d1096c-5998-4182-8ad1-588c4cdbf308",
+                  "time": "10:00 AM"
+                },
+                {
+                  "id": "ab503bec-f71a-4687-920f-3c5059eea7cb",
+                  "notes": [
+                    {
+                      "id": "837a4a97-7a78-4832-a1d4-f38757719a3d",
+                      "note": "Mass at St. Joseph Catholic Cemetery (103 Elm Grove Rd, Bluffton)"
+                    }
+                  ]
                 }
               ]
             }
           ]
         },
         {
-          "id": "c0961c46-d943-49d2-a301-c3654f08ddfb",
-          "name": "Lenten Soup Suppers",
-          "days": [
-            {
-              "id": "d30b12a5-d909-427e-a9fa-eb3244128b55",
-              "day": "Fridays during Lent",
-              "times": [
-                {
-                  "id": "d2072c24-32cf-4c49-8f39-893ea630f89a",
-                  "time": "6:00 PM",
-                  "end_time": "6:40 PM",
-                  "notes": [
-                    {
-                      "id": "ea33ef56-bae1-4639-a909-cd3d1704f9f4",
-                      "note": ""
-                    }
-                  ]
-                },
-                {
-                  "id": "8dc489d6-d141-4ba3-abcf-7280ef945eb3",
-                  "notes": []
-                }
-              ]
-            }
-          ]
+          "id": "5ab0a738-5016-41bb-86de-12100975bb2b",
+          "name": "New Section"
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"

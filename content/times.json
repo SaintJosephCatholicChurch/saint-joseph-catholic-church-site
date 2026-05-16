@@ -195,7 +195,42 @@
     {
       "id": "62969bc2-b5e2-4cea-8c8b-5a26712931f2",
       "name": "Memorial Day",
-      "sections": []
+      "sections": [
+        {
+          "id": "4bcf8061-d7be-418c-bbb7-56433e9a06bc",
+          "name": "Memorial Day Mass",
+          "days": [
+            {
+              "id": "887ef9ee-0fa7-44dd-bb65-890b472d4ec4",
+              "day": "Monday, May 25, 2026",
+              "times": [
+                {
+                  "id": "19df09c0-e95e-47b7-a86f-509a8bf56d9d",
+                  "time": "10:00 AM"
+                },
+                {
+                  "id": "a9193e6d-204e-4fd4-822d-e137754a2bb5",
+                  "notes": [
+                    {
+                      "id": "6a89f5d3-8545-49d2-98e5-fb987f46681b",
+                      "note": "Mass at St. Joseph Catholic Cemetery"
+                    }
+                  ]
+                },
+                {
+                  "id": "cbd38ae1-0c86-4152-901b-83ea949cb304",
+                  "notes": [
+                    {
+                      "id": "abbf24bc-7a1e-456e-9433-eb7279ee9fca",
+                      "note": "103 Elm Grove Rd, Bluffton"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Parish Office Hours",

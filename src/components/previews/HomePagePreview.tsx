@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useMemo } from 'react';
 
+import { normalizeHomePageData } from '../../lib/homepage';
 import times from '../../lib/times';
 import HomepageView from '../homepage/HomepageView';
 
@@ -82,13 +83,15 @@ const PagePreview: TemplatePreviewComponent<HomePageData> = ({ entry }) => {
     []
   );
 
+  const normalizedHomePageData = useMemo(() => normalizeHomePageData(entry.data), [entry.data]);
+
   return useMemo(
     () => (
       <StyledHomepagePreview>
-        <HomepageView homePageData={entry.data} times={times} recentPosts={mockRecentPosts} hideSearch />
+        <HomepageView homePageData={normalizedHomePageData} times={times} recentPosts={mockRecentPosts} hideSearch />
       </StyledHomepagePreview>
     ),
-    [entry.data, mockRecentPosts]
+    [mockRecentPosts, normalizedHomePageData]
   );
 };
 export default PagePreview;

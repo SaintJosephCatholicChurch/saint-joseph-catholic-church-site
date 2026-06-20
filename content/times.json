@@ -55,7 +55,7 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
-          "name": "Weekday Mass",
+          "name": "Weekday Mass (Week of  June 22-26)",
           "days": [
             {
               "day": "Monday",
@@ -63,11 +63,11 @@
                 {
                   "notes": [
                     {
-                      "note": "No Public Mass",
+                      "note": "",
                       "id": "def40232-aaa7-4235-8231-f3d29c235e44"
                     }
                   ],
-                  "time": "",
+                  "time": "11:15 AM",
                   "end_time": "",
                   "id": "a7392c84-9d2b-458a-bad2-d33a6ef39217"
                 }
@@ -78,18 +78,18 @@
               "day": "Tuesday",
               "times": [
                 {
-                  "time": "8:00 AM",
+                  "time": "11:15 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c",
                   "notes": []
                 },
                 {
                   "notes": [
                     {
-                      "note": "Adoration from 7:00 - 8:00 AM",
+                      "note": "",
                       "id": "1b8b52c8-43d8-470a-9913-ce9b9f35c300"
                     },
                     {
-                      "note": "Confession from 8:30 - 9:00 AM",
+                      "note": "Confession from 10:45 - 11:10 AM",
                       "id": "0e8e8ee9-ef84-475f-b206-a39188dbe6ba"
                     }
                   ],
@@ -102,7 +102,7 @@
               "day": "Wednesday",
               "times": [
                 {
-                  "time": "7:00 PM",
+                  "time": "11:15 AM",
                   "end_time": "",
                   "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe",
                   "notes": []
@@ -110,7 +110,11 @@
                 {
                   "notes": [
                     {
-                      "note": "Adoration and Confession from 6:00 - 7:00 PM",
+                      "id": "57555d15-0d57-4036-ae6b-2921c6dcd94c",
+                      "note": "Confession from 10:45 - 11:10 AM"
+                    },
+                    {
+                      "note": "Adoration and Confession from 7:15-8:15 PM",
                       "id": "785e4882-d7d0-4579-9c77-d49310f18884"
                     }
                   ],
@@ -123,10 +127,19 @@
               "day": "Thursday",
               "times": [
                 {
-                  "time": "8:00 AM",
+                  "time": "11:15 AM",
                   "end_time": "",
                   "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
                   "notes": []
+                },
+                {
+                  "id": "d26d5022-758e-4d24-bede-db7eca2e87ed",
+                  "notes": [
+                    {
+                      "id": "5564bf88-d45f-4ddb-83a6-c72ad9458afb",
+                      "note": "Adoration from 1:25-2:25 PM"
+                    }
+                  ]
                 }
               ],
               "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"
@@ -135,7 +148,7 @@
               "day": "Friday",
               "times": [
                 {
-                  "time": "8:30 AM",
+                  "time": "11:15 AM",
                   "end_time": "",
                   "id": "08e04d04-53e4-4f2b-8733-625ab18f4cf2"
                 }

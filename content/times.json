@@ -55,7 +55,7 @@
           "id": "60059095-5988-44fb-b73e-47cf9be36999"
         },
         {
-          "name": "Weekday Mass",
+          "name": "Weekday Mass (No Public Masses August 2-4, 2026)",
           "days": [
             {
               "day": "Monday",
@@ -89,6 +89,10 @@
                     {
                       "note": "Confession from 8:30-9:00 AM",
                       "id": "0e8e8ee9-ef84-475f-b206-a39188dbe6ba"
+                    },
+                    {
+                      "id": "14ca53f5-a53a-4057-8aa2-8838240ee963",
+                      "note": "No Public Mass August 2, 2026"
                     }
                   ],
                   "id": "7570bc61-12f2-4352-9217-0d9ff4109dd5"
@@ -110,6 +114,10 @@
                     {
                       "note": "Adoration and Confession from 6:00-6:45 PM",
                       "id": "785e4882-d7d0-4579-9c77-d49310f18884"
+                    },
+                    {
+                      "id": "eb878a3f-6d11-485e-b24c-38c3bd24bd2c",
+                      "note": "No Public Mass August 3, 2026"
                     }
                   ],
                   "id": "65a42201-52f6-4baa-b36a-18c37f1ff6db"
@@ -124,7 +132,21 @@
                   "time": "8:00 AM",
                   "end_time": "",
                   "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "e6f96318-7f6d-4ef5-b0ed-fecb75b6e48d",
+                      "note": ""
+                    }
+                  ]
+                },
+                {
+                  "id": "6a5e4d61-fc0b-4b0e-947c-fc3ef5aaad0a",
+                  "notes": [
+                    {
+                      "id": "eba1d432-df92-4e40-b9be-ea2d1ea71b1e",
+                      "note": "No Public Mass August 4, 2026"
+                    }
+                  ]
                 }
               ],
               "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"

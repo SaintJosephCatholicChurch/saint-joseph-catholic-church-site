@@ -52,16 +52,47 @@ export class NetlifyGitHubAuthenticator {
 
     return new Promise<NetlifyAuthResponse>((resolve, reject) => {
       const expectedOrigin = new URL(this.baseUrl).origin;
+      const AUTH_TIMEOUT_MS = 120000;
+      let pollTimer: number | null = null;
+      let timeoutTimer: number | null = null;
+      let settled = false;
+
       const closeAuthWindow = () => {
         this.authWindow?.close();
       };
       const postToAuthWindow = (message: string, origin: string) => {
         this.authWindow?.postMessage(message, origin);
       };
-
-      const cleanup = () => {
+      const parseAuthPayload = <T>(rawPayload: string) => {
+        try {
+          return JSON.parse(rawPayload) as T;
+        } catch {
+          throw new NetlifyAuthError('GitHub authentication returned an unreadable response.');
+        }
+      };
+      function cleanup() {
         window.removeEventListener('message', handleHandshake, false);
         window.removeEventListener('message', handleAuthorization, false);
+
+        if (pollTimer !== null) {
+          window.clearInterval(pollTimer);
+          pollTimer = null;
+        }
+
+        if (timeoutTimer !== null) {
+          window.clearTimeout(timeoutTimer);
+          timeoutTimer = null;
+        }
+      }
+
+      const finish = (callback: () => void) => {
+        if (settled) {
+          return;
+        }
+
+        settled = true;
+        cleanup();
+        callback();
       };
 
       function handleAuthorization(event: MessageEvent<string>) {
@@ -73,18 +104,34 @@ export class NetlifyGitHubAuthenticator {
         const errorPrefix = `authorization:${options.provider}:error:`;
 
         if (typeof event.data === 'string' && event.data.startsWith(successPrefix)) {
-          cleanup();
-          closeAuthWindow();
-          const payload = JSON.parse(event.data.slice(successPrefix.length)) as NetlifyAuthResponse;
-          resolve(payload);
+          try {
+            const payload = parseAuthPayload<NetlifyAuthResponse>(event.data.slice(successPrefix.length));
+            finish(() => {
+              closeAuthWindow();
+              resolve(payload);
+            });
+          } catch (error) {
+            finish(() => {
+              closeAuthWindow();
+              reject(error instanceof NetlifyAuthError ? error : new NetlifyAuthError('GitHub authentication failed.'));
+            });
+          }
           return;
         }
 
         if (typeof event.data === 'string' && event.data.startsWith(errorPrefix)) {
-          cleanup();
-          closeAuthWindow();
-          const payload = JSON.parse(event.data.slice(errorPrefix.length)) as { message?: string };
-          reject(new NetlifyAuthError(payload.message || 'GitHub authentication failed.'));
+          try {
+            const payload = parseAuthPayload<{ message?: string }>(event.data.slice(errorPrefix.length));
+            finish(() => {
+              closeAuthWindow();
+              reject(new NetlifyAuthError(payload.message || 'GitHub authentication failed.'));
+            });
+          } catch (error) {
+            finish(() => {
+              closeAuthWindow();
+              reject(error instanceof NetlifyAuthError ? error : new NetlifyAuthError('GitHub authentication failed.'));
+            });
+          }
         }
       }
 
@@ -112,12 +159,28 @@ export class NetlifyGitHubAuthenticator {
 
       this.authWindow = window.open(url.toString(), 'Netlify Authorization');
       if (!this.authWindow) {
-        cleanup();
-        reject(new NetlifyAuthError('The authentication popup was blocked.'));
+        finish(() => {
+          reject(new NetlifyAuthError('The authentication popup was blocked.'));
+        });
         return;
       }
 
       this.authWindow.focus();
+      pollTimer = window.setInterval(() => {
+        if (this.authWindow && !this.authWindow.closed) {
+          return;
+        }
+
+        finish(() => {
+          reject(new NetlifyAuthError('GitHub authentication was cancelled.'));
+        });
+      }, 500);
+      timeoutTimer = window.setTimeout(() => {
+        finish(() => {
+          closeAuthWindow();
+          reject(new NetlifyAuthError('GitHub authentication timed out. Please try again.'));
+        });
+      }, AUTH_TIMEOUT_MS);
     });
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 
 import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
 import type { HomepageDraft } from '../../content/writableComplexContent';
@@ -25,6 +25,7 @@ export function TimesSection({ headerActions, homepageDraft, onChange, value }: 
     onChange,
     times: value
   });
+  const pendingPreviewSelectionPathKeyRef = useRef<string | null>(null);
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -32,9 +33,21 @@ export function TimesSection({ headerActions, homepageDraft, onChange, value }: 
   });
   const activeCategoryId = controller.activePath.kind === 'root' ? null : controller.activePath.categoryId;
 
+  useEffect(() => {
+    if (panel !== 'editor' || !pendingPreviewSelectionPathKeyRef.current) {
+      return;
+    }
+
+    const pathKey = pendingPreviewSelectionPathKeyRef.current;
+    pendingPreviewSelectionPathKeyRef.current = null;
+    controller.selectPathKey(pathKey);
+  }, [controller, panel]);
+
   function handleSelectPathKey(pathKey: string) {
     if (panel === 'preview') {
+      pendingPreviewSelectionPathKeyRef.current = pathKey;
       setPanel('editor');
+      return;
     }
 
     controller.selectPathKey(pathKey);

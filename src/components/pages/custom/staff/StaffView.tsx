@@ -24,7 +24,12 @@ const StaffView = ({ activeFieldKey, staff }: StaffViewProps) => {
   return (
     <StyledStaffWrapper>
       {staff.map((staffMember, index) => (
-        <StaffCard activeFieldKey={activeFieldKey} index={index} key={`staff-${index}`} staffMember={staffMember} />
+        <StaffCard
+          activeFieldKey={activeFieldKey}
+          index={index}
+          key={staffMember.clientId || `staff-${index}`}
+          staffMember={staffMember}
+        />
       ))}
     </StyledStaffWrapper>
   );

@@ -84,6 +84,7 @@ export interface StoredContentValue<T> {
 export interface StoredDocument<TData extends object> {
   body: string;
   data: TData;
+  loaded?: boolean;
   path: string;
   sha?: string;
 }
@@ -644,6 +645,7 @@ class FrontmatterCollectionAdapter<TData extends { date: string; slug: string }>
     const document = this.parse(file.content, file.path);
     return {
       ...document,
+      loaded: true,
       sha: file.sha
     };
   }

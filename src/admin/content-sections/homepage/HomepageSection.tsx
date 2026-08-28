@@ -17,6 +17,7 @@ import { HomepageSlidesEditor } from './HomepageSlidesEditor';
 import { parseHomepageFieldKey, type HomepageFieldKey } from './fieldKeys';
 
 import type { HomepageDraft } from '../../content/writableComplexContent';
+import type { Times } from '../../../interface';
 import type { ReactNode } from 'react';
 
 const HOMEPAGE_EDITOR_TABS = ['featured', 'hero', 'sections', 'slides'] as const;
@@ -28,9 +29,10 @@ interface HomepageSectionProps {
   headerActions: ReactNode;
   onChange: (value: HomepageDraft) => void;
   onSelectDailyReadingsBackground: () => void;
-  onSelectFeaturedImage: (index: number) => void;
+  onSelectFeaturedImage: (clientId: string) => void;
   onSelectScheduleBackground: () => void;
-  onSelectSlideImage: (index: number) => void;
+  onSelectSlideImage: (clientId: string) => void;
+  times: Times[];
   value: HomepageDraft;
 }
 
@@ -41,11 +43,12 @@ export function HomepageSection({
   onSelectFeaturedImage,
   onSelectScheduleBackground,
   onSelectSlideImage,
+  times,
   value
 }: HomepageSectionProps) {
   const pendingExpandedFocusFieldKeyRef = useRef<HomepageFieldKey | null>(null);
   const pendingPreviewSelectionFieldKeyRef = useRef<HomepageFieldKey | null>(null);
-  const [expandedSlideIndexes, setExpandedSlideIndexes] = useState<number[]>([]);
+  const [expandedSlideClientIds, setExpandedSlideClientIds] = useState<string[]>([]);
   const [homepageTab, setHomepageTab] = useAdminQueryParamState<HomepageEditorTabId>({
     allowedValues: HOMEPAGE_EDITOR_TABS,
     defaultValue: 'hero',
@@ -67,16 +70,17 @@ export function HomepageSection({
       setHomepageTab(parsedFieldKey.tab);
 
       if (parsedFieldKey.tab === 'slides') {
-        setExpandedSlideIndexes((currentValue) =>
-          currentValue.includes(parsedFieldKey.index) ? currentValue : [...currentValue, parsedFieldKey.index]
+        setExpandedSlideClientIds((currentValue) =>
+          currentValue.includes(parsedFieldKey.clientId) ? currentValue : [...currentValue, parsedFieldKey.clientId]
         );
       }
     }
   });
 
   useEffect(() => {
-    setExpandedSlideIndexes((currentValue) => currentValue.filter((index) => index < value.slides.length));
-  }, [value.slides.length]);
+    const slideClientIds = new Set(value.slides.map((slide) => slide.clientId));
+    setExpandedSlideClientIds((currentValue) => currentValue.filter((clientId) => slideClientIds.has(clientId)));
+  }, [value.slides]);
 
   useEffect(() => {
     if (panel !== 'editor' || !pendingPreviewSelectionFieldKeyRef.current) {
@@ -91,7 +95,7 @@ export function HomepageSection({
   function selectFieldKeyInEditor(fieldKey: HomepageFieldKey) {
     const parsedFieldKey = parseHomepageFieldKey(fieldKey);
 
-    if (parsedFieldKey?.tab === 'slides' && !expandedSlideIndexes.includes(parsedFieldKey.index)) {
+    if (parsedFieldKey?.tab === 'slides' && !expandedSlideClientIds.includes(parsedFieldKey.clientId)) {
       pendingExpandedFocusFieldKeyRef.current = fieldKey;
       selection.setActiveFieldKey(fieldKey);
       return;
@@ -101,7 +105,7 @@ export function HomepageSection({
     selection.selectFieldKey(fieldKey);
   }
 
-  function handleExpandedEntered(index: number) {
+  function handleExpandedEntered(clientId: string) {
     const pendingFieldKey = pendingExpandedFocusFieldKeyRef.current;
 
     if (!pendingFieldKey) {
@@ -110,7 +114,7 @@ export function HomepageSection({
 
     const parsedFieldKey = parseHomepageFieldKey(pendingFieldKey);
 
-    if (!parsedFieldKey || parsedFieldKey.tab !== 'slides' || parsedFieldKey.index !== index) {
+    if (!parsedFieldKey || parsedFieldKey.tab !== 'slides' || parsedFieldKey.clientId !== clientId) {
       return;
     }
 
@@ -166,17 +170,17 @@ export function HomepageSection({
           {homepageTab === 'slides' ? (
             <HomepageSlidesEditor
               activeFieldKey={selection.activeFieldKey || undefined}
-              expandedIndexes={expandedSlideIndexes}
+              expandedClientIds={expandedSlideClientIds}
               onChange={onChange}
               onExpandedEntered={handleExpandedEntered}
               onSelectSlideImage={onSelectSlideImage}
-              onToggleExpanded={(index, expanded) =>
-                setExpandedSlideIndexes((currentValue) => {
+              onToggleExpanded={(clientId, expanded) =>
+                setExpandedSlideClientIds((currentValue) => {
                   if (expanded) {
-                    return currentValue.includes(index) ? currentValue : [...currentValue, index];
+                    return currentValue.includes(clientId) ? currentValue : [...currentValue, clientId];
                   }
 
-                  return currentValue.filter((entryIndex) => entryIndex !== index);
+                  return currentValue.filter((entryId) => entryId !== clientId);
                 })
               }
               registerField={selection.registerField}
@@ -199,6 +203,7 @@ export function HomepageSection({
           draft={value}
           interactive
           onSelectFieldKey={handleSelectFieldKey}
+          times={times}
         />
       }
     />

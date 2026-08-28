@@ -67,11 +67,11 @@ const ALL_CONTENT_SECTION_IDS = [...STRUCTURED_SECTION_IDS, ...COMPLEX_SECTION_I
 type StructuredImagePickerTarget = 'footer-background' | 'site-image' | null;
 
 type ComplexImagePickerTarget =
-  | { kind: 'homepage-featured'; index: number }
+  | { kind: 'homepage-featured'; clientId: string }
   | { kind: 'homepage-daily-readings-background' }
   | { kind: 'homepage-schedule-background' }
-  | { kind: 'homepage-slide'; index: number }
-  | { kind: 'staff'; index: number }
+  | { kind: 'homepage-slide'; clientId: string }
+  | { kind: 'staff'; clientId: string }
   | null;
 
 function isStructuredSectionId(sectionId: ContentEditorSectionId): sectionId is StructuredSectionId {
@@ -222,14 +222,15 @@ function ComplexSectionsEditor({ onSaved, repoClient, showIntroAlert, visibleSec
           {shouldRenderSection('homepage') ? (
             <HomepageSection
               headerActions={renderSectionHeaderActions('homepage')}
+              times={draft.times}
               value={draft.homepage}
               onChange={(homepage) => updateDraft('homepage', homepage)}
               onSelectDailyReadingsBackground={() =>
                 setImagePickerTarget({ kind: 'homepage-daily-readings-background' })
               }
-              onSelectFeaturedImage={(index) => setImagePickerTarget({ kind: 'homepage-featured', index })}
+              onSelectFeaturedImage={(clientId) => setImagePickerTarget({ kind: 'homepage-featured', clientId })}
               onSelectScheduleBackground={() => setImagePickerTarget({ kind: 'homepage-schedule-background' })}
-              onSelectSlideImage={(index) => setImagePickerTarget({ kind: 'homepage-slide', index })}
+              onSelectSlideImage={(clientId) => setImagePickerTarget({ kind: 'homepage-slide', clientId })}
             />
           ) : null}
 
@@ -247,7 +248,7 @@ function ComplexSectionsEditor({ onSaved, repoClient, showIntroAlert, visibleSec
               headerActions={renderSectionHeaderActions('staff')}
               value={draft.staff}
               onChange={(staff) => updateDraft('staff', staff)}
-              onSelectImage={(index) => setImagePickerTarget({ kind: 'staff', index })}
+              onSelectImage={(clientId) => setImagePickerTarget({ kind: 'staff', clientId })}
             />
           ) : null}
         </>
@@ -256,16 +257,16 @@ function ComplexSectionsEditor({ onSaved, repoClient, showIntroAlert, visibleSec
         const imagePickerTitle = imagePickerTarget?.kind === 'staff' ? 'Select staff image' : 'Select image';
         const imagePickerFolders: MediaFolderId[] = imagePickerTarget?.kind === 'staff' ? ['staff'] : ['shared'];
 
-        function updateHomepageSlide(index: number, nextValue: Partial<HomepageSlideDraft>) {
-          const slides = draft.homepage.slides.map((slide, slideIndex) =>
-            slideIndex === index ? { ...slide, ...nextValue } : slide
+        function updateHomepageSlide(clientId: string, nextValue: Partial<HomepageSlideDraft>) {
+          const slides = draft.homepage.slides.map((slide) =>
+            slide.clientId === clientId ? { ...slide, ...nextValue } : slide
           );
           updateDraft('homepage', { ...draft.homepage, slides });
         }
 
-        function updateHomepageFeatured(index: number, nextValue: Partial<HomepageFeaturedDraft>) {
-          const featured = draft.homepage.featured.map((item, itemIndex) =>
-            itemIndex === index ? ({ ...item, ...nextValue } as HomepageFeaturedDraft) : item
+        function updateHomepageFeatured(clientId: string, nextValue: Partial<HomepageFeaturedDraft>) {
+          const featured = draft.homepage.featured.map((item) =>
+            item.clientId === clientId ? ({ ...item, ...nextValue } as HomepageFeaturedDraft) : item
           );
           updateDraft('homepage', { ...draft.homepage, featured });
         }
@@ -290,18 +291,18 @@ function ComplexSectionsEditor({ onSaved, repoClient, showIntroAlert, visibleSec
           }
 
           if (imagePickerTarget.kind === 'homepage-slide') {
-            updateHomepageSlide(imagePickerTarget.index, { image: asset.publicPath });
+            updateHomepageSlide(imagePickerTarget.clientId, { image: asset.publicPath });
           }
 
           if (imagePickerTarget.kind === 'homepage-featured') {
-            updateHomepageFeatured(imagePickerTarget.index, { image: asset.publicPath });
+            updateHomepageFeatured(imagePickerTarget.clientId, { image: asset.publicPath });
           }
 
           if (imagePickerTarget.kind === 'staff') {
             updateDraft(
               'staff',
-              draft.staff.map((entry, entryIndex) =>
-                entryIndex === imagePickerTarget.index ? { ...entry, picture: asset.publicPath } : entry
+              draft.staff.map((entry) =>
+                entry.clientId === imagePickerTarget.clientId ? { ...entry, picture: asset.publicPath } : entry
               )
             );
           }
@@ -326,11 +327,11 @@ function ComplexSectionsEditor({ onSaved, repoClient, showIntroAlert, visibleSec
                     : imagePickerTarget?.kind === 'homepage-daily-readings-background'
                       ? draft.homepage.dailyReadingsBackground
                       : imagePickerTarget?.kind === 'homepage-slide'
-                        ? draft.homepage.slides[imagePickerTarget.index]?.image
+                        ? draft.homepage.slides.find((slide) => slide.clientId === imagePickerTarget.clientId)?.image
                         : imagePickerTarget?.kind === 'homepage-featured'
-                          ? draft.homepage.featured[imagePickerTarget.index]?.image
+                          ? draft.homepage.featured.find((item) => item.clientId === imagePickerTarget.clientId)?.image
                           : imagePickerTarget?.kind === 'staff'
-                            ? draft.staff[imagePickerTarget.index]?.picture
+                            ? draft.staff.find((entry) => entry.clientId === imagePickerTarget.clientId)?.picture
                             : undefined
                 }
                 onChange={handleSaved}

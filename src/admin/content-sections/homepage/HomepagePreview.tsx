@@ -11,29 +11,30 @@ import { useCallback, useEffect, useState } from 'react';
 
 import HomepageView from '../../../components/homepage/HomepageView';
 import { RECENT_NEWS_TO_SHOW } from '../../../constants';
-import times from '../../../lib/times';
 import { useAdminAuth } from '../../AdminAuthProvider';
 import { AdminPagePreviewFrame } from '../../AdminPagePreviewFrame';
 import { AdminDialogTitle } from '../../components/AdminDialogTitle';
 import { buildHomepagePreviewData, type HomepageDraft } from '../../content/writableComplexContent';
-import { getLoadedRecentPostContent } from '../../content/writableDocumentsContent';
+import { getLoadedRecentPostContent, loadRecentPostContent } from '../../content/writableDocumentsContent';
 import { handleAdminPreviewSelectionClick } from '../components/adminPreviewSelection';
 import { ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE, type HomepageFieldKey } from './fieldKeys';
 
-import type { PostContent } from '../../../interface';
+import type { PostContent, Times } from '../../../interface';
 
 interface HomepagePreviewProps {
   activeFieldKey?: HomepageFieldKey;
   draft: HomepageDraft;
   interactive?: boolean;
   onSelectFieldKey?: (fieldKey: HomepageFieldKey) => void;
+  times: Times[];
 }
 
 export function HomepagePreview({
   activeFieldKey,
   draft,
   interactive = false,
-  onSelectFieldKey
+  onSelectFieldKey,
+  times
 }: HomepagePreviewProps) {
   const pathname = usePathname();
   const { repoClient } = useAdminAuth();
@@ -48,7 +49,29 @@ export function HomepagePreview({
       return;
     }
 
-    setRecentPosts(getLoadedRecentPostContent(repoClient, RECENT_NEWS_TO_SHOW));
+    const cachedPosts = getLoadedRecentPostContent(repoClient, RECENT_NEWS_TO_SHOW);
+    if (cachedPosts.length > 0) {
+      setRecentPosts(cachedPosts);
+      return;
+    }
+
+    let cancelled = false;
+
+    void loadRecentPostContent(repoClient, RECENT_NEWS_TO_SHOW)
+      .then((posts) => {
+        if (!cancelled) {
+          setRecentPosts(posts);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setRecentPosts([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [repoClient]);
 
   const handleGoToMassTimes = useCallback(() => {

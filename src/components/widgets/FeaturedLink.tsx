@@ -4,6 +4,7 @@ import { memo } from 'react';
 
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
 import {
   createHomepageFeaturedFieldKey,
   getActiveHomepagePreviewTargetStyle,
@@ -40,7 +41,7 @@ const StyledSummary = styled('div')(
 
 interface FeaturedLinkProps {
   activeFieldKey?: HomepageFieldKey;
-  featuredIndex?: number;
+  featuredId?: string;
   featuredLink?: FeaturedLinkData;
   isFullWidth?: boolean;
 }
@@ -48,14 +49,15 @@ interface FeaturedLinkProps {
 const FeaturedLink = memo(
   ({
     activeFieldKey,
-    featuredIndex = 0,
+    featuredId = '0',
     featuredLink: { title, url, image, summary },
     isFullWidth = false
   }: FeaturedLinkProps) => {
     const theme = useTheme();
-    const titleFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'title');
-    const imageFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'image');
-    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'summary');
+    const resolvedImage = useResolvedMediaSrc(image || '');
+    const titleFieldKey = createHomepageFeaturedFieldKey(featuredId, 'title');
+    const imageFieldKey = createHomepageFeaturedFieldKey(featuredId, 'image');
+    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredId, 'summary');
 
     if (isEmpty(title) || isEmpty(url)) {
       return null;
@@ -96,7 +98,7 @@ const FeaturedLink = memo(
           </StyledTitle>
           {isNotEmpty(image) ? (
             <StyledImage
-              src={image}
+              src={resolvedImage}
               alt={title}
               {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
               style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}

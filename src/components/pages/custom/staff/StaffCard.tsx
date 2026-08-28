@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
 import { createStaffFieldKey, type StaffFieldKey } from '../../../../admin/content-sections/staff/fieldKeys';
+import { useResolvedMediaSrc } from '../../../../admin/previewMediaUrls';
 import { STAFF_CARD_GAP_SIZE, STAFF_DEFAULT_CARD_SIZE, STAFF_GLOBAL_PADDING } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';
 
@@ -29,11 +30,13 @@ function getActivePreviewTargetStyle(fieldKey: StaffFieldKey, activeFieldKey?: S
 
 const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
   const theme = useTheme();
+  const resolvedPicture = useResolvedMediaSrc(staffMember.picture || '');
+  const staffFieldId = staffMember.clientId || String(index);
 
   const customBreakpoint = STAFF_DEFAULT_CARD_SIZE * 2 + STAFF_CARD_GAP_SIZE + STAFF_GLOBAL_PADDING;
-  const nameFieldKey = createStaffFieldKey(index, 'name');
-  const pictureFieldKey = createStaffFieldKey(index, 'picture');
-  const titleFieldKey = createStaffFieldKey(index, 'title');
+  const nameFieldKey = createStaffFieldKey(staffFieldId, 'name');
+  const pictureFieldKey = createStaffFieldKey(staffFieldId, 'picture');
+  const titleFieldKey = createStaffFieldKey(staffFieldId, 'title');
 
   return (
     <Card
@@ -56,7 +59,7 @@ const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
             height: '80vw'
           }
         }}
-        image={staffMember.picture}
+        image={resolvedPicture}
         alt="green iguana"
       />
       <CardContent>

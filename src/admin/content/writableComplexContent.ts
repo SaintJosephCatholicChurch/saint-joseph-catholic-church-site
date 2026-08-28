@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import {
   ChurchSiteContentRepository,
   SITE_CONTENT_PATHS,
@@ -33,11 +35,13 @@ export const COMPLEX_WRITABLE_SECTIONS = [
 export type ComplexSectionId = (typeof COMPLEX_WRITABLE_SECTIONS)[number]['id'];
 
 export interface HomepageSlideDraft {
+  clientId: string;
   image: string;
   title: string;
 }
 
 export interface HomepageFeaturedLinkDraft {
+  clientId: string;
   image: string;
   summary: string;
   title: string;
@@ -46,6 +50,7 @@ export interface HomepageFeaturedLinkDraft {
 }
 
 export interface HomepageFeaturedPageDraft {
+  clientId: string;
   image: string;
   pageSlug: string;
   pageTitle: string;
@@ -74,9 +79,14 @@ export interface HomepageDraft {
 }
 
 export interface StaffEntryDraft {
+  clientId: string;
   name: string;
   picture: string;
   title: string;
+}
+
+export function createDraftClientId() {
+  return uuid();
 }
 
 export interface ComplexDraft {
@@ -194,11 +204,12 @@ function buildFeaturedPageReference(draft: HomepageFeaturedPageDraft, allowIncom
   return pageTitle ? `${pageSlug}|${pageTitle}` : pageSlug;
 }
 
-function createFeaturedDraft(value: FeaturedLink | FeaturedPage): HomepageFeaturedDraft {
+function createFeaturedDraft(value: FeaturedLink | FeaturedPage, index: number): HomepageFeaturedDraft {
   if (value.type === 'featured_page') {
     const pageReference = parseFeaturedPageReference(value.page);
 
     return {
+      clientId: value.clientId || `featured-${index}`,
       image: value.image || '',
       pageSlug: pageReference.pageSlug,
       pageTitle: pageReference.pageTitle,
@@ -208,6 +219,7 @@ function createFeaturedDraft(value: FeaturedLink | FeaturedPage): HomepageFeatur
   }
 
   return {
+    clientId: value.clientId || `featured-${index}`,
     image: value.image || '',
     summary: value.summary || '',
     title: value.title,
@@ -309,7 +321,21 @@ function buildHomepageValue(draft: HomepageDraft, options?: { allowIncomplete?: 
 }
 
 export function buildHomepagePreviewData(draft: HomepageDraft): HomePageData {
-  return buildHomepageValue(draft, { allowIncomplete: true });
+  const parsed = buildHomepageValue(draft, { allowIncomplete: true });
+  const previewableSlides = draft.slides.filter((slide) => slide.image.trim());
+  const previewableFeatured = draft.featured.filter((entry) => buildFeaturedValue(entry, true) !== null);
+
+  return {
+    ...parsed,
+    featured: parsed.featured.map((entry, index) => ({
+      ...entry,
+      clientId: previewableFeatured[index]?.clientId
+    })),
+    slides: parsed.slides.map((slide, index) => ({
+      ...slide,
+      clientId: previewableSlides[index]?.clientId
+    }))
+  };
 }
 
 function buildStaffValue(draft: StaffEntryDraft[]) {
@@ -351,7 +377,7 @@ export function createComplexDraft(content: ComplexContent): ComplexDraft {
         '',
       dailyReadingsSubtitle: content.homepage.value.daily_readings.subtitle,
       dailyReadingsTitle: content.homepage.value.daily_readings.title,
-      featured: content.homepage.value.featured.map((entry) => createFeaturedDraft(entry)),
+      featured: content.homepage.value.featured.map((entry, index) => createFeaturedDraft(entry, index)),
       invitationText: content.homepage.value.invitation_text,
       liveStreamButtonTitle: content.homepage.value.live_stream_button.title,
       liveStreamButtonUrl: content.homepage.value.live_stream_button.url,
@@ -362,12 +388,14 @@ export function createComplexDraft(content: ComplexContent): ComplexDraft {
       newsletterSignupLink: content.homepage.value.newsletter.signupLink || '',
       scheduleSectionBackground: content.homepage.value.schedule_section.schedule_background,
       scheduleSectionTitle: content.homepage.value.schedule_section.title,
-      slides: content.homepage.value.slides.map((slide) => ({
+      slides: content.homepage.value.slides.map((slide, index) => ({
+        clientId: slide.clientId || `slide-${index}`,
         image: slide.image || '',
         title: slide.title || ''
       }))
     },
-    staff: content.staff.value.staff.map((entry) => ({
+    staff: content.staff.value.staff.map((entry, index) => ({
+      clientId: entry.clientId || `staff-${index}`,
       name: entry.name || '',
       picture: entry.picture || '',
       title: entry.title || ''
@@ -381,6 +409,14 @@ export async function loadComplexContent(
   sectionIds: ComplexSectionId[] = COMPLEX_WRITABLE_SECTIONS.map((section) => section.id)
 ): Promise<ComplexContent> {
   const uniqueSectionIds = [...new Set(sectionIds)];
+
+  if (uniqueSectionIds.includes('times') && !uniqueSectionIds.includes('homepage')) {
+    uniqueSectionIds.push('homepage');
+  }
+
+  if (uniqueSectionIds.includes('homepage') && !uniqueSectionIds.includes('times')) {
+    uniqueSectionIds.push('times');
+  }
   const content = createEmptyComplexContent();
   const loadedSections = await Promise.all(uniqueSectionIds.map((sectionId) => loadComplexSection(repoClient, sectionId)));
 

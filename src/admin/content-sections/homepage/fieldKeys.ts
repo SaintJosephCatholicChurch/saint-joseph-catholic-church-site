@@ -36,8 +36,8 @@ export type HomepageSlideFieldName = (typeof HOMEPAGE_SLIDE_FIELDS)[number];
 export type HomepageFeaturedFieldName = (typeof HOMEPAGE_FEATURED_FIELDS)[number];
 export type HomepageHeroFieldKey = (typeof HOMEPAGE_HERO_FIELD_KEYS)[HomepageHeroFieldName];
 export type HomepageSectionFieldKey = (typeof HOMEPAGE_SECTION_FIELD_KEYS)[HomepageSectionFieldName];
-export type HomepageSlideFieldKey = `slides|${number}|${HomepageSlideFieldName}`;
-export type HomepageFeaturedFieldKey = `featured|${number}|${HomepageFeaturedFieldName}`;
+export type HomepageSlideFieldKey = `slides|${string}|${HomepageSlideFieldName}`;
+export type HomepageFeaturedFieldKey = `featured|${string}|${HomepageFeaturedFieldName}`;
 export type HomepageFieldKey =
   | HomepageHeroFieldKey
   | HomepageSectionFieldKey
@@ -47,18 +47,18 @@ export type HomepageFieldKey =
 type ParsedHomepageFieldKey =
   | { field: HomepageHeroFieldName; tab: 'hero' }
   | { field: HomepageSectionFieldName; tab: 'sections' }
-  | { field: HomepageSlideFieldName; index: number; tab: 'slides' }
-  | { field: HomepageFeaturedFieldName; index: number; tab: 'featured' };
+  | { clientId: string; field: HomepageSlideFieldName; tab: 'slides' }
+  | { clientId: string; field: HomepageFeaturedFieldName; tab: 'featured' };
 
-export function createHomepageSlideFieldKey(index: number, field: HomepageSlideFieldName): HomepageSlideFieldKey {
-  return `slides|${index}|${field}`;
+export function createHomepageSlideFieldKey(clientId: string, field: HomepageSlideFieldName): HomepageSlideFieldKey {
+  return `slides|${clientId}|${field}`;
 }
 
 export function createHomepageFeaturedFieldKey(
-  index: number,
+  clientId: string,
   field: HomepageFeaturedFieldName
 ): HomepageFeaturedFieldKey {
-  return `featured|${index}|${field}`;
+  return `featured|${clientId}|${field}`;
 }
 
 export function getActiveHomepagePreviewTargetStyle(fieldKey: string | undefined, activeFieldKey?: HomepageFieldKey) {
@@ -92,15 +92,9 @@ export function parseHomepageFieldKey(fieldKey: string): ParsedHomepageFieldKey 
     rawField &&
     HOMEPAGE_SLIDE_FIELDS.includes(rawField as HomepageSlideFieldName)
   ) {
-    const index = Number.parseInt(rawIndexOrField, 10);
-
-    if (Number.isNaN(index)) {
-      return null;
-    }
-
     return {
+      clientId: rawIndexOrField,
       field: rawField as HomepageSlideFieldName,
-      index,
       tab: 'slides'
     };
   }
@@ -111,15 +105,9 @@ export function parseHomepageFieldKey(fieldKey: string): ParsedHomepageFieldKey 
     rawField &&
     HOMEPAGE_FEATURED_FIELDS.includes(rawField as HomepageFeaturedFieldName)
   ) {
-    const index = Number.parseInt(rawIndexOrField, 10);
-
-    if (Number.isNaN(index)) {
-      return null;
-    }
-
     return {
+      clientId: rawIndexOrField,
       field: rawField as HomepageFeaturedFieldName,
-      index,
       tab: 'featured'
     };
   }

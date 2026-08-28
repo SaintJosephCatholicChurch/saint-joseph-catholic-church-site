@@ -12,7 +12,9 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
@@ -40,6 +42,7 @@ import {
   createEmptyBulletinDraft,
   createBulletinDraft,
   createBulletinSummaries,
+  deleteBulletin,
   getBulletinPdfListLabel,
   loadBulletinMediaContent,
   saveBulletin,
@@ -48,6 +51,7 @@ import {
   type BulletinSummary,
   type MediaAsset
 } from './content/writableBulletinsMediaContent';
+import { useAdminUnsavedChanges, useRegisterAdminDirty } from './unsavedChanges';
 
 import type { AdminRepoClient } from './services/adminTypes';
 
@@ -306,6 +310,8 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   const [draft, setDraft] = useState<BulletinDraft>(createEmptyBulletinDraft());
   const [pdfPickerTarget, setPdfPickerTarget] = useState<number | 'append' | null>(null);
   const [mediaLibraryViewMode, setMediaLibraryViewMode] = useState<MediaLibraryViewMode>('list');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { confirmIfDirty } = useAdminUnsavedChanges();
   const selectedBulletinIdRef = useRef(INITIAL_EDITOR_STATE.selectedBulletinId);
   const sortableSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
@@ -388,7 +394,7 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
     return () => {
       cancelled = true;
     };
-  }, [repoClient, routedBulletinId]);
+  }, [repoClient]);
 
   const summaries = useMemo(
     () => (editorState.content ? createBulletinSummaries(editorState.content) : []),
@@ -397,6 +403,7 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   const activeBulletin = findBulletinById(editorState.content, editorState.selectedBulletinId);
   const pristineDraft = activeBulletin ? createBulletinDraft(activeBulletin) : createEmptyBulletinDraft();
   const isDirty = JSON.stringify(draft) !== JSON.stringify(pristineDraft);
+  useRegisterAdminDirty('bulletins', isDirty);
   const isSaving = editorState.saveStatus === 'saving';
   const showListViewOnly = isCompactLayout && !routedBulletinId;
   const showDenseListCards = isCompactLayout;
@@ -415,10 +422,23 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       <Button disabled={!isDirty || isSaving} onClick={() => void handleSave()} variant="contained">
         Save
       </Button>
+      <IconButton
+        aria-label="Delete"
+        title="Delete"
+        onClick={() => setDeleteDialogOpen(true)}
+        disabled={isSaving || !activeBulletin}
+        size="small"
+      >
+        <DeleteOutlineIcon fontSize="small" />
+      </IconButton>
     </Stack>
   );
 
   function selectBulletin(bulletinId: string) {
+    if (bulletinId !== editorState.selectedBulletinId && isDirty && !confirmIfDirty()) {
+      return;
+    }
+
     setEditorState((currentState) => ({
       ...currentState,
       saveError: null,
@@ -431,6 +451,10 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   }
 
   function returnToBulletinList() {
+    if (isDirty && !confirmIfDirty()) {
+      return;
+    }
+
     replaceSelectionInUrl(null);
   }
 
@@ -575,6 +599,54 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
     }
   }
 
+  async function handleDelete() {
+    if (!editorState.content || !activeBulletin) {
+      return;
+    }
+
+    setEditorState((currentState) => ({
+      ...currentState,
+      saveError: null,
+      saveMessage: null,
+      saveStatus: 'saving'
+    }));
+
+    try {
+      const content = await deleteBulletin(repoClient, {
+        bulletin: activeBulletin,
+        content: editorState.content
+      });
+      const summaries = createBulletinSummaries(content);
+      const nextSelectedBulletinId = summaries[0]?.id || NEW_BULLETIN_ID;
+
+      setDeleteDialogOpen(false);
+      setEditorState((currentState) => ({
+        ...currentState,
+        content,
+        saveError: null,
+        saveMessage: 'Bulletin deleted.',
+        saveStatus: 'success',
+        selectedBulletinId: nextSelectedBulletinId,
+        status: 'success'
+      }));
+      setDraft(createDraftForSelection(content, nextSelectedBulletinId));
+      replaceSelectionInUrl(isCompactLayout ? null : nextSelectedBulletinId);
+
+      try {
+        await onSaved();
+      } catch {
+        // summary refresh failed, non-critical
+      }
+    } catch (error) {
+      setDeleteDialogOpen(false);
+      setEditorState((currentState) => ({
+        ...currentState,
+        saveError: buildErrorMessage(error),
+        saveStatus: 'error'
+      }));
+    }
+  }
+
   async function handleMediaChanged() {
     try {
       await refreshContent({ preserveDraft: true });
@@ -601,12 +673,17 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       return;
     }
 
+    if (isDirty && !confirmIfDirty()) {
+      replaceSelectionInUrl(editorState.selectedBulletinId);
+      return;
+    }
+
     setEditorState((currentState) => ({
       ...currentState,
       selectedBulletinId: routedBulletinId
     }));
     setDraft(createDraftForSelection(editorState.content, routedBulletinId));
-  }, [editorState.content, editorState.selectedBulletinId, routedBulletinId, summaries]);
+  }, [confirmIfDirty, editorState.content, editorState.selectedBulletinId, isDirty, replaceSelectionInUrl, routedBulletinId, summaries]);
 
   useEffect(() => {
     if (summaries.length > 0) {
@@ -793,6 +870,22 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
             viewMode={mediaLibraryViewMode}
           />
         </DialogContent>
+      </Dialog>
+      <Dialog fullWidth maxWidth="xs" onClose={() => setDeleteDialogOpen(false)} open={deleteDialogOpen}>
+        <AdminDialogTitle onClose={() => setDeleteDialogOpen(false)}>Delete bulletin</AdminDialogTitle>
+        <DialogContent dividers>
+          <DialogContentText>
+            Delete “{activeBulletin?.value.name || 'this bulletin'}”? This removes the metadata file from the repository.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, pt: 1 }}>
+          <Button color="inherit" onClick={() => setDeleteDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="error" onClick={() => void handleDelete()} variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
     </Stack>
   );

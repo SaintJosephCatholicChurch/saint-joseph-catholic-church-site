@@ -5,6 +5,7 @@ import { memo, useMemo } from 'react';
 
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
+import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
 import {
   createHomepageFeaturedFieldKey,
   getActiveHomepagePreviewTargetStyle,
@@ -41,7 +42,7 @@ const StyledSummary = styled('div')(
 
 interface FeaturedPageProps {
   activeFieldKey?: HomepageFieldKey;
-  featuredIndex?: number;
+  featuredId?: string;
   featuredPage?: FeaturedPageData;
   isFullWidth?: boolean;
 }
@@ -49,15 +50,16 @@ interface FeaturedPageProps {
 const FeaturedPage = memo(
   ({
     activeFieldKey,
-    featuredIndex = 0,
+    featuredId = '0',
     featuredPage: { page, image, summary },
     isFullWidth = false
   }: FeaturedPageProps) => {
     const theme = useTheme();
-    const pageSlugFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'pageSlug');
-    const pageTitleFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'pageTitle');
-    const imageFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'image');
-    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredIndex, 'summary');
+    const resolvedImage = useResolvedMediaSrc(image || '');
+    const pageSlugFieldKey = createHomepageFeaturedFieldKey(featuredId, 'pageSlug');
+    const pageTitleFieldKey = createHomepageFeaturedFieldKey(featuredId, 'pageTitle');
+    const imageFieldKey = createHomepageFeaturedFieldKey(featuredId, 'image');
+    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredId, 'summary');
 
     const [slug, title] = useMemo(() => {
       const parts = (page ?? '').split('|');
@@ -102,7 +104,7 @@ const FeaturedPage = memo(
           </StyledTitle>
           {isNotEmpty(image) ? (
             <StyledImage
-              src={image}
+              src={resolvedImage}
               alt={title ?? ''}
               loading="lazy"
               decoding="async"

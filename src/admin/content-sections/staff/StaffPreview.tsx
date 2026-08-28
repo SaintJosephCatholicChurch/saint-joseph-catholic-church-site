@@ -35,6 +35,7 @@ const StyledStaffPreviewBody = styled('div')(
 
 function buildStaffPreviewData(draft: StaffEntryDraft[]): Staff[] {
   return draft.map((entry) => ({
+    clientId: entry.clientId,
     name: entry.name,
     picture: entry.picture,
     title: entry.title

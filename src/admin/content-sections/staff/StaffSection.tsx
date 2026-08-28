@@ -15,15 +15,16 @@ import type { ReactNode } from 'react';
 interface StaffSectionProps {
   headerActions: ReactNode;
   onChange: (value: StaffEntryDraft[]) => void;
-  onSelectImage: (index: number) => void;
+  onSelectImage: (clientId: string) => void;
   value: StaffEntryDraft[];
 }
 
 const CONTENT_SECTION_PANELS = ['editor', 'preview'] as const;
 
 export function StaffSection({ headerActions, onChange, onSelectImage, value }: StaffSectionProps) {
-  const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
+  const [expandedClientIds, setExpandedClientIds] = useState<string[]>([]);
   const pendingExpandedFocusFieldKeyRef = useRef<StaffFieldKey | null>(null);
+  const pendingPreviewSelectionFieldKeyRef = useRef<StaffFieldKey | null>(null);
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -37,30 +38,35 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
         return;
       }
 
-      setExpandedIndexes((currentValue) =>
-        currentValue.includes(parsedFieldKey.index) ? currentValue : [...currentValue, parsedFieldKey.index]
+      setExpandedClientIds((currentValue) =>
+        currentValue.includes(parsedFieldKey.clientId) ? currentValue : [...currentValue, parsedFieldKey.clientId]
       );
     }
   });
 
   useEffect(() => {
-    setExpandedIndexes((currentValue) => currentValue.filter((index) => index < value.length));
-  }, [value.length]);
+    const staffClientIds = new Set(value.map((entry) => entry.clientId));
+    setExpandedClientIds((currentValue) => currentValue.filter((clientId) => staffClientIds.has(clientId)));
+  }, [value]);
 
-  function handleSelectFieldKey(fieldKey: StaffFieldKey) {
-    if (panel === 'preview') {
-      setPanel('editor');
+  useEffect(() => {
+    if (panel !== 'editor' || !pendingPreviewSelectionFieldKeyRef.current) {
+      return;
     }
 
+    const fieldKey = pendingPreviewSelectionFieldKeyRef.current;
+    pendingPreviewSelectionFieldKeyRef.current = null;
+    selectFieldKeyInEditor(fieldKey);
+  }, [panel, selection]);
+
+  function selectFieldKeyInEditor(fieldKey: StaffFieldKey) {
     const parsedFieldKey = parseStaffFieldKey(fieldKey);
 
     if (!parsedFieldKey) {
       return;
     }
 
-    const isExpanded = expandedIndexes.includes(parsedFieldKey.index);
-
-    if (isExpanded) {
+    if (expandedClientIds.includes(parsedFieldKey.clientId)) {
       pendingExpandedFocusFieldKeyRef.current = null;
       selection.selectFieldKey(fieldKey);
       return;
@@ -70,7 +76,17 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
     selection.setActiveFieldKey(fieldKey);
   }
 
-  function handleExpandedEntered(index: number) {
+  function handleSelectFieldKey(fieldKey: StaffFieldKey) {
+    if (panel === 'preview') {
+      pendingPreviewSelectionFieldKeyRef.current = fieldKey;
+      setPanel('editor');
+      return;
+    }
+
+    selectFieldKeyInEditor(fieldKey);
+  }
+
+  function handleExpandedEntered(clientId: string) {
     const pendingFieldKey = pendingExpandedFocusFieldKeyRef.current;
 
     if (!pendingFieldKey) {
@@ -79,12 +95,14 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
 
     const parsedFieldKey = parseStaffFieldKey(pendingFieldKey);
 
-    if (!parsedFieldKey || parsedFieldKey.index !== index) {
+    if (!parsedFieldKey || parsedFieldKey.clientId !== clientId) {
       return;
     }
 
     pendingExpandedFocusFieldKeyRef.current = null;
-    selection.selectFieldKey(pendingFieldKey);
+    requestAnimationFrame(() => {
+      selection.selectFieldKey(pendingFieldKey);
+    });
   }
 
   return (
@@ -95,18 +113,18 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
       editor={
         <StaffEditor
           activeFieldKey={selection.activeFieldKey || undefined}
-          expandedIndexes={expandedIndexes}
+          expandedClientIds={expandedClientIds}
           onChange={onChange}
           onExpandedEntered={handleExpandedEntered}
           onFocusFieldKey={selection.setActiveFieldKey}
           onSelectImage={onSelectImage}
-          onToggleExpanded={(index, expanded) =>
-            setExpandedIndexes((currentValue) => {
+          onToggleExpanded={(clientId, expanded) =>
+            setExpandedClientIds((currentValue) => {
               if (expanded) {
-                return currentValue.includes(index) ? currentValue : [...currentValue, index];
+                return currentValue.includes(clientId) ? currentValue : [...currentValue, clientId];
               }
 
-              return currentValue.filter((entryIndex) => entryIndex !== index);
+              return currentValue.filter((entryId) => entryId !== clientId);
             })
           }
           registerField={selection.registerField}

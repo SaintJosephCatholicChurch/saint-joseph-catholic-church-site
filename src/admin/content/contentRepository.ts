@@ -542,7 +542,7 @@ class JsonFileAdapter<TValue> {
   }
 
   serialize(value: TValue) {
-    return JSON.stringify(value, null, 2);
+    return `${JSON.stringify(value, null, 2)}\n`;
   }
 
   write(
@@ -589,7 +589,7 @@ class BulletinCollectionAdapter {
   }
 
   serialize(value: Bulletin) {
-    return JSON.stringify(value, null, 2);
+    return `${JSON.stringify(value, null, 2)}\n`;
   }
 
   write(

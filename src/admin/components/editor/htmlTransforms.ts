@@ -10,6 +10,7 @@ export function fromEditorToStorage(value: string): string {
       .replace(/([^/]{1})>/g, '$1/>')
       .replace('  ', ' ');
     newValue = newValue.replaceAll(imageMatch[0], newImage);
+    imageRegex.lastIndex = 0;
     imageMatch = imageRegex.exec(newValue);
   }
 
@@ -23,10 +24,11 @@ export function fromEditorToStorage(value: string): string {
       .replace(/data-asset="(?:[\w\W]+?)"/g, '')
       .replace('  ', ' ');
     newValue = newValue.replaceAll(fileMatch[0], newFileLink);
+    fileRegex.lastIndex = 0;
     fileMatch = fileRegex.exec(newValue);
   }
 
-  newValue = newValue.replace(/href="(?!http|mailto|tel|\/)([\w\W]+?)"/g, 'href="/$1"');
+  newValue = newValue.replace(/href="(?!https?:|mailto:|tel:|sms:|javascript:|\/|#|\?)([\w\W]+?)"/g, 'href="/$1"');
 
   return newValue;
 }

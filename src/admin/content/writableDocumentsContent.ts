@@ -209,6 +209,14 @@ async function commitOrWriteTextFile(
   }
 ) {
   if (input.currentPath !== input.nextPath) {
+    if (input.sha) {
+      const currentFile = await repoClient.readTextFile(input.currentPath);
+
+      if (currentFile.sha && currentFile.sha !== input.sha) {
+        throw new Error('This file was updated elsewhere. Reload the admin page and try saving again.');
+      }
+    }
+
     const commitResult = await repoClient.commitFiles({
       deletes: [{ path: input.currentPath }],
       message: input.message,
@@ -216,9 +224,13 @@ async function commitOrWriteTextFile(
     });
     const committedFile = commitResult.files.find((file) => file.path === input.nextPath);
 
+    if (!committedFile?.sha) {
+      throw new Error(`GitHub did not return a SHA for ${input.nextPath}. Reload the admin page and try again.`);
+    }
+
     return {
-      path: committedFile?.path || input.nextPath,
-      sha: committedFile?.sha || ''
+      path: committedFile.path,
+      sha: committedFile.sha
     };
   }
 
@@ -474,7 +486,7 @@ export async function savePageDocument(
     currentPath,
     message: `Admin: update page ${slug}`,
     nextPath,
-    sha: currentPath === nextPath ? input.document.sha : undefined
+    sha: input.document.sha
   });
 
   const savedDocument: StoredDocument<AdminPageFrontmatter> = {
@@ -482,7 +494,7 @@ export async function savePageDocument(
     data,
     loaded: true,
     path: result.path || nextPath,
-    sha: result.sha || input.document.sha
+    sha: result.sha
   };
   const nextContent = upsertDocumentInContent(input.content, 'page', savedDocument, currentPath);
   const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
@@ -522,7 +534,7 @@ export async function savePostDocument(
     currentPath,
     message: `Admin: update news post ${slug}`,
     nextPath,
-    sha: currentPath === nextPath ? input.document.sha : undefined
+    sha: input.document.sha
   });
 
   const savedDocument: StoredDocument<AdminPostFrontmatter> = {
@@ -530,7 +542,7 @@ export async function savePostDocument(
     data,
     loaded: true,
     path: result.path || nextPath,
-    sha: result.sha || input.document.sha
+    sha: result.sha
   };
   const nextContent = upsertDocumentInContent(input.content, 'post', savedDocument, currentPath);
   const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));

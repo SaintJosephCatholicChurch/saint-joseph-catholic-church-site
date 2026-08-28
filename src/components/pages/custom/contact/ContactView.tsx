@@ -245,7 +245,7 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                     {churchDetails.phone}
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_phones?.map((phone, index) => (
-                    <>
+                    <Fragment key={`additional-phone-${index}`}>
                       <StyledChurchDetailTitle
                         key={`additional-phone-${index}-title`}
                         {...getAdminPreviewFieldTargetProps('additionalPhones')}
@@ -260,7 +260,7 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                         <PhoneEnabledIcon fontSize="small" />
                         {phone.phone}
                       </StyledChurchDetailsLink>
-                    </>
+                    </Fragment>
                   ))}
                   <StyledChurchDetailTitle
                     {...getAdminPreviewFieldTargetProps('email')}
@@ -278,7 +278,7 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                     {churchDetails.email}
                   </StyledChurchDetailsLink>
                   {churchDetails.additional_emails?.map((email, index) => (
-                    <>
+                    <Fragment key={`additional-email-${index}`}>
                       <StyledChurchDetailTitle
                         key={`additional-email-${index}-title`}
                         {...getAdminPreviewFieldTargetProps('additionalEmails')}
@@ -293,7 +293,7 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                         <EmailIcon fontSize="small" />
                         {email.email}
                       </StyledChurchDetailsLink>
-                    </>
+                    </Fragment>
                   ))}
                 </StyledChurchDetailSection>
                 <StyledChurchDetailSection>

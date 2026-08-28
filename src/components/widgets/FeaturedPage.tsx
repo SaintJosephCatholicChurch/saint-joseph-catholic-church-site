@@ -63,14 +63,14 @@ const FeaturedPage = memo(
 
     const [slug, title] = useMemo(() => {
       const parts = (page ?? '').split('|');
-      if (parts.length < 2) {
-        return ['', ''];
-      }
+      const nextSlug = parts[0]?.trim() || '';
+      const nextTitle = parts.slice(1).join('|').trim() || nextSlug;
 
-      return [parts[0], parts[1]];
+      return [nextSlug, nextTitle];
     }, [page]);
+    const href = slug.startsWith('/') || /^(https?:)?\/\//i.test(slug) ? slug : `/${slug}`;
 
-    if (isEmpty(slug) || isEmpty(title)) {
+    if (isEmpty(slug)) {
       return null;
     }
 
@@ -79,7 +79,7 @@ const FeaturedPage = memo(
         <Button
           LinkComponent={Link}
           {...({ ['data-admin-field-key']: pageSlugFieldKey } as Record<string, string>)}
-          href={slug}
+          href={href}
           sx={{
             display: 'flex',
             flexDirection: 'column',

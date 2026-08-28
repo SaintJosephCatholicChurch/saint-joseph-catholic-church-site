@@ -39,10 +39,19 @@ export async function loadSharedContentResource<T>(
   }
 
   const nextEntry: SharedResourceEntry<T> = {};
-  const nextPromise = loader().then((value) => {
-    nextEntry.value = value;
-    return value;
-  });
+  const nextPromise = loader()
+    .then((value) => {
+      nextEntry.value = value;
+      return value;
+    })
+    .catch((error) => {
+      const latestEntry = store.get(key);
+      if (latestEntry === nextEntry) {
+        store.delete(key);
+      }
+
+      throw error;
+    });
 
   nextEntry.promise = nextPromise;
   store.set(key, nextEntry);

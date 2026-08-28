@@ -52,11 +52,17 @@ export function TimesPreview({
 
     let cancelled = false;
 
-    void loadStructuredContent(repoClient, ['churchDetails']).then((content) => {
-      if (!cancelled) {
-        setFacebookPage(content.churchDetails.value.facebook_page);
-      }
-    });
+    void loadStructuredContent(repoClient, ['churchDetails'])
+      .then((content) => {
+        if (!cancelled) {
+          setFacebookPage(content.churchDetails.value.facebook_page);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setFacebookPage('');
+        }
+      });
 
     return () => {
       cancelled = true;

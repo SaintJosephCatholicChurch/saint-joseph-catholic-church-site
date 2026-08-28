@@ -107,6 +107,14 @@ function formatDate(dateStr: string): string {
   });
 }
 
+function isPlaceholderDocumentBody(body: string) {
+  return !body
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<br[^>]*>/gi, '')
+    .replace(/<\/?p[^>]*>/gi, '')
+    .trim();
+}
+
 interface CreateDialogState {
   date: string;
   error: string | null;
@@ -306,10 +314,10 @@ export function DocumentContentEditor({
       const existingDraft = currentDrafts[documentId];
       const hydratedDraft = createPageDraft(document);
 
-      if (!existingDraft || !existingDraft.body) {
+      if (!existingDraft || isPlaceholderDocumentBody(existingDraft.body)) {
         return {
           ...currentDrafts,
-          [documentId]: existingDraft ? { ...existingDraft, body: hydratedDraft.body } : hydratedDraft
+          [documentId]: existingDraft ? { ...hydratedDraft, ...existingDraft, body: hydratedDraft.body } : hydratedDraft
         };
       }
 
@@ -322,10 +330,10 @@ export function DocumentContentEditor({
       const existingDraft = currentDrafts[documentId];
       const hydratedDraft = createPostDraft(document);
 
-      if (!existingDraft || !existingDraft.body) {
+      if (!existingDraft || isPlaceholderDocumentBody(existingDraft.body)) {
         return {
           ...currentDrafts,
-          [documentId]: existingDraft ? { ...existingDraft, body: hydratedDraft.body } : hydratedDraft
+          [documentId]: existingDraft ? { ...hydratedDraft, ...existingDraft, body: hydratedDraft.body } : hydratedDraft
         };
       }
 
@@ -489,6 +497,9 @@ export function DocumentContentEditor({
   );
   useRegisterAdminDirty(`document:${visibleKindsKey}`, isDirty);
   const isSaving = editorState.saveStatus === 'saving';
+  const isActiveDocumentLoaded = Boolean(
+    activeSummary?.kind === 'page' ? activePage?.loaded : activeSummary?.kind === 'post' ? activePost?.loaded : false
+  );
   const showListViewOnly = isCompactLayout && !routedDocumentId;
   const showDenseListCards = isCompactLayout;
   const showActiveListSelection = !isCompactLayout || Boolean(routedDocumentId);
@@ -560,7 +571,11 @@ export function DocumentContentEditor({
       >
         <RestartAltIcon fontSize="small" />
       </IconButton>
-      <Button variant="contained" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
+      <Button
+        variant="contained"
+        onClick={() => void handleSave()}
+        disabled={!isDirty || isSaving || !isActiveDocumentLoaded}
+      >
         Save
       </Button>
       <IconButton
@@ -613,17 +628,17 @@ export function DocumentContentEditor({
       const result: { content: DocumentContent; newId: string } =
         kind === 'page'
           ? await createPageDocument(repoClient, {
-            content: editorState.content,
-            date: createDialog.date,
-            slug: createDialog.slug,
-            title: createDialog.title
-          })
+              content: editorState.content,
+              date: createDialog.date,
+              slug: createDialog.slug,
+              title: createDialog.title
+            })
           : await createPostDocument(repoClient, {
-            content: editorState.content,
-            date: createDialog.date,
-            slug: createDialog.slug,
-            title: createDialog.title
-          });
+              content: editorState.content,
+              date: createDialog.date,
+              slug: createDialog.slug,
+              title: createDialog.title
+            });
 
       seedMissingDrafts(result.content);
       setEditorState((current) => ({
@@ -763,6 +778,16 @@ export function DocumentContentEditor({
       return;
     }
 
+    const activeDocument = activeSummary.kind === 'page' ? activePage : activePost;
+    if (!activeDocument?.loaded) {
+      setEditorState((currentState) => ({
+        ...currentState,
+        saveError: 'This document is still loading. Please wait a moment and try again.',
+        saveStatus: 'error'
+      }));
+      return;
+    }
+
     setEditorState((currentState) => ({
       ...currentState,
       saveError: null,
@@ -782,7 +807,9 @@ export function DocumentContentEditor({
         });
         content = savedPage.content;
         savedDocumentId = savedPage.documentId;
-        setPageDrafts((currentDrafts) => replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePageDraft));
+        setPageDrafts((currentDrafts) =>
+          replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePageDraft)
+        );
       }
 
       if (activeSummary.kind === 'post' && activePost && activePostDraft) {
@@ -793,7 +820,9 @@ export function DocumentContentEditor({
         });
         content = savedPost.content;
         savedDocumentId = savedPost.documentId;
-        setPostDrafts((currentDrafts) => replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePostDraft));
+        setPostDrafts((currentDrafts) =>
+          replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePostDraft)
+        );
       }
 
       setEditorState((currentState) => ({
@@ -1127,13 +1156,17 @@ export function DocumentContentEditor({
                           />
                           <Stack spacing={1}>
                             <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                            <AdminHtmlEditor
-                              assetToInsert={pendingEditorAsset}
-                              onAssetInserted={handleEditorAssetInserted}
-                              value={activePageDraft?.body || ''}
-                              onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
-                              onOpenMediaLibrary={openMediaPicker}
-                            />
+                            {isActiveDocumentLoaded ? (
+                              <AdminHtmlEditor
+                                assetToInsert={pendingEditorAsset}
+                                onAssetInserted={handleEditorAssetInserted}
+                                value={activePageDraft?.body || ''}
+                                onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
+                                onOpenMediaLibrary={openMediaPicker}
+                              />
+                            ) : (
+                              <LinearProgress />
+                            )}
                           </Stack>
                         </Stack>
                       ) : (
@@ -1178,13 +1211,17 @@ export function DocumentContentEditor({
                           </Stack>
                           <Stack spacing={1}>
                             <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                            <AdminHtmlEditor
-                              assetToInsert={pendingEditorAsset}
-                              onAssetInserted={handleEditorAssetInserted}
-                              value={activePostDraft?.body || ''}
-                              onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
-                              onOpenMediaLibrary={openMediaPicker}
-                            />
+                            {isActiveDocumentLoaded ? (
+                              <AdminHtmlEditor
+                                assetToInsert={pendingEditorAsset}
+                                onAssetInserted={handleEditorAssetInserted}
+                                value={activePostDraft?.body || ''}
+                                onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
+                                onOpenMediaLibrary={openMediaPicker}
+                              />
+                            ) : (
+                              <LinearProgress />
+                            )}
                           </Stack>
                         </Stack>
                       )}
@@ -1237,13 +1274,17 @@ export function DocumentContentEditor({
                           />
                           <Stack spacing={1}>
                             <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                            <AdminHtmlEditor
-                              assetToInsert={pendingEditorAsset}
-                              onAssetInserted={handleEditorAssetInserted}
-                              value={activePageDraft?.body || ''}
-                              onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
-                              onOpenMediaLibrary={openMediaPicker}
-                            />
+                            {isActiveDocumentLoaded ? (
+                              <AdminHtmlEditor
+                                assetToInsert={pendingEditorAsset}
+                                onAssetInserted={handleEditorAssetInserted}
+                                value={activePageDraft?.body || ''}
+                                onChange={(nextValue) => updateActivePageDraft({ body: nextValue })}
+                                onOpenMediaLibrary={openMediaPicker}
+                              />
+                            ) : (
+                              <LinearProgress />
+                            )}
                           </Stack>
                         </Stack>
                       ) : (
@@ -1288,13 +1329,17 @@ export function DocumentContentEditor({
                           </Stack>
                           <Stack spacing={1}>
                             <Typography sx={{ fontWeight: 700 }}>Body</Typography>
-                            <AdminHtmlEditor
-                              assetToInsert={pendingEditorAsset}
-                              onAssetInserted={handleEditorAssetInserted}
-                              value={activePostDraft?.body || ''}
-                              onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
-                              onOpenMediaLibrary={openMediaPicker}
-                            />
+                            {isActiveDocumentLoaded ? (
+                              <AdminHtmlEditor
+                                assetToInsert={pendingEditorAsset}
+                                onAssetInserted={handleEditorAssetInserted}
+                                value={activePostDraft?.body || ''}
+                                onChange={(nextValue) => updateActivePostDraft({ body: nextValue })}
+                                onOpenMediaLibrary={openMediaPicker}
+                              />
+                            ) : (
+                              <LinearProgress />
+                            )}
                           </Stack>
                         </Stack>
                       )}
@@ -1416,7 +1461,9 @@ export function DocumentContentEditor({
         </DialogContent>
       </Dialog>
       <Dialog fullWidth maxWidth="xs" onClose={() => setDeleteDialogOpen(false)} open={deleteDialogOpen}>
-        <AdminDialogTitle onClose={() => setDeleteDialogOpen(false)}>Delete {activeSummary?.kind === 'page' ? 'page' : 'news post'}</AdminDialogTitle>
+        <AdminDialogTitle onClose={() => setDeleteDialogOpen(false)}>
+          Delete {activeSummary?.kind === 'page' ? 'page' : 'news post'}
+        </AdminDialogTitle>
         <DialogContent dividers>
           <DialogContentText>
             Delete “{activeSummary?.title}”? This removes the file from the repository and cannot be undone from admin.

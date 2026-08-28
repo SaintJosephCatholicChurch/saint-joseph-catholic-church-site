@@ -16,6 +16,7 @@ import { AdminPagePreviewFrame } from '../../AdminPagePreviewFrame';
 import { AdminDialogTitle } from '../../components/AdminDialogTitle';
 import { buildHomepagePreviewData, type HomepageDraft } from '../../content/writableComplexContent';
 import { getLoadedRecentPostContent, loadRecentPostContent } from '../../content/writableDocumentsContent';
+import { useAdminUnsavedChanges } from '../../unsavedChanges';
 import { handleAdminPreviewSelectionClick } from '../components/adminPreviewSelection';
 import { ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE, type HomepageFieldKey } from './fieldKeys';
 
@@ -38,6 +39,7 @@ export function HomepagePreview({
 }: HomepagePreviewProps) {
   const pathname = usePathname();
   const { repoClient } = useAdminAuth();
+  const { confirmIfDirty } = useAdminUnsavedChanges();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [recentPosts, setRecentPosts] = useState<PostContent[]>([]);
@@ -75,6 +77,10 @@ export function HomepagePreview({
   }, [repoClient]);
 
   const handleGoToMassTimes = useCallback(() => {
+    if (!confirmIfDirty()) {
+      return;
+    }
+
     const nextParams = new URLSearchParams(searchParams.toString());
 
     nextParams.set('view', 'church');
@@ -83,7 +89,7 @@ export function HomepagePreview({
 
     const query = nextParams.toString();
     router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  }, [pathname, router, searchParams]);
+  }, [confirmIfDirty, pathname, router, searchParams]);
 
   const handleClickCapture = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {

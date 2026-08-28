@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  deletePreviewMediaBlob,
-  putPreviewMediaBlob
-} from './previewMediaStore';
+import { deletePreviewMediaBlob, putPreviewMediaBlob } from './previewMediaStore';
 
 import type {
   AdminRepoClient,
@@ -197,7 +194,11 @@ export class PreviewRepoClient implements AdminRepoClient {
       return;
     }
 
-    this.storage.setItem(PREVIEW_STORAGE_KEY, JSON.stringify(Array.from(entries.values())));
+    try {
+      this.storage.setItem(PREVIEW_STORAGE_KEY, JSON.stringify(Array.from(entries.values())));
+    } catch {
+      throw new Error('Preview mode could not save local changes because browser storage is full.');
+    }
   }
 
   getRepoLabel() {

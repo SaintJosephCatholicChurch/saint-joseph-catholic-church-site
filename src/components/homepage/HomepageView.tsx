@@ -302,13 +302,18 @@ const HomepageView = memo(
           details={schedule_section}
         />
         <ScheduleWidget
-          homepageAdminSelection={{
-            activeFieldKey: adminSelection?.activeFieldKey,
-            invitationTextFieldKey: HOMEPAGE_HERO_FIELD_KEYS.invitationText,
-            liveStreamButtonFieldKey: HOMEPAGE_HERO_FIELD_KEYS.liveStreamButtonTitle,
-            massTimesTarget: true,
-            scheduleTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.scheduleSectionTitle
-          }}
+          homepageAdminSelection={
+            adminSelection
+              ? {
+                  activeFieldKey: adminSelection.activeFieldKey,
+                  invitationTextFieldKey: HOMEPAGE_HERO_FIELD_KEYS.invitationText,
+                  liveStreamButtonFieldKey: HOMEPAGE_HERO_FIELD_KEYS.liveStreamButtonTitle,
+                  massTimesTarget: true,
+                  scheduleTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.scheduleSectionTitle
+                }
+              : undefined
+          }
+          inCMS={Boolean(adminSelection)}
           times={times}
           details={schedule_section}
           liveStreamButton={live_stream_button}

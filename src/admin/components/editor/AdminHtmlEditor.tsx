@@ -86,61 +86,49 @@ export function AdminHtmlEditor({
     [onOpenMediaLibrary]
   );
 
-  const editor = useMemo(
-    () => (
-      <StyledEditorRoot>
-        <BundledEditor
-          theme="light"
-          value={value}
-          onOpenMediaLibrary={handleOpenMediaLibrary}
-          onInit={(_event, editorInstance) => {
-            editorRef.current = editorInstance;
-          }}
-          onEditorChange={(nextValue) => {
-            onChange(fromEditorToStorage(nextValue));
-          }}
-          init={{
-            menubar: 'edit insert view format table tools help',
-            menu: {
-              edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
-              view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | fullscreen' },
-              insert: {
-                title: 'Insert',
-                items: 'link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime'
-              },
-              format: {
-                title: 'Format',
-                items: 'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
-              },
-              tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
-              table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' }
-            },
-            plugins: [
-              'advlist',
-              'anchor',
-              'autolink',
-              'bible-autolink',
-              'charmap',
-              'code',
-              'emoticons',
-              'fullscreen',
-              'insertdatetime',
-              'link',
-              'lists',
-              'media',
-              'preview',
-              'quickbars',
-              'searchreplace',
-              'table',
-              'telephone-autolink',
-              'visualblocks',
-              'wordcount'
-            ],
-            toolbar:
-              'blocks | bold italic forecolor | alignnone alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | admin-insert-image admin-insert-file | removeformat | code',
-            body_class: 'content editor',
-            content_css: ['/styles/global.css', '/styles/content.module.css'],
-            content_style: `
+  const init = useMemo(
+    () => ({
+      menubar: 'edit insert view format table tools help',
+      menu: {
+        edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+        view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | fullscreen' },
+        insert: {
+          title: 'Insert',
+          items: 'link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime'
+        },
+        format: {
+          title: 'Format',
+          items: 'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
+        },
+        tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+        table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' }
+      },
+      plugins: [
+        'advlist',
+        'anchor',
+        'autolink',
+        'bible-autolink',
+        'charmap',
+        'code',
+        'emoticons',
+        'fullscreen',
+        'insertdatetime',
+        'link',
+        'lists',
+        'media',
+        'preview',
+        'quickbars',
+        'searchreplace',
+        'table',
+        'telephone-autolink',
+        'visualblocks',
+        'wordcount'
+      ],
+      toolbar:
+        'blocks | bold italic forecolor | alignnone alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | admin-insert-image admin-insert-file | removeformat | code',
+      body_class: 'content editor',
+      content_css: ['/styles/global.css', '/styles/content.module.css'],
+      content_style: `
               html {
                 background-color: transparent;
               }
@@ -167,29 +155,41 @@ export function AdminHtmlEditor({
                 pointer-events: none;
               }
             `,
-            resize: false,
-            height: 720,
-            elementpath: false,
-            branding: false,
-            invalid_styles: 'width height',
-            quickbars_selection_toolbar: 'bold italic | blocks | quicklink blockquote | bullist numlist',
-            quickbars_insert_toolbar: 'admin-insert-image admin-insert-file quicktable',
-            setup: (editorInstance) => {
-              editorInstance.ui.registry.addButton('admin-insert-image', {
-                onAction: () => handleOpenMediaLibrary(true),
-                text: 'Image'
-              });
-              editorInstance.ui.registry.addButton('admin-insert-file', {
-                onAction: () => handleOpenMediaLibrary(false),
-                text: 'File'
-              });
-            }
-          }}
-        />
-      </StyledEditorRoot>
-    ),
-    [handleOpenMediaLibrary, onChange, value]
+      resize: false,
+      height: 720,
+      elementpath: false,
+      branding: false,
+      invalid_styles: 'width height',
+      quickbars_selection_toolbar: 'bold italic | blocks | quicklink blockquote | bullist numlist',
+      quickbars_insert_toolbar: 'admin-insert-image admin-insert-file quicktable',
+      setup: (editorInstance: TinyMCEEditor) => {
+        editorInstance.ui.registry.addButton('admin-insert-image', {
+          onAction: () => handleOpenMediaLibrary(true),
+          text: 'Image'
+        });
+        editorInstance.ui.registry.addButton('admin-insert-file', {
+          onAction: () => handleOpenMediaLibrary(false),
+          text: 'File'
+        });
+      }
+    }),
+    [handleOpenMediaLibrary]
   );
 
-  return editor;
+  return (
+    <StyledEditorRoot>
+      <BundledEditor
+        theme="light"
+        value={value}
+        onOpenMediaLibrary={handleOpenMediaLibrary}
+        onInit={(_event, editorInstance) => {
+          editorRef.current = editorInstance;
+        }}
+        onEditorChange={(nextValue) => {
+          onChange(fromEditorToStorage(nextValue));
+        }}
+        init={init}
+      />
+    </StyledEditorRoot>
+  );
 }

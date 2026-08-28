@@ -5,7 +5,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { createConnectedAdminBackend, createPreviewAdminBackend } from './services/adminBackends';
 
 import type { ReactNode } from 'react';
-import type { AdminAuthAdapter, AdminAuthSession, AdminAuthStatus, AdminBackendMode, AdminRepoClient } from './services/adminTypes';
+import type {
+  AdminAuthAdapter,
+  AdminAuthSession,
+  AdminAuthStatus,
+  AdminBackendMode,
+  AdminRepoClient
+} from './services/adminTypes';
 
 type AdminAuthContextValue = {
   authStatus: AdminAuthStatus;
@@ -56,7 +62,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
     try {
       const requestedMode = getRequestedMode();
-      const backendOrder: AdminBackendMode[] = requestedMode === 'preview' ? ['preview'] : ['connected', 'preview'];
+      const backendOrder: AdminBackendMode[] = requestedMode === 'preview' ? ['preview'] : ['connected'];
       let restoredSession: AdminAuthSession | null = null;
 
       for (const mode of backendOrder) {

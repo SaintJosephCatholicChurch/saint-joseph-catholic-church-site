@@ -75,6 +75,10 @@ export function HomepagePreview({
         return;
       }
 
+      if (event.target instanceof Element && event.target.closest('.react-slideshow-container .nav')) {
+        return;
+      }
+
       handleAdminPreviewSelectionClick(event, {
         interactive,
         onSelectFieldKey

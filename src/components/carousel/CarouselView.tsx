@@ -32,8 +32,15 @@ const StyledCarouselViewWrapper = styled(
   `
 );
 
-const StyledCarouselView = styled('div')(
-  ({ theme }) => `
+interface StyledCarouselViewProps {
+  $inCMS: boolean;
+}
+
+const StyledCarouselView = styled(
+  'div',
+  transientOptions
+)<StyledCarouselViewProps>(
+  ({ theme, $inCMS }) => `
     display: flex;
     overflow: hidden;
     position: relative;
@@ -50,6 +57,8 @@ const StyledCarouselView = styled('div')(
       justify-content: center;
       opacity: 0.5;
       padding: 0;
+      pointer-events: auto;
+      z-index: 11;
 
       &:first-of-type {
         margin-left: 32px;
@@ -66,8 +75,12 @@ const StyledCarouselView = styled('div')(
         height: 16px;
       }
 
-      ${getContainerQuery(theme.breakpoints.down('md'))} {
+      ${
+        $inCMS
+          ? ''
+          : `${getContainerQuery(theme.breakpoints.down('md'))} {
         display: none;
+      }`
       }
     }
 
@@ -89,11 +102,12 @@ const StyledCarouselView = styled('div')(
 
 interface CarouselViewProps {
   activeFieldKey?: HomepageFieldKey;
+  inCMS?: boolean;
   slides: Slide[];
   details?: ScheduleSection;
 }
 
-const CarouselView = ({ activeFieldKey, slides, details }: CarouselViewProps) => {
+const CarouselView = ({ activeFieldKey, inCMS = false, slides, details }: CarouselViewProps) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const handleSlideChange = useCallback((_old: number, next: number) => {
@@ -102,7 +116,7 @@ const CarouselView = ({ activeFieldKey, slides, details }: CarouselViewProps) =>
 
   return (
     <StyledCarouselViewWrapper $background={details?.schedule_background}>
-      <StyledCarouselView className="slide-container">
+      <StyledCarouselView className="slide-container" $inCMS={inCMS}>
         <Fade duration={CAROUSEL_DURATION} onChange={handleSlideChange}>
           {slides.map((slide, index) => (
             <CarouselSlide

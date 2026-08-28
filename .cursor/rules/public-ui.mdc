@@ -1,0 +1,19 @@
+---
+description: App Router pages, public components, and container-query styling
+globs: src/app/**,src/components/**
+alwaysApply: false
+---
+
+# Public site UI
+
+`src/app/` owns production routes. `src/pages/` is leftover and unused — do not add Pages Router files.
+
+Pattern: server `src/app/<route>/page.tsx` (metadata, `generateStaticParams`) → `'use client'` view in `src/app/client-pages/` → `AppPageShell` → `src/components/*`.
+
+- Shared chrome: `AppPageShell` → `Layout` + `PageView` + `Footer`.
+- Custom page UIs: `src/components/pages/custom/<feature>/`.
+- Domain types: `src/interface.ts`. Layout constants and WordPress-era redirects: `src/constants.ts`.
+- `Layout`'s `<main>` sets `container: page / inline-size`. Use `getContainerQuery(theme.breakpoints.*, inCMS)` so admin previews respond to pane width, not the viewport. Default `inCMS` is `true`.
+- Style with MUI `styled` / `sx` and `public/styles/global.css`. No public `ThemeProvider`; admin has its own theme in `AdminShell`.
+- Contact, ask, and parish-registration post to `api.stjosephchurchbluffton.org`, not Next routes. Smoke tests intercept those APIs — never call live services from Playwright.
+- Client-side 404 redirects use `REDIRECTS` in `src/constants.ts`.

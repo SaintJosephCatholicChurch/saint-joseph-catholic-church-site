@@ -1,11 +1,10 @@
-import DownloadIcon from '@mui/icons-material/Download';
-import IconButton from '@mui/material/IconButton';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { memo } from 'react';
 
+import BulletinPdfDownloadButton from './BulletinPdfDownloadButton';
 import { useFormattedBulletinDate, useFormattedBulletinUrlDate } from './util';
 
 import type { CSSProperties } from 'react';
@@ -81,12 +80,8 @@ const BulletListButton = memo(({ bulletin, selected, openInNewWindow = false, st
           sx={{ margin: 0 }}
         />
       </ListItemButton>
-      <IconButton
-        href={bulletin.pdf}
-        target="_blank"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
+      <BulletinPdfDownloadButton
+        bulletin={bulletin}
         sx={{
           position: 'absolute',
           right: '14px',
@@ -96,9 +91,7 @@ const BulletListButton = memo(({ bulletin, selected, openInNewWindow = false, st
             color: selected ? '#ffffff' : undefined
           }
         }}
-      >
-        <DownloadIcon />
-      </IconButton>
+      />
     </StyledListItemWrapper>
   );
 });

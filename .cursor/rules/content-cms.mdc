@@ -1,0 +1,27 @@
+---
+description: Git-backed content files, loaders, and admin persistence contracts
+globs: content/**,src/lib/**,src/admin/content/**
+alwaysApply: false
+---
+
+# Content and CMS
+
+Content lives in Git, not a database. Paths are `SITE_CONTENT_PATHS` in `src/admin/content/contentRepository.ts`.
+
+| Concern | File | Loader | Admin writer |
+|---|---|---|---|
+| Site config | `content/config.json` | `src/lib/config.ts` | `writableStructuredContent.ts` |
+| Church details | `content/church_details.json` | `src/lib/church_details.ts` | same |
+| Menu / logo | `content/menu.json` | `src/lib/menu.ts` | same |
+| Styles / tags | `content/styles.json`, `content/meta/tags.json` | `src/lib/styles.ts`, `src/lib/tags.ts` | same |
+| Homepage | `content/homepage.json` | `src/lib/homepage.ts` | `writableComplexContent.ts` |
+| Mass times | `content/times.json` | `src/lib/times.ts` | same |
+| Staff | `content/staff.json` | `src/lib/staff.ts` | same |
+| Pages / news | `content/pages/*.mdx`, `content/posts/*.mdx` | `src/lib/pages.ts`, `src/lib/posts.ts` | `writableDocumentsContent.ts` |
+| Bulletins | `content/bulletins/*.json` | `src/lib/bulletins.ts` | `writableBulletinsMediaContent.ts` |
+
+MDX is HTML-in-MDX (gray-matter frontmatter + HTML body), not React MDX. Preserve existing JSON/MDX shapes unless a change explicitly updates the contract.
+
+Events are **not** in `content/` — they come from Google Calendar. Ministries are ordinary MDX pages, not a typed entity.
+
+Media folders: `public/files`, `public/staff`, `public/bulletins`. Validate with `src/admin/content/validation.ts` helpers, not Zod/Yup.

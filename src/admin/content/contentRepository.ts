@@ -335,7 +335,8 @@ function validateBulletin(value: unknown, label: string): Bulletin {
   return {
     date: expectOptionalStringProperty(record, 'date', label),
     name: expectOptionalStringProperty(record, 'name', label),
-    pdf: expectOptionalStringProperty(record, 'pdf', label)
+    pdf: expectOptionalStringProperty(record, 'pdf', label),
+    pdfs: expectOptionalStringArrayProperty(record, 'pdfs', label)
   };
 }
 

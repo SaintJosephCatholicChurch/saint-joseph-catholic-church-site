@@ -2,24 +2,22 @@ import { parseISO } from 'date-fns';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-import { getFormattedBulletinTitle } from '../components/pages/custom/bulletins/util';
+import {
+  getBulletinPdfPaths,
+  getFormattedBulletinTitle,
+  normalizeBulletinPdfPath
+} from '../components/pages/custom/bulletins/util';
 import { isNullish } from '../util/null.util';
 
-import type { Bulletin, BulletinPDFData } from '../interface';
+import type { Bulletin, BulletinPDFData, BulletinPDFMeta } from '../interface';
+
+export { getBulletinPdfPaths, normalizeBulletinPdfPath };
 
 const pagesDirectory = join(process.cwd(), 'content/bulletins');
 const DATE_WITH_OPTIONAL_DUPLICATE_SUFFIX = /^(\d{4}-\d{2}-\d{2})(?:-\d+)?$/i;
 
 let bulletinCache: Bulletin[];
 let metaCache: BulletinPDFData[];
-
-export function normalizeBulletinPdfPath(pdfPath: string): string {
-  const publicRelativePath = pdfPath
-    .replace(/\\/g, '/')
-    .replace(/^\/+/, '')
-    .replace(/^(?:public\/)+/, '');
-  return `/${publicRelativePath}`;
-}
 
 export function getBulletinFileNameSortTime(fileName: string): number {
   const baseName = fileName.replace(/\.json$/i, '');
@@ -38,6 +36,19 @@ export function compareBulletinFileNames(leftFileName: string, rightFileName: st
   return rightFileName.localeCompare(leftFileName);
 }
 
+function normalizeBulletinRecord(bulletin: Bulletin): Bulletin {
+  const pdfPaths = getBulletinPdfPaths(bulletin);
+  if (pdfPaths.length === 0) {
+    return bulletin;
+  }
+
+  return {
+    ...bulletin,
+    pdf: pdfPaths[0],
+    ...(bulletin.pdfs?.length ? { pdfs: pdfPaths } : {})
+  };
+}
+
 export function fetchBulletins(): Bulletin[] {
   if (bulletinCache && process.env.NODE_ENV !== 'development') {
     return bulletinCache;
@@ -50,30 +61,48 @@ export function fetchBulletins(): Bulletin[] {
     .filter((it) => it.endsWith('.json'))
     .map((fileName) => {
       const bulletin = JSON.parse(readFileSync(join(pagesDirectory, fileName), 'utf8')) as Bulletin;
-      return bulletin.pdf ? { ...bulletin, pdf: normalizeBulletinPdfPath(bulletin.pdf) } : bulletin;
+      return normalizeBulletinRecord(bulletin);
     });
 
   return bulletinCache;
 }
 
-export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinPDFData | undefined {
-  if (isNullish(bulletin?.pdf)) {
-    return undefined;
-  }
-
+function readBulletinPdfMeta(pdfPath: string): BulletinPDFMeta {
   const metaFullPath = join(
     'public',
-    normalizeBulletinPdfPath(bulletin.pdf)
+    normalizeBulletinPdfPath(pdfPath)
       .replace(/^\/+/, '')
       .replace(/\.pdf$/g, ''),
     'meta.json'
   );
+
+  return JSON.parse(readFileSync(metaFullPath, 'utf8')) as BulletinPDFMeta;
+}
+
+export function fetchBulletinMetaData(bulletin: Bulletin | undefined): BulletinPDFData | undefined {
+  const pdfPaths = getBulletinPdfPaths(bulletin);
+  if (isNullish(bulletin) || pdfPaths.length === 0) {
+    return undefined;
+  }
+
+  const pages: string[] = [];
+  const texts: string[] = [];
+
+  for (const pdfPath of pdfPaths) {
+    const meta = readBulletinPdfMeta(pdfPath);
+    pages.push(...(meta.pages ?? []));
+    if (meta.text) {
+      texts.push(meta.text);
+    }
+  }
+
   return {
     title: getFormattedBulletinTitle(bulletin),
     slug: bulletin.date,
     date: bulletin.date,
-    ...JSON.parse(readFileSync(metaFullPath, 'utf8'))
-  } as BulletinPDFData;
+    pages,
+    text: texts.join(' ')
+  };
 }
 
 export function fetchBulletinsMetaData(): BulletinPDFData[] {

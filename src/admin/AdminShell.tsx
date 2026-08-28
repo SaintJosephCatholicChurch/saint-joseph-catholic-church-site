@@ -239,7 +239,13 @@ const ADMIN_THEME = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          height: '100%',
+          overflow: 'hidden'
+        },
         body: {
+          height: '100%',
+          overflow: 'hidden',
           backgroundColor: '#f4efe7',
           backgroundImage:
             'radial-gradient(circle at top left, rgba(184, 141, 73, 0.18), transparent 28%), radial-gradient(circle at top right, rgba(127, 35, 44, 0.12), transparent 34%)',
@@ -850,7 +856,11 @@ function renderAdminView(viewId: AdminViewId, repoClient: AdminRepoClient | null
     case 'siteConfig':
       return <SiteConfigView onSaved={onSaved} repoClient={repoClient} />;
     case 'help':
-      return <Help />;
+      return (
+        <TabbedViewBody>
+          <Help />
+        </TabbedViewBody>
+      );
     default:
       return null;
   }

@@ -1,5 +1,7 @@
 import { memo } from 'react';
 
+import { scrollToHelpHeading } from './scrollToHelpHeading';
+
 export interface HelpHeadingLinkProps {
   children: string;
 }
@@ -10,11 +12,10 @@ const HelpHeadingLink = memo(({ children }: HelpHeadingLinkProps) => {
   return (
     <a
       href={`#${id}`}
-      onClick={(e) => {
-        e.preventDefault();
-        document.querySelector(`#${id}`).scrollIntoView({
-          behavior: 'smooth'
-        });
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        scrollToHelpHeading(id);
       }}
     >
       {children}

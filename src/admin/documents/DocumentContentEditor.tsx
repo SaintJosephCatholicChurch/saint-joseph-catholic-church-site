@@ -43,6 +43,7 @@ import {
   loadDocumentContent,
   savePageDocument,
   savePostDocument,
+  slugifyDocumentValue,
   type DocumentContent,
   type DocumentKind,
   type DocumentSummary,
@@ -98,13 +99,6 @@ function formatDate(dateStr: string): string {
     day: 'numeric',
     year: 'numeric'
   });
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }
 
 interface CreateDialogState {
@@ -395,7 +389,10 @@ export function DocumentContentEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterTokens.join('\x00'), visibleSummaries]
   );
-  const preferredSelectedDocumentId = routedDocumentId || editorState.selectedDocumentId;
+  const preferredSelectedDocumentId =
+    routedDocumentId && filteredSummaries.some((summary) => summary.id === routedDocumentId)
+      ? routedDocumentId
+      : editorState.selectedDocumentId;
   const activeSummary =
     filteredSummaries.find((summary) => summary.id === preferredSelectedDocumentId) ||
     (!isCompactLayout || Boolean(routedDocumentId) ? filteredSummaries[0] || null : null);
@@ -503,7 +500,7 @@ export function DocumentContentEditor({
     setCreateDialog((current) => ({
       ...current,
       title,
-      slug: current.slugEdited ? current.slug : slugify(title)
+      slug: current.slugEdited ? current.slug : slugifyDocumentValue(title)
     }));
   }
 
@@ -524,17 +521,17 @@ export function DocumentContentEditor({
       const result: { content: DocumentContent; newId: string } =
         kind === 'page'
           ? await createPageDocument(repoClient, {
-              content: editorState.content,
-              date: createDialog.date,
-              slug: createDialog.slug,
-              title: createDialog.title
-            })
+            content: editorState.content,
+            date: createDialog.date,
+            slug: createDialog.slug,
+            title: createDialog.title
+          })
           : await createPostDocument(repoClient, {
-              content: editorState.content,
-              date: createDialog.date,
-              slug: createDialog.slug,
-              title: createDialog.title
-            });
+            content: editorState.content,
+            date: createDialog.date,
+            slug: createDialog.slug,
+            title: createDialog.title
+          });
 
       syncDraftsFromContent(result.content);
       setEditorState((current) => ({
@@ -675,6 +672,7 @@ export function DocumentContentEditor({
 
     try {
       let content = editorState.content;
+      let savedDocumentId = activeSummary.id;
 
       if (activeSummary.kind === 'page' && activePage && activePageDraft) {
         content = await savePageDocument(repoClient, {
@@ -685,11 +683,13 @@ export function DocumentContentEditor({
       }
 
       if (activeSummary.kind === 'post' && activePost && activePostDraft) {
-        content = await savePostDocument(repoClient, {
+        const savedPost = await savePostDocument(repoClient, {
           content,
           document: activePost,
           draft: activePostDraft
         });
+        content = savedPost.content;
+        savedDocumentId = savedPost.documentId;
       }
 
       syncDraftsFromContent(content);
@@ -699,8 +699,13 @@ export function DocumentContentEditor({
         saveError: null,
         saveMessage: `${activeSummary.kind === 'page' ? 'Page' : 'News post'} saved.`,
         saveStatus: 'success',
+        selectedDocumentId: savedDocumentId,
         status: 'success'
       }));
+
+      if (savedDocumentId !== activeSummary.id) {
+        replaceSelectionInUrl(savedDocumentId);
+      }
 
       try {
         await onSaved();
@@ -801,7 +806,7 @@ export function DocumentContentEditor({
             <TextField
               disabled={createDialog.saving}
               fullWidth
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
               label="Publish date"
               onChange={(e) => setCreateDialog((c) => ({ ...c, date: e.target.value }))}
               type="date"
@@ -951,22 +956,20 @@ export function DocumentContentEditor({
 
                       {activeSummary.kind === 'page' ? (
                         <Stack spacing={2}>
-                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                            <TextField
-                              label="Slug"
-                              value={activePageDraft?.slug || ''}
-                              onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
-                              fullWidth
-                            />
-                            <TextField
-                              label="Publish date"
-                              type="date"
-                              value={activePageDraft?.date || ''}
-                              onChange={(event) => updateActivePageDraft({ date: event.target.value })}
-                              fullWidth
-                              InputLabelProps={{ shrink: true }}
-                            />
-                          </Stack>
+                          <TextField
+                            label="Slug"
+                            value={activePageDraft?.slug || ''}
+                            onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                            fullWidth
+                          />
+                          <TextField
+                            label="Publish date"
+                            type="date"
+                            value={activePageDraft?.date || ''}
+                            onChange={(event) => updateActivePageDraft({ date: event.target.value })}
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                          />
                           <TextField
                             label="Title"
                             value={activePageDraft?.title || ''}
@@ -986,17 +989,21 @@ export function DocumentContentEditor({
                         </Stack>
                       ) : (
                         <Stack spacing={2}>
-                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                            <TextField label="Slug" value={activePostDraft?.slug || ''} fullWidth disabled />
-                            <TextField
-                              label="Publish date"
-                              type="date"
-                              value={activePostDraft?.date || ''}
-                              onChange={(event) => updateActivePostDraft({ date: event.target.value })}
-                              fullWidth
-                              InputLabelProps={{ shrink: true }}
-                            />
-                          </Stack>
+                          <TextField
+                            label="Slug"
+                            value={activePostDraft?.slug || ''}
+                            onChange={(event) => updateActivePostDraft({ slug: event.target.value })}
+                            helperText="Used in /news/[slug]"
+                            fullWidth
+                          />
+                          <TextField
+                            label="Publish date"
+                            type="date"
+                            value={activePostDraft?.date || ''}
+                            onChange={(event) => updateActivePostDraft({ date: event.target.value })}
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                          />
                           <TextField
                             label="Title"
                             value={activePostDraft?.title || ''}
@@ -1058,22 +1065,20 @@ export function DocumentContentEditor({
 
                       {activeSummary.kind === 'page' ? (
                         <Stack spacing={2}>
-                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                            <TextField
-                              label="Slug"
-                              value={activePageDraft?.slug || ''}
-                              onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
-                              fullWidth
-                            />
-                            <TextField
-                              label="Publish date"
-                              type="date"
-                              value={activePageDraft?.date || ''}
-                              onChange={(event) => updateActivePageDraft({ date: event.target.value })}
-                              fullWidth
-                              InputLabelProps={{ shrink: true }}
-                            />
-                          </Stack>
+                          <TextField
+                            label="Slug"
+                            value={activePageDraft?.slug || ''}
+                            onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                            fullWidth
+                          />
+                          <TextField
+                            label="Publish date"
+                            type="date"
+                            value={activePageDraft?.date || ''}
+                            onChange={(event) => updateActivePageDraft({ date: event.target.value })}
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                          />
                           <TextField
                             label="Title"
                             value={activePageDraft?.title || ''}
@@ -1093,17 +1098,21 @@ export function DocumentContentEditor({
                         </Stack>
                       ) : (
                         <Stack spacing={2}>
-                          <Stack direction={{ md: 'row', xs: 'column' }} spacing={2}>
-                            <TextField label="Slug" value={activePostDraft?.slug || ''} fullWidth disabled />
-                            <TextField
-                              label="Publish date"
-                              type="date"
-                              value={activePostDraft?.date || ''}
-                              onChange={(event) => updateActivePostDraft({ date: event.target.value })}
-                              fullWidth
-                              InputLabelProps={{ shrink: true }}
-                            />
-                          </Stack>
+                          <TextField
+                            label="Slug"
+                            value={activePostDraft?.slug || ''}
+                            onChange={(event) => updateActivePostDraft({ slug: event.target.value })}
+                            helperText="Used in /news/[slug]"
+                            fullWidth
+                          />
+                          <TextField
+                            label="Publish date"
+                            type="date"
+                            value={activePostDraft?.date || ''}
+                            onChange={(event) => updateActivePostDraft({ date: event.target.value })}
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                          />
                           <TextField
                             label="Title"
                             value={activePostDraft?.title || ''}
@@ -1226,7 +1235,7 @@ export function DocumentContentEditor({
             <TextField
               disabled={createDialog.saving}
               fullWidth
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
               label="Publish date"
               onChange={(e) => setCreateDialog((c) => ({ ...c, date: e.target.value }))}
               type="date"

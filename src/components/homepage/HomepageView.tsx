@@ -295,7 +295,12 @@ const HomepageView = memo(
 
     return (
       <StyledHomepageView>
-        <CarouselView activeFieldKey={adminSelection?.activeFieldKey} slides={slides} details={schedule_section} />
+        <CarouselView
+          activeFieldKey={adminSelection?.activeFieldKey}
+          inCMS={Boolean(adminSelection)}
+          slides={slides}
+          details={schedule_section}
+        />
         <ScheduleWidget
           homepageAdminSelection={{
             activeFieldKey: adminSelection?.activeFieldKey,

@@ -4,7 +4,6 @@ import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import Container from '../layout/Container';
 import Schedule from './Schedule';
-import type { HomepageFieldKey } from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { LiveStreamButton, ScheduleSection, Times } from '../../interface';
 
@@ -13,11 +12,11 @@ interface ScheduleAdminSelection {
 }
 
 interface HomepageScheduleAdminSelection {
-  activeFieldKey?: HomepageFieldKey;
-  invitationTextFieldKey?: HomepageFieldKey;
-  liveStreamButtonFieldKey?: HomepageFieldKey;
+  activeFieldKey?: string;
+  invitationTextFieldKey?: string;
+  liveStreamButtonFieldKey?: string;
   massTimesTarget?: boolean;
-  scheduleTitleFieldKey?: HomepageFieldKey;
+  scheduleTitleFieldKey?: string;
 }
 
 interface StyledScheduleProps {

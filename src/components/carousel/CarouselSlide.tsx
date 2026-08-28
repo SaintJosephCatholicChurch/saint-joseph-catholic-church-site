@@ -10,11 +10,7 @@ import {
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
-import {
-  createHomepageSlideFieldKey,
-  getActiveHomepagePreviewTargetStyle,
-  type HomepageFieldKey
-} from '../../admin/content-sections/homepage/fieldKeys';
+import { getActiveAdminPreviewTargetStyle, getAdminPreviewFieldTargetProps } from '../common/adminPreviewTarget';
 
 import type { Slide } from '../../interface';
 const StyledCarouselSlide = styled('div')(
@@ -122,18 +118,25 @@ const StyledTitle = styled(
 );
 
 interface CarouselSlideProps {
-  activeFieldKey?: HomepageFieldKey;
+  activeFieldKey?: string;
+  createSlideFieldKey?: (clientId: string, field: string) => string;
   slide: Slide;
   slideIndex: number;
   active: boolean;
 }
 
-const CarouselSlide = ({ activeFieldKey, slide: { clientId, image, title }, slideIndex, active }: CarouselSlideProps) => {
+const CarouselSlide = ({
+  activeFieldKey,
+  createSlideFieldKey,
+  slide: { clientId, image, title },
+  slideIndex,
+  active
+}: CarouselSlideProps) => {
   const [isActive, setIsActive] = useState(false);
   const resolvedImage = useResolvedMediaSrc(image);
   const slideFieldId = clientId || String(slideIndex);
-  const imageFieldKey = createHomepageSlideFieldKey(slideFieldId, 'image');
-  const titleFieldKey = createHomepageSlideFieldKey(slideFieldId, 'title');
+  const imageFieldKey = createSlideFieldKey?.(slideFieldId, 'image');
+  const titleFieldKey = createSlideFieldKey?.(slideFieldId, 'title');
 
   useEffect(() => {
     setIsActive(active);
@@ -144,14 +147,14 @@ const CarouselSlide = ({ activeFieldKey, slide: { clientId, image, title }, slid
       <StyledImage
         className="image-container"
         $image={resolvedImage}
-        {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
-        style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
+        {...getAdminPreviewFieldTargetProps(imageFieldKey)}
+        style={getActiveAdminPreviewTargetStyle(imageFieldKey, activeFieldKey)}
       />
       <StyledTitleWrapper>
         <StyledTitle
           $active={isActive}
-          {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
-          style={getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey)}
+          {...getAdminPreviewFieldTargetProps(titleFieldKey)}
+          style={getActiveAdminPreviewTargetStyle(titleFieldKey, activeFieldKey)}
         >
           {title}
         </StyledTitle>

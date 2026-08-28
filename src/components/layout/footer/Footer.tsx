@@ -127,7 +127,7 @@ const Footer = ({ styles, churchDetails, privacyPolicyLink, hideSearch = false }
           </StyledFooterContents>
         </Container>
       </StyledFooterContainerWrapper>
-      <Copyright privacyPolicyLink={privacyPolicyLink} />
+      <Copyright churchName={churchDetails.name} privacyPolicyLink={privacyPolicyLink} />
     </footer>
   );
 };

@@ -12,7 +12,6 @@ import {
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import CarouselSlide from './CarouselSlide';
-import type { HomepageFieldKey } from '../../admin/content-sections/homepage/fieldKeys';
 
 import type { ScheduleSection, Slide } from '../../interface';
 
@@ -101,13 +100,14 @@ const StyledCarouselView = styled(
 );
 
 interface CarouselViewProps {
-  activeFieldKey?: HomepageFieldKey;
+  activeFieldKey?: string;
+  createSlideFieldKey?: (clientId: string, field: string) => string;
   inCMS?: boolean;
   slides: Slide[];
   details?: ScheduleSection;
 }
 
-const CarouselView = ({ activeFieldKey, inCMS = false, slides, details }: CarouselViewProps) => {
+const CarouselView = ({ activeFieldKey, createSlideFieldKey, inCMS = false, slides, details }: CarouselViewProps) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const handleSlideChange = useCallback((_old: number, next: number) => {
@@ -121,6 +121,7 @@ const CarouselView = ({ activeFieldKey, inCMS = false, slides, details }: Carous
           {slides.map((slide, index) => (
             <CarouselSlide
               activeFieldKey={activeFieldKey}
+              createSlideFieldKey={createSlideFieldKey}
               key={slide.clientId || `slide-${index}`}
               slide={slide}
               slideIndex={index}

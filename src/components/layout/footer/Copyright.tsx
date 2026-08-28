@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
-import churchDetails from '../../../lib/church_details';
 import getContainerQuery from '../../../util/container.util';
 
 const StyledCopyright = styled('div')(
@@ -69,10 +68,11 @@ const StyledCopyrightSection = styled('div')`
 `;
 
 interface CopyrightProps {
+  churchName: string;
   privacyPolicyLink: string;
 }
 
-const Copyright = ({ privacyPolicyLink }: CopyrightProps) => {
+const Copyright = ({ churchName, privacyPolicyLink }: CopyrightProps) => {
   const year = useMemo(() => format(new Date(), 'yyyy'), []);
 
   return (
@@ -81,7 +81,7 @@ const Copyright = ({ privacyPolicyLink }: CopyrightProps) => {
         <StyledCopyrightSection>
           <CopyrightIcon fontSize="small" />
           <Box>
-            {year} {churchDetails.name}.
+            {year} {churchName}.
           </Box>
         </StyledCopyrightSection>
         <StyledCopyrightSection>

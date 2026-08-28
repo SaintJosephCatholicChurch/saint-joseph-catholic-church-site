@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import { memo, useCallback, useState } from 'react';
 
-import { getAdminPreviewFieldTargetProps } from '../../admin/content-sections/components/adminPreviewSelection';
+import { getAdminPreviewFieldTargetProps } from '../../components/common/adminPreviewTarget';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
@@ -228,13 +228,17 @@ const StyledNote = styled('div')`
 
 interface MobileScheduleTabPanelProps {
   activePathKey?: string;
+  enableAdminFieldKeys?: boolean;
   times: Times;
   index: number;
 }
 
-const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileScheduleTabPanelProps) => {
+const MobileScheduleTabPanel = memo(
+  ({ activePathKey, enableAdminFieldKeys = false, times, index }: MobileScheduleTabPanelProps) => {
   const [open, setOpen] = useState(index === 0);
   const categoryPath = buildCategoryPath(times.id);
+  const fieldTargetProps = (fieldKey?: string | null) =>
+    getAdminPreviewFieldTargetProps(enableAdminFieldKeys ? fieldKey : undefined);
 
   const handleClick = useCallback(() => {
     setOpen(!open);
@@ -243,7 +247,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
   return (
     <StyledMobileScheduleTabPanel $open={open}>
       <ListItemButton
-        {...getAdminPreviewFieldTargetProps(categoryPath)}
+        {...fieldTargetProps(categoryPath)}
         onClick={handleClick}
         sx={getActivePreviewTargetStyle(categoryPath, activePathKey)}
       >
@@ -273,7 +277,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
             return (
               <StyledNoteWrapper key={`section-${section.id || sectionIndex}`}>
                 <StyledNote
-                  {...getAdminPreviewFieldTargetProps(sectionNotePath)}
+                  {...fieldTargetProps(sectionNotePath)}
                   style={getActivePreviewTargetStyle(sectionNotePath, activePathKey)}
                 >
                   {section.note}
@@ -287,14 +291,14 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
           return (
             <StyledSections
               key={`mobile-section-${section.id || sectionIndex}`}
-              {...getAdminPreviewFieldTargetProps(sectionPath)}
+              {...fieldTargetProps(sectionPath)}
               style={getActivePreviewTargetStyle(sectionPath, activePathKey)}
             >
               {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
               {section.days?.map((day) => (
                 <StyledDayTimeLine
                   key={`mobile-section-${section.id || sectionIndex}-day-${day.id || day.day}`}
-                  {...getAdminPreviewFieldTargetProps(buildDayPath(times.id, section.id, day.id))}
+                  {...fieldTargetProps(buildDayPath(times.id, section.id, day.id))}
                   style={getActivePreviewTargetStyle(buildDayPath(times.id, section.id, day.id), activePathKey)}
                 >
                   <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
@@ -306,7 +310,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                         {isNotEmpty(day.times[0].time) || isNotEmpty(day.times[0].end_time) ? (
                           <StyledDayTimeLineTime>
                             <StyledDayTimeLineTimeTimes
-                              {...getAdminPreviewFieldTargetProps(
+                              {...fieldTargetProps(
                                 buildTimePath(times.id, section.id, day.id, day.times[0].id, 'time')
                               )}
                               style={getActivePreviewTargetStyle(
@@ -325,7 +329,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                                 </StyledDivider>
                                 <StyledDayTimeLineTimeTimes
                                   key={`mobile-section-${section.id || sectionIndex}-day-${day.id || day.day}-end-time-0-first`}
-                                  {...getAdminPreviewFieldTargetProps(
+                                  {...fieldTargetProps(
                                     buildTimePath(times.id, section.id, day.id, day.times[0].id, 'end_time')
                                   )}
                                   style={getActivePreviewTargetStyle(
@@ -345,7 +349,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                             .map((note) => (
                               <StyledDayTimeLineTimeComment
                                 key={`mobile-section-${section.id || sectionIndex}-day-${day.id || day.day}-note-${note.id}`}
-                                {...getAdminPreviewFieldTargetProps(
+                                {...fieldTargetProps(
                                   buildTimeNotePath(times.id, section.id, day.id, day.times[0].id, note.id)
                                 )}
                                 style={getActivePreviewTargetStyle(
@@ -385,7 +389,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                           {isNotEmpty(time.time) || isNotEmpty(time.end_time) ? (
                             <StyledDayTimeLineTime>
                               <StyledDayTimeLineTimeTimes
-                                {...getAdminPreviewFieldTargetProps(
+                                {...fieldTargetProps(
                                   buildTimePath(times.id, section.id, day.id, time.id, 'time')
                                 )}
                                 style={getActivePreviewTargetStyle(
@@ -404,7 +408,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                                   </StyledDivider>
                                   <StyledDayTimeLineTimeTimes
                                     key={`mobile-section-${section.id || sectionIndex}-day-${day.id || day.day}-end-time-${time.id || timeIndex}`}
-                                    {...getAdminPreviewFieldTargetProps(
+                                    {...fieldTargetProps(
                                       buildTimePath(times.id, section.id, day.id, time.id, 'end_time')
                                     )}
                                     style={getActivePreviewTargetStyle(
@@ -424,7 +428,7 @@ const MobileScheduleTabPanel = memo(({ activePathKey, times, index }: MobileSche
                                 .map((note) => (
                                   <StyledDayTimeLineTimeComment
                                     key={`mobile-section-${section.id || sectionIndex}-day-${day.id || day.day}-note-${note.id}`}
-                                    {...getAdminPreviewFieldTargetProps(
+                                    {...fieldTargetProps(
                                       buildTimeNotePath(times.id, section.id, day.id, time.id, note.id)
                                     )}
                                     style={getActivePreviewTargetStyle(

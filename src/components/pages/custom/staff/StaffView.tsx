@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import { STAFF_CARD_GAP_SIZE } from '../../../../constants';
 import StaffCard from './StaffCard';
 
-import type { StaffFieldKey } from '../../../../admin/content-sections/staff/fieldKeys';
-
 import type { Staff } from '../../../../interface';
 
 const StyledStaffWrapper = styled('div')`
@@ -16,16 +14,18 @@ const StyledStaffWrapper = styled('div')`
 `;
 
 interface StaffViewProps {
-  activeFieldKey?: StaffFieldKey;
+  activeFieldKey?: string;
+  createFieldKey?: (clientId: string, field: string) => string;
   staff: Staff[];
 }
 
-const StaffView = ({ activeFieldKey, staff }: StaffViewProps) => {
+const StaffView = ({ activeFieldKey, createFieldKey, staff }: StaffViewProps) => {
   return (
     <StyledStaffWrapper>
       {staff.map((staffMember, index) => (
         <StaffCard
           activeFieldKey={activeFieldKey}
+          createFieldKey={createFieldKey}
           index={index}
           key={staffMember.clientId || `staff-${index}`}
           staffMember={staffMember}

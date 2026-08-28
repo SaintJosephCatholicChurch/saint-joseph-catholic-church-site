@@ -6,11 +6,7 @@ import { memo, useMemo } from 'react';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
 import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
-import {
-  createHomepageFeaturedFieldKey,
-  getActiveHomepagePreviewTargetStyle,
-  type HomepageFieldKey
-} from '../../admin/content-sections/homepage/fieldKeys';
+import { getActiveAdminPreviewTargetStyle, getAdminPreviewFieldTargetProps } from '../common/adminPreviewTarget';
 
 import type { FeaturedPage as FeaturedPageData } from '../../interface';
 
@@ -41,25 +37,27 @@ const StyledSummary = styled('div')(
 );
 
 interface FeaturedPageProps {
-  activeFieldKey?: HomepageFieldKey;
-  featuredId?: string;
+  activeFieldKey?: string;
   featuredPage?: FeaturedPageData;
+  imageFieldKey?: string;
   isFullWidth?: boolean;
+  pageSlugFieldKey?: string;
+  pageTitleFieldKey?: string;
+  summaryFieldKey?: string;
 }
 
 const FeaturedPage = memo(
   ({
     activeFieldKey,
-    featuredId = '0',
     featuredPage: { page, image, summary },
-    isFullWidth = false
+    imageFieldKey,
+    isFullWidth = false,
+    pageSlugFieldKey,
+    pageTitleFieldKey,
+    summaryFieldKey
   }: FeaturedPageProps) => {
     const theme = useTheme();
     const resolvedImage = useResolvedMediaSrc(image || '');
-    const pageSlugFieldKey = createHomepageFeaturedFieldKey(featuredId, 'pageSlug');
-    const pageTitleFieldKey = createHomepageFeaturedFieldKey(featuredId, 'pageTitle');
-    const imageFieldKey = createHomepageFeaturedFieldKey(featuredId, 'image');
-    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredId, 'summary');
 
     const [slug, title] = useMemo(() => {
       const parts = (page ?? '').split('|');
@@ -78,7 +76,7 @@ const FeaturedPage = memo(
       <div>
         <Button
           LinkComponent={Link}
-          {...({ ['data-admin-field-key']: pageSlugFieldKey } as Record<string, string>)}
+          {...getAdminPreviewFieldTargetProps(pageSlugFieldKey)}
           href={href}
           sx={{
             display: 'flex',
@@ -90,15 +88,15 @@ const FeaturedPage = memo(
             padding: '0 8px 8px',
             alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            ...getActiveHomepagePreviewTargetStyle(pageSlugFieldKey, activeFieldKey),
+            ...getActiveAdminPreviewTargetStyle(pageSlugFieldKey, activeFieldKey),
             [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
               gap: '12px'
             }
           }}
         >
           <StyledTitle
-            {...({ ['data-admin-field-key']: pageTitleFieldKey } as Record<string, string>)}
-            style={getActiveHomepagePreviewTargetStyle(pageTitleFieldKey, activeFieldKey)}
+            {...getAdminPreviewFieldTargetProps(pageTitleFieldKey)}
+            style={getActiveAdminPreviewTargetStyle(pageTitleFieldKey, activeFieldKey)}
           >
             {title}
           </StyledTitle>
@@ -108,14 +106,14 @@ const FeaturedPage = memo(
               alt={title ?? ''}
               loading="lazy"
               decoding="async"
-              {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
-              style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
+              {...getAdminPreviewFieldTargetProps(imageFieldKey)}
+              style={getActiveAdminPreviewTargetStyle(imageFieldKey, activeFieldKey)}
             />
           ) : null}
           {isNotEmpty(summary) ? (
             <StyledSummary
-              {...({ ['data-admin-field-key']: summaryFieldKey } as Record<string, string>)}
-              style={getActiveHomepagePreviewTargetStyle(summaryFieldKey, activeFieldKey)}
+              {...getAdminPreviewFieldTargetProps(summaryFieldKey)}
+              style={getActiveAdminPreviewTargetStyle(summaryFieldKey, activeFieldKey)}
             >
               {summary}
             </StyledSummary>

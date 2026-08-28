@@ -801,7 +801,12 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
           <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['menu']} />
         ) : null}
         {tab === 'styles' ? (
-          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['styles']} />
+          <ContentEditor
+            onSaved={onSaved}
+            repoClient={repoClient}
+            showIntroAlert={false}
+            visibleSections={['styles']}
+          />
         ) : null}
       </TabbedViewBody>
     </TabbedView>
@@ -968,6 +973,14 @@ function AdminShellSurface() {
     router.replace(buildAdminHref(), { scroll: false });
   }, [buildAdminHref, router, searchParams, session]);
 
+  function handleLogout() {
+    if (!confirmIfDirty()) {
+      return;
+    }
+
+    void logout();
+  }
+
   function handleSelectView(viewId: AdminViewId) {
     if (viewId !== activeView.id && !confirmIfDirty()) {
       return;
@@ -1059,7 +1072,7 @@ function AdminShellSurface() {
           variant="outlined"
           color="inherit"
           startIcon={<LogoutOutlinedIcon />}
-          onClick={() => void logout()}
+          onClick={handleLogout}
           disabled={!session}
           fullWidth
         >
@@ -1098,7 +1111,7 @@ function AdminShellSurface() {
             aria-label="Logout"
             $active={false}
             $collapsed
-            onClick={() => void logout()}
+            onClick={handleLogout}
             disabled={!session}
           >
             <NavIcon $active={false}>
@@ -1111,7 +1124,7 @@ function AdminShellSurface() {
           variant="outlined"
           color="inherit"
           startIcon={<LogoutOutlinedIcon />}
-          onClick={() => void logout()}
+          onClick={handleLogout}
           disabled={!session}
           fullWidth
         >
@@ -1142,7 +1155,7 @@ function AdminShellSurface() {
               </ShellToolbarMenuButton>
             ) : null}
             <ShellToolbarTitle variant="h5" sx={{ fontWeight: 700 }}>
-              Content admin
+              {session?.mode === 'preview' ? 'Content admin (preview)' : 'Content admin'}
             </ShellToolbarTitle>
             {session ? (
               <Typography
@@ -1157,7 +1170,12 @@ function AdminShellSurface() {
                 {session.user.name}
               </Typography>
             ) : (
-              <ShellToolbarAction variant="contained" color="primary" onClick={() => void login()} disabled={authStatus === 'authenticating'}>
+              <ShellToolbarAction
+                variant="contained"
+                color="primary"
+                onClick={() => void login()}
+                disabled={authStatus === 'authenticating'}
+              >
                 Connect GitHub
               </ShellToolbarAction>
             )}
@@ -1184,6 +1202,9 @@ function AdminShellSurface() {
 
             <MainPanel>
               <PanelBody>
+                {session?.mode === 'preview' ? (
+                  <Alert severity="warning">Preview mode — changes stay in this browser and are not published.</Alert>
+                ) : null}
                 {authStatus === 'restoring' || authStatus === 'authenticating' ? <PanelLoadingProgress /> : null}
                 {error ? <Alert severity="error">{error}</Alert> : null}
                 {!canRenderActiveView ? <Alert severity="info">Sign in to open this collection.</Alert> : null}

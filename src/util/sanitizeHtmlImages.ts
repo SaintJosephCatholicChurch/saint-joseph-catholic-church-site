@@ -1,4 +1,5 @@
 // Utility to post-process HTML strings and make <img> tags safer/performant for rendering
+// - strip script/event-handler XSS vectors from CMS HTML
 // - ensure img tags have alt attribute (empty if missing)
 // - add loading="lazy" where appropriate
 // - add decoding="async"
@@ -8,9 +9,17 @@ export default function sanitizeHtmlImages(html: string | undefined): string | T
     return '';
   }
 
+  const withoutDangerousMarkup = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi, '')
+    .replace(/<object\b[^>]*>[\s\S]*?<\/object>/gi, '')
+    .replace(/<embed\b[^>]*\/?>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/(href|src|xlink:href)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, '$1=$2$2');
+
   // Add alt="" if missing, add loading and decoding attributes, and normalize closing
   // This is a safe, conservative transformation and should not change existing alt text.
-  return html
+  return withoutDangerousMarkup
     .replace(/<img([^>]*?)>/gi, (match: string, attrs: string) => {
       let newAttrs: string = attrs || '';
 

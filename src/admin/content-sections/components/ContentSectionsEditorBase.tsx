@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useRegisterAdminDirty } from '../../unsavedChanges';
+import { clearSharedContentResource } from '../../content/sharedContentStore';
 
 import type { AdminRepoClient } from '../../services/adminTypes';
 import type { ReactNode } from 'react';
@@ -101,10 +102,10 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
   const pristineDraft = editorState.content && editorState.draft ? createDraft(editorState.content) : null;
   const isAnyVisibleSectionDirty = Boolean(
     pristineDraft &&
-      editorState.draft &&
-      visibleSectionIds.some(
-        (sectionId) => JSON.stringify(editorState.draft?.[sectionId]) !== JSON.stringify(pristineDraft[sectionId])
-      )
+    editorState.draft &&
+    visibleSectionIds.some(
+      (sectionId) => JSON.stringify(editorState.draft?.[sectionId]) !== JSON.stringify(pristineDraft[sectionId])
+    )
   );
 
   useRegisterAdminDirty(`content:${visibleSectionIdsKey}`, isAnyVisibleSectionDirty);
@@ -198,17 +199,30 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
         draft: editorState.draft,
         sectionId
       });
+      const savedDraft = createDraft(content);
 
-      setEditorState((currentState) => ({
-        ...currentState,
-        content,
-        draft: createDraft(content),
-        saveError: null,
-        saveMessage: `${getSectionLabel(sectionId)} saved.`,
-        saveSectionId: sectionId,
-        saveStatus: 'success',
-        status: 'success'
-      }));
+      setEditorState((currentState) => {
+        const nextDraft = { ...savedDraft };
+
+        if (currentState.draft) {
+          for (const draftSectionId of Object.keys(currentState.draft) as SectionId[]) {
+            if (draftSectionId !== sectionId) {
+              nextDraft[draftSectionId] = currentState.draft[draftSectionId];
+            }
+          }
+        }
+
+        return {
+          ...currentState,
+          content,
+          draft: nextDraft,
+          saveError: null,
+          saveMessage: `${getSectionLabel(sectionId)} saved.`,
+          saveSectionId: sectionId,
+          saveStatus: 'success',
+          status: 'success'
+        };
+      });
 
       try {
         await onSaved();
@@ -221,6 +235,7 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
         }));
       }
     } catch (error) {
+      clearSharedContentResource(repoClient);
       setEditorState((currentState) => ({
         ...currentState,
         saveError: buildErrorMessage(error, failureMessage),
@@ -286,13 +301,26 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
       {editorState.saveMessage ? <Alert severity="success">{editorState.saveMessage}</Alert> : null}
       {editorState.saveError ? <Alert severity="error">{editorState.saveError}</Alert> : null}
       {editorState.status === 'loading' ? <LinearProgress /> : null}
-      {renderSections({
-        draft: editorState.draft,
-        renderSectionHeaderActions,
-        shouldRenderSection,
-        updateDraft,
-        visibleSectionIds
-      })}
+      <Stack
+        spacing={2}
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          minWidth: 0,
+          opacity: isSaving ? 0.72 : 1,
+          overflow: 'hidden',
+          pointerEvents: isSaving ? 'none' : 'auto',
+          width: '100%'
+        }}
+      >
+        {renderSections({
+          draft: editorState.draft,
+          renderSectionHeaderActions,
+          shouldRenderSection,
+          updateDraft,
+          visibleSectionIds
+        })}
+      </Stack>
       {renderDialogs ? renderDialogs({ draft: editorState.draft, onSaved, repoClient, updateDraft }) : null}
     </Stack>
   );

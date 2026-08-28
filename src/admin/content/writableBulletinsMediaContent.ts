@@ -180,7 +180,7 @@ function toBulletinEntries(entries: RepoDirectoryEntry[]) {
 }
 
 function sortBulletins(bulletins: StoredContentValue<Bulletin>[]) {
-  return [...bulletins].sort((left, right) => right.value.date.localeCompare(left.value.date));
+  return [...bulletins].sort((left, right) => (right.value.date || '').localeCompare(left.value.date || ''));
 }
 
 function buildBulletinId(path: string) {
@@ -448,13 +448,27 @@ export async function saveBulletin(
   let savedSha = input.bulletin?.sha || '';
 
   if (isRename && currentPath) {
+    if (input.bulletin?.sha) {
+      const currentFile = await repoClient.readTextFile(currentPath);
+
+      if (currentFile.sha && currentFile.sha !== input.bulletin.sha) {
+        throw new Error('This bulletin was updated elsewhere. Reload the admin page and try saving again.');
+      }
+    }
+
     const commitResult = await repoClient.commitFiles({
       deletes: [{ path: currentPath }],
       message: buildBulletinCommitMessage(date, false),
       upserts: [{ content: serializedValue, path: nextPath }]
     });
-    savedPath = commitResult.files.find((file) => file.path === nextPath)?.path || nextPath;
-    savedSha = commitResult.files.find((file) => file.path === nextPath)?.sha || '';
+    const committedFile = commitResult.files.find((file) => file.path === nextPath);
+
+    if (!committedFile?.sha) {
+      throw new Error(`GitHub did not return a SHA for ${nextPath}. Reload the admin page and try again.`);
+    }
+
+    savedPath = committedFile.path;
+    savedSha = committedFile.sha;
   } else {
     const savedResult = await repository.writeBulletin({
       message: buildBulletinCommitMessage(date, !input.bulletin),
@@ -494,7 +508,7 @@ export async function uploadMediaAsset(
   }
 ) {
   const targetName = input.replaceAsset?.name || input.fileName;
-  const fileName = trimRequiredValue(targetName || '', 'Upload file name');
+  const fileName = sanitizeUploadedFileName(trimRequiredValue(targetName || '', 'Upload file name'));
   const path = input.replaceAsset?.path || buildMediaPath(input.folderId, fileName);
 
   const uploaded = await repoClient.uploadMedia({

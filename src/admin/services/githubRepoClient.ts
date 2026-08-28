@@ -141,6 +141,14 @@ function decodeBase64ToText(value: string) {
   return new TextDecoder().decode(bytes);
 }
 
+function requireWriteSha(sha: string | undefined, path: string) {
+  if (!sha) {
+    throw new Error(`GitHub did not return a SHA for ${path}. Reload the admin page and try again.`);
+  }
+
+  return sha;
+}
+
 function createErrorMessage(status: number, payload: unknown) {
   if (payload && typeof payload === 'object' && 'message' in payload && typeof payload.message === 'string') {
     return payload.message;
@@ -180,6 +188,10 @@ export class GitHubRepoClient implements AdminRepoClient {
     const normalizedPath = path.replace(/^\/+|\/+$/g, '');
     const tree = await this.getTreeForPath(normalizedPath);
 
+    if (tree.truncated) {
+      throw new Error(`GitHub returned a truncated file listing for ${normalizedPath || '/'}.`);
+    }
+
     return tree.tree
       .filter((entry) => entry.type === 'blob' || entry.type === 'tree')
       .map((entry) => ({
@@ -211,15 +223,15 @@ export class GitHubRepoClient implements AdminRepoClient {
     return {
       commitSha: response.commit?.sha,
       path: response.content?.path || input.path,
-      sha: response.content?.sha || input.sha || ''
+      sha: requireWriteSha(response.content?.sha, input.path)
     };
   }
 
   async deleteFile(input: RepoDeleteInput): Promise<void> {
-    const sha = input.sha || (await this.findFileSha(input.path));
+    const sha = input.sha;
 
     if (!sha) {
-      throw new Error(`Cannot delete ${input.path} because the file does not exist.`);
+      throw new Error(`Cannot delete ${input.path} because a file SHA is required.`);
     }
 
     const encodedPath = encodePath(input.path);
@@ -245,7 +257,7 @@ export class GitHubRepoClient implements AdminRepoClient {
     return {
       commitSha: response.commit?.sha,
       path: response.content?.path || input.path,
-      sha: response.content?.sha || input.sha || ''
+      sha: requireWriteSha(response.content?.sha, input.path)
     };
   }
 
@@ -403,19 +415,6 @@ export class GitHubRepoClient implements AdminRepoClient {
     return `${method.toUpperCase()}:${url}`;
   }
 
-  private async findFileSha(path: string) {
-    try {
-      const file = await this.getFileContents(path);
-      return file.sha;
-    } catch (error) {
-      if (error instanceof Error && error.message.startsWith('404:')) {
-        return undefined;
-      }
-
-      throw error;
-    }
-  }
-
   private async getFileContents(path: string) {
     const encodedPath = encodePath(path);
     const response = await this.requestJson<GitHubContentsDirectoryItem[] | GitHubContentsFileResponse>(
@@ -442,8 +441,23 @@ export class GitHubRepoClient implements AdminRepoClient {
     }
   ) {
     const encodedPath = encodePath(path);
+    const body: {
+      branch: string;
+      content: string;
+      message: string;
+      sha?: string;
+    } = {
+      branch: payload.branch,
+      content: payload.content,
+      message: payload.message
+    };
+
+    if (payload.sha) {
+      body.sha = payload.sha;
+    }
+
     return this.requestJson<GitHubWriteResponse>(`/repos/${this.repo}/contents/${encodedPath}`, {
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
       method: 'PUT'
     });
   }
@@ -518,6 +532,12 @@ export class GitHubRepoClient implements AdminRepoClient {
       }
 
       return response.data;
+    } catch (error) {
+      if (!shouldUseCache) {
+        this.clearContentRequestCache();
+      }
+
+      throw error;
     } finally {
       if (shouldUseCache) {
         this.inFlightRequests.delete(cacheKey);
@@ -595,6 +615,12 @@ export class GitHubRepoClient implements AdminRepoClient {
     const parsedPayload = responseText ? (JSON.parse(responseText) as unknown) : null;
 
     if (!response.ok && response.status !== 304) {
+      if (response.status === 409) {
+        throw new Error(
+          `${response.status}: This file was updated elsewhere. Reload the admin page and try saving again.`
+        );
+      }
+
       throw new Error(`${response.status}: ${createErrorMessage(response.status, parsedPayload)}`);
     }
 

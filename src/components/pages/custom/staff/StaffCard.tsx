@@ -60,7 +60,7 @@ const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
           }
         }}
         image={resolvedPicture}
-        alt="green iguana"
+        alt={staffMember.name || staffMember.title || 'Staff member'}
       />
       <CardContent>
         <Typography

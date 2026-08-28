@@ -10,11 +10,7 @@ import getContainerQuery from '../../../../util/container.util';
 import { isNotEmpty } from '../../../../util/string.util';
 import useElementSize from '../../../../util/useElementSize';
 import useLiveStreamUrl from './useLiveStreamUrl';
-import {
-  getActiveHomepagePreviewTargetStyle,
-  type HomepageFieldKey
-} from '../../../../admin/content-sections/homepage/fieldKeys';
-import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
+import { getActiveAdminPreviewTargetStyle, getAdminPreviewFieldTargetProps } from '../../../../components/common/adminPreviewTarget';
 
 import type { LiveStreamButton } from '../../../../interface';
 
@@ -44,8 +40,8 @@ const StyledLiveStreamWrapper = styled('div')(
 );
 
 interface HomepageLiveStreamProps {
-  activeFieldKey?: HomepageFieldKey;
-  buttonFieldKey?: HomepageFieldKey;
+  activeFieldKey?: string;
+  buttonFieldKey?: string;
   facebookPage: string;
   liveStreamButton?: LiveStreamButton;
 }
@@ -89,7 +85,7 @@ const HomepageLiveStream = ({
           href={`https://www.facebook.com/${facebookPage}/live`}
           target="_blank"
           sx={{
-            ...getActiveHomepagePreviewTargetStyle(buttonFieldKey, activeFieldKey),
+            ...getActiveAdminPreviewTargetStyle(buttonFieldKey, activeFieldKey),
             marginTop: '16px',
             fontSize: '20px',
             backgroundColor: '#bc2f3b',
@@ -122,7 +118,7 @@ const HomepageLiveStream = ({
       size="large"
       startIcon={<LiveTvIcon />}
       sx={{
-        ...getActiveHomepagePreviewTargetStyle(buttonFieldKey, activeFieldKey),
+        ...getActiveAdminPreviewTargetStyle(buttonFieldKey, activeFieldKey),
         marginTop: '16px',
         fontSize: '20px',
         backgroundColor: '#bc2f3b',

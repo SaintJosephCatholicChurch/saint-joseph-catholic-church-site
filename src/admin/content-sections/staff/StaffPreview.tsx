@@ -10,7 +10,7 @@ import { handleAdminPreviewSelectionClick } from '../components/adminPreviewSele
 import { AdminPagePreviewFrame } from '../../AdminPagePreviewFrame';
 import type { StaffEntryDraft } from '../../content/writableComplexContent';
 
-import type { StaffFieldKey } from './fieldKeys';
+import { createStaffFieldKey, type StaffFieldKey, type StaffFieldName } from './fieldKeys';
 
 interface StaffPreviewProps {
   activeFieldKey?: StaffFieldKey;
@@ -54,7 +54,11 @@ export function StaffPreview({ activeFieldKey, draft, interactive = false, onSel
         }}
       >
         <PageTitle title="Parish Staff" />
-        <StaffView activeFieldKey={activeFieldKey} staff={buildStaffPreviewData(draft)} />
+        <StaffView
+          activeFieldKey={activeFieldKey}
+          createFieldKey={(clientId, field) => createStaffFieldKey(clientId, field as StaffFieldName)}
+          staff={buildStaffPreviewData(draft)}
+        />
       </StyledStaffPreviewBody>
     </AdminPagePreviewFrame>
   );

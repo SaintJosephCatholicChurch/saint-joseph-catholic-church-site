@@ -4,45 +4,38 @@ import CardMedia from '@mui/material/CardMedia';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
-import { createStaffFieldKey, type StaffFieldKey } from '../../../../admin/content-sections/staff/fieldKeys';
 import { useResolvedMediaSrc } from '../../../../admin/previewMediaUrls';
+import {
+  getActiveAdminPreviewTargetStyle,
+  getAdminPreviewFieldTargetProps
+} from '../../../../components/common/adminPreviewTarget';
 import { STAFF_CARD_GAP_SIZE, STAFF_DEFAULT_CARD_SIZE, STAFF_GLOBAL_PADDING } from '../../../../constants';
 import getContainerQuery from '../../../../util/container.util';
 
 import type { Staff } from '../../../../interface';
 
 interface StaffCardProps {
-  activeFieldKey?: StaffFieldKey;
+  activeFieldKey?: string;
+  createFieldKey?: (clientId: string, field: string) => string;
   index: number;
   staffMember: Staff;
 }
 
-const ACTIVE_PREVIEW_TARGET_STYLE = {
-  backgroundColor: 'rgba(188, 47, 59, 0.1)',
-  borderRadius: '4px',
-  boxShadow: 'inset 0 0 0 1px rgba(127, 35, 44, 0.24)'
-} as const;
-
-function getActivePreviewTargetStyle(fieldKey: StaffFieldKey, activeFieldKey?: StaffFieldKey) {
-  return activeFieldKey === fieldKey ? ACTIVE_PREVIEW_TARGET_STYLE : undefined;
-}
-
-const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
+const StaffCard = ({ activeFieldKey, createFieldKey, index, staffMember }: StaffCardProps) => {
   const theme = useTheme();
   const resolvedPicture = useResolvedMediaSrc(staffMember.picture || '');
   const staffFieldId = staffMember.clientId || String(index);
 
   const customBreakpoint = STAFF_DEFAULT_CARD_SIZE * 2 + STAFF_CARD_GAP_SIZE + STAFF_GLOBAL_PADDING;
-  const nameFieldKey = createStaffFieldKey(staffFieldId, 'name');
-  const pictureFieldKey = createStaffFieldKey(staffFieldId, 'picture');
-  const titleFieldKey = createStaffFieldKey(staffFieldId, 'title');
+  const nameFieldKey = createFieldKey?.(staffFieldId, 'name');
+  const pictureFieldKey = createFieldKey?.(staffFieldId, 'picture');
+  const titleFieldKey = createFieldKey?.(staffFieldId, 'title');
 
   return (
     <Card
       {...getAdminPreviewFieldTargetProps(nameFieldKey)}
       sx={{
-        ...getActivePreviewTargetStyle(nameFieldKey, activeFieldKey),
+        ...getActiveAdminPreviewTargetStyle(nameFieldKey, activeFieldKey),
         width: STAFF_DEFAULT_CARD_SIZE,
         [getContainerQuery(theme.breakpoints.down(customBreakpoint))]: {
           width: '100%'
@@ -53,7 +46,7 @@ const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
         component="img"
         {...getAdminPreviewFieldTargetProps(pictureFieldKey)}
         sx={{
-          ...getActivePreviewTargetStyle(pictureFieldKey, activeFieldKey),
+          ...getActiveAdminPreviewTargetStyle(pictureFieldKey, activeFieldKey),
           height: STAFF_DEFAULT_CARD_SIZE,
           [getContainerQuery(theme.breakpoints.down(customBreakpoint))]: {
             height: '80vw'
@@ -68,7 +61,7 @@ const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
           variant="h5"
           component="div"
           {...getAdminPreviewFieldTargetProps(nameFieldKey)}
-          sx={getActivePreviewTargetStyle(nameFieldKey, activeFieldKey)}
+          sx={getActiveAdminPreviewTargetStyle(nameFieldKey, activeFieldKey)}
         >
           {staffMember.name}
         </Typography>
@@ -76,7 +69,7 @@ const StaffCard = ({ activeFieldKey, index, staffMember }: StaffCardProps) => {
           variant="body2"
           color="text.secondary"
           {...getAdminPreviewFieldTargetProps(titleFieldKey)}
-          sx={getActivePreviewTargetStyle(titleFieldKey, activeFieldKey)}
+          sx={getActiveAdminPreviewTargetStyle(titleFieldKey, activeFieldKey)}
         >
           {staffMember.title}
         </Typography>

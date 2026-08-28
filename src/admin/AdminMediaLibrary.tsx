@@ -3,6 +3,10 @@
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
@@ -14,12 +18,14 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AdminSelectableCard, AdminSurfacePanel } from './components/AdminCards';
+import { AdminDialogTitle } from './components/AdminDialogTitle';
 import {
   AdminResponsiveActionRow,
   AdminSupportPreviewInset,
   AdminSupportPreviewSurface
 } from './components/AdminSupport';
 import {
+  deleteMediaAsset,
   loadMediaLibraryContent,
   MEDIA_FOLDERS,
   uploadMediaAsset,
@@ -57,7 +63,7 @@ interface MediaLibraryState {
   status: 'error' | 'idle' | 'loading' | 'success';
   uploadError: string | null;
   uploadMessage: string | null;
-  uploadStatus: 'error' | 'idle' | 'uploading' | 'success';
+  uploadStatus: 'deleting' | 'error' | 'idle' | 'uploading' | 'success';
 }
 
 const INITIAL_LIBRARY_STATE: MediaLibraryState = {
@@ -246,6 +252,7 @@ export function AdminMediaLibrary({
     [allowedFolderIds]
   );
   const [activeFolderId, setActiveFolderId] = useState<MediaFolderId>(folderOptions[0]?.folderId || 'shared');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [libraryState, setLibraryState] = useState<MediaLibraryState>(INITIAL_LIBRARY_STATE);
 
   useEffect(() => {
@@ -330,6 +337,8 @@ export function AdminMediaLibrary({
   const selectedAsset =
     visibleAssets.find((asset) => asset.id === libraryState.selectedAssetId) || visibleAssets[0] || null;
   const isUploading = libraryState.uploadStatus === 'uploading';
+  const isDeleting = libraryState.uploadStatus === 'deleting';
+  const isBusy = isUploading || isDeleting;
   const uploadAccept = selectionFilter === 'images' ? 'image/*' : undefined;
   const shouldShowFolderButtons = folderOptions.length > 1;
 
@@ -452,6 +461,65 @@ export function AdminMediaLibrary({
     }
   }
 
+  function openDeleteDialog() {
+    if (!selectedAsset) {
+      return;
+    }
+
+    if (!selectedAsset.sha) {
+      setLibraryState((currentState) => ({
+        ...currentState,
+        uploadError: `Cannot delete ${selectedAsset.name} because a file SHA is required.`,
+        uploadMessage: null,
+        uploadStatus: 'error'
+      }));
+      return;
+    }
+
+    setDeleteDialogOpen(true);
+  }
+
+  function closeDeleteDialog() {
+    if (isDeleting) {
+      return;
+    }
+
+    setDeleteDialogOpen(false);
+  }
+
+  async function handleDelete() {
+    if (!selectedAsset?.sha) {
+      openDeleteDialog();
+      return;
+    }
+
+    setLibraryState((currentState) => ({
+      ...currentState,
+      uploadError: null,
+      uploadMessage: null,
+      uploadStatus: 'deleting'
+    }));
+
+    try {
+      await deleteMediaAsset(repoClient, selectedAsset);
+      setDeleteDialogOpen(false);
+      await refreshContent();
+      setLibraryState((currentState) => ({
+        ...currentState,
+        uploadError: null,
+        uploadMessage: `Deleted ${selectedAsset.name} from ${getFolderLabel(activeFolderId)}.`,
+        uploadStatus: 'success'
+      }));
+      await Promise.resolve(onChange?.());
+    } catch (error) {
+      setLibraryState((currentState) => ({
+        ...currentState,
+        uploadError: buildErrorMessage(error),
+        uploadStatus: 'error'
+      }));
+    }
+  }
+
   if (libraryState.status === 'loading' && !libraryState.content) {
     return (
       <Stack spacing={2}>
@@ -464,7 +532,7 @@ export function AdminMediaLibrary({
 
   const actionRow = (
     <AdminResponsiveActionRow spacing={1.5} sx={viewMode === 'grid' ? { justifyContent: 'flex-end' } : undefined}>
-      <Button component="label" disabled={isUploading} variant="contained">
+      <Button component="label" disabled={isBusy} variant="contained">
         Upload new asset
         <input
           hidden
@@ -481,7 +549,7 @@ export function AdminMediaLibrary({
           }}
         />
       </Button>
-      <Button component="label" disabled={isUploading || !selectedAsset} variant="outlined">
+      <Button component="label" disabled={isBusy || !selectedAsset} variant="outlined">
         Replace selected asset
         <input
           hidden
@@ -496,7 +564,10 @@ export function AdminMediaLibrary({
 
             event.target.value = '';
           }}
-        />
+          />
+      </Button>
+      <Button color="error" disabled={isBusy || !selectedAsset} onClick={openDeleteDialog} variant="outlined">
+        Delete selected asset
       </Button>
       {onSelectAsset ? (
         <Button
@@ -518,7 +589,7 @@ export function AdminMediaLibrary({
             {title}
           </Typography>
           <Typography sx={{ color: '#5d4a40', lineHeight: 1.7, mt: 1 }}>
-            {description || 'Browse the media folders, upload new assets, and replace existing files.'}
+            {description || 'Browse the media folders, upload new assets, replace existing files, or delete a selected file.'}
           </Typography>
         </div>
       ) : null}
@@ -657,6 +728,25 @@ export function AdminMediaLibrary({
           </AdminSurfacePanel>
         ) : null}
       </Stack>
+      <Dialog fullWidth maxWidth="xs" onClose={closeDeleteDialog} open={deleteDialogOpen}>
+        <AdminDialogTitle onClose={closeDeleteDialog}>Delete media file</AdminDialogTitle>
+        <DialogContent dividers>
+          <DialogContentText>
+            Delete “{selectedAsset?.name}”? This removes the file from the repository and cannot be undone from admin.
+            {activeFolderId === 'bulletins'
+              ? ' Bulletin PDFs may still be linked from bulletin records after this file is removed.'
+              : null}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, pt: 1 }}>
+          <Button color="inherit" disabled={isDeleting} onClick={closeDeleteDialog}>
+            Cancel
+          </Button>
+          <Button color="error" disabled={isDeleting} onClick={() => void handleDelete()} variant="contained">
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 }

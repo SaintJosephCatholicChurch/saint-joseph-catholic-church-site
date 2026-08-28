@@ -2,17 +2,18 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import {
+  ADMIN_PREVIEW_FIELD_KEY_ATTRIBUTE,
+  getAdminPreviewFieldTargetProps
+} from '../../../components/common/adminPreviewTarget';
+
 import type { MouseEvent as ReactMouseEvent } from 'react';
 
-export const ADMIN_PREVIEW_FIELD_KEY_ATTRIBUTE = 'data-admin-field-key';
+export { ADMIN_PREVIEW_FIELD_KEY_ATTRIBUTE, getAdminPreviewFieldTargetProps };
 
 function focusField(element: HTMLElement) {
   element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   element.focus({ preventScroll: true });
-}
-
-export function getAdminPreviewFieldTargetProps(fieldKey?: string | null) {
-  return fieldKey ? ({ [ADMIN_PREVIEW_FIELD_KEY_ATTRIBUTE]: fieldKey } as Record<string, string>) : {};
 }
 
 export function resolveAdminPreviewFieldKey(target: EventTarget | null) {

@@ -22,13 +22,8 @@ const HOMEPAGE_SECTION_FIELDS = Object.keys(HOMEPAGE_SECTION_FIELD_KEYS) as Home
 const HOMEPAGE_SLIDE_FIELDS = ['image', 'title'] as const;
 const HOMEPAGE_FEATURED_FIELDS = ['image', 'pageSlug', 'pageTitle', 'summary', 'title', 'url'] as const;
 
-export const ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE = 'data-admin-homepage-mass-times-target';
-
-const ACTIVE_HOMEPAGE_PREVIEW_TARGET_STYLE = {
-  backgroundColor: 'rgba(188, 47, 59, 0.1)',
-  boxShadow: 'inset 0 0 0 1px rgba(127, 35, 44, 0.24)',
-  borderRadius: '4px'
-} as const;
+export { ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE } from '../../../components/common/adminPreviewTarget';
+export { getActiveAdminPreviewTargetStyle as getActiveHomepagePreviewTargetStyle } from '../../../components/common/adminPreviewTarget';
 
 export type HomepageHeroFieldName = keyof typeof HOMEPAGE_HERO_FIELD_KEYS;
 export type HomepageSectionFieldName = keyof typeof HOMEPAGE_SECTION_FIELD_KEYS;
@@ -59,10 +54,6 @@ export function createHomepageFeaturedFieldKey(
   field: HomepageFeaturedFieldName
 ): HomepageFeaturedFieldKey {
   return `featured|${clientId}|${field}`;
-}
-
-export function getActiveHomepagePreviewTargetStyle(fieldKey: string | undefined, activeFieldKey?: HomepageFieldKey) {
-  return fieldKey && activeFieldKey === fieldKey ? ACTIVE_HOMEPAGE_PREVIEW_TARGET_STYLE : undefined;
 }
 
 export function parseHomepageFieldKey(fieldKey: string): ParsedHomepageFieldKey | null {

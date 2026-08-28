@@ -16,11 +16,21 @@ import { AdminPagePreviewFrame } from '../../AdminPagePreviewFrame';
 import { AdminDialogTitle } from '../../components/AdminDialogTitle';
 import { buildHomepagePreviewData, type HomepageDraft } from '../../content/writableComplexContent';
 import { getLoadedRecentPostContent, loadRecentPostContent } from '../../content/writableDocumentsContent';
+import { loadStructuredContent } from '../../content/writableStructuredContent';
 import { useAdminUnsavedChanges } from '../../unsavedChanges';
 import { handleAdminPreviewSelectionClick } from '../components/adminPreviewSelection';
-import { ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE, type HomepageFieldKey } from './fieldKeys';
+import {
+  ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE,
+  createHomepageFeaturedFieldKey,
+  createHomepageSlideFieldKey,
+  HOMEPAGE_HERO_FIELD_KEYS,
+  HOMEPAGE_SECTION_FIELD_KEYS,
+  type HomepageFeaturedFieldName,
+  type HomepageFieldKey,
+  type HomepageSlideFieldName
+} from './fieldKeys';
 
-import type { PostContent, Times } from '../../../interface';
+import type { ChurchDetails, PostContent, Times } from '../../../interface';
 
 interface HomepagePreviewProps {
   activeFieldKey?: HomepageFieldKey;
@@ -43,7 +53,37 @@ export function HomepagePreview({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [recentPosts, setRecentPosts] = useState<PostContent[]>([]);
+  const [churchDetails, setChurchDetails] = useState<ChurchDetails | undefined>();
+  const [privacyPolicyUrl, setPrivacyPolicyUrl] = useState<string | undefined>();
   const [massTimesDialogOpen, setMassTimesDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (!repoClient) {
+      setChurchDetails(undefined);
+      setPrivacyPolicyUrl(undefined);
+      return;
+    }
+
+    let cancelled = false;
+
+    void loadStructuredContent(repoClient, ['churchDetails', 'siteConfig'])
+      .then((content) => {
+        if (!cancelled) {
+          setChurchDetails(content.churchDetails.value);
+          setPrivacyPolicyUrl(content.siteConfig.value.privacy_policy_url);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setChurchDetails(undefined);
+          setPrivacyPolicyUrl('');
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [repoClient]);
 
   useEffect(() => {
     if (!repoClient) {
@@ -124,8 +164,26 @@ export function HomepagePreview({
           sx={{ display: 'flex', flexDirection: 'column', maxWidth: '100%', width: '1200px' }}
         >
           <HomepageView
-            adminSelection={{ activeFieldKey }}
+            adminSelection={{
+              activeFieldKey,
+              createFeaturedFieldKey: (clientId, field) =>
+                createHomepageFeaturedFieldKey(clientId, field as HomepageFeaturedFieldName),
+              createSlideFieldKey: (clientId, field) =>
+                createHomepageSlideFieldKey(clientId, field as HomepageSlideFieldName),
+              dailyReadingsBackgroundFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsBackground,
+              dailyReadingsSubtitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsSubtitle,
+              dailyReadingsTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.dailyReadingsTitle,
+              invitationTextFieldKey: HOMEPAGE_HERO_FIELD_KEYS.invitationText,
+              liveStreamButtonFieldKey: HOMEPAGE_HERO_FIELD_KEYS.liveStreamButtonTitle,
+              newsletterBannerSubtitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerSubtitle,
+              newsletterBannerTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.newsletterBannerTitle,
+              newsletterSignupButtonTextFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupButtonText,
+              newsletterSignupLinkFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupLink,
+              scheduleTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.scheduleSectionTitle
+            }}
+            churchDetails={churchDetails}
             homePageData={buildHomepagePreviewData(draft)}
+            privacyPolicyUrl={privacyPolicyUrl}
             times={times}
             recentPosts={recentPosts}
             hideSearch

@@ -537,6 +537,26 @@ export async function uploadMediaAsset(
   return fallbackAsset;
 }
 
+export async function deleteMediaAsset(repoClient: AdminRepoClient, asset: MediaAsset) {
+  const sha = asset.sha;
+
+  if (!sha) {
+    throw new Error(`Cannot delete ${asset.name} because a file SHA is required.`);
+  }
+
+  await repoClient.deleteFile({
+    message: `Admin: delete ${getFolderConfig(asset.folderId).label.toLowerCase()} ${asset.name}`,
+    path: asset.path,
+    sha
+  });
+
+  const currentAssets = (await loadMediaAssets(repoClient, [asset.folderId]))[asset.folderId];
+  const nextAssets = currentAssets.filter((entry) => entry.path !== asset.path);
+  updateMediaFolderCache(repoClient, asset.folderId, nextAssets);
+
+  return nextAssets;
+}
+
 export async function deleteBulletin(
   repoClient: AdminRepoClient,
   input: {

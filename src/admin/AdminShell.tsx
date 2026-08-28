@@ -28,7 +28,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 
 import Help from './help/Help';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuthProvider';
@@ -924,12 +924,18 @@ function AdminLoginPage({
   );
 }
 
+const EDITOR_IDENTITY_PARAMS = ['view', 'churchTab', 'newsTab', 'siteConfigTab'] as const;
+
+function getEditorIdentity(searchParams: URLSearchParams) {
+  return EDITOR_IDENTITY_PARAMS.map((name) => `${name}=${searchParams.get(name) || ''}`).join('&');
+}
+
 function AdminShellSurface() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { authStatus, error, login, logout, repoClient, session, startPreview } = useAdminAuth();
-  const { confirmIfDirty } = useAdminUnsavedChanges();
+  const { confirmIfDirty, consumeAllowedNavigation } = useAdminUnsavedChanges();
   const activeViewId = parseAdminViewId(searchParams.get('view'));
   const contentViews = ADMIN_VIEWS.filter(isInternalAdminView);
   const activeView = contentViews.find((view) => view.id === activeViewId) || contentViews[0];
@@ -939,6 +945,9 @@ function AdminShellSurface() {
   const noopSaved = async () => {};
   const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const editorIdentity = getEditorIdentity(searchParams);
+  const previousEditorIdentityRef = useRef(editorIdentity);
+  const previousSearchRef = useRef(searchParams.toString());
 
   const buildAdminHref = useCallback(
     (nextViewId = activeView.id) => {
@@ -972,6 +981,22 @@ function AdminShellSurface() {
 
     router.replace(buildAdminHref(), { scroll: false });
   }, [buildAdminHref, router, searchParams, session]);
+
+  useEffect(() => {
+    if (editorIdentity === previousEditorIdentityRef.current) {
+      previousSearchRef.current = searchParams.toString();
+      return;
+    }
+
+    if (consumeAllowedNavigation() || confirmIfDirty()) {
+      previousEditorIdentityRef.current = editorIdentity;
+      previousSearchRef.current = searchParams.toString();
+      return;
+    }
+
+    const previousSearch = previousSearchRef.current;
+    router.replace(previousSearch ? `${pathname}?${previousSearch}` : pathname, { scroll: false });
+  }, [confirmIfDirty, consumeAllowedNavigation, editorIdentity, pathname, router, searchParams]);
 
   function handleLogout() {
     if (!confirmIfDirty()) {

@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { memo } from 'react';
 
-import { getAdminPreviewFieldTargetProps } from '../../admin/content-sections/components/adminPreviewSelection';
+import { getAdminPreviewFieldTargetProps } from '../../components/common/adminPreviewTarget';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
@@ -265,6 +265,7 @@ const NOTE_MAX_LINE_LENGTH = 45;
 
 interface ScheduleTabPanelProps {
   activePathKey?: string;
+  enableAdminFieldKeys?: boolean;
   times: Times;
   value: number;
   index: number;
@@ -273,8 +274,18 @@ interface ScheduleTabPanelProps {
 }
 
 const ScheduleTabPanel = memo(
-  ({ activePathKey, times, value, index, disablePadding = false, variant = 'normal' }: ScheduleTabPanelProps) => {
+  ({
+    activePathKey,
+    enableAdminFieldKeys = false,
+    times,
+    value,
+    index,
+    disablePadding = false,
+    variant = 'normal'
+  }: ScheduleTabPanelProps) => {
     const categoryPath = buildCategoryPath(times.id);
+    const fieldTargetProps = (fieldKey?: string | null) =>
+      getAdminPreviewFieldTargetProps(enableAdminFieldKeys ? fieldKey : undefined);
 
     return (
       <TabPanel value={value} index={index}>
@@ -282,7 +293,7 @@ const ScheduleTabPanel = memo(
           <StyledTabPanelTitleWrapper>
             <StyledTabPanelTitle
               $variant={variant}
-              {...getAdminPreviewFieldTargetProps(categoryPath)}
+              {...fieldTargetProps(categoryPath)}
               style={getActivePreviewTargetStyle(categoryPath, activePathKey)}
             >
               {times.name}
@@ -295,7 +306,7 @@ const ScheduleTabPanel = memo(
               return (
                 <StyledNote
                   key={`section-${section.id || sectionIndex}`}
-                  {...getAdminPreviewFieldTargetProps(notePath)}
+                  {...fieldTargetProps(notePath)}
                   style={getActivePreviewTargetStyle(notePath, activePathKey)}
                 >
                   {section.note}
@@ -309,14 +320,14 @@ const ScheduleTabPanel = memo(
               <StyledSections
                 key={`section-${section.id || sectionIndex}`}
                 $variant={variant}
-                {...getAdminPreviewFieldTargetProps(sectionPath)}
+                {...fieldTargetProps(sectionPath)}
                 style={getActivePreviewTargetStyle(sectionPath, activePathKey)}
               >
                 {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
                 {section.days?.map((day, dayIndex) => (
                   <StyledDayTimeLine
                     key={`section-${section.id || sectionIndex}-day-${day.id || dayIndex}`}
-                    {...getAdminPreviewFieldTargetProps(buildDayPath(times.id, section.id, day.id))}
+                    {...fieldTargetProps(buildDayPath(times.id, section.id, day.id))}
                     style={getActivePreviewTargetStyle(buildDayPath(times.id, section.id, day.id), activePathKey)}
                   >
                     <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
@@ -325,7 +336,7 @@ const ScheduleTabPanel = memo(
                         <StyledDayTimeLineTime
                           key={`section-${section.id || sectionIndex}-day-${day.id || dayIndex}-times-${time.id || timeIndex}`}
                           $inlineNotes={!isNotEmpty(time.end_time)}
-                          {...getAdminPreviewFieldTargetProps(
+                          {...fieldTargetProps(
                             buildTimePath(times.id, section.id, day.id, time.id, 'time')
                           )}
                           style={getActivePreviewTargetStyle(
@@ -334,7 +345,7 @@ const ScheduleTabPanel = memo(
                           )}
                         >
                           <StyledDayTimeLineTimeTimes
-                            {...getAdminPreviewFieldTargetProps(
+                            {...fieldTargetProps(
                               buildTimePath(times.id, section.id, day.id, time.id, 'time')
                             )}
                             style={getActivePreviewTargetStyle(
@@ -353,7 +364,7 @@ const ScheduleTabPanel = memo(
                               </StyledDivider>
                               <StyledDayTimeLineTimeTimes
                                 key={`section-${section.id || sectionIndex}-day-${day.id || dayIndex}-end-time-${time.id || timeIndex}`}
-                                {...getAdminPreviewFieldTargetProps(
+                                {...fieldTargetProps(
                                   buildTimePath(times.id, section.id, day.id, time.id, 'end_time')
                                 )}
                                 style={getActivePreviewTargetStyle(
@@ -372,7 +383,7 @@ const ScheduleTabPanel = memo(
                                 .map((note) => (
                                   <StyledDayTimeLineTimeComment
                                     key={`section-${section.id || sectionIndex}-day-${day.id || dayIndex}-note-${note.id}`}
-                                    {...getAdminPreviewFieldTargetProps(
+                                    {...fieldTargetProps(
                                       buildTimeNotePath(times.id, section.id, day.id, time.id, note.id)
                                     )}
                                     style={getActivePreviewTargetStyle(

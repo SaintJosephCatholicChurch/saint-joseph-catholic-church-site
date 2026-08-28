@@ -5,11 +5,7 @@ import { memo } from 'react';
 import getContainerQuery from '../../util/container.util';
 import { isEmpty, isNotEmpty } from '../../util/string.util';
 import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
-import {
-  createHomepageFeaturedFieldKey,
-  getActiveHomepagePreviewTargetStyle,
-  type HomepageFieldKey
-} from '../../admin/content-sections/homepage/fieldKeys';
+import { getActiveAdminPreviewTargetStyle, getAdminPreviewFieldTargetProps } from '../common/adminPreviewTarget';
 
 import type { FeaturedLink as FeaturedLinkData } from '../../interface';
 
@@ -40,24 +36,25 @@ const StyledSummary = styled('div')(
 );
 
 interface FeaturedLinkProps {
-  activeFieldKey?: HomepageFieldKey;
-  featuredId?: string;
+  activeFieldKey?: string;
   featuredLink?: FeaturedLinkData;
+  imageFieldKey?: string;
   isFullWidth?: boolean;
+  summaryFieldKey?: string;
+  titleFieldKey?: string;
 }
 
 const FeaturedLink = memo(
   ({
     activeFieldKey,
-    featuredId = '0',
     featuredLink: { title, url, image, summary },
-    isFullWidth = false
+    imageFieldKey,
+    isFullWidth = false,
+    summaryFieldKey,
+    titleFieldKey
   }: FeaturedLinkProps) => {
     const theme = useTheme();
     const resolvedImage = useResolvedMediaSrc(image || '');
-    const titleFieldKey = createHomepageFeaturedFieldKey(featuredId, 'title');
-    const imageFieldKey = createHomepageFeaturedFieldKey(featuredId, 'image');
-    const summaryFieldKey = createHomepageFeaturedFieldKey(featuredId, 'summary');
 
     if (isEmpty(title) || isEmpty(url)) {
       return null;
@@ -67,7 +64,7 @@ const FeaturedLink = memo(
       <div>
         <Button
           component="a"
-          {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
+          {...getAdminPreviewFieldTargetProps(titleFieldKey)}
           href={url}
           target={
             /^https:\/\/[a-z]+\.stjosephchurchbluffton\.org\//.test(url) && !/\.[a-z]{1,4}$/.test(url)
@@ -84,15 +81,15 @@ const FeaturedLink = memo(
             padding: '0 8px 8px',
             alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            ...getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey),
+            ...getActiveAdminPreviewTargetStyle(titleFieldKey, activeFieldKey),
             [getContainerQuery(theme.breakpoints.down(!isFullWidth ? 'lg' : 'sm'))]: {
               gap: '12px'
             }
           }}
         >
           <StyledTitle
-            {...({ ['data-admin-field-key']: titleFieldKey } as Record<string, string>)}
-            style={getActiveHomepagePreviewTargetStyle(titleFieldKey, activeFieldKey)}
+            {...getAdminPreviewFieldTargetProps(titleFieldKey)}
+            style={getActiveAdminPreviewTargetStyle(titleFieldKey, activeFieldKey)}
           >
             {title}
           </StyledTitle>
@@ -100,14 +97,14 @@ const FeaturedLink = memo(
             <StyledImage
               src={resolvedImage}
               alt={title}
-              {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
-              style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
+              {...getAdminPreviewFieldTargetProps(imageFieldKey)}
+              style={getActiveAdminPreviewTargetStyle(imageFieldKey, activeFieldKey)}
             />
           ) : null}
           {isNotEmpty(summary) ? (
             <StyledSummary
-              {...({ ['data-admin-field-key']: summaryFieldKey } as Record<string, string>)}
-              style={getActiveHomepagePreviewTargetStyle(summaryFieldKey, activeFieldKey)}
+              {...getAdminPreviewFieldTargetProps(summaryFieldKey)}
+              style={getActiveAdminPreviewTargetStyle(summaryFieldKey, activeFieldKey)}
             >
               {summary}
             </StyledSummary>

@@ -7,12 +7,11 @@ import Tabs from '@mui/material/Tabs';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
-import { getAdminPreviewFieldTargetProps } from '../../admin/content-sections/components/adminPreviewSelection';
 import {
   ADMIN_HOMEPAGE_MASS_TIMES_ATTRIBUTE,
-  getActiveHomepagePreviewTargetStyle,
-  type HomepageFieldKey
-} from '../../admin/content-sections/homepage/fieldKeys';
+  getActiveAdminPreviewTargetStyle,
+  getAdminPreviewFieldTargetProps
+} from '../common/adminPreviewTarget';
 import { EXTRA_EXTRA_SMALL_BREAKPOINT } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
@@ -28,11 +27,11 @@ interface ScheduleAdminSelection {
 }
 
 interface HomepageScheduleAdminSelection {
-  activeFieldKey?: HomepageFieldKey;
-  invitationTextFieldKey?: HomepageFieldKey;
-  liveStreamButtonFieldKey?: HomepageFieldKey;
+  activeFieldKey?: string;
+  invitationTextFieldKey?: string;
+  liveStreamButtonFieldKey?: string;
   massTimesTarget?: boolean;
-  scheduleTitleFieldKey?: HomepageFieldKey;
+  scheduleTitleFieldKey?: string;
 }
 
 const ACTIVE_PREVIEW_TARGET_STYLE = {
@@ -191,7 +190,7 @@ const Schedule = ({
             <StyledHeaderText
               key="invitation-text"
               {...getAdminPreviewFieldTargetProps(homepageAdminSelection?.invitationTextFieldKey)}
-              style={getActiveHomepagePreviewTargetStyle(
+              style={getActiveAdminPreviewTargetStyle(
                 homepageAdminSelection?.invitationTextFieldKey,
                 homepageAdminSelection?.activeFieldKey
               )}
@@ -243,7 +242,7 @@ const Schedule = ({
           <StyledHeaderPreText
             key="title"
             {...getAdminPreviewFieldTargetProps(homepageAdminSelection?.scheduleTitleFieldKey)}
-            style={getActiveHomepagePreviewTargetStyle(
+            style={getActiveAdminPreviewTargetStyle(
               homepageAdminSelection?.scheduleTitleFieldKey,
               homepageAdminSelection?.activeFieldKey
             )}
@@ -268,6 +267,7 @@ const Schedule = ({
           <MobileScheduleTabPanel
             key={`mobile-schedule-panel-${timeSchedule.id || index}`}
             activePathKey={adminSelection?.activePathKey}
+            enableAdminFieldKeys={Boolean(adminSelection)}
             times={timeSchedule}
             index={index}
           />
@@ -297,7 +297,7 @@ const Schedule = ({
                 <Tab
                   key={`time-schedule-${timeSchedule.id || index}`}
                   label={timeSchedule.name}
-                  {...getAdminPreviewFieldTargetProps(categoryPath)}
+                  {...getAdminPreviewFieldTargetProps(adminSelection ? categoryPath : undefined)}
                   {...a11yProps(index)}
                   sx={{
                     ...getActivePreviewTargetStyle(categoryPath, adminSelection?.activePathKey),
@@ -333,6 +333,7 @@ const Schedule = ({
             <ScheduleTabPanel
               key={`schedule-tab-${timeSchedule.id || index}`}
               activePathKey={adminSelection?.activePathKey}
+              enableAdminFieldKeys={Boolean(adminSelection)}
               value={value}
               index={index}
               times={timeSchedule}

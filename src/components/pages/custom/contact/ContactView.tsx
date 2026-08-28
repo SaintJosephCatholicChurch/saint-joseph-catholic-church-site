@@ -5,7 +5,7 @@ import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-import { getAdminPreviewFieldTargetProps } from '../../../../admin/content-sections/components/adminPreviewSelection';
+import { getActiveAdminPreviewTargetStyle, getAdminPreviewFieldTargetProps } from '../../../../components/common/adminPreviewTarget';
 import Container from '../../../../components/layout/Container';
 import { StyledChurchDetailsLink, StyledContactDetails } from '../../../../components/layout/footer/ContactDetails';
 import PageTitle from '../../../../components/pages/PageTitle';
@@ -134,16 +134,6 @@ const StyledSocialLinks = styled('div')`
   margin-top: 8px;
 `;
 
-const ACTIVE_PREVIEW_TARGET_STYLE = {
-  backgroundColor: 'rgba(188, 47, 59, 0.1)',
-  borderRadius: '4px',
-  boxShadow: 'inset 0 0 0 1px rgba(127, 35, 44, 0.24)'
-} as const;
-
-function getActivePreviewTargetStyle(fieldKey: string, activeFieldKey?: string) {
-  return activeFieldKey === fieldKey ? ACTIVE_PREVIEW_TARGET_STYLE : undefined;
-}
-
 interface ContactViewAdminSelection {
   activeFieldKey?: string;
   interactive?: boolean;
@@ -153,6 +143,10 @@ interface ContactViewProps {
   adminSelection?: ContactViewAdminSelection;
   churchDetails: ChurchDetails;
   disableForm?: boolean;
+}
+
+function contactFieldProps(adminSelection: ContactViewAdminSelection | undefined, fieldKey: string) {
+  return getAdminPreviewFieldTargetProps(adminSelection ? fieldKey : undefined);
 }
 
 function getPreviewLinkProps(
@@ -168,7 +162,7 @@ function getPreviewLinkProps(
   const interactive = adminSelection?.interactive;
 
   return {
-    ...getAdminPreviewFieldTargetProps(fieldKey),
+    ...contactFieldProps(adminSelection, fieldKey),
     href,
     rel: options?.rel,
     target: options?.target,
@@ -179,7 +173,7 @@ function getPreviewLinkProps(
         }
       : undefined,
     style: {
-      ...getActivePreviewTargetStyle(fieldKey, adminSelection?.activeFieldKey),
+      ...getActiveAdminPreviewTargetStyle(fieldKey, adminSelection?.activeFieldKey),
       ...(interactive ? { cursor: 'pointer' } : null)
     }
   };
@@ -196,36 +190,36 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
               <StyledContactDetails>
                 <StyledAddress>
                   <Box
-                    {...getAdminPreviewFieldTargetProps('name')}
-                    sx={getActivePreviewTargetStyle('name', adminSelection?.activeFieldKey)}
+                    {...contactFieldProps(adminSelection,'name')}
+                    sx={getActiveAdminPreviewTargetStyle('name', adminSelection?.activeFieldKey)}
                   >
                     <strong>{churchDetails.name}</strong>
                   </Box>
                   <Box>
                     <span
-                      {...getAdminPreviewFieldTargetProps('address')}
-                      style={getActivePreviewTargetStyle('address', adminSelection?.activeFieldKey)}
+                      {...contactFieldProps(adminSelection,'address')}
+                      style={getActiveAdminPreviewTargetStyle('address', adminSelection?.activeFieldKey)}
                     >
                       {churchDetails.address}
                     </span>
                   </Box>
                   <Box>
                     <span
-                      {...getAdminPreviewFieldTargetProps('city')}
-                      style={getActivePreviewTargetStyle('city', adminSelection?.activeFieldKey)}
+                      {...contactFieldProps(adminSelection,'city')}
+                      style={getActiveAdminPreviewTargetStyle('city', adminSelection?.activeFieldKey)}
                     >
                       {churchDetails.city}
                     </span>
                     {', '}
                     <span
-                      {...getAdminPreviewFieldTargetProps('state')}
-                      style={getActivePreviewTargetStyle('state', adminSelection?.activeFieldKey)}
+                      {...contactFieldProps(adminSelection,'state')}
+                      style={getActiveAdminPreviewTargetStyle('state', adminSelection?.activeFieldKey)}
                     >
                       {churchDetails.state}
                     </span>{' '}
                     <span
-                      {...getAdminPreviewFieldTargetProps('zipcode')}
-                      style={getActivePreviewTargetStyle('zipcode', adminSelection?.activeFieldKey)}
+                      {...contactFieldProps(adminSelection,'zipcode')}
+                      style={getActiveAdminPreviewTargetStyle('zipcode', adminSelection?.activeFieldKey)}
                     >
                       {churchDetails.zipcode}
                     </span>
@@ -233,8 +227,8 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                 </StyledAddress>
                 <StyledChurchDetailSection>
                   <StyledChurchDetailTitle
-                    {...getAdminPreviewFieldTargetProps('phone')}
-                    style={getActivePreviewTargetStyle('phone', adminSelection?.activeFieldKey)}
+                    {...contactFieldProps(adminSelection,'phone')}
+                    style={getActiveAdminPreviewTargetStyle('phone', adminSelection?.activeFieldKey)}
                   >
                     Church Phone
                   </StyledChurchDetailTitle>
@@ -248,8 +242,8 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                     <Fragment key={`additional-phone-${index}`}>
                       <StyledChurchDetailTitle
                         key={`additional-phone-${index}-title`}
-                        {...getAdminPreviewFieldTargetProps('additionalPhones')}
-                        style={getActivePreviewTargetStyle('additionalPhones', adminSelection?.activeFieldKey)}
+                        {...contactFieldProps(adminSelection,'additionalPhones')}
+                        style={getActiveAdminPreviewTargetStyle('additionalPhones', adminSelection?.activeFieldKey)}
                       >
                         {phone.name}:
                       </StyledChurchDetailTitle>
@@ -263,8 +257,8 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                     </Fragment>
                   ))}
                   <StyledChurchDetailTitle
-                    {...getAdminPreviewFieldTargetProps('email')}
-                    style={getActivePreviewTargetStyle('email', adminSelection?.activeFieldKey)}
+                    {...contactFieldProps(adminSelection,'email')}
+                    style={getActiveAdminPreviewTargetStyle('email', adminSelection?.activeFieldKey)}
                   >
                     Church Email
                   </StyledChurchDetailTitle>
@@ -281,8 +275,8 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                     <Fragment key={`additional-email-${index}`}>
                       <StyledChurchDetailTitle
                         key={`additional-email-${index}-title`}
-                        {...getAdminPreviewFieldTargetProps('additionalEmails')}
-                        style={getActivePreviewTargetStyle('additionalEmails', adminSelection?.activeFieldKey)}
+                        {...contactFieldProps(adminSelection,'additionalEmails')}
+                        style={getActiveAdminPreviewTargetStyle('additionalEmails', adminSelection?.activeFieldKey)}
                       >
                         {email.name}
                       </StyledChurchDetailTitle>
@@ -300,14 +294,14 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
                   {churchDetails.contacts?.map((contact, index) => (
                     <Fragment key={`contact-${index}`}>
                       <StyledChurchDetailTitle
-                        {...getAdminPreviewFieldTargetProps('contacts')}
-                        style={getActivePreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
+                        {...contactFieldProps(adminSelection,'contacts')}
+                        style={getActiveAdminPreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
                       >
                         {contact.title}
                       </StyledChurchDetailTitle>
                       <StyledChurchDetailContent
-                        {...getAdminPreviewFieldTargetProps('contacts')}
-                        style={getActivePreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
+                        {...contactFieldProps(adminSelection,'contacts')}
+                        style={getActiveAdminPreviewTargetStyle('contacts', adminSelection?.activeFieldKey)}
                       >
                         {contact.name}
                       </StyledChurchDetailContent>
@@ -350,9 +344,9 @@ const ContactView = ({ adminSelection, churchDetails, disableForm }: ContactView
               />
               {adminSelection?.interactive ? (
                 <Box
-                  {...getAdminPreviewFieldTargetProps('googleMapLocation')}
+                  {...contactFieldProps(adminSelection,'googleMapLocation')}
                   sx={{
-                    ...getActivePreviewTargetStyle('googleMapLocation', adminSelection.activeFieldKey),
+                    ...getActiveAdminPreviewTargetStyle('googleMapLocation', adminSelection.activeFieldKey),
                     cursor: 'pointer',
                     inset: 0,
                     position: 'absolute'

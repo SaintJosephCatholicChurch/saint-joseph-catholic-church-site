@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
+import { useResolvedMediaSrc } from '../previewMediaUrls';
 import type { Ref } from 'react';
 
 import { AdminResponsiveActionRow, AdminSupportPreviewInset, AdminSupportPreviewSurface } from './AdminSupport';
@@ -30,6 +31,7 @@ export function AdminImagePathField({
   value
 }: AdminImagePathFieldProps) {
   const trimmedValue = value.trim();
+  const resolvedSrc = useResolvedMediaSrc(trimmedValue);
 
   return (
     <Stack spacing={1.25} width="100%">
@@ -38,7 +40,7 @@ export function AdminImagePathField({
           <AdminSupportPreviewInset sx={{ alignSelf: 'center', p: 0.25, width: '100%' }}>
             <Box
               component="img"
-              src={trimmedValue}
+              src={resolvedSrc}
               alt={previewAlt}
               sx={{
                 display: 'block',

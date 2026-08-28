@@ -272,9 +272,9 @@ const HomepageView = memo(
         if (featuredContent.type === 'featured_link') {
           return (
             <FeaturedLinkView
-              key={`page-${index}`}
+              key={featuredContent.clientId || `page-${index}`}
               activeFieldKey={adminSelection?.activeFieldKey}
-              featuredIndex={index}
+              featuredId={featuredContent.clientId || String(index)}
               featuredLink={featuredContent}
               isFullWidth
             />
@@ -282,9 +282,9 @@ const HomepageView = memo(
         }
         return (
           <FeaturedPageView
-            key={`page-${index}`}
+            key={featuredContent.clientId || `page-${index}`}
             activeFieldKey={adminSelection?.activeFieldKey}
-            featuredIndex={index}
+            featuredId={featuredContent.clientId || String(index)}
             featuredPage={featuredContent}
             isFullWidth
           />

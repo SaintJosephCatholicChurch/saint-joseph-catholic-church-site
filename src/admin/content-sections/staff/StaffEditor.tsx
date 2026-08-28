@@ -7,36 +7,38 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useId } from 'react';
 
 import { AdminSortableAccordionRepeaterCard } from '../../components/AdminCards';
 import { AdminImagePathField } from '../../components/AdminImagePathField';
+import { createDraftClientId, type StaffEntryDraft } from '../../content/writableComplexContent';
 import { createStaffFieldKey, parseStaffFieldKey, type StaffFieldKey } from './fieldKeys';
 
-import type { StaffEntryDraft } from '../../content/writableComplexContent';
 import type { DragEndEvent } from '@dnd-kit/core';
 
 interface StaffEditorProps {
   activeFieldKey?: StaffFieldKey;
-  expandedIndexes: number[];
+  expandedClientIds: string[];
   onChange: (value: StaffEntryDraft[]) => void;
-  onExpandedEntered: (index: number) => void;
+  onExpandedEntered: (clientId: string) => void;
   onFocusFieldKey: (fieldKey: StaffFieldKey | null) => void;
-  onSelectImage: (index: number) => void;
-  onToggleExpanded: (index: number, expanded: boolean) => void;
+  onSelectImage: (clientId: string) => void;
+  onToggleExpanded: (clientId: string, expanded: boolean) => void;
   registerField: (fieldKey: StaffFieldKey) => (element: HTMLElement | null) => void;
   value: StaffEntryDraft[];
 }
 
-const EMPTY_STAFF_ENTRY: StaffEntryDraft = {
-  name: '',
-  picture: '',
-  title: ''
-};
+function createEmptyStaffEntry(): StaffEntryDraft {
+  return {
+    clientId: createDraftClientId(),
+    name: '',
+    picture: '',
+    title: ''
+  };
+}
 
 export function StaffEditor({
   activeFieldKey,
-  expandedIndexes,
+  expandedClientIds,
   onChange,
   onExpandedEntered,
   onFocusFieldKey,
@@ -45,18 +47,17 @@ export function StaffEditor({
   registerField,
   value
 }: StaffEditorProps) {
-  const staffIdPrefix = useId();
   const sortableSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
-  const staffSortableIds = value.map((_, index) => `${staffIdPrefix}-staff-${index}`);
-  const activeStaffIndex = activeFieldKey ? (parseStaffFieldKey(activeFieldKey)?.index ?? null) : null;
+  const staffSortableIds = value.map((entry) => entry.clientId);
+  const activeStaffClientId = activeFieldKey ? (parseStaffFieldKey(activeFieldKey)?.clientId ?? null) : null;
 
-  function updateStaffEntry(index: number, nextValue: Partial<StaffEntryDraft>) {
-    onChange(value.map((entry, entryIndex) => (entryIndex === index ? { ...entry, ...nextValue } : entry)));
+  function updateStaffEntry(clientId: string, nextValue: Partial<StaffEntryDraft>) {
+    onChange(value.map((entry) => (entry.clientId === clientId ? { ...entry, ...nextValue } : entry)));
   }
 
   function moveStaffEntry(activeId: string, overId: string) {
-    const activeIndex = value.findIndex((_, index) => `${staffIdPrefix}-staff-${index}` === activeId);
-    const overIndex = value.findIndex((_, index) => `${staffIdPrefix}-staff-${index}` === overId);
+    const activeIndex = value.findIndex((entry) => entry.clientId === activeId);
+    const overIndex = value.findIndex((entry) => entry.clientId === overId);
 
     if (activeIndex < 0 || overIndex < 0 || activeIndex === overIndex) {
       return;
@@ -83,7 +84,7 @@ export function StaffEditor({
       <Button
         variant="outlined"
         startIcon={<AddIcon />}
-        onClick={() => onChange([...value, { ...EMPTY_STAFF_ENTRY }])}
+        onClick={() => onChange([...value, createEmptyStaffEntry()])}
         sx={{ alignSelf: 'flex-start' }}
       >
         Add staff entry
@@ -92,21 +93,20 @@ export function StaffEditor({
         <SortableContext items={staffSortableIds} strategy={verticalListSortingStrategy}>
           <Stack spacing={2}>
             {value.map((entry, index) => {
-              const entryId = staffSortableIds[index];
               const imageAlt = entry.name || `Staff entry ${index + 1}`;
               const hasImage = entry.picture.trim().length > 0;
-              const nameFieldKey = createStaffFieldKey(index, 'name');
-              const titleFieldKey = createStaffFieldKey(index, 'title');
-              const pictureFieldKey = createStaffFieldKey(index, 'picture');
+              const nameFieldKey = createStaffFieldKey(entry.clientId, 'name');
+              const titleFieldKey = createStaffFieldKey(entry.clientId, 'title');
+              const pictureFieldKey = createStaffFieldKey(entry.clientId, 'picture');
 
               return (
                 <AdminSortableAccordionRepeaterCard
-                  key={entryId}
-                  active={activeStaffIndex === index}
-                  expanded={expandedIndexes.includes(index)}
-                  id={entryId}
-                  onExpandedChange={(expanded) => onToggleExpanded(index, expanded)}
-                  onExpandedEntered={() => onExpandedEntered(index)}
+                  key={entry.clientId}
+                  active={activeStaffClientId === entry.clientId}
+                  expanded={expandedClientIds.includes(entry.clientId)}
+                  id={entry.clientId}
+                  onExpandedChange={(expanded) => onToggleExpanded(entry.clientId, expanded)}
+                  onExpandedEntered={() => onExpandedEntered(entry.clientId)}
                   title={entry.name.trim() || `Staff ${index + 1}`}
                   summary={entry.title.trim() || (hasImage ? entry.picture : 'No title or image selected yet.')}
                   preview={
@@ -122,7 +122,7 @@ export function StaffEditor({
                       </Typography>
                     )
                   }
-                  onRemove={() => onChange(value.filter((_, entryIndex) => entryIndex !== index))}
+                  onRemove={() => onChange(value.filter((item) => item.clientId !== entry.clientId))}
                   removeButtonLabel="Remove staff entry"
                 >
                   <Stack spacing={2} sx={{ pt: 1 }}>
@@ -131,7 +131,7 @@ export function StaffEditor({
                       inputRef={registerField(nameFieldKey)}
                       value={entry.name}
                       onFocus={() => onFocusFieldKey(nameFieldKey)}
-                      onChange={(event) => updateStaffEntry(index, { name: event.target.value })}
+                      onChange={(event) => updateStaffEntry(entry.clientId, { name: event.target.value })}
                       fullWidth
                     />
                     <TextField
@@ -139,13 +139,13 @@ export function StaffEditor({
                       inputRef={registerField(titleFieldKey)}
                       value={entry.title}
                       onFocus={() => onFocusFieldKey(titleFieldKey)}
-                      onChange={(event) => updateStaffEntry(index, { title: event.target.value })}
+                      onChange={(event) => updateStaffEntry(entry.clientId, { title: event.target.value })}
                       fullWidth
                     />
                     <AdminImagePathField
                       actionButtonRef={registerField(pictureFieldKey)}
                       onButtonFocus={() => onFocusFieldKey(pictureFieldKey)}
-                      onSelectImage={() => onSelectImage(index)}
+                      onSelectImage={() => onSelectImage(entry.clientId)}
                       previewAlt={imageAlt}
                       value={entry.picture}
                     />

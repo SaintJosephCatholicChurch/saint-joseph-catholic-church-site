@@ -13,7 +13,7 @@ export function fromEditorToStorage(value: string): string {
     imageMatch = imageRegex.exec(newValue);
   }
 
-  newValue = newValue.replace(/src="(?!http|\/)([\w\W]+?)"/g, 'href="/$1"');
+  newValue = newValue.replace(/src="(?!https?:|\/|data:|blob:)([\w\W]+?)"/g, 'src="/$1"');
 
   const fileRegex = /<a(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?>(?:[\w\W]+?)<\/a>/g;
   let fileMatch = fileRegex.exec(newValue);

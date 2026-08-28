@@ -1,3 +1,4 @@
+import { mapWithConcurrency } from '../../util/async.util';
 import { getBulletinPdfPaths } from '../../components/pages/custom/bulletins/util';
 import {
   ChurchSiteContentRepository,
@@ -5,7 +6,7 @@ import {
   siteContentAdapters,
   type StoredContentValue
 } from './contentRepository';
-import { loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
+import { getSharedContentResource, loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { Bulletin } from '../../interface';
 import type { AdminRepoClient, RepoDirectoryEntry } from '../services/adminTypes';
@@ -58,19 +59,44 @@ export interface BulletinSummary {
   pdfs: string[];
 }
 
-export interface BulletinMediaContent {
-  bulletins: StoredContentValue<Bulletin>[];
+export interface MediaLibraryContent {
   loadedAt: string;
   mediaAssets: Record<MediaFolderId, MediaAsset[]>;
 }
 
+export interface BulletinMediaContent extends MediaLibraryContent {
+  bulletins: StoredContentValue<Bulletin>[];
+}
+
 const BULLETIN_MEDIA_CACHE_KEY = 'bulletin-media-content';
+const BULLETIN_RECORDS_CACHE_KEY = 'bulletin-records';
 const BULLETIN_SESSION_KEY_PREFIX = 'admin-bulletin-content';
+const BULLETIN_READ_CONCURRENCY = 8;
 
 const IMAGE_FILE_REGEX = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
 
 function buildBulletinStorageKey(repoClient: AdminRepoClient) {
   return `${BULLETIN_SESSION_KEY_PREFIX}:${repoClient.getRepoLabel()}`;
+}
+
+function getMediaAssetsCacheKey(folderId: MediaFolderId) {
+  return `media-assets:${folderId}`;
+}
+
+function createEmptyMediaAssets(): Record<MediaFolderId, MediaAsset[]> {
+  return {
+    bulletins: [],
+    shared: [],
+    staff: []
+  };
+}
+
+function escapeHtmlAttribute(value: string) {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
+function escapeHtmlText(value: string) {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function getFolderConfig(folderId: MediaFolderId) {
@@ -165,10 +191,6 @@ function buildBulletinCommitMessage(date: string, isNew: boolean) {
   return `Admin: ${isNew ? 'create' : 'update'} bulletin ${date}`;
 }
 
-function buildBulletinRenameDeleteMessage(previousPath: string, nextDate: string) {
-  return `Admin: remove old bulletin metadata ${fileNameFromPath(previousPath)} after rename to ${nextDate}`;
-}
-
 function validateBulletinPdfPath(value: string | undefined) {
   if (!value) {
     return;
@@ -233,10 +255,10 @@ export function isImageAsset(path: string) {
 
 export function createMediaInsertionMarkup(asset: Pick<MediaAsset, 'kind' | 'name' | 'publicPath'>) {
   if (asset.kind === 'image') {
-    return `<img src="${asset.publicPath}" alt="${asset.name}" />`;
+    return `<img src="${escapeHtmlAttribute(asset.publicPath)}" alt="${escapeHtmlAttribute(asset.name)}" />`;
   }
 
-  return `<a target="_blank" href="${asset.publicPath}">${asset.name}</a>`;
+  return `<a target="_blank" href="${escapeHtmlAttribute(asset.publicPath)}">${escapeHtmlText(asset.name)}</a>`;
 }
 
 export function createEmptyBulletinDraft(): BulletinDraft {
@@ -296,44 +318,97 @@ function writeStoredBulletins(repoClient: AdminRepoClient, bulletins: StoredCont
   }
 }
 
+function updateMediaFolderCache(repoClient: AdminRepoClient, folderId: MediaFolderId, assets: MediaAsset[]) {
+  setSharedContentResource(repoClient, getMediaAssetsCacheKey(folderId), assets);
+  const cachedContent = getSharedContentResource<BulletinMediaContent>(repoClient, BULLETIN_MEDIA_CACHE_KEY);
+
+  if (!cachedContent) {
+    return;
+  }
+
+  setBulletinMediaContent(repoClient, {
+    ...cachedContent,
+    loadedAt: new Date().toISOString(),
+    mediaAssets: {
+      ...cachedContent.mediaAssets,
+      [folderId]: assets
+    }
+  });
+}
+
 function setBulletinMediaContent(repoClient: AdminRepoClient, content: BulletinMediaContent) {
   writeStoredBulletins(repoClient, content.bulletins);
+  setSharedContentResource(repoClient, BULLETIN_RECORDS_CACHE_KEY, content.bulletins);
+  (Object.keys(content.mediaAssets) as MediaFolderId[]).forEach((folderId) => {
+    setSharedContentResource(repoClient, getMediaAssetsCacheKey(folderId), content.mediaAssets[folderId]);
+  });
   return setSharedContentResource(repoClient, BULLETIN_MEDIA_CACHE_KEY, content);
+}
+
+export async function loadMediaAssets(
+  repoClient: AdminRepoClient,
+  folderIds: MediaFolderId[]
+): Promise<Record<MediaFolderId, MediaAsset[]>> {
+  const uniqueFolderIds = [...new Set(folderIds)];
+  const loadedFolders = await Promise.all(
+    uniqueFolderIds.map((folderId) =>
+      loadSharedContentResource(repoClient, getMediaAssetsCacheKey(folderId), async () => {
+        const entries = await repoClient.listFiles(getFolderConfig(folderId).rule.folderPath);
+        return toMediaAssets(folderId, entries);
+      })
+    )
+  );
+  const mediaAssets = createEmptyMediaAssets();
+
+  uniqueFolderIds.forEach((folderId, index) => {
+    mediaAssets[folderId] = loadedFolders[index];
+  });
+
+  return mediaAssets;
+}
+
+export async function loadBulletinRecords(repoClient: AdminRepoClient): Promise<StoredContentValue<Bulletin>[]> {
+  return loadSharedContentResource(repoClient, BULLETIN_RECORDS_CACHE_KEY, async () => {
+    const repository = new ChurchSiteContentRepository(repoClient);
+    const bulletinEntries = toBulletinEntries(await repoClient.listFiles(siteContentAdapters.bulletins.folderPath));
+    const storedBulletins = readStoredBulletins(repoClient);
+
+    return sortBulletins(
+      await mapWithConcurrency(bulletinEntries, BULLETIN_READ_CONCURRENCY, async (entry) => {
+        const storedBulletin = storedBulletins.get(entry.path);
+
+        if (storedBulletin && storedBulletin.sha && entry.sha === storedBulletin.sha) {
+          return storedBulletin;
+        }
+
+        return repository.readBulletin(entry.path);
+      })
+    );
+  });
+}
+
+export async function loadMediaLibraryContent(
+  repoClient: AdminRepoClient,
+  folderIds: MediaFolderId[]
+): Promise<MediaLibraryContent> {
+  const mediaAssets = await loadMediaAssets(repoClient, folderIds);
+  return {
+    loadedAt: new Date().toISOString(),
+    mediaAssets
+  };
 }
 
 export async function loadBulletinMediaContent(repoClient: AdminRepoClient): Promise<BulletinMediaContent> {
   return loadSharedContentResource(repoClient, BULLETIN_MEDIA_CACHE_KEY, async () => {
-    const repository = new ChurchSiteContentRepository(repoClient);
-    const [bulletinEntries, sharedAssets, staffAssets, bulletinAssets] = await Promise.all([
-      repoClient.listFiles(siteContentAdapters.bulletins.folderPath),
-      repoClient.listFiles(SITE_MEDIA_RULES.shared.folderPath),
-      repoClient.listFiles(SITE_MEDIA_RULES.staff.folderPath),
-      repoClient.listFiles(SITE_MEDIA_RULES.bulletins.folderPath)
+    const [bulletins, mediaAssets] = await Promise.all([
+      loadBulletinRecords(repoClient),
+      loadMediaAssets(repoClient, ['bulletins'])
     ]);
-
-    const storedBulletins = readStoredBulletins(repoClient);
-    const bulletins = sortBulletins(
-      await Promise.all(
-        toBulletinEntries(bulletinEntries).map((entry) => {
-          const storedBulletin = storedBulletins.get(entry.path);
-
-          if (storedBulletin && storedBulletin.sha && entry.sha === storedBulletin.sha) {
-            return storedBulletin;
-          }
-
-          return repository.readBulletin(entry.path);
-        })
-      )
-    );
 
     return setBulletinMediaContent(repoClient, {
       bulletins,
       loadedAt: new Date().toISOString(),
-      mediaAssets: {
-        bulletins: toMediaAssets('bulletins', bulletinAssets),
-        shared: toMediaAssets('shared', sharedAssets),
-        staff: toMediaAssets('staff', staffAssets)
-      }
+      mediaAssets
     });
   });
 }
@@ -362,33 +437,39 @@ export async function saveBulletin(
     throw new Error(`A bulletin for ${date} already exists.`);
   }
 
-  const savedResult = await repository.writeBulletin({
-    message: buildBulletinCommitMessage(date, !input.bulletin),
-    path: nextPath,
-    sha: currentPath === nextPath ? input.bulletin?.sha : undefined,
-    value: {
-      date,
-      name,
-      ...pdfFields
-    }
-  });
+  const value = {
+    date,
+    name,
+    ...pdfFields
+  };
+  const serializedValue = siteContentAdapters.bulletins.serialize(value);
+  const isRename = Boolean(currentPath && currentPath !== nextPath);
+  let savedPath = nextPath;
+  let savedSha = input.bulletin?.sha || '';
 
-  if (currentPath && currentPath !== nextPath) {
-    await repoClient.deleteFile({
-      message: buildBulletinRenameDeleteMessage(currentPath, date),
-      path: currentPath,
-      sha: input.bulletin?.sha
+  if (isRename && currentPath) {
+    const commitResult = await repoClient.commitFiles({
+      deletes: [{ path: currentPath }],
+      message: buildBulletinCommitMessage(date, false),
+      upserts: [{ content: serializedValue, path: nextPath }]
     });
+    savedPath = commitResult.files.find((file) => file.path === nextPath)?.path || nextPath;
+    savedSha = commitResult.files.find((file) => file.path === nextPath)?.sha || '';
+  } else {
+    const savedResult = await repository.writeBulletin({
+      message: buildBulletinCommitMessage(date, !input.bulletin),
+      path: nextPath,
+      sha: currentPath === nextPath ? input.bulletin?.sha : undefined,
+      value
+    });
+    savedPath = savedResult.path || nextPath;
+    savedSha = savedResult.sha;
   }
 
   const savedBulletin = {
-    path: savedResult.path,
-    sha: savedResult.sha,
-    value: {
-      date,
-      name,
-      ...pdfFields
-    }
+    path: savedPath,
+    sha: savedSha,
+    value
   };
   const remainingBulletins = input.content.bulletins.filter(
     (bulletin) => bulletin.path !== currentPath && bulletin.path !== nextPath
@@ -416,7 +497,7 @@ export async function uploadMediaAsset(
   const fileName = trimRequiredValue(targetName || '', 'Upload file name');
   const path = input.replaceAsset?.path || buildMediaPath(input.folderId, fileName);
 
-  await repoClient.uploadMedia({
+  const uploaded = await repoClient.uploadMedia({
     file: input.file,
     message: `Admin: ${input.replaceAsset ? 'replace' : 'upload'} ${getFolderConfig(input.folderId).label.toLowerCase()} ${fileName}`,
     path,
@@ -429,22 +510,38 @@ export async function uploadMediaAsset(
     kind: IMAGE_FILE_REGEX.test(fileName) ? 'image' : 'file',
     name: fileName,
     path,
-    publicPath: buildPublicPath(input.folderId, fileName)
+    publicPath: buildPublicPath(input.folderId, fileName),
+    sha: uploaded.sha
   };
-  const cachedContent = await loadBulletinMediaContent(repoClient);
-  const nextAssets = [
-    ...cachedContent.mediaAssets[input.folderId].filter((asset) => asset.path !== path),
-    fallbackAsset
-  ].sort((left, right) => left.name.localeCompare(right.name));
+  const currentAssets = (await loadMediaAssets(repoClient, [input.folderId]))[input.folderId];
+  const nextAssets = [...currentAssets.filter((asset) => asset.path !== path), fallbackAsset].sort((left, right) =>
+    left.name.localeCompare(right.name)
+  );
 
-  setBulletinMediaContent(repoClient, {
-    ...cachedContent,
-    loadedAt: new Date().toISOString(),
-    mediaAssets: {
-      ...cachedContent.mediaAssets,
-      [input.folderId]: nextAssets
-    }
-  });
+  updateMediaFolderCache(repoClient, input.folderId, nextAssets);
 
   return fallbackAsset;
+}
+
+export async function deleteBulletin(
+  repoClient: AdminRepoClient,
+  input: {
+    bulletin: StoredContentValue<Bulletin>;
+    content: BulletinMediaContent;
+  }
+) {
+  await repoClient.deleteFile({
+    message: `Admin: delete bulletin ${input.bulletin.value.date || fileNameFromPath(input.bulletin.path)}`,
+    path: input.bulletin.path,
+    sha: input.bulletin.sha
+  });
+
+  const nextContent: BulletinMediaContent = {
+    ...input.content,
+    bulletins: input.content.bulletins.filter((bulletin) => bulletin.path !== input.bulletin.path),
+    loadedAt: new Date().toISOString()
+  };
+
+  setBulletinMediaContent(repoClient, nextContent);
+  return nextContent;
 }

@@ -1,7 +1,14 @@
 'use client';
 
+import {
+  deletePreviewMediaBlob,
+  putPreviewMediaBlob
+} from './previewMediaStore';
+
 import type {
   AdminRepoClient,
+  RepoCommitFilesInput,
+  RepoCommitFilesResult,
   RepoDeleteInput,
   RepoDirectoryEntry,
   RepoMediaUploadInput,
@@ -25,7 +32,7 @@ type PreviewManifest = {
 };
 
 const PREVIEW_REPO_LABEL = 'preview@local';
-const PREVIEW_STORAGE_KEY = 'site-admin-preview-files';
+export const PREVIEW_STORAGE_KEY = 'site-admin-preview-files';
 let previewManifestPromise: Promise<PreviewManifest> | null = null;
 
 function computeSha(value: string) {
@@ -221,6 +228,11 @@ export class PreviewRepoClient implements AdminRepoClient {
   async writeTextFile(input: RepoWriteInput): Promise<RepoWriteResult> {
     const normalizedPath = normalizePath(input.path);
     const entries = await this.getEntries();
+
+    if (input.sha === undefined && entries.has(normalizedPath)) {
+      throw new Error(`${normalizedPath} already exists.`);
+    }
+
     const nextEntry = createFileEntry(normalizedPath, input.content);
     entries.set(normalizedPath, nextEntry);
     this.persist(entries);
@@ -228,6 +240,42 @@ export class PreviewRepoClient implements AdminRepoClient {
     return {
       path: normalizedPath,
       sha: nextEntry.sha
+    };
+  }
+
+  async commitFiles(input: RepoCommitFilesInput): Promise<RepoCommitFilesResult> {
+    const upserts = input.upserts || [];
+    const deletes = input.deletes || [];
+
+    if (upserts.length === 0 && deletes.length === 0) {
+      throw new Error('A commit must include at least one file change.');
+    }
+
+    const entries = await this.getEntries();
+    const files: Array<{ path: string; sha: string }> = [];
+
+    for (const upsert of upserts) {
+      const normalizedPath = normalizePath(upsert.path);
+      const nextEntry = createFileEntry(normalizedPath, upsert.content);
+      entries.set(normalizedPath, nextEntry);
+      files.push({ path: normalizedPath, sha: nextEntry.sha });
+    }
+
+    for (const entry of deletes) {
+      const normalizedPath = normalizePath(entry.path);
+
+      if (!entries.delete(normalizedPath)) {
+        throw new Error(`Cannot delete ${normalizedPath} because the file does not exist in preview mode.`);
+      }
+
+      void deletePreviewMediaBlob(normalizedPath);
+    }
+
+    this.persist(entries);
+
+    return {
+      commitSha: computeSha(`${input.message}:${files.map((file) => file.path).join('|')}`),
+      files
     };
   }
 
@@ -240,6 +288,7 @@ export class PreviewRepoClient implements AdminRepoClient {
     }
 
     this.persist(entries);
+    void deletePreviewMediaBlob(normalizedPath);
   }
 
   async uploadMedia(input: RepoMediaUploadInput): Promise<RepoWriteResult> {
@@ -248,6 +297,7 @@ export class PreviewRepoClient implements AdminRepoClient {
     const nextEntry = createMediaEntry(normalizedPath, input.file.size);
     entries.set(normalizedPath, nextEntry);
     this.persist(entries);
+    await putPreviewMediaBlob(normalizedPath, input.file);
 
     return {
       path: normalizedPath,

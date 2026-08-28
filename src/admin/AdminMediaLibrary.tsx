@@ -20,14 +20,17 @@ import {
   AdminSupportPreviewSurface
 } from './components/AdminSupport';
 import {
-  loadBulletinMediaContent,
+  loadMediaLibraryContent,
   MEDIA_FOLDERS,
   uploadMediaAsset,
-  type BulletinMediaContent,
   type MediaAsset,
-  type MediaFolderId
+  type MediaFolderId,
+  type MediaLibraryContent
 } from './content/writableBulletinsMediaContent';
 
+import { useResolvedMediaSrc } from './previewMediaUrls';
+
+import type { SxProps, Theme } from '@mui/material/styles';
 import type { AdminRepoClient } from './services/adminTypes';
 
 type MediaSelectionFilter = 'all' | 'files' | 'images';
@@ -48,7 +51,7 @@ interface AdminMediaLibraryProps {
 }
 
 interface MediaLibraryState {
-  content: BulletinMediaContent | null;
+  content: MediaLibraryContent | null;
   error: string | null;
   selectedAssetId: string | null;
   status: 'error' | 'idle' | 'loading' | 'success';
@@ -84,6 +87,20 @@ function filterAssets(assets: MediaAsset[], selectionFilter: MediaSelectionFilte
     default:
       return assets;
   }
+}
+
+function MediaPreviewImage({
+  alt,
+  src,
+  sx
+}: {
+  alt: string;
+  src: string;
+  sx: SxProps<Theme>;
+}) {
+  const resolvedSrc = useResolvedMediaSrc(src);
+
+  return <Box alt={alt} component="img" src={resolvedSrc} sx={sx} />;
 }
 
 function getFolderLabel(folderId: MediaFolderId) {
@@ -136,10 +153,9 @@ function AssetButton({
               p: 0.5
             }}
           >
-            <Box
-              component="img"
-              src={asset.publicPath}
+            <MediaPreviewImage
               alt={asset.name}
+              src={asset.publicPath}
               sx={{
                 display: 'block',
                 maxHeight: viewMode === 'grid' ? 120 : 80,
@@ -258,7 +274,10 @@ export function AdminMediaLibrary({
       }));
 
       try {
-        const content = await loadBulletinMediaContent(repoClient);
+        const content = await loadMediaLibraryContent(
+          repoClient,
+          folderOptions.map((folder) => folder.folderId)
+        );
 
         if (cancelled) {
           return;
@@ -289,7 +308,7 @@ export function AdminMediaLibrary({
     return () => {
       cancelled = true;
     };
-  }, [repoClient]);
+  }, [folderOptions, repoClient]);
 
   const visibleAssets = filterAssets(libraryState.content?.mediaAssets[activeFolderId] || [], selectionFilter);
   const currentAsset = useMemo(() => {
@@ -380,7 +399,10 @@ export function AdminMediaLibrary({
   }
 
   async function refreshContent(preferredAssetId?: string) {
-    const content = await loadBulletinMediaContent(repoClient);
+    const content = await loadMediaLibraryContent(
+      repoClient,
+      folderOptions.map((folder) => folder.folderId)
+    );
     const nextVisibleAssets = filterAssets(content.mediaAssets[activeFolderId] || [], selectionFilter);
     const selectedAssetId =
       preferredAssetId && nextVisibleAssets.some((asset) => asset.id === preferredAssetId)
@@ -607,10 +629,9 @@ export function AdminMediaLibrary({
               <AdminSupportPreviewSurface sx={{ p: 1.25 }}>
                 {selectedAsset.kind === 'image' ? (
                   <AdminSupportPreviewInset sx={{ alignSelf: 'flex-start', maxWidth: '100%', p: 0.5 }}>
-                    <Box
-                      component="img"
-                      src={selectedAsset.publicPath}
+                    <MediaPreviewImage
                       alt={selectedAsset.name}
+                      src={selectedAsset.publicPath}
                       sx={{
                         display: 'block',
                         maxHeight: 220,

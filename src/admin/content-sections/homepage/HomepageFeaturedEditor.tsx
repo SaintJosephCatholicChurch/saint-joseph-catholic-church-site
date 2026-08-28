@@ -13,32 +13,33 @@ import { AdminRepeaterCard, AdminSectionCard } from '../../components/AdminCards
 import { AdminImagePathField } from '../../components/AdminImagePathField';
 import { createHomepageFeaturedFieldKey, type HomepageFieldKey } from './fieldKeys';
 
-import type {
-  HomepageDraft,
-  HomepageFeaturedDraft,
-  HomepageFeaturedLinkDraft,
-  HomepageFeaturedPageDraft
-} from '../../content/writableComplexContent';
+import { createDraftClientId, type HomepageDraft, type HomepageFeaturedDraft, type HomepageFeaturedLinkDraft, type HomepageFeaturedPageDraft } from '../../content/writableComplexContent';
 
-const EMPTY_FEATURED_LINK: HomepageFeaturedLinkDraft = {
-  image: '',
-  summary: '',
-  title: '',
-  type: 'featured_link',
-  url: ''
-};
+function createEmptyFeaturedLink(): HomepageFeaturedLinkDraft {
+  return {
+    clientId: createDraftClientId(),
+    image: '',
+    summary: '',
+    title: '',
+    type: 'featured_link',
+    url: ''
+  };
+}
 
-const EMPTY_FEATURED_PAGE: HomepageFeaturedPageDraft = {
-  image: '',
-  pageSlug: '',
-  pageTitle: '',
-  summary: '',
-  type: 'featured_page'
-};
+function createEmptyFeaturedPage(): HomepageFeaturedPageDraft {
+  return {
+    clientId: createDraftClientId(),
+    image: '',
+    pageSlug: '',
+    pageTitle: '',
+    summary: '',
+    type: 'featured_page'
+  };
+}
 
 interface HomepageFeaturedEditorProps {
   onChange: (value: HomepageDraft) => void;
-  onSelectFeaturedImage: (index: number) => void;
+  onSelectFeaturedImage: (clientId: string) => void;
   registerField: (fieldKey: HomepageFieldKey) => (element: HTMLElement | null) => void;
   value: HomepageDraft;
 }
@@ -52,9 +53,9 @@ export function HomepageFeaturedEditor({
   const [featuredMenuAnchor, setFeaturedMenuAnchor] = useState<HTMLElement | null>(null);
   const isFeaturedMenuOpen = Boolean(featuredMenuAnchor);
 
-  function updateHomepageFeatured(index: number, nextValue: Partial<HomepageFeaturedDraft>) {
-    const featured = value.featured.map((item, itemIndex) =>
-      itemIndex === index ? ({ ...item, ...nextValue } as HomepageFeaturedDraft) : item
+  function updateHomepageFeatured(clientId: string, nextValue: Partial<HomepageFeaturedDraft>) {
+    const featured = value.featured.map((item) =>
+      item.clientId === clientId ? ({ ...item, ...nextValue } as HomepageFeaturedDraft) : item
     );
     onChange({ ...value, featured });
   }
@@ -70,7 +71,7 @@ export function HomepageFeaturedEditor({
   function addHomepageFeaturedItem(type: HomepageFeaturedDraft['type']) {
     onChange({
       ...value,
-      featured: [...value.featured, type === 'featured_page' ? { ...EMPTY_FEATURED_PAGE } : { ...EMPTY_FEATURED_LINK }]
+      featured: [...value.featured, type === 'featured_page' ? createEmptyFeaturedPage() : createEmptyFeaturedLink()]
     });
     closeFeaturedMenu();
   }
@@ -115,37 +116,37 @@ export function HomepageFeaturedEditor({
       <Stack spacing={2}>
         {value.featured.map((item, index) => (
           <AdminRepeaterCard
-            key={`homepage-featured-${index}`}
+            key={item.clientId}
             title={`Featured ${index + 1}: ${item.type === 'featured_page' ? 'Page' : 'Link'}`}
           >
             {item.type === 'featured_page' ? (
               <Stack spacing={2}>
                 <TextField
                   label="Page slug"
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'pageSlug'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'pageSlug'))}
                   value={item.pageSlug}
-                  onChange={(event) => updateHomepageFeatured(index, { pageSlug: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { pageSlug: event.target.value })}
                   fullWidth
                 />
                 <TextField
                   label="Page title"
                   helperText="Optional title paired with the page slug for this featured item."
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'pageTitle'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'pageTitle'))}
                   value={item.pageTitle}
-                  onChange={(event) => updateHomepageFeatured(index, { pageTitle: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { pageTitle: event.target.value })}
                   fullWidth
                 />
                 <AdminImagePathField
-                  actionButtonRef={registerField(createHomepageFeaturedFieldKey(index, 'image'))}
-                  onSelectImage={() => onSelectFeaturedImage(index)}
+                  actionButtonRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'image'))}
+                  onSelectImage={() => onSelectFeaturedImage(item.clientId)}
                   previewAlt={item.pageTitle || `Featured page ${index + 1}`}
                   value={item.image}
                 />
                 <TextField
                   label="Summary"
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'summary'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'summary'))}
                   value={item.summary}
-                  onChange={(event) => updateHomepageFeatured(index, { summary: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { summary: event.target.value })}
                   fullWidth
                   multiline
                   minRows={3}
@@ -155,29 +156,29 @@ export function HomepageFeaturedEditor({
               <Stack spacing={2}>
                 <TextField
                   label="Title"
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'title'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'title'))}
                   value={item.title}
-                  onChange={(event) => updateHomepageFeatured(index, { title: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { title: event.target.value })}
                   fullWidth
                 />
                 <TextField
                   label="URL"
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'url'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'url'))}
                   value={item.url}
-                  onChange={(event) => updateHomepageFeatured(index, { url: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { url: event.target.value })}
                   fullWidth
                 />
                 <AdminImagePathField
-                  actionButtonRef={registerField(createHomepageFeaturedFieldKey(index, 'image'))}
-                  onSelectImage={() => onSelectFeaturedImage(index)}
+                  actionButtonRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'image'))}
+                  onSelectImage={() => onSelectFeaturedImage(item.clientId)}
                   previewAlt={item.title || `Featured link ${index + 1}`}
                   value={item.image}
                 />
                 <TextField
                   label="Summary"
-                  inputRef={registerField(createHomepageFeaturedFieldKey(index, 'summary'))}
+                  inputRef={registerField(createHomepageFeaturedFieldKey(item.clientId, 'summary'))}
                   value={item.summary}
-                  onChange={(event) => updateHomepageFeatured(index, { summary: event.target.value })}
+                  onChange={(event) => updateHomepageFeatured(item.clientId, { summary: event.target.value })}
                   fullWidth
                   multiline
                   minRows={3}
@@ -187,9 +188,7 @@ export function HomepageFeaturedEditor({
             <Button
               variant="outlined"
               color="inherit"
-              onClick={() =>
-                onChange({ ...value, featured: value.featured.filter((_, itemIndex) => itemIndex !== index) })
-              }
+              onClick={() => onChange({ ...value, featured: value.featured.filter((entry) => entry.clientId !== item.clientId) })}
             >
               Remove featured item
             </Button>

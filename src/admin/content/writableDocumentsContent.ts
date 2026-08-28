@@ -176,8 +176,15 @@ function normalizeRequiredSlug(value: string, label: string) {
   return slug;
 }
 
-function fileNameFromPath(path: string) {
-  return path.split('/').pop() || path;
+function assertUniquePageSlug(pages: StoredDocument<AdminPageFrontmatter>[], slug: string, currentPath?: string) {
+  const nextPath = siteContentAdapters.pages.buildPath(slug);
+  const conflictingPage = pages.find(
+    (page) => page.path !== currentPath && (page.path === nextPath || page.data.slug === slug)
+  );
+
+  if (conflictingPage) {
+    throw new Error(`A page with slug "${slug}" already exists.`);
+  }
 }
 
 function assertUniquePostSlug(posts: StoredDocument<AdminPostFrontmatter>[], slug: string, currentPath?: string) {
@@ -191,8 +198,36 @@ function assertUniquePostSlug(posts: StoredDocument<AdminPostFrontmatter>[], slu
   }
 }
 
-function buildPostRenameDeleteMessage(previousPath: string, nextSlug: string) {
-  return `Admin: remove old news post ${fileNameFromPath(previousPath)} after rename to ${nextSlug}`;
+async function commitOrWriteTextFile(
+  repoClient: AdminRepoClient,
+  input: {
+    content: string;
+    currentPath: string;
+    message: string;
+    nextPath: string;
+    sha?: string;
+  }
+) {
+  if (input.currentPath !== input.nextPath) {
+    const commitResult = await repoClient.commitFiles({
+      deletes: [{ path: input.currentPath }],
+      message: input.message,
+      upserts: [{ content: input.content, path: input.nextPath }]
+    });
+    const committedFile = commitResult.files.find((file) => file.path === input.nextPath);
+
+    return {
+      path: committedFile?.path || input.nextPath,
+      sha: committedFile?.sha || ''
+    };
+  }
+
+  return repoClient.writeTextFile({
+    content: input.content,
+    message: input.message,
+    path: input.nextPath,
+    sha: input.sha
+  });
 }
 
 function upsertDocumentInContent(
@@ -257,6 +292,7 @@ function createPagePlaceholder(summary: DocumentSummary): StoredDocument<AdminPa
       slug: summary.slug,
       title: summary.title
     },
+    loaded: false,
     path: summary.path,
     sha: summary.sha
   };
@@ -272,6 +308,7 @@ function createPostPlaceholder(summary: DocumentSummary): StoredDocument<AdminPo
       tags: summary.tags,
       title: summary.title
     },
+    loaded: false,
     path: summary.path,
     sha: summary.sha
   };
@@ -392,7 +429,7 @@ export async function ensureDocumentLoaded(
 
   if (summary.kind === 'page') {
     const currentDocument = content.pages.find((document) => buildDocumentId('page', document.path) === documentId);
-    if (currentDocument?.body) {
+    if (currentDocument?.loaded) {
       return content;
     }
 
@@ -403,7 +440,7 @@ export async function ensureDocumentLoaded(
   }
 
   const currentDocument = content.posts.find((document) => buildDocumentId('post', document.path) === documentId);
-  if (currentDocument?.body) {
+  if (currentDocument?.loaded) {
     return content;
   }
 
@@ -420,31 +457,37 @@ export async function savePageDocument(
     document: StoredDocument<AdminPageFrontmatter>;
     draft: PageDraft;
   }
-) {
-  const repository = new ChurchSiteContentRepository(repoClient);
-
+): Promise<{ content: DocumentContent; documentId: string }> {
   assertHtmlOnlyDocumentBody(input.draft.body);
 
   const date = trimRequiredValue(input.draft.date, 'Page publish date');
-  const slug = trimRequiredValue(input.draft.slug, 'Page slug');
+  const slug = normalizeRequiredSlug(input.draft.slug, 'Page slug');
   const title = trimRequiredValue(input.draft.title, 'Page title');
-  const result = await repository.writePage({
-    body: input.draft.body,
-    data: { date, slug, title },
+  const currentPath = input.document.path;
+  const nextPath = siteContentAdapters.pages.buildPath(slug);
+
+  assertUniquePageSlug(input.content.pages, slug, currentPath);
+
+  const data = { date, slug, title };
+  const result = await commitOrWriteTextFile(repoClient, {
+    content: siteContentAdapters.pages.serialize({ body: input.draft.body, data }),
+    currentPath,
     message: `Admin: update page ${slug}`,
-    path: input.document.path,
-    sha: input.document.sha
+    nextPath,
+    sha: currentPath === nextPath ? input.document.sha : undefined
   });
 
   const savedDocument: StoredDocument<AdminPageFrontmatter> = {
     body: input.draft.body,
-    data: { date, slug, title },
-    path: result.path || input.document.path,
+    data,
+    loaded: true,
+    path: result.path || nextPath,
     sha: result.sha || input.document.sha
   };
-  const nextContent = upsertDocumentInContent(input.content, 'page', savedDocument, input.document.path);
+  const nextContent = upsertDocumentInContent(input.content, 'page', savedDocument, currentPath);
+  const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
 
-  return setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
+  return { content, documentId: buildDocumentId('page', savedDocument.path) };
 }
 
 export async function savePostDocument(
@@ -455,8 +498,6 @@ export async function savePostDocument(
     draft: PostDraft;
   }
 ): Promise<{ content: DocumentContent; documentId: string }> {
-  const repository = new ChurchSiteContentRepository(repoClient);
-
   assertHtmlOnlyDocumentBody(input.draft.body);
 
   const date = trimRequiredValue(input.draft.date, 'News publish date');
@@ -469,37 +510,25 @@ export async function savePostDocument(
 
   assertUniquePostSlug(input.content.posts, slug, currentPath);
 
-  const result = await repository.writePost({
-    body: input.draft.body,
-    data: {
-      date,
-      image,
-      slug,
-      tags,
-      title
-    },
+  const data = {
+    date,
+    image,
+    slug,
+    tags,
+    title
+  };
+  const result = await commitOrWriteTextFile(repoClient, {
+    content: siteContentAdapters.posts.serialize({ body: input.draft.body, data }),
+    currentPath,
     message: `Admin: update news post ${slug}`,
-    path: nextPath,
+    nextPath,
     sha: currentPath === nextPath ? input.document.sha : undefined
   });
 
-  if (currentPath !== nextPath) {
-    await repoClient.deleteFile({
-      message: buildPostRenameDeleteMessage(currentPath, slug),
-      path: currentPath,
-      sha: input.document.sha
-    });
-  }
-
   const savedDocument: StoredDocument<AdminPostFrontmatter> = {
     body: input.draft.body,
-    data: {
-      date,
-      image,
-      slug,
-      tags,
-      title
-    },
+    data,
+    loaded: true,
     path: result.path || nextPath,
     sha: result.sha || input.document.sha
   };
@@ -514,9 +543,17 @@ export async function createPageDocument(
   input: { content?: DocumentContent | null; date: string; slug: string; title: string }
 ): Promise<{ content: DocumentContent; newId: string }> {
   const repository = new ChurchSiteContentRepository(repoClient);
-  const slug = trimRequiredValue(input.slug, 'Page slug');
+  const slug = normalizeRequiredSlug(input.slug, 'Page slug');
   const title = trimRequiredValue(input.title, 'Page title');
   const date = trimRequiredValue(input.date, 'Page publish date');
+  const baseContent = input.content ||
+    getSharedContentResource<DocumentContent>(repoClient, DOCUMENT_CONTENT_CACHE_KEY) || {
+      loadedAt: new Date().toISOString(),
+      pages: [],
+      posts: []
+    };
+
+  assertUniquePageSlug(baseContent.pages, slug);
 
   const result = await repository.writePage({
     body: '<p></p>',
@@ -527,15 +564,10 @@ export async function createPageDocument(
   const document: StoredDocument<AdminPageFrontmatter> = {
     body: '<p></p>',
     data: { date, slug, title },
-    path: result.path || `${SITE_CONTENT_PATHS.pages}/${slug}.mdx`,
+    loaded: true,
+    path: result.path || siteContentAdapters.pages.buildPath(slug),
     sha: result.sha
   };
-  const baseContent = input.content ||
-    getSharedContentResource<DocumentContent>(repoClient, DOCUMENT_CONTENT_CACHE_KEY) || {
-      loadedAt: new Date().toISOString(),
-      pages: [],
-      posts: []
-    };
   const nextContent = upsertDocumentInContent(baseContent, 'page', document);
   const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
   return { content, newId: buildDocumentId('page', document.path) };
@@ -567,12 +599,51 @@ export async function createPostDocument(
   const document: StoredDocument<AdminPostFrontmatter> = {
     body: '<p></p>',
     data: { date, slug, title },
+    loaded: true,
     path: result.path || siteContentAdapters.posts.buildPath(slug),
     sha: result.sha
   };
   const nextContent = upsertDocumentInContent(baseContent, 'post', document);
   const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
   return { content, newId: buildDocumentId('post', document.path) };
+}
+
+export async function deletePageDocument(
+  repoClient: AdminRepoClient,
+  input: { content: DocumentContent; document: StoredDocument<AdminPageFrontmatter> }
+) {
+  await repoClient.deleteFile({
+    message: `Admin: delete page ${input.document.data.slug}`,
+    path: input.document.path,
+    sha: input.document.sha
+  });
+
+  const nextContent: DocumentContent = {
+    ...input.content,
+    loadedAt: new Date().toISOString(),
+    pages: input.content.pages.filter((page) => page.path !== input.document.path)
+  };
+
+  return setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
+}
+
+export async function deletePostDocument(
+  repoClient: AdminRepoClient,
+  input: { content: DocumentContent; document: StoredDocument<AdminPostFrontmatter> }
+) {
+  await repoClient.deleteFile({
+    message: `Admin: delete news post ${input.document.data.slug}`,
+    path: input.document.path,
+    sha: input.document.sha
+  });
+
+  const nextContent: DocumentContent = {
+    ...input.content,
+    loadedAt: new Date().toISOString(),
+    posts: input.content.posts.filter((post) => post.path !== input.document.path)
+  };
+
+  return setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
 }
 
 export async function loadRecentPostContent(repoClient: AdminRepoClient, limit: number): Promise<PostContent[]> {

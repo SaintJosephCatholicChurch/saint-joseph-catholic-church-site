@@ -1,10 +1,81 @@
 'use client';
 
+import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import type { ChurchDetailsFieldKey } from './fieldKeys';
-import type { ChurchDetailsDraft } from '../../content/writableStructuredContent';
+import type { ChurchDetailsDraft, NamedPairDraft } from '../../content/writableStructuredContent';
+
+interface ChurchDetailsEditorProps {
+  onChange: (value: ChurchDetailsDraft) => void;
+  onFocusFieldKey: (fieldKey: ChurchDetailsFieldKey | null) => void;
+  registerField: (fieldKey: ChurchDetailsFieldKey) => (element: HTMLElement | null) => void;
+  value: ChurchDetailsDraft;
+}
+
+function NamedPairRepeater({
+  addLabel,
+  leftLabel,
+  onChange,
+  onFocus,
+  registerRef,
+  rightLabel,
+  title,
+  value
+}: {
+  addLabel: string;
+  leftLabel: string;
+  onChange: (value: NamedPairDraft[]) => void;
+  onFocus: () => void;
+  registerRef: (element: HTMLElement | null) => void;
+  rightLabel: string;
+  title: string;
+  value: NamedPairDraft[];
+}) {
+  return (
+    <Stack ref={registerRef} spacing={1.5} onFocus={onFocus}>
+      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+        {title}
+      </Typography>
+      {value.map((entry, index) => (
+        <Stack key={`named-pair-${index}`} direction={{ sm: 'row', xs: 'column' }} spacing={1} alignItems={{ sm: 'center' }}>
+          <TextField
+            label={leftLabel}
+            value={entry.name}
+            onChange={(event) =>
+              onChange(value.map((item, itemIndex) => (itemIndex === index ? { ...item, name: event.target.value } : item)))
+            }
+            fullWidth
+          />
+          <TextField
+            label={rightLabel}
+            value={entry.value}
+            onChange={(event) =>
+              onChange(
+                value.map((item, itemIndex) => (itemIndex === index ? { ...item, value: event.target.value } : item))
+              )
+            }
+            fullWidth
+          />
+          <Button color="inherit" onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))} variant="outlined">
+            Remove
+          </Button>
+        </Stack>
+      ))}
+      <Button
+        startIcon={<AddIcon />}
+        onClick={() => onChange([...value, { name: '', value: '' }])}
+        sx={{ alignSelf: 'flex-start' }}
+        variant="outlined"
+      >
+        {addLabel}
+      </Button>
+    </Stack>
+  );
+}
 
 interface ChurchDetailsEditorProps {
   onChange: (value: ChurchDetailsDraft) => void;
@@ -180,54 +251,36 @@ export function ChurchDetailsEditor({ onChange, onFocusFieldKey, registerField, 
         multiline
         minRows={3}
       />
-      <TextField
-        label="Contacts"
-        helperText="One per line: Name | Title"
-        inputRef={registerField('contacts')}
-        value={value.contacts}
+      <NamedPairRepeater
+        addLabel="Add contact"
+        leftLabel="Name"
+        onChange={(contacts) => onChange({ ...value, contacts })}
         onFocus={() => onFocusFieldKey('contacts')}
-        onChange={(event) =>
-          onChange({
-            ...value,
-            contacts: event.target.value
-          })
-        }
-        fullWidth
-        multiline
-        minRows={4}
+        registerRef={registerField('contacts')}
+        rightLabel="Title"
+        title="Contacts"
+        value={value.contacts}
       />
       <Stack direction="column" spacing={2}>
-        <TextField
-          label="Additional emails"
-          helperText="One per line: Name | Email"
-          inputRef={registerField('additionalEmails')}
-          value={value.additionalEmails}
+        <NamedPairRepeater
+          addLabel="Add email"
+          leftLabel="Name"
+          onChange={(additionalEmails) => onChange({ ...value, additionalEmails })}
           onFocus={() => onFocusFieldKey('additionalEmails')}
-          onChange={(event) =>
-            onChange({
-              ...value,
-              additionalEmails: event.target.value
-            })
-          }
-          fullWidth
-          multiline
-          minRows={4}
+          registerRef={registerField('additionalEmails')}
+          rightLabel="Email"
+          title="Additional emails"
+          value={value.additionalEmails}
         />
-        <TextField
-          label="Additional phones"
-          helperText="One per line: Name | Phone"
-          inputRef={registerField('additionalPhones')}
-          value={value.additionalPhones}
+        <NamedPairRepeater
+          addLabel="Add phone"
+          leftLabel="Name"
+          onChange={(additionalPhones) => onChange({ ...value, additionalPhones })}
           onFocus={() => onFocusFieldKey('additionalPhones')}
-          onChange={(event) =>
-            onChange({
-              ...value,
-              additionalPhones: event.target.value
-            })
-          }
-          fullWidth
-          multiline
-          minRows={4}
+          registerRef={registerField('additionalPhones')}
+          rightLabel="Phone"
+          title="Additional phones"
+          value={value.additionalPhones}
         />
       </Stack>
     </Stack>

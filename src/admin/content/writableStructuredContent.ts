@@ -40,12 +40,17 @@ export const STRUCTURED_WRITABLE_SECTIONS = [
 
 export type StructuredSectionId = (typeof STRUCTURED_WRITABLE_SECTIONS)[number]['id'];
 
+export interface NamedPairDraft {
+  name: string;
+  value: string;
+}
+
 export interface ChurchDetailsDraft {
-  additionalEmails: string;
-  additionalPhones: string;
+  additionalEmails: NamedPairDraft[];
+  additionalPhones: NamedPairDraft[];
   address: string;
   city: string;
-  contacts: string;
+  contacts: NamedPairDraft[];
   email: string;
   facebookPage: string;
   googleMapLocation: string;
@@ -198,38 +203,6 @@ async function loadStructuredSection(repoClient: AdminRepoClient, sectionId: Str
   });
 }
 
-function splitNonEmptyLines(value: string) {
-  return value
-    .split(/\r?\n/g)
-    .map((line) => line.trim())
-    .filter(Boolean);
-}
-
-function serializeMappedLines<TValue>(items: TValue[] | undefined, mapLine: (item: TValue) => string) {
-  return (items || []).map((item) => mapLine(item)).join('\n');
-}
-
-function parseLinePairs(value: string, label: string, leftLabel: string, rightLabel: string) {
-  return splitNonEmptyLines(value).map((line, index) => {
-    const separatorIndex = line.indexOf('|');
-
-    if (separatorIndex === -1) {
-      throw new Error(`${label} line ${index + 1} must use "${leftLabel} | ${rightLabel}" format.`);
-    }
-
-    const left = line.slice(0, separatorIndex).trim();
-    const right = line.slice(separatorIndex + 1).trim();
-
-    if (!left || !right) {
-      throw new Error(
-        `${label} line ${index + 1} must include both ${leftLabel.toLowerCase()} and ${rightLabel.toLowerCase()}.`
-      );
-    }
-
-    return { left, right };
-  });
-}
-
 function parseStringList(value: string) {
   return value
     .split(/\r?\n|,/g)
@@ -262,23 +235,35 @@ function getSectionLabel(sectionId: StructuredSectionId) {
   return STRUCTURED_WRITABLE_SECTIONS.find((section) => section.id === sectionId)?.label || sectionId;
 }
 
+function requireNamedPairs(items: NamedPairDraft[], label: string, valueLabel: string) {
+  return items
+    .map((entry) => ({
+      name: entry.name.trim(),
+      value: entry.value.trim()
+    }))
+    .filter((entry) => entry.name || entry.value)
+    .map((entry, index) => {
+      if (!entry.name || !entry.value) {
+        throw new Error(`${label} ${index + 1} must include both a name and ${valueLabel.toLowerCase()}.`);
+      }
+
+      return entry;
+    });
+}
+
 function buildChurchDetailsValue(draft: ChurchDetailsDraft) {
-  const contacts = parseLinePairs(draft.contacts, 'Church contacts', 'Name', 'Title').map((entry) => ({
-    name: entry.left,
-    title: entry.right
+  const contacts = requireNamedPairs(draft.contacts, 'Church contacts', 'Title').map((entry) => ({
+    name: entry.name,
+    title: entry.value
   }));
-  const additionalEmails = parseLinePairs(draft.additionalEmails, 'Additional emails', 'Name', 'Email').map(
-    (entry) => ({
-      email: entry.right,
-      name: entry.left
-    })
-  );
-  const additionalPhones = parseLinePairs(draft.additionalPhones, 'Additional phones', 'Name', 'Phone').map(
-    (entry) => ({
-      name: entry.left,
-      phone: entry.right
-    })
-  );
+  const additionalEmails = requireNamedPairs(draft.additionalEmails, 'Additional emails', 'Email').map((entry) => ({
+    email: entry.value,
+    name: entry.name
+  }));
+  const additionalPhones = requireNamedPairs(draft.additionalPhones, 'Additional phones', 'Phone').map((entry) => ({
+    name: entry.name,
+    phone: entry.value
+  }));
 
   return siteContentAdapters.churchDetails.parse(
     JSON.stringify({
@@ -332,19 +317,34 @@ function createMenuItemDraft(value: MenuItem): MenuItemDraft {
   };
 }
 
-function buildMenuLinkValue(draft: MenuLinkDraft): MenuLink {
+function buildMenuLinkValue(draft: MenuLinkDraft, label: string): MenuLink {
+  const title = draft.title.trim();
+
+  if (!title) {
+    throw new Error(`${label} requires a title.`);
+  }
+
+  const page = draft.page.trim();
+  const url = draft.url.trim();
+
+  if (!page && !url) {
+    throw new Error(`${label} requires a page or URL.`);
+  }
+
   return {
-    page: trimOptionalValue(draft.page),
-    title: draft.title.trim(),
-    url: trimOptionalValue(draft.url)
+    page: trimOptionalValue(page),
+    title,
+    url: trimOptionalValue(url)
   };
 }
 
-function buildMenuItemValue(draft: MenuItemDraft): MenuItem {
-  const menuLinks = draft.menuLinks.map(buildMenuLinkValue);
+function buildMenuItemValue(draft: MenuItemDraft, itemIndex: number): MenuItem {
+  const menuLinks = draft.menuLinks.map((link, linkIndex) =>
+    buildMenuLinkValue(link, `Menu item ${itemIndex + 1} sub-link ${linkIndex + 1}`)
+  );
 
   return {
-    ...buildMenuLinkValue(draft),
+    ...buildMenuLinkValue(draft, `Menu item ${itemIndex + 1}`),
     menu_links: menuLinks.length ? menuLinks : undefined
   };
 }
@@ -356,7 +356,7 @@ function buildMenuValue(draft: MenuDraft) {
         primary: draft.logoPrimary,
         secondary: draft.logoSecondary
       },
-      menu_items: draft.menuItems.map(buildMenuItemValue),
+      menu_items: draft.menuItems.map((item, index) => buildMenuItemValue(item, index)),
       online_giving_button_text: draft.onlineGivingButtonText
     }),
     SITE_CONTENT_PATHS.menu
@@ -388,17 +388,20 @@ function buildCommitMessage(sectionId: StructuredSectionId) {
 export function createStructuredDraft(content: StructuredContent): StructuredDraft {
   return {
     churchDetails: {
-      additionalEmails: serializeMappedLines(
-        content.churchDetails.value.additional_emails,
-        (entry) => `${entry.name} | ${entry.email}`
-      ),
-      additionalPhones: serializeMappedLines(
-        content.churchDetails.value.additional_phones,
-        (entry) => `${entry.name} | ${entry.phone}`
-      ),
+      additionalEmails: (content.churchDetails.value.additional_emails || []).map((entry) => ({
+        name: entry.name,
+        value: entry.email
+      })),
+      additionalPhones: (content.churchDetails.value.additional_phones || []).map((entry) => ({
+        name: entry.name,
+        value: entry.phone
+      })),
       address: content.churchDetails.value.address,
       city: content.churchDetails.value.city,
-      contacts: serializeMappedLines(content.churchDetails.value.contacts, (entry) => `${entry.name} | ${entry.title}`),
+      contacts: (content.churchDetails.value.contacts || []).map((entry) => ({
+        name: entry.name,
+        value: entry.title
+      })),
       email: content.churchDetails.value.email,
       facebookPage: content.churchDetails.value.facebook_page,
       googleMapLocation: content.churchDetails.value.google_map_location,
@@ -439,6 +442,10 @@ export async function loadStructuredContent(
   sectionIds: StructuredSectionId[] = STRUCTURED_WRITABLE_SECTIONS.map((section) => section.id)
 ): Promise<StructuredContent> {
   const uniqueSectionIds = [...new Set(sectionIds)];
+
+  if (uniqueSectionIds.includes('menu') && !uniqueSectionIds.includes('churchDetails')) {
+    uniqueSectionIds.push('churchDetails');
+  }
   const content = createEmptyStructuredContent();
   const loadedSections = await Promise.all(uniqueSectionIds.map((sectionId) => loadStructuredSection(repoClient, sectionId)));
 

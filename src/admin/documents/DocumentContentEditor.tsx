@@ -1,10 +1,13 @@
 'use client';
 
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -39,6 +42,8 @@ import {
   createPageDraft,
   createPostDocument,
   createPostDraft,
+  deletePageDocument,
+  deletePostDocument,
   ensureDocumentLoaded,
   loadDocumentContent,
   savePageDocument,
@@ -50,6 +55,7 @@ import {
   type PageDraft,
   type PostDraft
 } from '../content/writableDocumentsContent';
+import { useRegisterAdminDirty, useAdminUnsavedChanges } from '../unsavedChanges';
 
 import type { MediaAsset } from '../content/writableBulletinsMediaContent';
 import type { AdminRepoClient } from '../services/adminTypes';
@@ -249,6 +255,8 @@ export function DocumentContentEditor({
   const [pageDrafts, setPageDrafts] = useState<Record<string, PageDraft>>({});
   const [postDrafts, setPostDrafts] = useState<Record<string, PostDraft>>({});
   const [createDialog, setCreateDialog] = useState<CreateDialogState>(CLOSED_CREATE_DIALOG);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { confirmIfDirty } = useAdminUnsavedChanges();
 
   const visibleKinds = useMemo<DocumentKind[]>(
     () => (allowedKinds && allowedKinds.length > 0 ? allowedKinds : ['page', 'post']),
@@ -266,13 +274,75 @@ export function DocumentContentEditor({
     visibleKindsRef.current = visibleKinds;
   }, [visibleKinds]);
 
-  function syncDraftsFromContent(content: DocumentContent) {
-    setPageDrafts(
-      Object.fromEntries(content.pages.map((document) => [`page:${document.path}`, createPageDraft(document)]))
-    );
-    setPostDrafts(
-      Object.fromEntries(content.posts.map((document) => [`post:${document.path}`, createPostDraft(document)]))
-    );
+  function seedMissingDrafts(content: DocumentContent) {
+    setPageDrafts((currentDrafts) => {
+      const nextDrafts = { ...currentDrafts };
+
+      for (const document of content.pages) {
+        const documentId = `page:${document.path}`;
+        if (!nextDrafts[documentId]) {
+          nextDrafts[documentId] = createPageDraft(document);
+        }
+      }
+
+      return nextDrafts;
+    });
+    setPostDrafts((currentDrafts) => {
+      const nextDrafts = { ...currentDrafts };
+
+      for (const document of content.posts) {
+        const documentId = `post:${document.path}`;
+        if (!nextDrafts[documentId]) {
+          nextDrafts[documentId] = createPostDraft(document);
+        }
+      }
+
+      return nextDrafts;
+    });
+  }
+
+  function applyHydratedPageDraft(documentId: string, document: Parameters<typeof createPageDraft>[0]) {
+    setPageDrafts((currentDrafts) => {
+      const existingDraft = currentDrafts[documentId];
+      const hydratedDraft = createPageDraft(document);
+
+      if (!existingDraft || !existingDraft.body) {
+        return {
+          ...currentDrafts,
+          [documentId]: existingDraft ? { ...existingDraft, body: hydratedDraft.body } : hydratedDraft
+        };
+      }
+
+      return currentDrafts;
+    });
+  }
+
+  function applyHydratedPostDraft(documentId: string, document: Parameters<typeof createPostDraft>[0]) {
+    setPostDrafts((currentDrafts) => {
+      const existingDraft = currentDrafts[documentId];
+      const hydratedDraft = createPostDraft(document);
+
+      if (!existingDraft || !existingDraft.body) {
+        return {
+          ...currentDrafts,
+          [documentId]: existingDraft ? { ...existingDraft, body: hydratedDraft.body } : hydratedDraft
+        };
+      }
+
+      return currentDrafts;
+    });
+  }
+
+  function replaceDraftId<TDraft>(
+    currentDrafts: Record<string, TDraft>,
+    previousId: string,
+    nextId: string,
+    nextDraft: TDraft
+  ) {
+    const nextDrafts = { ...currentDrafts };
+    delete nextDrafts[previousId];
+    nextDrafts[nextId] = nextDraft;
+    return nextDrafts;
   }
 
   const buildSelectionHref = useCallback(
@@ -321,7 +391,7 @@ export function DocumentContentEditor({
           return;
         }
 
-        syncDraftsFromContent(content);
+        seedMissingDrafts(content);
         setEditorState((currentState) => ({
           ...currentState,
           content,
@@ -414,7 +484,10 @@ export function DocumentContentEditor({
       : activeSummary?.kind === 'post' && activePost
         ? createPostDraft(activePost)
         : null;
-  const isDirty = activeDraft && pristineDraft ? JSON.stringify(activeDraft) !== JSON.stringify(pristineDraft) : false;
+  const isDirty = Boolean(
+    activeDraft && pristineDraft ? JSON.stringify(activeDraft) !== JSON.stringify(pristineDraft) : false
+  );
+  useRegisterAdminDirty(`document:${visibleKindsKey}`, isDirty);
   const isSaving = editorState.saveStatus === 'saving';
   const showListViewOnly = isCompactLayout && !routedDocumentId;
   const showDenseListCards = isCompactLayout;
@@ -425,7 +498,7 @@ export function DocumentContentEditor({
     }
 
     const activeDocument = activeSummary.kind === 'page' ? activePage : activePost;
-    if (!activeDocument || activeDocument.body) {
+    if (!activeDocument || activeDocument.loaded) {
       return;
     }
 
@@ -439,7 +512,17 @@ export function DocumentContentEditor({
           return;
         }
 
-        syncDraftsFromContent(nextContent);
+        const hydratedDocument =
+          activeSummary.kind === 'page'
+            ? nextContent.pages.find((document) => `page:${document.path}` === activeSummary.id)
+            : nextContent.posts.find((document) => `post:${document.path}` === activeSummary.id);
+
+        if (hydratedDocument && activeSummary.kind === 'page') {
+          applyHydratedPageDraft(activeSummary.id, hydratedDocument);
+        } else if (hydratedDocument && activeSummary.kind === 'post') {
+          applyHydratedPostDraft(activeSummary.id, hydratedDocument);
+        }
+
         setEditorState((currentState) => ({
           ...currentState,
           content: nextContent,
@@ -480,6 +563,15 @@ export function DocumentContentEditor({
       <Button variant="contained" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
         Save
       </Button>
+      <IconButton
+        aria-label="Delete"
+        title="Delete"
+        onClick={() => setDeleteDialogOpen(true)}
+        disabled={isSaving || !activeSummary}
+        size="small"
+      >
+        <DeleteOutlineIcon fontSize="small" />
+      </IconButton>
     </Stack>
   );
 
@@ -533,7 +625,7 @@ export function DocumentContentEditor({
             title: createDialog.title
           });
 
-      syncDraftsFromContent(result.content);
+      seedMissingDrafts(result.content);
       setEditorState((current) => ({
         ...current,
         content: result.content,
@@ -577,6 +669,10 @@ export function DocumentContentEditor({
   }
 
   function selectDocument(documentId: string) {
+    if (documentId !== editorState.selectedDocumentId && isDirty && !confirmIfDirty()) {
+      return;
+    }
+
     setMobileDetailPanel('editor');
     setEditorState((currentState) => ({
       ...currentState,
@@ -589,6 +685,10 @@ export function DocumentContentEditor({
   }
 
   function returnToDocumentList() {
+    if (isDirty && !confirmIfDirty()) {
+      return;
+    }
+
     setMobileDetailPanel('editor');
     replaceSelectionInUrl(null);
   }
@@ -675,11 +775,14 @@ export function DocumentContentEditor({
       let savedDocumentId = activeSummary.id;
 
       if (activeSummary.kind === 'page' && activePage && activePageDraft) {
-        content = await savePageDocument(repoClient, {
+        const savedPage = await savePageDocument(repoClient, {
           content,
           document: activePage,
           draft: activePageDraft
         });
+        content = savedPage.content;
+        savedDocumentId = savedPage.documentId;
+        setPageDrafts((currentDrafts) => replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePageDraft));
       }
 
       if (activeSummary.kind === 'post' && activePost && activePostDraft) {
@@ -690,9 +793,9 @@ export function DocumentContentEditor({
         });
         content = savedPost.content;
         savedDocumentId = savedPost.documentId;
+        setPostDrafts((currentDrafts) => replaceDraftId(currentDrafts, activeSummary.id, savedDocumentId, activePostDraft));
       }
 
-      syncDraftsFromContent(content);
       setEditorState((currentState) => ({
         ...currentState,
         content,
@@ -717,6 +820,66 @@ export function DocumentContentEditor({
         }));
       }
     } catch (error) {
+      setEditorState((currentState) => ({
+        ...currentState,
+        saveError: buildErrorMessage(error),
+        saveStatus: 'error'
+      }));
+    }
+  }
+
+  async function handleDelete() {
+    if (!activeSummary || !editorState.content) {
+      return;
+    }
+
+    setEditorState((currentState) => ({
+      ...currentState,
+      saveError: null,
+      saveMessage: null,
+      saveStatus: 'saving'
+    }));
+
+    try {
+      let content = editorState.content;
+
+      if (activeSummary.kind === 'page' && activePage) {
+        content = await deletePageDocument(repoClient, { content, document: activePage });
+        setPageDrafts((currentDrafts) => {
+          const nextDrafts = { ...currentDrafts };
+          delete nextDrafts[activeSummary.id];
+          return nextDrafts;
+        });
+      }
+
+      if (activeSummary.kind === 'post' && activePost) {
+        content = await deletePostDocument(repoClient, { content, document: activePost });
+        setPostDrafts((currentDrafts) => {
+          const nextDrafts = { ...currentDrafts };
+          delete nextDrafts[activeSummary.id];
+          return nextDrafts;
+        });
+      }
+
+      setDeleteDialogOpen(false);
+      setEditorState((currentState) => ({
+        ...currentState,
+        content,
+        saveError: null,
+        saveMessage: `${activeSummary.kind === 'page' ? 'Page' : 'News post'} deleted.`,
+        saveStatus: 'success',
+        selectedDocumentId: null,
+        status: 'success'
+      }));
+      replaceSelectionInUrl(null);
+
+      try {
+        await onSaved();
+      } catch {
+        // summary refresh failed, non-critical
+      }
+    } catch (error) {
+      setDeleteDialogOpen(false);
       setEditorState((currentState) => ({
         ...currentState,
         saveError: buildErrorMessage(error),
@@ -753,17 +916,15 @@ export function DocumentContentEditor({
       return;
     }
 
-    const fallbackDocumentId = filteredSummaries[0].id;
+    if (routedDocumentId) {
+      return;
+    }
 
     setEditorState((currentState) => ({
       ...currentState,
-      selectedDocumentId: fallbackDocumentId
+      selectedDocumentId: filteredSummaries[0].id
     }));
-
-    if (routedDocumentId) {
-      replaceSelectionInUrl(fallbackDocumentId);
-    }
-  }, [editorState.selectedDocumentId, filteredSummaries, replaceSelectionInUrl, routedDocumentId]);
+  }, [editorState.selectedDocumentId, filteredSummaries, routedDocumentId]);
 
   if (editorState.status === 'loading' && !editorState.content) {
     return (
@@ -862,20 +1023,7 @@ export function DocumentContentEditor({
         errorMessage={editorState.saveError}
         loading={editorState.status === 'loading'}
         successMessage={editorState.saveMessage}
-      >
-        {showIntroAlert ? (
-          <Stack spacing={2}>
-            <Alert severity="info">
-              Phase 8 keeps pages and news on the existing frontmatter-plus-body contract, but this admin path only
-              supports HTML body editing. MDX imports, JSX components, and expression blocks are rejected on save.
-            </Alert>
-            <Alert severity="info">
-              Phase 9 now adds shared-media browsing, upload, and direct asset insertion for both document bodies and
-              news hero images.
-            </Alert>
-          </Stack>
-        ) : null}
-      </AdminStatusStack>
+      />
 
       <Stack direction={{ xl: 'row', xs: 'column' }} spacing={2} alignItems="stretch" sx={{ flex: 1, minHeight: 0 }}>
         {!isCompactLayout || showListViewOnly ? (
@@ -960,6 +1108,7 @@ export function DocumentContentEditor({
                             label="Slug"
                             value={activePageDraft?.slug || ''}
                             onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                            helperText="Used in /[slug]"
                             fullWidth
                           />
                           <TextField
@@ -1069,6 +1218,7 @@ export function DocumentContentEditor({
                             label="Slug"
                             value={activePageDraft?.slug || ''}
                             onChange={(event) => updateActivePageDraft({ slug: event.target.value })}
+                            helperText="Used in /[slug]"
                             fullWidth
                           />
                           <TextField
@@ -1264,6 +1414,22 @@ export function DocumentContentEditor({
             </Stack>
           </Stack>
         </DialogContent>
+      </Dialog>
+      <Dialog fullWidth maxWidth="xs" onClose={() => setDeleteDialogOpen(false)} open={deleteDialogOpen}>
+        <AdminDialogTitle onClose={() => setDeleteDialogOpen(false)}>Delete {activeSummary?.kind === 'page' ? 'page' : 'news post'}</AdminDialogTitle>
+        <DialogContent dividers>
+          <DialogContentText>
+            Delete “{activeSummary?.title}”? This removes the file from the repository and cannot be undone from admin.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, pt: 1 }}>
+          <Button color="inherit" onClick={() => setDeleteDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="error" onClick={() => void handleDelete()} variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
     </Stack>
   );

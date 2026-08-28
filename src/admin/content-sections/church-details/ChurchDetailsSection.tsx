@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 import { useAdminFieldSelection } from '../components/adminPreviewSelection';
 import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
 import { ChurchDetailsEditor } from './ChurchDetailsEditor';
@@ -21,15 +23,28 @@ const CONTENT_SECTION_PANELS = ['editor', 'preview'] as const;
 
 export function ChurchDetailsSection({ headerActions, onChange, showPreview, value }: ChurchDetailsSectionProps) {
   const selection = useAdminFieldSelection<ChurchDetailsFieldKey>();
+  const pendingPreviewSelectionFieldKeyRef = useRef<ChurchDetailsFieldKey | null>(null);
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
     paramName: 'churchDetailsPanel'
   });
 
+  useEffect(() => {
+    if (panel !== 'editor' || !pendingPreviewSelectionFieldKeyRef.current) {
+      return;
+    }
+
+    const fieldKey = pendingPreviewSelectionFieldKeyRef.current;
+    pendingPreviewSelectionFieldKeyRef.current = null;
+    selection.selectFieldKey(fieldKey);
+  }, [panel, selection]);
+
   function handleSelectFieldKey(fieldKey: ChurchDetailsFieldKey) {
     if (panel === 'preview') {
+      pendingPreviewSelectionFieldKeyRef.current = fieldKey;
       setPanel('editor');
+      return;
     }
 
     selection.selectFieldKey(fieldKey);

@@ -1,6 +1,8 @@
 import type {
   AdminRepoClient,
   AdminUser,
+  RepoCommitFilesInput,
+  RepoCommitFilesResult,
   RepoDeleteInput,
   RepoDirectoryEntry,
   RepoMediaUploadInput,
@@ -53,6 +55,37 @@ type GitHubWriteResponse = {
     path: string;
     sha: string;
   };
+};
+
+type GitHubCommitResponse = {
+  sha: string;
+  commit?: {
+    tree?: {
+      sha?: string;
+    };
+  };
+};
+
+type GitHubTreeEntry = {
+  mode?: string;
+  path: string;
+  sha: string | null;
+  size?: number;
+  type: 'blob' | 'commit' | 'tree';
+};
+
+type GitHubTreeResponse = {
+  sha: string;
+  tree: GitHubTreeEntry[];
+  truncated?: boolean;
+};
+
+type GitHubBlobResponse = {
+  sha: string;
+};
+
+type GitHubCreatedCommitResponse = {
+  sha: string;
 };
 
 type GitHubRepoClientConfig = {
@@ -144,31 +177,18 @@ export class GitHubRepoClient implements AdminRepoClient {
   }
 
   async listFiles(path: string): Promise<RepoDirectoryEntry[]> {
-    const encodedPath = encodePath(path);
-    const endpoint = encodedPath ? `/repos/${this.repo}/contents/${encodedPath}` : `/repos/${this.repo}/contents`;
-    const response = await this.requestJson<GitHubContentsDirectoryItem[] | GitHubContentsFileResponse>(endpoint, {
-      query: { ref: this.branch }
-    });
+    const normalizedPath = path.replace(/^\/+|\/+$/g, '');
+    const tree = await this.getTreeForPath(normalizedPath);
 
-    if (!Array.isArray(response)) {
-      return [
-        {
-          name: response.name,
-          path: response.path,
-          sha: response.sha,
-          size: response.size,
-          type: 'file'
-        }
-      ];
-    }
-
-    return response.map((entry) => ({
-      name: entry.name,
-      path: entry.path,
-      sha: entry.sha,
-      size: entry.size,
-      type: entry.type
-    }));
+    return tree.tree
+      .filter((entry) => entry.type === 'blob' || entry.type === 'tree')
+      .map((entry) => ({
+        name: entry.path,
+        path: normalizedPath ? `${normalizedPath}/${entry.path}` : entry.path,
+        sha: entry.sha || undefined,
+        size: entry.size,
+        type: entry.type === 'tree' ? 'dir' : 'file'
+      }));
   }
 
   async readTextFile(path: string): Promise<RepoTextFile> {
@@ -181,18 +201,17 @@ export class GitHubRepoClient implements AdminRepoClient {
   }
 
   async writeTextFile(input: RepoWriteInput): Promise<RepoWriteResult> {
-    const sha = input.sha || (await this.findFileSha(input.path));
     const response = await this.putFile(input.path, {
       branch: this.branch,
       content: encodeBytesToBase64(new TextEncoder().encode(input.content)),
       message: input.message,
-      sha
+      sha: input.sha
     });
 
     return {
       commitSha: response.commit?.sha,
       path: response.content?.path || input.path,
-      sha: response.content?.sha || sha || ''
+      sha: response.content?.sha || input.sha || ''
     };
   }
 
@@ -215,19 +234,99 @@ export class GitHubRepoClient implements AdminRepoClient {
   }
 
   async uploadMedia(input: RepoMediaUploadInput): Promise<RepoWriteResult> {
-    const sha = input.sha || (await this.findFileSha(input.path));
     const fileBytes = new Uint8Array(await input.file.arrayBuffer());
     const response = await this.putFile(input.path, {
       branch: this.branch,
       content: encodeBytesToBase64(fileBytes),
       message: input.message,
-      sha
+      sha: input.sha
     });
 
     return {
       commitSha: response.commit?.sha,
       path: response.content?.path || input.path,
-      sha: response.content?.sha || sha || ''
+      sha: response.content?.sha || input.sha || ''
+    };
+  }
+
+  async commitFiles(input: RepoCommitFilesInput): Promise<RepoCommitFilesResult> {
+    const upserts = input.upserts || [];
+    const deletes = input.deletes || [];
+
+    if (upserts.length === 0 && deletes.length === 0) {
+      throw new Error('A commit must include at least one file change.');
+    }
+
+    const currentCommit = await this.requestJson<GitHubCommitResponse>(`/repos/${this.repo}/commits/${this.branch}`);
+    const baseTreeSha = currentCommit.commit?.tree?.sha;
+
+    if (!baseTreeSha) {
+      throw new Error('GitHub did not return a tree SHA for the current branch.');
+    }
+
+    const blobs = await Promise.all(
+      upserts.map(async (upsert) => {
+        const blob = await this.requestJson<GitHubBlobResponse>(`/repos/${this.repo}/git/blobs`, {
+          body: JSON.stringify({
+            content: encodeBytesToBase64(new TextEncoder().encode(upsert.content)),
+            encoding: 'base64'
+          }),
+          method: 'POST'
+        });
+
+        return {
+          path: upsert.path.replace(/^\/+/, ''),
+          sha: blob.sha
+        };
+      })
+    );
+
+    const treeNodes: Array<{ mode: string; path: string; sha: string | null; type: string }> = [
+      ...blobs.map((blob) => ({
+        mode: '100644',
+        path: blob.path,
+        sha: blob.sha,
+        type: 'blob'
+      })),
+      ...deletes.map((entry) => {
+        const deletedSha: string | null = null;
+
+        return {
+          mode: '100644',
+          path: entry.path.replace(/^\/+/, ''),
+          sha: deletedSha,
+          type: 'blob'
+        };
+      })
+    ];
+
+    const tree = await this.requestJson<GitHubTreeResponse>(`/repos/${this.repo}/git/trees`, {
+      body: JSON.stringify({
+        base_tree: baseTreeSha,
+        tree: treeNodes
+      }),
+      method: 'POST'
+    });
+
+    const commit = await this.requestJson<GitHubCreatedCommitResponse>(`/repos/${this.repo}/git/commits`, {
+      body: JSON.stringify({
+        message: input.message,
+        parents: [currentCommit.sha],
+        tree: tree.sha
+      }),
+      method: 'POST'
+    });
+
+    await this.requestJson(`/repos/${this.repo}/git/refs/heads/${this.branch}`, {
+      body: JSON.stringify({
+        sha: commit.sha
+      }),
+      method: 'PATCH'
+    });
+
+    return {
+      commitSha: commit.sha,
+      files: blobs
     };
   }
 
@@ -247,16 +346,57 @@ export class GitHubRepoClient implements AdminRepoClient {
   }
 
   private clearContentRequestCache() {
-    const contentsPath = `/repos/${this.repo}/contents`;
+    const cachePrefixes = [
+      `/repos/${this.repo}/contents`,
+      `/repos/${this.repo}/git/trees`,
+      `/repos/${this.repo}/git/ref`,
+      `/repos/${this.repo}/git/commits`,
+      `/repos/${this.repo}/commits`
+    ];
 
     for (const cacheKey of [...this.responseCache.keys()]) {
-      if (cacheKey.includes(contentsPath)) {
+      if (cachePrefixes.some((prefix) => cacheKey.includes(prefix))) {
         this.responseCache.delete(cacheKey);
         this.stalePersistedCacheKeys.delete(cacheKey);
       }
     }
 
     this.persistResponseCache();
+  }
+
+  private async getBranchTreeSha() {
+    const commit = await this.requestJson<GitHubCommitResponse>(`/repos/${this.repo}/commits/${this.branch}`);
+    const treeSha = commit.commit?.tree?.sha;
+
+    if (!treeSha) {
+      throw new Error(`GitHub did not return a tree SHA for ${this.branch}.`);
+    }
+
+    return treeSha;
+  }
+
+  private async getGitTree(treeSha: string) {
+    return this.requestJson<GitHubTreeResponse>(`/repos/${this.repo}/git/trees/${treeSha}`);
+  }
+
+  private async getTreeForPath(path: string) {
+    let tree = await this.getGitTree(await this.getBranchTreeSha());
+
+    if (!path) {
+      return tree;
+    }
+
+    for (const segment of path.split('/').filter(Boolean)) {
+      const nextEntry = tree.tree.find((entry) => entry.path === segment && entry.type === 'tree');
+
+      if (!nextEntry?.sha) {
+        throw new Error(`404: ${path} was not found.`);
+      }
+
+      tree = await this.getGitTree(nextEntry.sha);
+    }
+
+    return tree;
   }
 
   private createRequestCacheKey(url: string, method: string) {
@@ -373,7 +513,7 @@ export class GitHubRepoClient implements AdminRepoClient {
         });
         this.stalePersistedCacheKeys.delete(cacheKey);
         this.persistResponseCache();
-      } else if (method === 'DELETE' || method === 'PUT') {
+      } else if (method === 'DELETE' || method === 'PUT' || method === 'PATCH' || method === 'POST') {
         this.clearContentRequestCache();
       }
 

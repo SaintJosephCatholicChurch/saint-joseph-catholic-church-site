@@ -59,6 +59,26 @@ export interface RepoWriteResult {
   sha: string;
 }
 
+export interface RepoFileUpsert {
+  content: string;
+  path: string;
+}
+
+export interface RepoFileDelete {
+  path: string;
+}
+
+export interface RepoCommitFilesInput {
+  deletes?: RepoFileDelete[];
+  message: string;
+  upserts?: RepoFileUpsert[];
+}
+
+export interface RepoCommitFilesResult {
+  commitSha?: string;
+  files: Array<{ path: string; sha: string }>;
+}
+
 export interface SessionStoreLike {
   getItem(key: string): string | null;
   removeItem(key: string): void;
@@ -66,6 +86,7 @@ export interface SessionStoreLike {
 }
 
 export interface AdminRepoClient {
+  commitFiles(input: RepoCommitFilesInput): Promise<RepoCommitFilesResult>;
   deleteFile(input: RepoDeleteInput): Promise<void>;
   getRepoLabel(): string;
   listFiles(path: string): Promise<RepoDirectoryEntry[]>;

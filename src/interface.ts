@@ -13,6 +13,7 @@ export interface FeaturedPage {
   page: string;
   image?: string;
   summary?: string;
+  clientId?: string;
 }
 
 export interface FeaturedLink {
@@ -21,6 +22,7 @@ export interface FeaturedLink {
   url: string;
   image?: string;
   summary?: string;
+  clientId?: string;
 }
 
 export interface LiveStreamButton {
@@ -52,6 +54,7 @@ export interface HomePageData {
 export interface Slide {
   readonly image: string;
   readonly title: string;
+  readonly clientId?: string;
 }
 
 export interface TimesTime {
@@ -143,6 +146,7 @@ export interface Staff {
   readonly name?: string;
   readonly title?: string;
   readonly picture?: string;
+  readonly clientId?: string;
 }
 
 export interface PostContentData {

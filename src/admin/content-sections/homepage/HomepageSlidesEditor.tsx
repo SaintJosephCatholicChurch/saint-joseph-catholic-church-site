@@ -7,33 +7,34 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useId } from 'react';
 
 import { AdminSectionCard, AdminSortableAccordionRepeaterCard } from '../../components/AdminCards';
 import { AdminImagePathField } from '../../components/AdminImagePathField';
+import { createDraftClientId, type HomepageDraft, type HomepageSlideDraft } from '../../content/writableComplexContent';
 import { createHomepageSlideFieldKey, parseHomepageFieldKey, type HomepageFieldKey } from './fieldKeys';
-
-import type { HomepageDraft, HomepageSlideDraft } from '../../content/writableComplexContent';
-
-const EMPTY_HOMEPAGE_SLIDE: HomepageSlideDraft = {
-  image: '',
-  title: ''
-};
 
 interface HomepageSlidesEditorProps {
   activeFieldKey?: HomepageFieldKey;
-  expandedIndexes: number[];
+  expandedClientIds: string[];
   onChange: (value: HomepageDraft) => void;
-  onExpandedEntered: (index: number) => void;
-  onSelectSlideImage: (index: number) => void;
-  onToggleExpanded: (index: number, expanded: boolean) => void;
+  onExpandedEntered: (clientId: string) => void;
+  onSelectSlideImage: (clientId: string) => void;
+  onToggleExpanded: (clientId: string, expanded: boolean) => void;
   registerField: (fieldKey: HomepageFieldKey) => (element: HTMLElement | null) => void;
   value: HomepageDraft;
 }
 
+function createEmptyHomepageSlide(): HomepageSlideDraft {
+  return {
+    clientId: createDraftClientId(),
+    image: '',
+    title: ''
+  };
+}
+
 export function HomepageSlidesEditor({
   activeFieldKey,
-  expandedIndexes,
+  expandedClientIds,
   onChange,
   onExpandedEntered,
   onSelectSlideImage,
@@ -41,23 +42,19 @@ export function HomepageSlidesEditor({
   registerField,
   value
 }: HomepageSlidesEditorProps) {
-  const slideIdPrefix = useId();
   const sortableSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
-  const slideSortableIds = value.slides.map((_, index) => `${slideIdPrefix}-slide-${index}`);
-  const activeSlideIndex = activeFieldKey
-    ? parseHomepageFieldKey(activeFieldKey)?.tab === 'slides'
-      ? (parseHomepageFieldKey(activeFieldKey)?.index ?? null)
-      : null
-    : null;
+  const slideSortableIds = value.slides.map((slide) => slide.clientId);
+  const parsedActiveFieldKey = activeFieldKey ? parseHomepageFieldKey(activeFieldKey) : null;
+  const activeSlideClientId = parsedActiveFieldKey?.tab === 'slides' ? parsedActiveFieldKey.clientId : null;
 
-  function updateHomepageSlide(index: number, nextValue: Partial<HomepageSlideDraft>) {
-    const slides = value.slides.map((slide, slideIndex) => (slideIndex === index ? { ...slide, ...nextValue } : slide));
+  function updateHomepageSlide(clientId: string, nextValue: Partial<HomepageSlideDraft>) {
+    const slides = value.slides.map((slide) => (slide.clientId === clientId ? { ...slide, ...nextValue } : slide));
     onChange({ ...value, slides });
   }
 
   function moveHomepageSlide(activeId: string, overId: string) {
-    const activeIndex = value.slides.findIndex((_, index) => `${slideIdPrefix}-slide-${index}` === activeId);
-    const overIndex = value.slides.findIndex((_, index) => `${slideIdPrefix}-slide-${index}` === overId);
+    const activeIndex = value.slides.findIndex((slide) => slide.clientId === activeId);
+    const overIndex = value.slides.findIndex((slide) => slide.clientId === overId);
 
     if (activeIndex < 0 || overIndex < 0 || activeIndex === overIndex) {
       return;
@@ -83,11 +80,7 @@ export function HomepageSlidesEditor({
     <AdminSectionCard
       title="Slides"
       headerActions={
-        <Button
-          startIcon={<AddIcon />}
-          variant="outlined"
-          onClick={() => onChange({ ...value, slides: [...value.slides, { ...EMPTY_HOMEPAGE_SLIDE }] })}
-        >
+        <Button startIcon={<AddIcon />} variant="outlined" onClick={() => onChange({ ...value, slides: [...value.slides, createEmptyHomepageSlide()] })}>
           Add slide
         </Button>
       }
@@ -96,20 +89,19 @@ export function HomepageSlidesEditor({
         <SortableContext items={slideSortableIds} strategy={verticalListSortingStrategy}>
           <Stack spacing={2}>
             {value.slides.map((slide, index) => {
-              const slideId = slideSortableIds[index];
               const imageAlt = slide.title || `Homepage slide ${index + 1}`;
               const hasImage = slide.image.trim().length > 0;
 
               return (
                 <AdminSortableAccordionRepeaterCard
-                  active={activeSlideIndex === index}
-                  key={slideId}
-                  expanded={expandedIndexes.includes(index)}
-                  id={slideId}
-                  onExpandedChange={(expanded) => onToggleExpanded(index, expanded)}
-                  onExpandedEntered={() => onExpandedEntered(index)}
+                  active={activeSlideClientId === slide.clientId}
+                  key={slide.clientId}
+                  expanded={expandedClientIds.includes(slide.clientId)}
+                  id={slide.clientId}
+                  onExpandedChange={(expanded) => onToggleExpanded(slide.clientId, expanded)}
+                  onExpandedEntered={() => onExpandedEntered(slide.clientId)}
                   onRemove={() =>
-                    onChange({ ...value, slides: value.slides.filter((_, slideIndex) => slideIndex !== index) })
+                    onChange({ ...value, slides: value.slides.filter((entry) => entry.clientId !== slide.clientId) })
                   }
                   removeButtonLabel="Remove slide"
                   title={`Slide ${index + 1}`}
@@ -131,14 +123,14 @@ export function HomepageSlidesEditor({
                   <Stack direction="column" spacing={2}>
                     <TextField
                       label="Text"
-                      inputRef={registerField(createHomepageSlideFieldKey(index, 'title'))}
+                      inputRef={registerField(createHomepageSlideFieldKey(slide.clientId, 'title'))}
                       value={slide.title}
-                      onChange={(event) => updateHomepageSlide(index, { title: event.target.value })}
+                      onChange={(event) => updateHomepageSlide(slide.clientId, { title: event.target.value })}
                       fullWidth
                     />
                     <AdminImagePathField
-                      actionButtonRef={registerField(createHomepageSlideFieldKey(index, 'image'))}
-                      onSelectImage={() => onSelectSlideImage(index)}
+                      actionButtonRef={registerField(createHomepageSlideFieldKey(slide.clientId, 'image'))}
+                      onSelectImage={() => onSelectSlideImage(slide.clientId)}
                       previewAlt={imageAlt}
                       value={slide.image}
                     />

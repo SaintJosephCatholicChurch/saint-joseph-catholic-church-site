@@ -9,6 +9,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useRegisterAdminDirty } from '../../unsavedChanges';
+
 import type { AdminRepoClient } from '../../services/adminTypes';
 import type { ReactNode } from 'react';
 
@@ -96,6 +98,16 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
     [sections, visibleSections]
   );
   const visibleSectionIdsKey = visibleSectionIds.join('|');
+  const pristineDraft = editorState.content && editorState.draft ? createDraft(editorState.content) : null;
+  const isAnyVisibleSectionDirty = Boolean(
+    pristineDraft &&
+      editorState.draft &&
+      visibleSectionIds.some(
+        (sectionId) => JSON.stringify(editorState.draft?.[sectionId]) !== JSON.stringify(pristineDraft[sectionId])
+      )
+  );
+
+  useRegisterAdminDirty(`content:${visibleSectionIdsKey}`, isAnyVisibleSectionDirty);
 
   useEffect(() => {
     let cancelled = false;
@@ -229,11 +241,10 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
     );
   }
 
-  if (!editorState.content || !editorState.draft) {
+  if (!editorState.content || !editorState.draft || !pristineDraft) {
     return editorState.error ? <Alert severity="error">{editorState.error}</Alert> : null;
   }
 
-  const pristineDraft = createDraft(editorState.content);
   const isSaving = editorState.saveStatus === 'saving';
   const isDirty = (sectionId: SectionId) =>
     JSON.stringify(editorState.draft[sectionId]) !== JSON.stringify(pristineDraft[sectionId]);

@@ -1,27 +1,21 @@
 const STAFF_FIELDS = ['name', 'picture', 'title'] as const;
 
 export type StaffFieldName = (typeof STAFF_FIELDS)[number];
-export type StaffFieldKey = `staff|${number}|${StaffFieldName}`;
+export type StaffFieldKey = `staff|${string}|${StaffFieldName}`;
 
-export function createStaffFieldKey(index: number, field: StaffFieldName): StaffFieldKey {
-  return `staff|${index}|${field}`;
+export function createStaffFieldKey(clientId: string, field: StaffFieldName): StaffFieldKey {
+  return `staff|${clientId}|${field}`;
 }
 
 export function parseStaffFieldKey(fieldKey: string) {
-  const [prefix, rawIndex, rawField] = fieldKey.split('|');
+  const [prefix, rawClientId, rawField] = fieldKey.split('|');
 
-  if (prefix !== 'staff' || !rawIndex || !rawField || !STAFF_FIELDS.includes(rawField as StaffFieldName)) {
-    return null;
-  }
-
-  const index = Number.parseInt(rawIndex, 10);
-
-  if (Number.isNaN(index)) {
+  if (prefix !== 'staff' || !rawClientId || !rawField || !STAFF_FIELDS.includes(rawField as StaffFieldName)) {
     return null;
   }
 
   return {
-    field: rawField as StaffFieldName,
-    index
+    clientId: rawClientId,
+    field: rawField as StaffFieldName
   };
 }

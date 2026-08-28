@@ -9,6 +9,7 @@ import {
 } from '../../constants';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
+import { useResolvedMediaSrc } from '../../admin/previewMediaUrls';
 import {
   createHomepageSlideFieldKey,
   getActiveHomepagePreviewTargetStyle,
@@ -127,10 +128,12 @@ interface CarouselSlideProps {
   active: boolean;
 }
 
-const CarouselSlide = ({ activeFieldKey, slide: { image, title }, slideIndex, active }: CarouselSlideProps) => {
+const CarouselSlide = ({ activeFieldKey, slide: { clientId, image, title }, slideIndex, active }: CarouselSlideProps) => {
   const [isActive, setIsActive] = useState(false);
-  const imageFieldKey = createHomepageSlideFieldKey(slideIndex, 'image');
-  const titleFieldKey = createHomepageSlideFieldKey(slideIndex, 'title');
+  const resolvedImage = useResolvedMediaSrc(image);
+  const slideFieldId = clientId || String(slideIndex);
+  const imageFieldKey = createHomepageSlideFieldKey(slideFieldId, 'image');
+  const titleFieldKey = createHomepageSlideFieldKey(slideFieldId, 'title');
 
   useEffect(() => {
     setIsActive(active);
@@ -140,7 +143,7 @@ const CarouselSlide = ({ activeFieldKey, slide: { image, title }, slideIndex, ac
     <StyledCarouselSlide className="each-fade">
       <StyledImage
         className="image-container"
-        $image={image}
+        $image={resolvedImage}
         {...({ ['data-admin-field-key']: imageFieldKey } as Record<string, string>)}
         style={getActiveHomepagePreviewTargetStyle(imageFieldKey, activeFieldKey)}
       />

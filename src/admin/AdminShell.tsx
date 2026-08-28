@@ -35,6 +35,8 @@ import { AdminAuthProvider, useAdminAuth } from './AdminAuthProvider';
 import { BulletinMediaEditor } from './BulletinMediaEditor';
 import { ContentEditor } from './ContentEditor';
 import { DocumentContentEditor } from './documents/DocumentContentEditor';
+import { AdminUnsavedChangesProvider, useAdminUnsavedChanges } from './unsavedChanges';
+import { PreviewMediaUrlProvider } from './previewMediaUrls';
 
 import type { Theme } from '@mui/material/styles';
 import type { AdminRepoClient } from './services/adminTypes';
@@ -137,7 +139,7 @@ interface NavigationItemProps {
 
 const CHURCH_VIEW_TABS = ['details', 'staff', 'times'] as const;
 const NEWS_VIEW_TABS = ['posts', 'tags'] as const;
-const SITE_CONFIG_VIEW_TABS = ['general', 'menu'] as const;
+const SITE_CONFIG_VIEW_TABS = ['general', 'menu', 'styles'] as const;
 
 type ChurchViewTabId = (typeof CHURCH_VIEW_TABS)[number];
 type NewsViewTabId = (typeof NEWS_VIEW_TABS)[number];
@@ -151,12 +153,17 @@ function useAdminViewTabState<TValue extends string>(
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { confirmIfDirty } = useAdminUnsavedChanges();
 
   const rawValue = searchParams.get(paramName);
   const value = rawValue && allowedValues.includes(rawValue as TValue) ? (rawValue as TValue) : defaultValue;
 
   const setValue = useCallback(
     (nextValue: TValue) => {
+      if (nextValue !== value && !confirmIfDirty()) {
+        return;
+      }
+
       const nextParams = new URLSearchParams(searchParams.toString());
 
       if (nextValue === defaultValue) {
@@ -168,7 +175,7 @@ function useAdminViewTabState<TValue extends string>(
       const query = nextParams.toString();
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
     },
-    [defaultValue, paramName, pathname, router, searchParams]
+    [confirmIfDirty, defaultValue, paramName, pathname, router, searchParams, value]
   );
 
   return [value, setValue] as const;
@@ -779,6 +786,7 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
       >
         <Tab label="General Site Config" value="general" />
         <Tab label="Menu & Logo" value="menu" />
+        <Tab label="Styles" value="styles" />
       </TabbedViewTabs>
       <TabbedViewBody>
         {tab === 'general' ? (
@@ -791,6 +799,9 @@ function SiteConfigView({ onSaved, repoClient }: { onSaved: () => Promise<void>;
         ) : null}
         {tab === 'menu' ? (
           <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['menu']} />
+        ) : null}
+        {tab === 'styles' ? (
+          <ContentEditor onSaved={onSaved} repoClient={repoClient} showIntroAlert={false} visibleSections={['styles']} />
         ) : null}
       </TabbedViewBody>
     </TabbedView>
@@ -896,6 +907,9 @@ function AdminLoginPage({
           <Button variant="contained" onClick={() => void login()} disabled={isBusy}>
             Connect GitHub
           </Button>
+          <Button variant="outlined" color="inherit" href="/admin?view=help">
+            Help
+          </Button>
           <Button variant="outlined" color="inherit" href="/">
             Return to site
           </Button>
@@ -910,6 +924,7 @@ function AdminShellSurface() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { authStatus, error, login, logout, repoClient, session, startPreview } = useAdminAuth();
+  const { confirmIfDirty } = useAdminUnsavedChanges();
   const activeViewId = parseAdminViewId(searchParams.get('view'));
   const contentViews = ADMIN_VIEWS.filter(isInternalAdminView);
   const activeView = contentViews.find((view) => view.id === activeViewId) || contentViews[0];
@@ -954,6 +969,10 @@ function AdminShellSurface() {
   }, [buildAdminHref, router, searchParams, session]);
 
   function handleSelectView(viewId: AdminViewId) {
+    if (viewId !== activeView.id && !confirmIfDirty()) {
+      return;
+    }
+
     setMobileSidebarOpen(false);
     if (desktopSidebarExpanded) {
       setDesktopSidebarExpanded(false);
@@ -1102,7 +1121,7 @@ function AdminShellSurface() {
     </SidebarBody>
   );
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && activeViewId !== 'help') {
     return (
       <ShellRoot>
         <LoginWorkspace>
@@ -1137,7 +1156,11 @@ function AdminShellSurface() {
               >
                 {session.user.name}
               </Typography>
-            ) : null}
+            ) : (
+              <ShellToolbarAction variant="contained" color="primary" onClick={() => void login()} disabled={authStatus === 'authenticating'}>
+                Connect GitHub
+              </ShellToolbarAction>
+            )}
             <ShellToolbarAction variant="outlined" color="inherit" href="/">
               Return to site
             </ShellToolbarAction>
@@ -1179,7 +1202,11 @@ export default function AdminShell() {
     <ThemeProvider theme={ADMIN_THEME}>
       <CssBaseline />
       <AdminAuthProvider>
-        <AdminShellSurface />
+        <AdminUnsavedChangesProvider>
+          <PreviewMediaUrlProvider>
+            <AdminShellSurface />
+          </PreviewMediaUrlProvider>
+        </AdminUnsavedChangesProvider>
       </AdminAuthProvider>
     </ThemeProvider>
   );

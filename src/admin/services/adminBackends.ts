@@ -1,7 +1,8 @@
 import { ADMIN_AUTH, ADMIN_REPOSITORY, ADMIN_SESSION_KEYS } from '../adminConfig';
 import { GitHubRepoClient } from './githubRepoClient';
 import { NetlifyAuthError, NetlifyGitHubAuthenticator } from './netlifyGitHubAuth';
-import { PreviewRepoClient } from './previewRepoClient';
+import { clearPreviewMediaBlobs } from './previewMediaStore';
+import { PreviewRepoClient, PREVIEW_STORAGE_KEY } from './previewRepoClient';
 
 import type { AdminAuthAdapter, AdminAuthSession, SessionStoreLike } from './adminTypes';
 
@@ -19,6 +20,46 @@ function getDefaultBrowserSessionStorage(): SessionStoreLike | null {
   }
 
   return window.sessionStorage;
+}
+
+const ADMIN_CACHE_KEY_PREFIXES = [
+  'admin-github-response-cache:',
+  'admin-document-summaries:',
+  'admin-bulletin-content:'
+];
+
+function clearPrefixedStorageKeys(
+  storage: { key(index: number): string | null; length: number; removeItem(key: string): void } | null,
+  prefixes: string[]
+) {
+  if (!storage) {
+    return;
+  }
+
+  const keysToRemove: string[] = [];
+
+  for (let index = 0; index < storage.length; index += 1) {
+    const key = storage.key(index);
+
+    if (key && prefixes.some((prefix) => key.startsWith(prefix))) {
+      keysToRemove.push(key);
+    }
+  }
+
+  for (const key of keysToRemove) {
+    storage.removeItem(key);
+  }
+}
+
+function clearAdminClientCaches() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  clearPrefixedStorageKeys(window.sessionStorage, ADMIN_CACHE_KEY_PREFIXES);
+  clearPrefixedStorageKeys(window.localStorage, ADMIN_CACHE_KEY_PREFIXES);
+  window.sessionStorage.removeItem(PREVIEW_STORAGE_KEY);
+  void clearPreviewMediaBlobs();
 }
 
 function readStoredSession(storage: SessionStoreLike | null, key: string) {
@@ -132,6 +173,7 @@ export function createConnectedAdminBackend(
     },
     logout() {
       clearStoredSessions(storage, [ADMIN_SESSION_KEYS.connected, ADMIN_SESSION_KEYS.preview]);
+      clearAdminClientCaches();
       return Promise.resolve();
     },
     async restoreSession() {
@@ -188,6 +230,7 @@ export function createPreviewAdminBackend(
     },
     logout() {
       clearStoredSessions(storage, [ADMIN_SESSION_KEYS.preview]);
+      clearAdminClientCaches();
       return Promise.resolve();
     },
     restoreSession() {

@@ -121,7 +121,7 @@ const CarouselView = ({ activeFieldKey, inCMS = false, slides, details }: Carous
           {slides.map((slide, index) => (
             <CarouselSlide
               activeFieldKey={activeFieldKey}
-              key={`slide-${index}`}
+              key={slide.clientId || `slide-${index}`}
               slide={slide}
               slideIndex={index}
               active={activeSlide === index}

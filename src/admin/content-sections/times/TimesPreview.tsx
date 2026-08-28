@@ -6,9 +6,10 @@ import { useEffect, useMemo, useState } from 'react';
 import ScheduleWidget from '../../../components/schedule/ScheduleWidget';
 import { MAX_APP_WIDTH } from '../../../constants';
 import type { Times } from '../../../interface';
-import churchDetails from '../../../lib/church_details';
+import { useAdminAuth } from '../../AdminAuthProvider';
 import { handleAdminPreviewSelectionClick } from '../components/adminPreviewSelection';
 import { AdminPagePreviewFrame } from '../../AdminPagePreviewFrame';
+import { loadStructuredContent } from '../../content/writableStructuredContent';
 import { buildHomepagePreviewData, type HomepageDraft } from '../../content/writableComplexContent';
 
 interface TimesPreviewProps {
@@ -29,6 +30,8 @@ export function TimesPreview({
   times
 }: TimesPreviewProps) {
   const homepagePreview = buildHomepagePreviewData(draft);
+  const { repoClient } = useAdminAuth();
+  const [facebookPage, setFacebookPage] = useState('');
   const [previewTab, setPreviewTab] = useState(0);
   const activeCategoryIndex = useMemo(
     () => (selectedCategoryId ? times.findIndex((entry) => entry.id === selectedCategoryId) : -1),
@@ -40,6 +43,25 @@ export function TimesPreview({
       setPreviewTab(activeCategoryIndex);
     }
   }, [activeCategoryIndex]);
+
+  useEffect(() => {
+    if (!repoClient) {
+      setFacebookPage('');
+      return;
+    }
+
+    let cancelled = false;
+
+    void loadStructuredContent(repoClient, ['churchDetails']).then((content) => {
+      if (!cancelled) {
+        setFacebookPage(content.churchDetails.value.facebook_page);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [repoClient]);
 
   function handleClickCapture(event: React.MouseEvent<HTMLDivElement>) {
     handleAdminPreviewSelectionClick(event, {
@@ -61,7 +83,7 @@ export function TimesPreview({
           details={homepagePreview.schedule_section}
           liveStreamButton={homepagePreview.live_stream_button}
           invitationText={homepagePreview.invitation_text}
-          facebookPage={churchDetails.facebook_page}
+          facebookPage={facebookPage}
           tab={previewTab}
           onTabChange={(nextTab) => setPreviewTab(nextTab)}
         />

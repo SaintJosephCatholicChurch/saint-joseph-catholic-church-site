@@ -8,7 +8,7 @@ export const ADMIN_AUTH = {
   baseUrl: 'https://api.netlify.com',
   authEndpoint: 'auth',
   authScope: 'repo',
-  siteId: ''
+  siteId: process.env.NEXT_PUBLIC_NETLIFY_SITE_ID || ''
 } as const;
 
 export const ADMIN_SESSION_KEYS = {

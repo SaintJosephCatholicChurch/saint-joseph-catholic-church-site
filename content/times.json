@@ -61,15 +61,13 @@
               "day": "Monday",
               "times": [
                 {
+                  "id": "53d417c3-5788-43a5-b2e5-8e133333da29",
                   "notes": [
                     {
-                      "note": "No Public Mass",
-                      "id": "def40232-aaa7-4235-8231-f3d29c235e44"
+                      "id": "d5433ba6-104d-4abd-ac49-8555a4540375",
+                      "note": "No Public Mass"
                     }
-                  ],
-                  "time": "",
-                  "end_time": "",
-                  "id": "a7392c84-9d2b-458a-bad2-d33a6ef39217"
+                  ]
                 }
               ],
               "id": "72ea0383-b76d-42a1-8aa4-7c4d6ac88123"
@@ -80,22 +78,21 @@
                 {
                   "time": "8:00 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c",
-                  "notes": [
-                    {
-                      "id": "6f0f0733-42e5-43a6-898e-404e1708d09d",
-                      "note": "No Public Mass May 12, 2026"
-                    }
-                  ]
+                  "notes": []
                 },
                 {
                   "notes": [
                     {
-                      "note": "Adoration from 7:00 - 8:00 AM",
+                      "note": "Adoration from 7:00-8:00 AM",
                       "id": "1b8b52c8-43d8-470a-9913-ce9b9f35c300"
                     },
                     {
-                      "note": "Confession from 8:30 - 9:00 AM",
+                      "note": "Confession from 8:30-9:00 AM",
                       "id": "0e8e8ee9-ef84-475f-b206-a39188dbe6ba"
+                    },
+                    {
+                      "id": "14ca53f5-a53a-4057-8aa2-8838240ee963",
+                      "note": "No Public Mass August 25, 2026"
                     }
                   ],
                   "id": "7570bc61-12f2-4352-9217-0d9ff4109dd5"
@@ -115,8 +112,12 @@
                 {
                   "notes": [
                     {
-                      "note": "Adoration and Confession from 6:00 - 7:00 PM",
+                      "note": "Adoration and Confession from 6:00-6:45 PM",
                       "id": "785e4882-d7d0-4579-9c77-d49310f18884"
+                    },
+                    {
+                      "id": "eb878a3f-6d11-485e-b24c-38c3bd24bd2c",
+                      "note": "No Public Mass on  August 26, 2026"
                     }
                   ],
                   "id": "65a42201-52f6-4baa-b36a-18c37f1ff6db"
@@ -133,8 +134,17 @@
                   "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
                   "notes": [
                     {
-                      "id": "49208a2a-763b-46ec-bd8f-b00b178da952",
-                      "note": "No Public Mass May 7, 2026"
+                      "id": "e6f96318-7f6d-4ef5-b0ed-fecb75b6e48d",
+                      "note": ""
+                    }
+                  ]
+                },
+                {
+                  "id": "6a5e4d61-fc0b-4b0e-947c-fc3ef5aaad0a",
+                  "notes": [
+                    {
+                      "id": "eba1d432-df92-4e40-b9be-ea2d1ea71b1e",
+                      "note": "No Public Mass on August 27, 2026"
                     }
                   ]
                 }
@@ -189,6 +199,10 @@
             }
           ],
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
+        },
+        {
+          "id": "dd90e1e0-6ffb-4aa3-b811-29ca71f17584",
+          "name": ""
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
@@ -206,7 +220,21 @@
                   "time": "9:00 AM",
                   "end_time": "4:00 PM",
                   "id": "8095da27-90eb-4eb0-b700-4cc1d53af02f",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "8360144c-9e0a-4350-a3b5-480d73838add",
+                      "note": ""
+                    }
+                  ]
+                },
+                {
+                  "id": "edbaa928-23c9-4cd6-a2ef-006abd433006",
+                  "notes": [
+                    {
+                      "id": "0d769238-dac0-49dd-98f9-0f8aa9c5ce53",
+                      "note": ""
+                    }
+                  ]
                 }
               ],
               "id": "f5b3bedc-f8af-412a-a3b8-5d43315bf548"
@@ -358,7 +386,7 @@
         },
         {
           "id": "f1c3dc55-662f-45d0-9e32-881e2c3acbfa",
-          "name": "Confessions During Parish Renovations - December 30, 2026",
+          "name": "Confessions During Parish Renovations - December 30, 2025 - August 2026",
           "days": [
             {
               "id": "6f5a3f5e-ef0c-4365-826f-21f9c2e0c767",
@@ -369,7 +397,7 @@
                   "notes": [
                     {
                       "id": "3248c485-22ec-440f-8967-d47584c20e52",
-                      "note": "Note: During renovations, confessions will heard in Room 208, opposite the Parish Conference Room."
+                      "note": "Note: During renovations, confessions will now be heard in Fr. David's Office (next to the Parish Office)"
                     }
                   ]
                 }
@@ -457,43 +485,25 @@
       "name": "Stations of the Cross",
       "sections": [
         {
-          "id": "57c21468-9e74-468b-b395-462ddc360f12",
-          "name": "Stations of the Cross",
+          "id": "99704f3e-0d32-4803-b239-0062de0150e7",
+          "name": "Memorial Day - May 25, 2026",
           "days": [
             {
-              "id": "437e6fd3-7c01-4459-8541-2787160180da",
-              "day": "Fridays during Lent",
+              "id": "7689161d-a4ce-4e95-9f86-f1ea476bc656",
+              "day": "Mass",
               "times": [
                 {
-                  "id": "77c2ed87-7d7d-4e0d-944a-94d7feed9d03",
-                  "time": "7:00 PM"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "c0961c46-d943-49d2-a301-c3654f08ddfb",
-          "name": "Lenten Soup Suppers",
-          "days": [
-            {
-              "id": "d30b12a5-d909-427e-a9fa-eb3244128b55",
-              "day": "Fridays during Lent",
-              "times": [
-                {
-                  "id": "d2072c24-32cf-4c49-8f39-893ea630f89a",
-                  "time": "6:00 PM",
-                  "end_time": "6:40 PM",
-                  "notes": [
-                    {
-                      "id": "ea33ef56-bae1-4639-a909-cd3d1704f9f4",
-                      "note": ""
-                    }
-                  ]
+                  "id": "31d1096c-5998-4182-8ad1-588c4cdbf308",
+                  "time": "10:00 AM"
                 },
                 {
-                  "id": "8dc489d6-d141-4ba3-abcf-7280ef945eb3",
-                  "notes": []
+                  "id": "ab503bec-f71a-4687-920f-3c5059eea7cb",
+                  "notes": [
+                    {
+                      "id": "837a4a97-7a78-4832-a1d4-f38757719a3d",
+                      "note": "Mass at St. Joseph Catholic Cemetery (103 Elm Grove Rd, Bluffton)"
+                    }
+                  ]
                 }
               ]
             }

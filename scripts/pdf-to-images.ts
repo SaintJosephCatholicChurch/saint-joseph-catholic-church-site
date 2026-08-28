@@ -7,7 +7,7 @@ import { join } from 'path';
 import { PDFExtract } from 'pdf.js-extract';
 import webp from 'webp-converter';
 
-import { fetchBulletins, normalizeBulletinPdfPath } from '../src/lib/bulletins';
+import { fetchBulletins, getBulletinPdfPaths, normalizeBulletinPdfPath } from '../src/lib/bulletins';
 // eslint-disable-next-line import/default
 import pdfImg from '../src/util/pdf/pdf-img-convert';
 
@@ -181,79 +181,77 @@ function fixCommonBulletinErrors(textContent: string) {
   let bulletinsProcessed = 0;
   const bulletins = fetchBulletins();
   for (const bulletin of bulletins) {
-    if (!bulletin.pdf) {
-      continue;
-    }
+    for (const pdfPath of getBulletinPdfPaths(bulletin)) {
+      const normalizedPdfPath = normalizeBulletinPdfPath(pdfPath);
+      const pdfFullPath = join(publicPath, normalizedPdfPath.replace(/^\/+/, ''));
 
-    const normalizedPdfPath = normalizeBulletinPdfPath(bulletin.pdf);
-    const pdfFullPath = join(publicPath, normalizedPdfPath.replace(/^\/+/, ''));
+      const folderPath = normalizedPdfPath.replace(/\.pdf$/g, '');
+      const folderFullPath = join(publicPath, folderPath.replace(/^\/+/, ''));
+      if (existsSync(folderFullPath)) {
+        continue;
+      }
 
-    const folderPath = normalizedPdfPath.replace(/\.pdf$/g, '');
-    const folderFullPath = join(publicPath, folderPath.replace(/^\/+/, ''));
-    if (existsSync(folderFullPath)) {
-      continue;
-    }
+      mkdirSync(folderFullPath);
 
-    mkdirSync(folderFullPath);
+      const pageImages: string[] = [];
+      let textContent = '';
 
-    const pageImages: string[] = [];
-    let textContent = '';
+      try {
+        const images = await pdfImg.convert(pdfFullPath, {
+          width: 1224,
+          height: 1584
+        });
 
-    try {
-      const images = await pdfImg.convert(pdfFullPath, {
-        width: 1224,
-        height: 1584
-      });
+        for (let i = 0; i < images.length; i++) {
+          const imageFullPathJpg = join(folderFullPath, `${i + 1}.jpg`);
+          const imageFullPathWebp = join(folderFullPath, `${i + 1}.webp`);
 
-      for (let i = 0; i < images.length; i++) {
-        const imageFullPathJpg = join(folderFullPath, `${i + 1}.jpg`);
-        const imageFullPathWebp = join(folderFullPath, `${i + 1}.webp`);
-
-        try {
-          writeFileSync(imageFullPathJpg, images[i]);
-          await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
-          rmSync(imageFullPathJpg);
-          pageImages.push(`${folderPath}/${i + 1}.webp`);
-        } catch (error: unknown) {
-          if (error && error instanceof Error) {
-            console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);
-          } else {
-            console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
+          try {
+            writeFileSync(imageFullPathJpg, images[i]);
+            await webp.cwebp(imageFullPathJpg, imageFullPathWebp, '-q 80', '-v');
+            rmSync(imageFullPathJpg);
+            pageImages.push(`${folderPath}/${i + 1}.webp`);
+          } catch (error: unknown) {
+            if (error && error instanceof Error) {
+              console.error(`Error generating page ${i + 1} image for ${pdfFullPath}: ${error.toString()}`);
+            } else {
+              console.error(`Unknown error generating page ${i + 1} image for ${pdfFullPath}`);
+            }
           }
         }
+      } catch (e) {
+        console.error('Failed to create images', e);
       }
-    } catch (e) {
-      console.error('Failed to create images', e);
-    }
 
-    try {
       try {
-        const pdfData = await pdfExtract.extract(pdfFullPath, options);
-        textContent = pdfData.pages
-          .map((page) => page.content.map((content) => content.str).join(' '))
-          .join(' ')
-          .replace(/[ ]{2}/g, ' ')
-          .replace(/[^a-z0-9 ]/gi, '');
-      } catch (error: unknown) {
-        if (error && error instanceof Error) {
-          console.error(`Error generating text content for ${pdfFullPath}: ${error.toString()}`);
-        } else {
-          console.error(`Unknown error generating text content for ${pdfFullPath}`);
+        try {
+          const pdfData = await pdfExtract.extract(pdfFullPath, options);
+          textContent = pdfData.pages
+            .map((page) => page.content.map((content) => content.str).join(' '))
+            .join(' ')
+            .replace(/[ ]{2}/g, ' ')
+            .replace(/[^a-z0-9 ]/gi, '');
+        } catch (error: unknown) {
+          if (error && error instanceof Error) {
+            console.error(`Error generating text content for ${pdfFullPath}: ${error.toString()}`);
+          } else {
+            console.error(`Unknown error generating text content for ${pdfFullPath}`);
+          }
+          textContent = '';
         }
-        textContent = '';
+      } catch (e) {
+        console.error('Failed to get text', e);
       }
-    } catch (e) {
-      console.error('Failed to get text', e);
+
+      const metaFullPath = join(folderFullPath, 'meta.json');
+      const data: BulletinPDFMeta = {
+        pages: pageImages,
+        text: fixCommonBulletinErrors(textContent)
+      };
+
+      writeFileSync(metaFullPath, JSON.stringify(data, null, 2));
+      bulletinsProcessed++;
     }
-
-    const metaFullPath = join(folderFullPath, 'meta.json');
-    const data: BulletinPDFMeta = {
-      pages: pageImages,
-      text: fixCommonBulletinErrors(textContent)
-    };
-
-    writeFileSync(metaFullPath, JSON.stringify(data, null, 2));
-    bulletinsProcessed++;
   }
 
   if (bulletinsProcessed === 0) {

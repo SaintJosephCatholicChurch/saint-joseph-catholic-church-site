@@ -1,4 +1,7 @@
 import { styled } from '@mui/material/styles';
+import type { MouseEvent } from 'react';
+
+import { scrollToHelpHeading } from './scrollToHelpHeading';
 
 import type { NestedHeading } from './HelpTableOfContents';
 
@@ -45,6 +48,12 @@ const StyledListItem = styled('li')`
   }
 `;
 
+function handleHeadingClick(event: MouseEvent<HTMLAnchorElement>, id: string) {
+  event.preventDefault();
+  event.stopPropagation();
+  scrollToHelpHeading(id);
+}
+
 interface HelpHeadingsProps {
   headings: NestedHeading[];
   activeId: string | undefined;
@@ -54,30 +63,14 @@ const HelpHeadings = ({ headings, activeId }: HelpHeadingsProps) => (
   <StyledList>
     {headings.map((heading) => (
       <StyledListItem key={heading.id} className={heading.id === activeId ? 'active' : ''}>
-        <a
-          href={`#${heading.id}`}
-          onClick={(e) => {
-            e.preventDefault();
-            document.querySelector(`#${heading.id}`).scrollIntoView({
-              behavior: 'smooth'
-            });
-          }}
-        >
+        <a href={`#${heading.id}`} onClick={(event) => handleHeadingClick(event, heading.id)}>
           {heading.title}
         </a>
         {heading.items.length > 0 && (
           <StyledList>
             {heading.items.map((child) => (
               <StyledListItem key={child.id} className={child.id === activeId ? 'active' : ''}>
-                <a
-                  href={`#${child.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector(`#${child.id}`).scrollIntoView({
-                      behavior: 'smooth'
-                    });
-                  }}
-                >
+                <a href={`#${child.id}`} onClick={(event) => handleHeadingClick(event, child.id)}>
                   {child.title}
                 </a>
               </StyledListItem>

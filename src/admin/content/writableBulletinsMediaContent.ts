@@ -1,3 +1,4 @@
+import { getBulletinPdfPaths } from '../../components/pages/custom/bulletins/util';
 import {
   ChurchSiteContentRepository,
   SITE_MEDIA_RULES,
@@ -46,7 +47,7 @@ export interface MediaAsset {
 export interface BulletinDraft {
   date: string;
   name: string;
-  pdf: string;
+  pdfs: string[];
 }
 
 export interface BulletinSummary {
@@ -54,7 +55,7 @@ export interface BulletinSummary {
   id: string;
   name: string;
   path: string;
-  pdf: string;
+  pdfs: string[];
 }
 
 export interface BulletinMediaContent {
@@ -94,11 +95,6 @@ function trimRequiredValue(value: string, label: string) {
   }
 
   return trimmedValue;
-}
-
-function normalizeOptionalValue(value: string) {
-  const trimmedValue = value.trim();
-  return trimmedValue ? trimmedValue : undefined;
 }
 
 function sanitizeUploadedFileName(fileName: string) {
@@ -183,6 +179,54 @@ function validateBulletinPdfPath(value: string | undefined) {
   }
 }
 
+function normalizeBulletinDraftPdfs(pdfs: string[]) {
+  const normalizedPdfs: string[] = [];
+
+  for (const pdf of pdfs) {
+    const trimmedPdf = pdf.trim();
+    if (!trimmedPdf) {
+      continue;
+    }
+
+    validateBulletinPdfPath(trimmedPdf);
+
+    if (normalizedPdfs.includes(trimmedPdf)) {
+      throw new Error('Each bulletin PDF can only be attached once.');
+    }
+
+    normalizedPdfs.push(trimmedPdf);
+  }
+
+  return normalizedPdfs;
+}
+
+function serializeBulletinPdfFields(pdfs: string[]): Pick<Bulletin, 'pdf' | 'pdfs'> {
+  if (pdfs.length === 0) {
+    return {};
+  }
+
+  if (pdfs.length === 1) {
+    return { pdf: pdfs[0] };
+  }
+
+  return {
+    pdf: pdfs[0],
+    pdfs
+  };
+}
+
+export function getBulletinPdfListLabel(pdfs: string[]) {
+  if (pdfs.length === 0) {
+    return 'No linked PDF';
+  }
+
+  if (pdfs.length === 1) {
+    return fileNameFromPath(pdfs[0]);
+  }
+
+  return `${pdfs.length} PDFs`;
+}
+
 export function isImageAsset(path: string) {
   return IMAGE_FILE_REGEX.test(path);
 }
@@ -195,19 +239,19 @@ export function createMediaInsertionMarkup(asset: Pick<MediaAsset, 'kind' | 'nam
   return `<a target="_blank" href="${asset.publicPath}">${asset.name}</a>`;
 }
 
-export function createEmptyBulletinDraft() {
+export function createEmptyBulletinDraft(): BulletinDraft {
   return {
     date: '',
     name: '',
-    pdf: ''
-  } satisfies BulletinDraft;
+    pdfs: []
+  };
 }
 
 export function createBulletinDraft(bulletin: StoredContentValue<Bulletin>): BulletinDraft {
   return {
     date: bulletin.value.date || '',
     name: bulletin.value.name || '',
-    pdf: bulletin.value.pdf || ''
+    pdfs: getBulletinPdfPaths(bulletin.value)
   };
 }
 
@@ -217,7 +261,7 @@ export function createBulletinSummaries(content: BulletinMediaContent): Bulletin
     id: buildBulletinId(bulletin.path),
     name: bulletin.value.name || 'Untitled bulletin',
     path: bulletin.path,
-    pdf: bulletin.value.pdf || ''
+    pdfs: getBulletinPdfPaths(bulletin.value)
   }));
 }
 
@@ -305,9 +349,8 @@ export async function saveBulletin(
   const repository = new ChurchSiteContentRepository(repoClient);
   const date = trimRequiredValue(input.draft.date, 'Bulletin date');
   const name = trimRequiredValue(input.draft.name, 'Bulletin name');
-  const pdf = normalizeOptionalValue(input.draft.pdf);
-
-  validateBulletinPdfPath(pdf);
+  const pdfs = normalizeBulletinDraftPdfs(input.draft.pdfs);
+  const pdfFields = serializeBulletinPdfFields(pdfs);
 
   const currentPath = input.bulletin?.path;
   const nextPath = siteContentAdapters.bulletins.buildPath(date);
@@ -326,7 +369,7 @@ export async function saveBulletin(
     value: {
       date,
       name,
-      pdf
+      ...pdfFields
     }
   });
 
@@ -344,7 +387,7 @@ export async function saveBulletin(
     value: {
       date,
       name,
-      pdf
+      ...pdfFields
     }
   };
   const remainingBulletins = input.content.bulletins.filter(

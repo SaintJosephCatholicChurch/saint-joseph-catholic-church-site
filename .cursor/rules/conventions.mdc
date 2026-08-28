@@ -1,0 +1,22 @@
+---
+description: Core coding, stack, and verification conventions for this repo
+alwaysApply: true
+---
+
+# Core conventions
+
+- This is a **Next.js 16 App Router static export** (`output: 'export'`). Do not add Next API routes, Pages Router files, or request-time SSR data.
+- Keep **webpack**: `next dev --webpack` / `next build --webpack`. Do not switch to Turbopack until custom `?raw` loaders and PWA are revalidated.
+- Leave **PWA off** unless `NEXT_ENABLE_PWA=true` is set on purpose. Production TypeScript ignores build errors; always run `npm run type-check` locally.
+- Prefer **relative imports**. Use `import type { X } from '...'`. Prettier: single quotes, no trailing commas, print width 120.
+- Import MUI as a default or 2nd-level path, never the barrel and never 3rd-level:
+
+```ts
+import Button from '@mui/material/Button';
+import type { SxProps, Theme } from '@mui/material/styles';
+```
+
+- Domain types live in `src/interface.ts`. Do not introduce Tailwind, a headless CMS, Prisma, or NextAuth.
+- `npm run lint` only covers `**/*.ts`. Validate TSX with `type-check` and `build`.
+- Do not treat `src/app/README.md`, `README.md`'s `local-cms` step, or stale paths in `plan.md` as current. Trust the source tree.
+- Keep `.github/copilot-instructions.md` in sync when changing these rules or `AGENTS.md`.

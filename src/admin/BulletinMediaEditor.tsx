@@ -1,12 +1,18 @@
 'use client';
 
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
@@ -17,6 +23,7 @@ import { useTheme } from '@mui/material/styles';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { arrayMoveImmutable } from '../util/array.util';
 import { AdminSelectableCard } from './components/AdminCards';
 import {
   AdminCompactActionBar,
@@ -27,17 +34,19 @@ import {
   AdminStatusStack
 } from './components/AdminWorkspace';
 import { AdminDialogTitle } from './components/AdminDialogTitle';
-import { AdminFilePathField } from './components/AdminFilePathField';
+import { AdminSupportPreviewInset, AdminSupportPreviewSurface } from './components/AdminSupport';
 import { AdminMediaLibrary, AdminMediaLibraryViewToggle, type MediaLibraryViewMode } from './AdminMediaLibrary';
 import {
   createEmptyBulletinDraft,
   createBulletinDraft,
   createBulletinSummaries,
+  getBulletinPdfListLabel,
   loadBulletinMediaContent,
   saveBulletin,
   type BulletinDraft,
   type BulletinMediaContent,
-  type BulletinSummary
+  type BulletinSummary,
+  type MediaAsset
 } from './content/writableBulletinsMediaContent';
 
 import type { AdminRepoClient } from './services/adminTypes';
@@ -88,6 +97,89 @@ function formatDate(dateStr: string): string {
     day: 'numeric',
     year: 'numeric'
   });
+}
+
+function SortableBulletinPdfRow({
+  id,
+  onChange,
+  onRemove,
+  pdfPath
+}: {
+  id: string;
+  onChange: () => void;
+  onRemove: () => void;
+  pdfPath: string;
+}) {
+  const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const fileName = pdfPath.split('/').pop() || pdfPath;
+
+  return (
+    <Stack
+      ref={setNodeRef}
+      direction="row"
+      spacing={1.25}
+      alignItems="center"
+      sx={{
+        background: '#fbfaf8',
+        border: '1px solid rgba(191, 48, 60, 0.12)',
+        borderRadius: '4px',
+        opacity: isDragging ? 0.92 : 1,
+        p: 1.25,
+        transform: CSS.Transform.toString(transform),
+        transition
+      }}
+    >
+      <IconButton
+        aria-label={`Reorder ${fileName}`}
+        size="small"
+        {...attributes}
+        {...listeners}
+        sx={{ color: '#7a5d50', cursor: isDragging ? 'grabbing' : 'grab', flexShrink: 0 }}
+      >
+        <DragIndicatorIcon fontSize="small" />
+      </IconButton>
+      <AdminSupportPreviewSurface sx={{ flex: 1, minWidth: 0, p: 1.25 }}>
+        <Stack direction="row" spacing={1.25} alignItems="center" sx={{ minWidth: 0 }}>
+          <AdminSupportPreviewInset
+            sx={{
+              color: '#7f232c',
+              flexShrink: 0,
+              p: 1
+            }}
+          >
+            <PictureAsPdfIcon fontSize="small" />
+          </AdminSupportPreviewInset>
+          <Stack spacing={0.25} sx={{ minWidth: 0 }}>
+            <Typography sx={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {fileName}
+            </Typography>
+            <Typography
+              sx={{
+                color: '#6a5448',
+                fontSize: '0.82rem',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {pdfPath}
+            </Typography>
+          </Stack>
+        </Stack>
+      </AdminSupportPreviewSurface>
+      <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
+        <Button color="inherit" href={pdfPath} rel="noreferrer" size="small" target="_blank" variant="outlined">
+          Open
+        </Button>
+        <Button onClick={onChange} size="small" variant="outlined">
+          Change
+        </Button>
+        <IconButton aria-label={`Remove ${fileName}`} onClick={onRemove} size="small">
+          <DeleteOutlineIcon fontSize="small" />
+        </IconButton>
+      </Stack>
+    </Stack>
+  );
 }
 
 function BulletinListCard({
@@ -158,7 +250,7 @@ function BulletinListCard({
               whiteSpace: 'nowrap'
             }}
           >
-            {item.pdf ? item.pdf.split('/').pop() || item.pdf : 'No linked PDF'}
+            {getBulletinPdfListLabel(item.pdfs)}
           </Typography>
         </Stack>
       ) : (
@@ -182,7 +274,7 @@ function BulletinListCard({
               textOverflow: 'ellipsis'
             }}
           >
-            {item.pdf ? item.pdf.split('/').pop() || item.pdf : 'No linked PDF'}
+            {getBulletinPdfListLabel(item.pdfs)}
           </Typography>
         </Box>
       )}
@@ -212,9 +304,10 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
   const routedBulletinId = searchParams.get(BULLETIN_SELECTION_QUERY_PARAM);
   const [editorState, setEditorState] = useState<BulletinEditorState>(INITIAL_EDITOR_STATE);
   const [draft, setDraft] = useState<BulletinDraft>(createEmptyBulletinDraft());
-  const [pdfPickerOpen, setPdfPickerOpen] = useState(false);
+  const [pdfPickerTarget, setPdfPickerTarget] = useState<number | 'append' | null>(null);
   const [mediaLibraryViewMode, setMediaLibraryViewMode] = useState<MediaLibraryViewMode>('list');
   const selectedBulletinIdRef = useRef(INITIAL_EDITOR_STATE.selectedBulletinId);
+  const sortableSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
   const buildSelectionHref = useCallback(
     (bulletinId: string | null) => {
@@ -352,6 +445,64 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       saveMessage: null,
       saveStatus: 'idle'
     }));
+  }
+
+  function handlePdfsDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const oldIndex = draft.pdfs.indexOf(String(active.id));
+    const newIndex = draft.pdfs.indexOf(String(over.id));
+    if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex) {
+      return;
+    }
+
+    updateDraft({ pdfs: arrayMoveImmutable(draft.pdfs, oldIndex, newIndex) });
+  }
+
+  function removePdf(index: number) {
+    updateDraft({ pdfs: draft.pdfs.filter((_, pdfIndex) => pdfIndex !== index) });
+  }
+
+  function handleSelectedPdf(asset: MediaAsset) {
+    const nextPath = asset.publicPath;
+    const existingIndex = draft.pdfs.indexOf(nextPath);
+
+    if (pdfPickerTarget === 'append') {
+      if (existingIndex >= 0) {
+        setEditorState((currentState) => ({
+          ...currentState,
+          saveError: 'That PDF is already attached to this bulletin.',
+          saveStatus: 'error'
+        }));
+        return;
+      }
+
+      updateDraft({ pdfs: [...draft.pdfs, nextPath] });
+      setPdfPickerTarget(null);
+      return;
+    }
+
+    if (typeof pdfPickerTarget !== 'number') {
+      return;
+    }
+
+    if (existingIndex >= 0 && existingIndex !== pdfPickerTarget) {
+      setEditorState((currentState) => ({
+        ...currentState,
+        saveError: 'That PDF is already attached to this bulletin.',
+        saveStatus: 'error'
+      }));
+      return;
+    }
+
+    const nextPdfs = [...draft.pdfs];
+    nextPdfs[pdfPickerTarget] = nextPath;
+    updateDraft({ pdfs: nextPdfs });
+    setPdfPickerTarget(null);
   }
 
   async function refreshContent(options?: { preserveDraft?: boolean; selectedBulletinId?: string }) {
@@ -574,16 +725,40 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
                 </Stack>
 
                 <Stack spacing={1.5}>
-                  <Typography sx={{ fontWeight: 700 }}>Linked PDF</Typography>
-                  <AdminFilePathField
-                    buttonLabel="Select PDF"
-                    onSelectFile={() => setPdfPickerOpen(true)}
-                    openLabel="Open PDF"
-                    value={draft.pdf}
-                  />
+                  <Stack direction="row" spacing={1.5} alignItems="center" justifyContent="space-between">
+                    <Typography sx={{ fontWeight: 700 }}>Linked PDFs</Typography>
+                    <Button onClick={() => setPdfPickerTarget('append')} startIcon={<AddIcon />} variant="outlined">
+                      Add PDF
+                    </Button>
+                  </Stack>
+                  {draft.pdfs.length > 0 ? (
+                    <DndContext
+                      collisionDetection={closestCenter}
+                      onDragEnd={handlePdfsDragEnd}
+                      sensors={sortableSensors}
+                    >
+                      <SortableContext items={draft.pdfs} strategy={verticalListSortingStrategy}>
+                        <Stack spacing={1.25}>
+                          {draft.pdfs.map((pdfPath, index) => (
+                            <SortableBulletinPdfRow
+                              key={pdfPath}
+                              id={pdfPath}
+                              onChange={() => setPdfPickerTarget(index)}
+                              onRemove={() => removePdf(index)}
+                              pdfPath={pdfPath}
+                            />
+                          ))}
+                        </Stack>
+                      </SortableContext>
+                    </DndContext>
+                  ) : (
+                    <Typography sx={{ color: '#6a5448', fontSize: '0.82rem', lineHeight: 1.6 }}>
+                      No PDFs are attached yet.
+                    </Typography>
+                  )}
                   <Typography sx={{ color: '#6a5448', fontSize: '0.82rem', lineHeight: 1.6 }}>
-                    Bulletin PDFs must stay under /bulletins. Use the picker to select an existing PDF or upload a new
-                    one.
+                    Bulletin PDFs must stay under /bulletins. Drag to reorder them; the public bulletin viewer shows
+                    their pages in this order after the PDFs are processed into images.
                   </Typography>
                 </Stack>
                 {!activeBulletin ? (
@@ -597,22 +772,19 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
         ) : null}
       </Stack>
 
-      <Dialog fullWidth maxWidth="lg" onClose={() => setPdfPickerOpen(false)} open={pdfPickerOpen}>
+      <Dialog fullWidth maxWidth="lg" onClose={() => setPdfPickerTarget(null)} open={pdfPickerTarget !== null}>
         <AdminDialogTitle
           actions={<AdminMediaLibraryViewToggle value={mediaLibraryViewMode} onChange={setMediaLibraryViewMode} />}
-          onClose={() => setPdfPickerOpen(false)}
+          onClose={() => setPdfPickerTarget(null)}
         >
           Select or upload bulletin PDF
         </AdminDialogTitle>
         <DialogContent dividers>
           <AdminMediaLibrary
             allowedFolderIds={['bulletins']}
-            currentAssetPublicPath={draft.pdf || undefined}
+            currentAssetPublicPath={typeof pdfPickerTarget === 'number' ? draft.pdfs[pdfPickerTarget] : undefined}
             onChange={handleMediaChanged}
-            onSelectAsset={(asset) => {
-              updateDraft({ pdf: asset.publicPath });
-              setPdfPickerOpen(false);
-            }}
+            onSelectAsset={handleSelectedPdf}
             repoClient={repoClient}
             selectionFilter="files"
             selectionLabel="Use selected PDF"

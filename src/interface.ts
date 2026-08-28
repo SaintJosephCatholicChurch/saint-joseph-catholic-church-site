@@ -123,6 +123,7 @@ export interface Bulletin {
   readonly name?: string;
   readonly date?: string;
   readonly pdf?: string;
+  readonly pdfs?: string[];
 }
 
 export interface BulletinPDFMeta {

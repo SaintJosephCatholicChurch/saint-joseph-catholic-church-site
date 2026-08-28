@@ -63,6 +63,7 @@ const StyledContent = styled('main')`
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: #1f2022;
+    scroll-margin-top: 12px;
   }
 
   h3 {
@@ -73,6 +74,7 @@ const StyledContent = styled('main')`
     line-height: 1.2;
     letter-spacing: -0.015em;
     color: #2f3136;
+    scroll-margin-top: 12px;
   }
 
   h4,
@@ -278,7 +280,8 @@ const HelpContent = () => {
           <strong>Date</strong> - The bulletin&apos;s date.
         </li>
         <li>
-          <strong>PDF</strong> - The PDF bulletin file.
+          <strong>PDFs</strong> - One or more PDF files under <code>/bulletins</code>. Drag to reorder them. The public
+          bulletin viewer shows every page from every PDF in this order after the files are processed into images.
         </li>
       </ul>
       <HelpHeading variant="h2">News</HelpHeading>
@@ -289,6 +292,11 @@ const HelpContent = () => {
       <p>This tab controls all the posts that appear on the News page.</p>
       <p>This section includes:</p>
       <ul>
+        <li>
+          <strong>Slug</strong> - The url path for the post. (
+          <code>https://stjosephchurchbluffton.org/news/[slug]</code>) Changing an existing slug updates that URL after
+          the next site deploy; the previous address will no longer work.
+        </li>
         <li>
           <strong>Title</strong> - The post&apos;s title.
         </li>

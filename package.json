@@ -19,7 +19,7 @@
     "smoke:serve:static": "node ./scripts/serve-export.mjs --root out --port 4173",
     "smoke:test": "playwright test",
     "smoke:test:update": "playwright test --update-snapshots",
-    "start": "next start",
+    "start": "npm run dev",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --watch"
   },
@@ -112,5 +112,11 @@
     "trailingComma": "none",
     "singleQuote": true,
     "printWidth": 120
+  },
+  "allowScripts": {
+    "canvas@3.2.3": true,
+    "netlify-cli@24.11.3": true,
+    "esbuild@0.27.3": true,
+    "sharp@0.34.5": true
   }
 }

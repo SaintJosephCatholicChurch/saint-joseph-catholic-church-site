@@ -1,10 +1,8 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import DownloadIcon from '@mui/icons-material/Download';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
@@ -19,6 +17,7 @@ import { isNotNullish } from '../../../../util/null.util';
 import transientOptions from '../../../../util/transientOptions';
 import useWindowSize from '../../../../util/useWindowSize';
 import PageTitle from '../../PageTitle';
+import BulletinPdfDownloadButton from './BulletinPdfDownloadButton';
 import BulletListButton from './BulletListButton';
 import { getFormattedBulletinTitle, useFormattedBulletinTitle } from './util';
 
@@ -338,10 +337,10 @@ const StyledImage = styled('img')(
 
 interface BulletinListRowProps {
   bulletins: Bulletin[];
-  selectedPdf: string;
+  selectedDate: string;
 }
 
-const BulletinListRow = ({ index, style, bulletins, selectedPdf }: RowComponentProps<BulletinListRowProps>) => {
+const BulletinListRow = ({ index, style, bulletins, selectedDate }: RowComponentProps<BulletinListRowProps>) => {
   const activeBulletin = bulletins[index];
 
   return (
@@ -349,7 +348,7 @@ const BulletinListRow = ({ index, style, bulletins, selectedPdf }: RowComponentP
       key={`bulletin-${index}`}
       style={style}
       bulletin={activeBulletin}
-      selected={activeBulletin.pdf === selectedPdf}
+      selected={activeBulletin.date === selectedDate}
     />
   );
 };
@@ -380,8 +379,8 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const router = useRouter();
 
   const onBulletinChange = useCallback(
-    (pdf: string) => {
-      const newBulletin = bulletins.find((aBulletin) => aBulletin.pdf === pdf);
+    (date: string) => {
+      const newBulletin = bulletins.find((aBulletin) => aBulletin.date === date);
       if (isNotNullish(newBulletin)) {
         router.push(`/parish-bulletins/${newBulletin.date}`);
       }
@@ -429,7 +428,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   const bulletinMenuItems = useMemo(
     () =>
       bulletins?.map((aBulletin, index) => (
-        <MenuItem key={`bulletin-menu-item-${index}`} value={aBulletin.pdf}>
+        <MenuItem key={`bulletin-menu-item-${index}`} value={aBulletin.date}>
           {getFormattedBulletinTitle(aBulletin)}
         </MenuItem>
       )),
@@ -442,7 +441,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
   useEffect(() => {
     if (bulletin != null && listRef.current) {
       listRef.current.scrollToRow({
-        index: bulletins.findIndex((b) => b.pdf === bulletin.pdf),
+        index: bulletins.findIndex((b) => b.date === bulletin.date),
         align: 'start'
       });
     }
@@ -469,7 +468,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
             rowHeight={60}
             rowProps={{
               bulletins: bulletins ?? [],
-              selectedPdf: bulletin.pdf
+              selectedDate: bulletin.date ?? ''
             }}
             overscanCount={5}
             style={{
@@ -484,22 +483,14 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
             <Select
               labelId="bulletin-label"
               id="bulletin"
-              value={bulletin.pdf}
+              value={bulletin.date ?? ''}
               label="Bulletin"
               onChange={(event) => onBulletinChange(event.target.value)}
             >
               {bulletinMenuItems}
             </Select>
           </FormControl>
-          <IconButton
-            href={bulletin.pdf}
-            target="_blank"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-          >
-            <DownloadIcon />
-          </IconButton>
+          <BulletinPdfDownloadButton bulletin={bulletin} />
         </StyledSelectWrapper>
         <StyledPDFViewerWrapper $width={width} $height={height}>
           <StyledPDFViewer>
@@ -509,7 +500,7 @@ const ParishBulletinsView = ({ bulletins, bulletin, meta: { pages } }: ParishBul
                   <StyledSlidableArea $width={width} $index={page - 1}>
                     {pages.map((pageImage, index) => (
                       <StyledImage
-                        key={`${bulletin.pdf}-page-${index + 1}`}
+                        key={`${bulletin.date}-page-${index + 1}`}
                         src={pageImage}
                         alt={`${title} - Page ${index + 1}`}
                         width={width}

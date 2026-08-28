@@ -1,6 +1,7 @@
 import {
   ChurchSiteContentRepository,
   SITE_CONTENT_PATHS,
+  siteContentAdapters,
   type AdminPageFrontmatter,
   type AdminPostFrontmatter,
   type StoredDocument
@@ -156,6 +157,42 @@ function trimRequiredValue(value: string, label: string) {
   }
 
   return trimmedValue;
+}
+
+export function slugifyDocumentValue(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function normalizeRequiredSlug(value: string, label: string) {
+  const slug = slugifyDocumentValue(value.trim());
+
+  if (!slug) {
+    throw new Error(`${label} is required.`);
+  }
+
+  return slug;
+}
+
+function fileNameFromPath(path: string) {
+  return path.split('/').pop() || path;
+}
+
+function assertUniquePostSlug(posts: StoredDocument<AdminPostFrontmatter>[], slug: string, currentPath?: string) {
+  const nextPath = siteContentAdapters.posts.buildPath(slug);
+  const conflictingPost = posts.find(
+    (post) => post.path !== currentPath && (post.path === nextPath || post.data.slug === slug)
+  );
+
+  if (conflictingPost) {
+    throw new Error(`A news post with slug "${slug}" already exists.`);
+  }
+}
+
+function buildPostRenameDeleteMessage(previousPath: string, nextSlug: string) {
+  return `Admin: remove old news post ${fileNameFromPath(previousPath)} after rename to ${nextSlug}`;
 }
 
 function upsertDocumentInContent(
@@ -417,44 +454,59 @@ export async function savePostDocument(
     document: StoredDocument<AdminPostFrontmatter>;
     draft: PostDraft;
   }
-) {
+): Promise<{ content: DocumentContent; documentId: string }> {
   const repository = new ChurchSiteContentRepository(repoClient);
 
   assertHtmlOnlyDocumentBody(input.draft.body);
 
   const date = trimRequiredValue(input.draft.date, 'News publish date');
+  const slug = normalizeRequiredSlug(input.draft.slug, 'Post slug');
   const title = trimRequiredValue(input.draft.title, 'News title');
   const image = normalizeOptionalValue(input.draft.image);
   const tags = parseTagList(input.draft.tags);
+  const currentPath = input.document.path;
+  const nextPath = siteContentAdapters.posts.buildPath(slug);
+
+  assertUniquePostSlug(input.content.posts, slug, currentPath);
+
   const result = await repository.writePost({
     body: input.draft.body,
     data: {
       date,
       image,
-      slug: input.document.data.slug,
+      slug,
       tags,
       title
     },
-    message: `Admin: update news post ${input.document.data.slug}`,
-    path: input.document.path,
-    sha: input.document.sha
+    message: `Admin: update news post ${slug}`,
+    path: nextPath,
+    sha: currentPath === nextPath ? input.document.sha : undefined
   });
+
+  if (currentPath !== nextPath) {
+    await repoClient.deleteFile({
+      message: buildPostRenameDeleteMessage(currentPath, slug),
+      path: currentPath,
+      sha: input.document.sha
+    });
+  }
 
   const savedDocument: StoredDocument<AdminPostFrontmatter> = {
     body: input.draft.body,
     data: {
       date,
       image,
-      slug: input.document.data.slug,
+      slug,
       tags,
       title
     },
-    path: result.path || input.document.path,
+    path: result.path || nextPath,
     sha: result.sha || input.document.sha
   };
-  const nextContent = upsertDocumentInContent(input.content, 'post', savedDocument, input.document.path);
+  const nextContent = upsertDocumentInContent(input.content, 'post', savedDocument, currentPath);
+  const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
 
-  return setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
+  return { content, documentId: buildDocumentId('post', savedDocument.path) };
 }
 
 export async function createPageDocument(
@@ -494,9 +546,17 @@ export async function createPostDocument(
   input: { content?: DocumentContent | null; date: string; slug: string; title: string }
 ): Promise<{ content: DocumentContent; newId: string }> {
   const repository = new ChurchSiteContentRepository(repoClient);
-  const slug = trimRequiredValue(input.slug, 'Post slug');
+  const slug = normalizeRequiredSlug(input.slug, 'Post slug');
   const title = trimRequiredValue(input.title, 'Post title');
   const date = trimRequiredValue(input.date, 'Post publish date');
+  const baseContent = input.content ||
+    getSharedContentResource<DocumentContent>(repoClient, DOCUMENT_CONTENT_CACHE_KEY) || {
+      loadedAt: new Date().toISOString(),
+      pages: [],
+      posts: []
+    };
+
+  assertUniquePostSlug(baseContent.posts, slug);
 
   const result = await repository.writePost({
     body: '<p></p>',
@@ -507,15 +567,9 @@ export async function createPostDocument(
   const document: StoredDocument<AdminPostFrontmatter> = {
     body: '<p></p>',
     data: { date, slug, title },
-    path: result.path || `${SITE_CONTENT_PATHS.posts}/${slug}.mdx`,
+    path: result.path || siteContentAdapters.posts.buildPath(slug),
     sha: result.sha
   };
-  const baseContent = input.content ||
-    getSharedContentResource<DocumentContent>(repoClient, DOCUMENT_CONTENT_CACHE_KEY) || {
-      loadedAt: new Date().toISOString(),
-      pages: [],
-      posts: []
-    };
   const nextContent = upsertDocumentInContent(baseContent, 'post', document);
   const content = setDocumentCaches(repoClient, nextContent, createDocumentSummaries(nextContent));
   return { content, newId: buildDocumentId('post', document.path) };

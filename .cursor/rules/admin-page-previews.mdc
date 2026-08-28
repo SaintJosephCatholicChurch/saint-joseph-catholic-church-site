@@ -1,0 +1,27 @@
+---
+description: Admin page-style preview shell and width conventions
+globs: src/admin/**
+alwaysApply: false
+---
+
+# Admin page previews
+
+For page-style previews under `src/admin/`, compose `AdminPagePreviewFrame`. Do not create local preview shells.
+
+`AdminPagePreviewFrame` owns the full-size outer surface, horizontal centering, the `page` container (`container: 'page / inline-size'`), and vertical overflow.
+
+Declare width only through `pageSx`: `width: '100%'` plus a preview-specific `maxWidth`.
+
+```tsx
+<AdminPagePreviewFrame pageSx={{ width: '100%', maxWidth: `${MAX_APP_WIDTH}px` }}>
+  {preview}
+</AdminPagePreviewFrame>
+```
+
+Do not add preview-local `overflow: auto`, `overflowY: auto`, `container: 'page / inline-size'`, or centering wrappers unless the nested content itself has a separate behavior (for example `onClickCapture` for preview-to-editor selection).
+
+If a narrower column is needed inside the frame, use a local wrapper with only `width: '100%'` and `maxWidth`; let the shared frame handle centering and overflow.
+
+Reuse public components with `inCMS` / `adminSelection` rather than duplicating markup. Feed **draft** data into previews, not live `src/lib` imports, when the editor is editing that data.
+
+New structured sections should use `AdminContentSectionPage` (desktop split, mobile tabs) plus `ContentSectionsEditorBase`.

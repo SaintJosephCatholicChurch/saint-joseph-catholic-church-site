@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 
 import { AdminSortableAccordionRepeaterCard } from '../../components/AdminCards';
 import { AdminCompactActionBar } from '../../components/AdminWorkspace';
+import { useAdminSortableSensors } from '../../components/useAdminSortableSensors';
 
 import type { MenuDraft, MenuItemDraft, MenuLinkDraft } from '../../content/writableStructuredContent';
 import type { MenuBreadcrumb, MenuFieldPath, MenuRootField } from './useMenuEditorController';
@@ -119,6 +120,8 @@ function renderBreadcrumbs(breadcrumbs: MenuBreadcrumb[], onSelectPath: (path: M
 }
 
 export function MenuEditor({ controller }: MenuEditorProps) {
+  const sortableSensors = useAdminSortableSensors();
+
   function renderRootView() {
     return (
       <Stack spacing={2} sx={{ minWidth: 0 }}>
@@ -159,6 +162,7 @@ export function MenuEditor({ controller }: MenuEditorProps) {
         {controller.menu.menuItems.length ? (
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;
@@ -287,6 +291,7 @@ export function MenuEditor({ controller }: MenuEditorProps) {
           {item.menuLinks.length ? (
             <DndContext
               collisionDetection={closestCenter}
+              sensors={sortableSensors}
               onDragEnd={({ active, over }) => {
                 if (!over || active.id === over.id) {
                   return;

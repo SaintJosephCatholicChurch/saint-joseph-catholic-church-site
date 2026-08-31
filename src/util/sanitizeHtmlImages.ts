@@ -1,3 +1,31 @@
+const DANGEROUS_TAG_NAMES = 'script|iframe|object|embed|svg|math|form|style';
+const VOID_DANGEROUS_TAG_NAMES = 'meta|base|link';
+const DANGEROUS_URI_SCHEME = String.raw`(?:javascript|vbscript|data\s*:\s*text\s*\/\s*html)`;
+
+export function stripDangerousUris(html: string) {
+  return html
+    .replace(
+      new RegExp(
+        String.raw`(href|src|xlink:href|action|formaction|srcdoc)\s*=\s*(['"])\s*${DANGEROUS_URI_SCHEME}[\s\S]*?\2`,
+        'gi'
+      ),
+      '$1=$2$2'
+    )
+    .replace(
+      new RegExp(String.raw`(href|src|xlink:href|action|formaction)\s*=\s*${DANGEROUS_URI_SCHEME}[^\s>]*`, 'gi'),
+      '$1=""'
+    );
+}
+
+function stripDangerousMarkup(html: string) {
+  return stripDangerousUris(
+    html
+      .replace(new RegExp(String.raw`<(${DANGEROUS_TAG_NAMES})\b[^>]*>[\s\S]*?<\/\1>`, 'gi'), '')
+      .replace(new RegExp(String.raw`<(?:${DANGEROUS_TAG_NAMES}|${VOID_DANGEROUS_TAG_NAMES})\b[^>]*\/?>`, 'gi'), '')
+      .replace(/\bon[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+  );
+}
+
 // Utility to post-process HTML strings and make <img> tags safer/performant for rendering
 // - strip script/event-handler XSS vectors from CMS HTML
 // - ensure img tags have alt attribute (empty if missing)
@@ -9,13 +37,7 @@ export default function sanitizeHtmlImages(html: string | undefined): string | T
     return '';
   }
 
-  const withoutDangerousMarkup = html
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi, '')
-    .replace(/<object\b[^>]*>[\s\S]*?<\/object>/gi, '')
-    .replace(/<embed\b[^>]*\/?>/gi, '')
-    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    .replace(/(href|src|xlink:href)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, '$1=$2$2');
+  const withoutDangerousMarkup = stripDangerousMarkup(html);
 
   // Add alt="" if missing, add loading and decoding attributes, and normalize closing
   // This is a safe, conservative transformation and should not change existing alt text.

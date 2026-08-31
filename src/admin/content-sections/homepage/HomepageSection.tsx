@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
+import { AdminContentSectionPage, useAdminMobileLayout } from '../components/AdminContentSectionPage';
 import { useAdminFieldSelection } from '../components/adminPreviewSelection';
 import { useAdminQueryParamState } from '../../useAdminQueryParamState';
 import { HomepageFeaturedEditor } from './HomepageFeaturedEditor';
@@ -48,6 +48,7 @@ export function HomepageSection({
 }: HomepageSectionProps) {
   const pendingExpandedFocusFieldKeyRef = useRef<HomepageFieldKey | null>(null);
   const pendingPreviewSelectionFieldKeyRef = useRef<HomepageFieldKey | null>(null);
+  const isMobileLayout = useAdminMobileLayout();
   const [expandedSlideClientIds, setExpandedSlideClientIds] = useState<string[]>([]);
   const [homepageTab, setHomepageTab] = useAdminQueryParamState<HomepageEditorTabId>({
     allowedValues: HOMEPAGE_EDITOR_TABS,
@@ -125,7 +126,7 @@ export function HomepageSection({
   }
 
   function handleSelectFieldKey(fieldKey: HomepageFieldKey) {
-    if (panel === 'preview') {
+    if (isMobileLayout && panel === 'preview') {
       pendingPreviewSelectionFieldKeyRef.current = fieldKey;
       setPanel('editor');
       return;

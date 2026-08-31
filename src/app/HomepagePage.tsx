@@ -2,6 +2,8 @@
 
 import Layout from '../components/Layout';
 import HomepageView from '../components/homepage/HomepageView';
+import churchDetails from '../lib/church_details';
+import config from '../lib/config';
 import homePageData from '../lib/homepage';
 import times from '../lib/times';
 
@@ -13,7 +15,13 @@ const HomepagePage = ({ ...sidebarProps }: HomepagePageProps) => {
   return (
     <Layout>
       <div>
-        <HomepageView homePageData={homePageData} times={times} {...sidebarProps} />
+        <HomepageView
+          churchDetails={churchDetails}
+          homePageData={homePageData}
+          privacyPolicyUrl={config.privacy_policy_url}
+          times={times}
+          {...sidebarProps}
+        />
       </div>
     </Layout>
   );

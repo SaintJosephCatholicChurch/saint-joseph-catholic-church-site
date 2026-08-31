@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
+import { AdminContentSectionPage, useAdminMobileLayout } from '../components/AdminContentSectionPage';
 import { MenuEditor } from './MenuEditor';
 import { MenuPreview } from './MenuPreview';
 import { useMenuEditorController } from './useMenuEditorController';
@@ -23,6 +23,7 @@ const CONTENT_SECTION_PANELS = ['editor', 'preview'] as const;
 export function MenuSection({ churchDetails, headerActions, onChange, value }: MenuSectionProps) {
   const controller = useMenuEditorController({ menu: value, onChange });
   const pendingPreviewSelectionPathKeyRef = useRef<string | null>(null);
+  const isMobileLayout = useAdminMobileLayout();
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -40,7 +41,7 @@ export function MenuSection({ churchDetails, headerActions, onChange, value }: M
   }, [controller, panel]);
 
   function handleSelectPathKey(pathKey: string) {
-    if (panel === 'preview') {
+    if (isMobileLayout && panel === 'preview') {
       pendingPreviewSelectionPathKeyRef.current = pathKey;
       setPanel('editor');
       return;

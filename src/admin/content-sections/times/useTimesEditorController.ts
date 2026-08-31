@@ -483,12 +483,6 @@ export function useTimesEditorController({ onChange, times }: TimesEditorControl
   const fieldSelection = useAdminFieldSelection<string>();
 
   useEffect(() => {
-    if (normalizedTimes !== times) {
-      onChange(normalizedTimes);
-    }
-  }, [normalizedTimes, onChange, times]);
-
-  useEffect(() => {
     if (!pathExists(normalizedTimes, activePath)) {
       setActivePathState(getDefaultPath(normalizedTimes));
     }

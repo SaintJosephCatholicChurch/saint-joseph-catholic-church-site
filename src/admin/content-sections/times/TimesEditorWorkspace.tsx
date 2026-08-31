@@ -23,6 +23,7 @@ import { useState } from 'react';
 
 import { AdminSortableAccordionRepeaterCard } from '../../components/AdminCards';
 import { AdminCompactActionBar, AdminStatusStack } from '../../components/AdminWorkspace';
+import { useAdminSortableSensors } from '../../components/useAdminSortableSensors';
 import type { TimesFieldPath, useTimesEditorController } from './useTimesEditorController';
 
 import type { TimesDay } from '../../../interface';
@@ -124,6 +125,7 @@ function renderBreadcrumbs(
 }
 
 export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) {
+  const sortableSensors = useAdminSortableSensors();
   const [deletePath, setDeletePath] = useState<TimesFieldPath | null>(null);
 
   const activeCategoryId = controller.activePath.kind === 'root' ? null : controller.activePath.categoryId;
@@ -189,6 +191,7 @@ export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) 
           </Button>
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;
@@ -261,6 +264,7 @@ export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) 
           />
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;
@@ -371,6 +375,7 @@ export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) 
           />
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;
@@ -454,6 +459,7 @@ export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) 
           />
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;
@@ -611,6 +617,7 @@ export function TimesEditorWorkspace({ controller }: TimesEditorWorkspaceProps) 
           />
           <DndContext
             collisionDetection={closestCenter}
+            sensors={sortableSensors}
             onDragEnd={({ active, over }) => {
               if (!over || active.id === over.id) {
                 return;

@@ -6,6 +6,7 @@ import {
   type AdminPostFrontmatter,
   type StoredDocument
 } from './contentRepository';
+import { CONTENT_CONFLICT_RETRY_MESSAGE } from './conflictError';
 import { getSharedContentResource, loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { PostContent } from '../../interface';
@@ -213,7 +214,7 @@ async function commitOrWriteTextFile(
       const currentFile = await repoClient.readTextFile(input.currentPath);
 
       if (currentFile.sha && currentFile.sha !== input.sha) {
-        throw new Error('This file was updated elsewhere. Reload the admin page and try saving again.');
+        throw new Error(CONTENT_CONFLICT_RETRY_MESSAGE);
       }
     }
 

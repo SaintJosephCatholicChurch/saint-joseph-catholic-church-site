@@ -91,7 +91,7 @@ export function AdminHtmlEditor({
       menubar: 'edit insert view format table tools help',
       menu: {
         edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
-        view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | fullscreen' },
+        view: { title: 'View', items: 'code | visualaid visualchars visualblocks | fullscreen' },
         insert: {
           title: 'Insert',
           items: 'link media inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime'
@@ -100,7 +100,7 @@ export function AdminHtmlEditor({
           title: 'Format',
           items: 'bold italic underline strikethrough superscript subscript | forecolor | align | removeformat'
         },
-        tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+        tools: { title: 'Tools', items: 'code wordcount' },
         table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' }
       },
       plugins: [
@@ -112,16 +112,20 @@ export function AdminHtmlEditor({
         'code',
         'emoticons',
         'fullscreen',
+        'help',
         'insertdatetime',
         'link',
         'lists',
         'media',
+        'nonbreaking',
+        'pagebreak',
         'preview',
         'quickbars',
         'searchreplace',
         'table',
         'telephone-autolink',
         'visualblocks',
+        'visualchars',
         'wordcount'
       ],
       toolbar:

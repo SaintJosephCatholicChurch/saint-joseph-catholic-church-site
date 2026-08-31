@@ -10,8 +10,6 @@ import {
   LARGE_BREAKPOINT,
   SMALL_BREAKPOINT
 } from '../../constants';
-import churchDetailsFromLib from '../../lib/church_details';
-import config from '../../lib/config';
 import getContainerQuery from '../../util/container.util';
 import transientOptions from '../../util/transientOptions';
 import CarouselView from '../carousel/CarouselView';
@@ -247,9 +245,9 @@ export interface HomepageViewAdminSelection {
 
 interface HomepageViewProps {
   adminSelection?: HomepageViewAdminSelection;
-  churchDetails?: ChurchDetails;
+  churchDetails: ChurchDetails;
   homePageData: HomePageData;
-  privacyPolicyUrl?: string;
+  privacyPolicyUrl: string;
   times: Times[];
   recentPosts: PostContent[];
   hideSearch?: boolean;
@@ -258,7 +256,7 @@ interface HomepageViewProps {
 const HomepageView = memo(
   ({
     adminSelection,
-    churchDetails = churchDetailsFromLib,
+    churchDetails,
     homePageData: {
       slides,
       schedule_section,
@@ -268,7 +266,7 @@ const HomepageView = memo(
       featured,
       newsletter
     },
-    privacyPolicyUrl = config.privacy_policy_url,
+    privacyPolicyUrl,
     times,
     recentPosts,
     hideSearch

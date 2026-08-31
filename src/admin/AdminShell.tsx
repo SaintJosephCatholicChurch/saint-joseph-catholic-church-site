@@ -125,7 +125,7 @@ const ADMIN_VIEWS: AdminView[] = [
 ];
 
 function parseAdminViewId(value: string | null): AdminViewId {
-  return ADMIN_VIEWS.some((view) => view.kind === 'internal' && view.id === value) ? (value as AdminViewId) : 'news';
+  return ADMIN_VIEWS.some((view) => view.kind === 'internal' && view.id === value) ? (value as AdminViewId) : 'church';
 }
 
 function isInternalAdminView(view: AdminView): view is InternalAdminView {

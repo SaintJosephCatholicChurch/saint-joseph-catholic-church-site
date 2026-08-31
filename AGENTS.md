@@ -176,7 +176,7 @@ Route `/admin` → `src/app/admin/page.tsx` → `AdminPageView` dynamically impo
 
 - **Connected:** Netlify GitHub OAuth (`src/admin/services/netlifyGitHubAuth.ts`). Needs push access to `SaintJosephCatholicChurch/saint-joseph-catholic-church-site`.
 - **Preview:** local session, writes to `sessionStorage` against `previewManifest.generated.json`. No GitHub push.
-- Sessions: `localStorage` keys in `ADMIN_SESSION_KEYS`. GitHub `repo` tokens live there for connected sessions (XSS on `/admin` equals write access). `ADMIN_AUTH.siteId` prefers `NEXT_PUBLIC_NETLIFY_SITE_ID`, then hostname fallback in `netlifyGitHubAuth.ts`. Set the env var in production.
+- Sessions: `localStorage` keys in `ADMIN_SESSION_KEYS`. GitHub `repo` tokens live there for connected sessions (XSS on `/admin` equals write access). `ADMIN_AUTH.siteId` uses `NEXT_PUBLIC_NETLIFY_SITE_ID` (required in production). Localhost may fall back to `cms.netlify.com`. Connected login fails loudly if the site id is missing on a non-local host.
 - No RBAC beyond “can push to the repo”. Help view does not require auth.
 
 ### Views
@@ -298,7 +298,7 @@ TypeScript: `strict: true`, `noImplicitAny: true`, **`strictNullChecks: false`**
 5. Container queries matter for preview fidelity. Use `getContainerQuery`.
 6. Lint does not cover `.tsx`.
 7. Production `next build` can ignore TS errors (`ignoreBuildErrors`).
-8. Admin OAuth `siteId` prefers `NEXT_PUBLIC_NETLIFY_SITE_ID`; hostname fallback is last resort. Connected tokens stay in `localStorage`.
+8. Admin OAuth `siteId` requires `NEXT_PUBLIC_NETLIFY_SITE_ID` in production (localhost may use `cms.netlify.com`). Connected tokens stay in `localStorage`.
 9. `previewManifest.generated.json` is a large generated snapshot for offline admin preview — treat it as generated.
 10. TinaCMS is a mental model for Times field paths only, not a dependency.
 11. `content/logo.json` may still exist on disk; menu now owns logo in admin drafts.

@@ -32,6 +32,24 @@ import {
 
 import type { ChurchDetails, PostContent, Times } from '../../../interface';
 
+const EMPTY_CHURCH_DETAILS: ChurchDetails = {
+  additional_emails: [],
+  additional_phones: [],
+  address: '',
+  city: '',
+  contacts: [],
+  email: '',
+  facebook_page: '',
+  google_map_location: '',
+  mission_statement: '',
+  name: '',
+  online_giving_url: '',
+  phone: '',
+  state: '',
+  vision_statement: '',
+  zipcode: ''
+};
+
 interface HomepagePreviewProps {
   activeFieldKey?: HomepageFieldKey;
   draft: HomepageDraft;
@@ -53,14 +71,14 @@ export function HomepagePreview({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [recentPosts, setRecentPosts] = useState<PostContent[]>([]);
-  const [churchDetails, setChurchDetails] = useState<ChurchDetails | undefined>();
-  const [privacyPolicyUrl, setPrivacyPolicyUrl] = useState<string | undefined>();
+  const [churchDetails, setChurchDetails] = useState<ChurchDetails | null>(null);
+  const [privacyPolicyUrl, setPrivacyPolicyUrl] = useState<string | null>(null);
   const [massTimesDialogOpen, setMassTimesDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!repoClient) {
-      setChurchDetails(undefined);
-      setPrivacyPolicyUrl(undefined);
+      setChurchDetails(EMPTY_CHURCH_DETAILS);
+      setPrivacyPolicyUrl('');
       return;
     }
 
@@ -75,7 +93,7 @@ export function HomepagePreview({
       })
       .catch(() => {
         if (!cancelled) {
-          setChurchDetails(undefined);
+          setChurchDetails(EMPTY_CHURCH_DETAILS);
           setPrivacyPolicyUrl('');
         }
       });
@@ -181,9 +199,9 @@ export function HomepagePreview({
               newsletterSignupLinkFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.newsletterSignupLink,
               scheduleTitleFieldKey: HOMEPAGE_SECTION_FIELD_KEYS.scheduleSectionTitle
             }}
-            churchDetails={churchDetails}
+            churchDetails={churchDetails || EMPTY_CHURCH_DETAILS}
             homePageData={buildHomepagePreviewData(draft)}
-            privacyPolicyUrl={privacyPolicyUrl}
+            privacyPolicyUrl={privacyPolicyUrl || ''}
             times={times}
             recentPosts={recentPosts}
             hideSearch

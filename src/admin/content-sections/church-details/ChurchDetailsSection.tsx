@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { useAdminFieldSelection } from '../components/adminPreviewSelection';
-import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
+import { AdminContentSectionPage, useAdminMobileLayout } from '../components/AdminContentSectionPage';
 import { ChurchDetailsEditor } from './ChurchDetailsEditor';
 import { ChurchDetailsSectionPreview } from './ChurchDetailsPreview';
 import { useAdminQueryParamState } from '../../useAdminQueryParamState';
@@ -24,6 +24,7 @@ const CONTENT_SECTION_PANELS = ['editor', 'preview'] as const;
 export function ChurchDetailsSection({ headerActions, onChange, showPreview, value }: ChurchDetailsSectionProps) {
   const selection = useAdminFieldSelection<ChurchDetailsFieldKey>();
   const pendingPreviewSelectionFieldKeyRef = useRef<ChurchDetailsFieldKey | null>(null);
+  const isMobileLayout = useAdminMobileLayout();
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -41,7 +42,7 @@ export function ChurchDetailsSection({ headerActions, onChange, showPreview, val
   }, [panel, selection]);
 
   function handleSelectFieldKey(fieldKey: ChurchDetailsFieldKey) {
-    if (panel === 'preview') {
+    if (isMobileLayout && panel === 'preview') {
       pendingPreviewSelectionFieldKeyRef.current = fieldKey;
       setPanel('editor');
       return;
@@ -53,6 +54,7 @@ export function ChurchDetailsSection({ headerActions, onChange, showPreview, val
   return (
     <AdminContentSectionPage
       actions={headerActions}
+      description="This preview shows Contact page fields. Mission, vision, and online giving appear in the site header and footer."
       title="Church Details"
       panelParamName="churchDetailsPanel"
       editor={

@@ -47,7 +47,7 @@ export class NetlifyGitHubAuthenticator {
 
     const siteId = this.getSiteId();
     if (!siteId) {
-      throw new NetlifyAuthError('A Netlify site id is required to start the GitHub authentication flow.');
+      throw new NetlifyAuthError('NEXT_PUBLIC_NETLIFY_SITE_ID must be set at build time for admin login on this site.');
     }
 
     return new Promise<NetlifyAuthResponse>((resolve, reject) => {
@@ -194,6 +194,10 @@ export class NetlifyGitHubAuthenticator {
     }
 
     const host = window.location.host.split(':')[0];
-    return host === 'localhost' ? 'cms.netlify.com' : host;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return 'cms.netlify.com';
+    }
+
+    return null;
   }
 }

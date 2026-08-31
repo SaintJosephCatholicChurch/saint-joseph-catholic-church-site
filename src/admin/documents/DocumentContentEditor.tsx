@@ -55,6 +55,8 @@ import {
   type PageDraft,
   type PostDraft
 } from '../content/writableDocumentsContent';
+import { isContentConflictError, CONTENT_CONFLICT_RETRY_MESSAGE } from '../content/conflictError';
+import { clearSharedContentResource } from '../content/sharedContentStore';
 import { useRegisterAdminDirty, useAdminUnsavedChanges } from '../unsavedChanges';
 
 import type { MediaAsset } from '../content/writableBulletinsMediaContent';
@@ -467,13 +469,11 @@ export function DocumentContentEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterTokens.join('\x00'), visibleSummaries]
   );
-  const preferredSelectedDocumentId =
-    routedDocumentId && filteredSummaries.some((summary) => summary.id === routedDocumentId)
-      ? routedDocumentId
-      : editorState.selectedDocumentId;
-  const activeSummary =
-    filteredSummaries.find((summary) => summary.id === preferredSelectedDocumentId) ||
-    (!isCompactLayout || Boolean(routedDocumentId) ? filteredSummaries[0] || null : null);
+  const showListViewOnly = isCompactLayout && !routedDocumentId;
+  const activeSummary = showListViewOnly
+    ? null
+    : visibleSummaries.find((summary) => summary.id === editorState.selectedDocumentId) ||
+      (!isCompactLayout ? visibleSummaries[0] || null : null);
   const activePage =
     activeSummary?.kind === 'page'
       ? editorState.content?.pages.find((document) => `page:${document.path}` === activeSummary.id) || null
@@ -500,7 +500,6 @@ export function DocumentContentEditor({
   const isActiveDocumentLoaded = Boolean(
     activeSummary?.kind === 'page' ? activePage?.loaded : activeSummary?.kind === 'post' ? activePost?.loaded : false
   );
-  const showListViewOnly = isCompactLayout && !routedDocumentId;
   const showDenseListCards = isCompactLayout;
   const showActiveListSelection = !isCompactLayout || Boolean(routedDocumentId);
   useEffect(() => {
@@ -683,8 +682,44 @@ export function DocumentContentEditor({
     setPendingEditorAsset(null);
   }
 
+  function resetDraftForDocument(documentId: string | null) {
+    if (!documentId || !editorState.content) {
+      return;
+    }
+
+    const page = editorState.content.pages.find((document) => `page:${document.path}` === documentId);
+    if (page) {
+      setPageDrafts((currentDrafts) => ({
+        ...currentDrafts,
+        [documentId]: createPageDraft(page)
+      }));
+      return;
+    }
+
+    const post = editorState.content.posts.find((document) => `post:${document.path}` === documentId);
+    if (post) {
+      setPostDrafts((currentDrafts) => ({
+        ...currentDrafts,
+        [documentId]: createPostDraft(post)
+      }));
+    }
+  }
+
+  function confirmDiscardCurrentDocument() {
+    if (!isDirty) {
+      return true;
+    }
+
+    if (!confirmIfDirty()) {
+      return false;
+    }
+
+    resetDraftForDocument(editorState.selectedDocumentId);
+    return true;
+  }
+
   function selectDocument(documentId: string) {
-    if (documentId !== editorState.selectedDocumentId && isDirty && !confirmIfDirty()) {
+    if (documentId !== editorState.selectedDocumentId && !confirmDiscardCurrentDocument()) {
       return;
     }
 
@@ -700,7 +735,7 @@ export function DocumentContentEditor({
   }
 
   function returnToDocumentList() {
-    if (isDirty && !confirmIfDirty()) {
+    if (!confirmDiscardCurrentDocument()) {
       return;
     }
 
@@ -749,21 +784,11 @@ export function DocumentContentEditor({
   }
 
   function resetActiveDraft() {
-    if (!activeSummary || !pristineDraft) {
+    if (!activeSummary) {
       return;
     }
 
-    if (activeSummary.kind === 'page' && activePage && activePageDraft) {
-      setPageDrafts((currentDrafts) => ({
-        ...currentDrafts,
-        [activeSummary.id]: createPageDraft(activePage)
-      }));
-    } else if (activeSummary.kind === 'post' && activePost && activePostDraft) {
-      setPostDrafts((currentDrafts) => ({
-        ...currentDrafts,
-        [activeSummary.id]: createPostDraft(activePost)
-      }));
-    }
+    resetDraftForDocument(activeSummary.id);
 
     setEditorState((currentState) => ({
       ...currentState,
@@ -849,6 +874,26 @@ export function DocumentContentEditor({
         }));
       }
     } catch (error) {
+      if (isContentConflictError(error)) {
+        try {
+          clearSharedContentResource(repoClient);
+          const latestContent = await loadDocumentContent(repoClient);
+          const hydratedContent = activeSummary
+            ? await ensureDocumentLoaded(repoClient, latestContent, activeSummary.id)
+            : latestContent;
+          seedMissingDrafts(hydratedContent);
+          setEditorState((currentState) => ({
+            ...currentState,
+            content: hydratedContent,
+            saveError: CONTENT_CONFLICT_RETRY_MESSAGE,
+            saveStatus: 'error'
+          }));
+          return;
+        } catch {
+          // Fall through to the original save error.
+        }
+      }
+
       setEditorState((currentState) => ({
         ...currentState,
         saveError: buildErrorMessage(error),
@@ -930,30 +975,45 @@ export function DocumentContentEditor({
       return;
     }
 
+    if (isDirty && !confirmIfDirty()) {
+      replaceSelectionInUrl(editorState.selectedDocumentId);
+      return;
+    }
+
+    resetDraftForDocument(editorState.selectedDocumentId);
     setEditorState((currentState) => ({
       ...currentState,
       selectedDocumentId: routedDocumentId
     }));
-  }, [editorState.content, editorState.selectedDocumentId, routedDocumentId, visibleSummaries]);
+  }, [
+    confirmIfDirty,
+    editorState.content,
+    editorState.selectedDocumentId,
+    isDirty,
+    replaceSelectionInUrl,
+    routedDocumentId,
+    visibleSummaries
+  ]);
 
   useEffect(() => {
-    if (filteredSummaries.length === 0) {
+    if (visibleSummaries.length === 0 || !editorState.selectedDocumentId) {
       return;
     }
 
-    if (filteredSummaries.some((summary) => summary.id === editorState.selectedDocumentId)) {
+    if (visibleSummaries.some((summary) => summary.id === editorState.selectedDocumentId)) {
       return;
     }
 
-    if (routedDocumentId) {
-      return;
-    }
-
+    const fallbackDocumentId = visibleSummaries[0].id;
     setEditorState((currentState) => ({
       ...currentState,
-      selectedDocumentId: filteredSummaries[0].id
+      selectedDocumentId: fallbackDocumentId
     }));
-  }, [editorState.selectedDocumentId, filteredSummaries, routedDocumentId]);
+
+    if (routedDocumentId) {
+      replaceSelectionInUrl(fallbackDocumentId);
+    }
+  }, [editorState.selectedDocumentId, replaceSelectionInUrl, routedDocumentId, visibleSummaries]);
 
   if (editorState.status === 'loading' && !editorState.content) {
     return (

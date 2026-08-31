@@ -346,13 +346,13 @@ const HelpContent = () => {
       </ul>
       <HelpHeading variant="h2">Site Config</HelpHeading>
       <p>
-        This section controls all site configuration related items. It has two tabs:{' '}
-        <strong>General Site Config</strong> and <strong>Menu &amp; Logo</strong>.
+        This section controls all site configuration related items. It has three tabs:{' '}
+        <strong>General Site Config</strong>, <strong>Menu &amp; Logo</strong>, and <strong>Styles</strong>.
       </p>
       <HelpHeading variant="h3">General Site Config</HelpHeading>
       <p>
         This tab controls all of the meta and{' '}
-        <a href="https://searchengineland.com/guide/what-is-seo">SEO (Search Engine Optimzation)</a>.
+        <a href="https://searchengineland.com/guide/what-is-seo">SEO (Search Engine Optimization)</a>.
       </p>
       <p>This section includes:</p>
       <ul>
@@ -373,7 +373,7 @@ const HelpContent = () => {
         </li>
         <li>
           <strong>Site Keywords</strong> - Keywords for search engines (google, bing, etc) to pick up on. (See{' '}
-          <a href="https://searchengineland.com/guide/what-is-seo">SEO (Search Engine Optimzation)</a>)
+          <a href="https://searchengineland.com/guide/what-is-seo">SEO (Search Engine Optimization)</a>)
         </li>
         <li>
           <strong>News Posts Per Page</strong> - How many news posts should appear on each page in the news section.
@@ -385,7 +385,7 @@ const HelpContent = () => {
       <HelpHeading variant="h3">Menu & Logo</HelpHeading>
       <p>
         This section controls the top navigation menu (desktop) and the pull out navigation drawer (tablet and mobile),
-        as well as the Logo displayed in both. It also controls the text for the dontation button.
+        as well as the Logo displayed in both. It also controls the text for the donation button.
       </p>
       <p>This section includes:</p>
       <strong>Logo</strong>
@@ -402,7 +402,7 @@ const HelpContent = () => {
       <strong>Online Giving Button Text</strong>
       <ul>
         <li>
-          <strong>Online Giving Button Text</strong> - The text for the dontation button.
+          <strong>Online Giving Button Text</strong> - The text for the donation button.
         </li>
       </ul>
       <strong>Menu Items</strong>
@@ -438,6 +438,13 @@ const HelpContent = () => {
               and nothing happens on click/tap.
             </li>
           </ul>
+        </li>
+      </ul>
+      <HelpHeading variant="h3">Styles</HelpHeading>
+      <p>This tab controls extra visual settings that are not part of General or Menu. Currently it has one field:</p>
+      <ul>
+        <li>
+          <strong>Footer Background</strong> - The background image used behind the site footer.
         </li>
       </ul>
     </StyledContent>

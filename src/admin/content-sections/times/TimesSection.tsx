@@ -2,7 +2,7 @@
 
 import { type ReactNode, useEffect, useRef } from 'react';
 
-import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
+import { AdminContentSectionPage, useAdminMobileLayout } from '../components/AdminContentSectionPage';
 import type { HomepageDraft } from '../../content/writableComplexContent';
 import { useAdminQueryParamState } from '../../useAdminQueryParamState';
 import { TimesEditorWorkspace } from './TimesEditorWorkspace';
@@ -26,6 +26,7 @@ export function TimesSection({ headerActions, homepageDraft, onChange, value }: 
     times: value
   });
   const pendingPreviewSelectionPathKeyRef = useRef<string | null>(null);
+  const isMobileLayout = useAdminMobileLayout();
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -44,7 +45,7 @@ export function TimesSection({ headerActions, homepageDraft, onChange, value }: 
   }, [controller, panel]);
 
   function handleSelectPathKey(pathKey: string) {
-    if (panel === 'preview') {
+    if (isMobileLayout && panel === 'preview') {
       pendingPreviewSelectionPathKeyRef.current = pathKey;
       setPanel('editor');
       return;

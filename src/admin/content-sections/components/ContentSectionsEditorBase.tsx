@@ -7,10 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useRegisterAdminDirty } from '../../unsavedChanges';
+import { isContentConflictError, CONTENT_CONFLICT_RETRY_MESSAGE } from '../../content/conflictError';
 import { clearSharedContentResource } from '../../content/sharedContentStore';
+import { useRegisterAdminDirty } from '../../unsavedChanges';
 
 import type { AdminRepoClient } from '../../services/adminTypes';
 import type { ReactNode } from 'react';
@@ -116,11 +117,16 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
     async function loadRequestedContent() {
       const requestedSectionIds = visibleSectionIdsKey ? (visibleSectionIdsKey.split('|') as SectionId[]) : [];
 
-      setEditorState((currentState) => ({
-        ...currentState,
+      setEditorState({
+        content: null,
+        draft: null,
         error: null,
+        saveError: null,
+        saveMessage: null,
+        saveSectionId: null,
+        saveStatus: 'idle',
         status: 'loading'
-      }));
+      });
 
       try {
         const content = await loadContent(repoClient, requestedSectionIds);
@@ -160,7 +166,7 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
     return sections.find((section) => section.id === sectionId)?.label || sectionId;
   }
 
-  function updateDraft<TKey extends SectionId>(sectionId: TKey, value: Draft[TKey]) {
+  const updateDraft = useCallback(<TKey extends SectionId>(sectionId: TKey, value: Draft[TKey]) => {
     setEditorState((currentState) => {
       if (!currentState.draft) {
         return currentState;
@@ -178,7 +184,7 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
         saveStatus: 'idle'
       };
     });
-  }
+  }, []);
 
   async function handleSave(sectionId: SectionId) {
     if (!editorState.content || !editorState.draft) {
@@ -236,6 +242,23 @@ export function ContentSectionsEditorBase<SectionId extends string, Content, Dra
       }
     } catch (error) {
       clearSharedContentResource(repoClient);
+
+      if (isContentConflictError(error)) {
+        try {
+          const latestContent = await loadContent(repoClient, visibleSectionIds);
+          setEditorState((currentState) => ({
+            ...currentState,
+            content: latestContent,
+            saveError: CONTENT_CONFLICT_RETRY_MESSAGE,
+            saveSectionId: sectionId,
+            saveStatus: 'error'
+          }));
+          return;
+        } catch {
+          // Fall through to the original save error.
+        }
+      }
+
       setEditorState((currentState) => ({
         ...currentState,
         saveError: buildErrorMessage(error, failureMessage),

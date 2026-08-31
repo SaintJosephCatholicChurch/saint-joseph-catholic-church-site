@@ -6,6 +6,7 @@ import {
   siteContentAdapters,
   type StoredContentValue
 } from './contentRepository';
+import { CONTENT_CONFLICT_RETRY_MESSAGE } from './conflictError';
 import { getSharedContentResource, loadSharedContentResource, setSharedContentResource } from './sharedContentStore';
 
 import type { Bulletin } from '../../interface';
@@ -72,6 +73,8 @@ const BULLETIN_MEDIA_CACHE_KEY = 'bulletin-media-content';
 const BULLETIN_RECORDS_CACHE_KEY = 'bulletin-records';
 const BULLETIN_SESSION_KEY_PREFIX = 'admin-bulletin-content';
 const BULLETIN_READ_CONCURRENCY = 8;
+const BULLETIN_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const MAX_MEDIA_UPLOAD_BYTES = 25 * 1024 * 1024;
 
 const IMAGE_FILE_REGEX = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
 
@@ -121,6 +124,16 @@ function trimRequiredValue(value: string, label: string) {
   }
 
   return trimmedValue;
+}
+
+function normalizeBulletinDate(value: string) {
+  const date = trimRequiredValue(value, 'Bulletin date');
+
+  if (!BULLETIN_DATE_PATTERN.test(date) || date.includes('..') || date.includes('/') || date.includes('\\')) {
+    throw new Error('Bulletin date must be YYYY-MM-DD.');
+  }
+
+  return date;
 }
 
 function sanitizeUploadedFileName(fileName: string) {
@@ -196,7 +209,16 @@ function validateBulletinPdfPath(value: string | undefined) {
     return;
   }
 
-  if (!value.startsWith(`${SITE_MEDIA_RULES.bulletins.publicPath}/`)) {
+  const prefix = `${SITE_MEDIA_RULES.bulletins.publicPath}/`;
+
+  if (!value.startsWith(prefix)) {
+    throw new Error(`Bulletin PDF paths must stay inside ${SITE_MEDIA_RULES.bulletins.publicPath}.`);
+  }
+
+  const relativePath = value.slice(prefix.length).replace(/\\/g, '/');
+  const segments = relativePath.split('/').filter(Boolean);
+
+  if (segments.length === 0 || segments.some((segment) => segment === '.' || segment === '..')) {
     throw new Error(`Bulletin PDF paths must stay inside ${SITE_MEDIA_RULES.bulletins.publicPath}.`);
   }
 }
@@ -422,7 +444,7 @@ export async function saveBulletin(
   }
 ) {
   const repository = new ChurchSiteContentRepository(repoClient);
-  const date = trimRequiredValue(input.draft.date, 'Bulletin date');
+  const date = normalizeBulletinDate(input.draft.date);
   const name = trimRequiredValue(input.draft.name, 'Bulletin name');
   const pdfs = normalizeBulletinDraftPdfs(input.draft.pdfs);
   const pdfFields = serializeBulletinPdfFields(pdfs);
@@ -452,7 +474,7 @@ export async function saveBulletin(
       const currentFile = await repoClient.readTextFile(currentPath);
 
       if (currentFile.sha && currentFile.sha !== input.bulletin.sha) {
-        throw new Error('This bulletin was updated elsewhere. Reload the admin page and try saving again.');
+        throw new Error(CONTENT_CONFLICT_RETRY_MESSAGE);
       }
     }
 
@@ -511,6 +533,16 @@ export async function uploadMediaAsset(
   const fileName = sanitizeUploadedFileName(trimRequiredValue(targetName || '', 'Upload file name'));
   const path = input.replaceAsset?.path || buildMediaPath(input.folderId, fileName);
 
+  if (input.file.size > MAX_MEDIA_UPLOAD_BYTES) {
+    throw new Error('Files must be 25 MB or smaller.');
+  }
+
+  const currentAssets = (await loadMediaAssets(repoClient, [input.folderId]))[input.folderId];
+
+  if (!input.replaceAsset && currentAssets.some((asset) => asset.path === path)) {
+    throw new Error(`A file named ${fileName} already exists. Choose a different name or replace the existing file.`);
+  }
+
   const uploaded = await repoClient.uploadMedia({
     file: input.file,
     message: `Admin: ${input.replaceAsset ? 'replace' : 'upload'} ${getFolderConfig(input.folderId).label.toLowerCase()} ${fileName}`,
@@ -527,7 +559,6 @@ export async function uploadMediaAsset(
     publicPath: buildPublicPath(input.folderId, fileName),
     sha: uploaded.sha
   };
-  const currentAssets = (await loadMediaAssets(repoClient, [input.folderId]))[input.folderId];
   const nextAssets = [...currentAssets.filter((asset) => asset.path !== path), fallbackAsset].sort((left, right) =>
     left.name.localeCompare(right.name)
   );

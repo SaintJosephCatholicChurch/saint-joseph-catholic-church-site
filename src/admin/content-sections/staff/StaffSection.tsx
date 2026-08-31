@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useAdminFieldSelection } from '../components/adminPreviewSelection';
-import { AdminContentSectionPage } from '../components/AdminContentSectionPage';
+import { AdminContentSectionPage, useAdminMobileLayout } from '../components/AdminContentSectionPage';
 import { useAdminQueryParamState } from '../../useAdminQueryParamState';
 import { StaffEditor } from './StaffEditor';
 import { StaffPreview } from './StaffPreview';
@@ -25,6 +25,7 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
   const [expandedClientIds, setExpandedClientIds] = useState<string[]>([]);
   const pendingExpandedFocusFieldKeyRef = useRef<StaffFieldKey | null>(null);
   const pendingPreviewSelectionFieldKeyRef = useRef<StaffFieldKey | null>(null);
+  const isMobileLayout = useAdminMobileLayout();
   const [panel, setPanel] = useAdminQueryParamState({
     allowedValues: CONTENT_SECTION_PANELS,
     defaultValue: 'editor',
@@ -77,7 +78,7 @@ export function StaffSection({ headerActions, onChange, onSelectImage, value }: 
   }
 
   function handleSelectFieldKey(fieldKey: StaffFieldKey) {
-    if (panel === 'preview') {
+    if (isMobileLayout && panel === 'preview') {
       pendingPreviewSelectionFieldKeyRef.current = fieldKey;
       setPanel('editor');
       return;

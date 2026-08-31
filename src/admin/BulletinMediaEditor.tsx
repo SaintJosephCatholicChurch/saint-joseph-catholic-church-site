@@ -51,6 +51,8 @@ import {
   type BulletinSummary,
   type MediaAsset
 } from './content/writableBulletinsMediaContent';
+import { isContentConflictError, CONTENT_CONFLICT_RETRY_MESSAGE } from './content/conflictError';
+import { clearSharedContentResource } from './content/sharedContentStore';
 import { useAdminUnsavedChanges, useRegisterAdminDirty } from './unsavedChanges';
 
 import type { AdminRepoClient } from './services/adminTypes';
@@ -591,6 +593,21 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
         }));
       }
     } catch (error) {
+      if (isContentConflictError(error)) {
+        try {
+          clearSharedContentResource(repoClient);
+          await refreshContent({ preserveDraft: true });
+          setEditorState((currentState) => ({
+            ...currentState,
+            saveError: CONTENT_CONFLICT_RETRY_MESSAGE,
+            saveStatus: 'error'
+          }));
+          return;
+        } catch {
+          // Fall through to the original save error.
+        }
+      }
+
       setEditorState((currentState) => ({
         ...currentState,
         saveError: buildErrorMessage(error),
@@ -683,7 +700,15 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
       selectedBulletinId: routedBulletinId
     }));
     setDraft(createDraftForSelection(editorState.content, routedBulletinId));
-  }, [confirmIfDirty, editorState.content, editorState.selectedBulletinId, isDirty, replaceSelectionInUrl, routedBulletinId, summaries]);
+  }, [
+    confirmIfDirty,
+    editorState.content,
+    editorState.selectedBulletinId,
+    isDirty,
+    replaceSelectionInUrl,
+    routedBulletinId,
+    summaries
+  ]);
 
   useEffect(() => {
     if (summaries.length > 0) {
@@ -875,7 +900,8 @@ export function BulletinMediaEditor({ onSaved, repoClient }: BulletinMediaEditor
         <AdminDialogTitle onClose={() => setDeleteDialogOpen(false)}>Delete bulletin</AdminDialogTitle>
         <DialogContent dividers>
           <DialogContentText>
-            Delete “{activeBulletin?.value.name || 'this bulletin'}”? This removes the metadata file from the repository.
+            Delete “{activeBulletin?.value.name || 'this bulletin'}”? This removes the metadata file from the
+            repository.
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2, pt: 1 }}>

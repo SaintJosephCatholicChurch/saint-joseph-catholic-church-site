@@ -1,3 +1,5 @@
+import { stripDangerousUris } from '../../../util/sanitizeHtmlImages';
+
 export function fromEditorToStorage(value: string): string {
   let newValue = value;
 
@@ -14,6 +16,7 @@ export function fromEditorToStorage(value: string): string {
     imageMatch = imageRegex.exec(newValue);
   }
 
+  newValue = stripDangerousUris(newValue);
   newValue = newValue.replace(/src="(?!https?:|\/|data:|blob:)([\w\W]+?)"/g, 'src="/$1"');
 
   const fileRegex = /<a(?:[^>]+?)data-asset="([\w\W]+?)"(?:[^>]+?)?>(?:[\w\W]+?)<\/a>/g;
@@ -28,7 +31,8 @@ export function fromEditorToStorage(value: string): string {
     fileMatch = fileRegex.exec(newValue);
   }
 
-  newValue = newValue.replace(/href="(?!https?:|mailto:|tel:|sms:|javascript:|\/|#|\?)([\w\W]+?)"/g, 'href="/$1"');
+  newValue = stripDangerousUris(newValue);
+  newValue = newValue.replace(/href="(?!https?:|mailto:|tel:|sms:|\/|#|\?)([\w\W]+?)"/g, 'href="/$1"');
 
   return newValue;
 }

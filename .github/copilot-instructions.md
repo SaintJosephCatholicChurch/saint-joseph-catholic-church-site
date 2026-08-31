@@ -21,7 +21,7 @@ This file is kept in sync with Cursor: `AGENTS.md` (full repo map) and `.cursor/
 - Do not add preview-local `overflow: auto`, `overflowY: auto`, `container: 'page / inline-size'`, or centering wrappers unless the nested content itself has a separate behavior requirement.
 - If a preview needs a narrower content column inside the page frame, use a local wrapper with only `width: '100%'` and `maxWidth`; let the shared frame and container handle centering.
 - Reuse public components with `inCMS` / `adminSelection`. Feed draft data into previews, not live `src/lib` imports, when the editor owns that data.
-- `ADMIN_AUTH.siteId` prefers `NEXT_PUBLIC_NETLIFY_SITE_ID` (set this in production). Do not commit a real site id. Connected GitHub tokens stay in `localStorage`; XSS on `/admin` equals repo write access. Logout clears session keys plus GitHub/document/bulletin/preview-file caches.
+- `ADMIN_AUTH.siteId` uses `NEXT_PUBLIC_NETLIFY_SITE_ID` (required in production; localhost may fall back to `cms.netlify.com`). Do not commit a real site id. Connected GitHub tokens stay in `localStorage`; XSS on `/admin` equals repo write access. Logout clears session keys plus GitHub/document/bulletin/preview-file caches.
 - New structured sections should use `AdminContentSectionPage` plus `ContentSectionsEditorBase`.
 
 ## Where things live

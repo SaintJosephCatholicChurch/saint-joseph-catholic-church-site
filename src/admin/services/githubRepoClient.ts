@@ -612,16 +612,30 @@ export class GitHubRepoClient implements AdminRepoClient {
     });
 
     const responseText = await response.text();
-    const parsedPayload = responseText ? (JSON.parse(responseText) as unknown) : null;
+    let parsedPayload: unknown = null;
+
+    if (responseText) {
+      try {
+        parsedPayload = JSON.parse(responseText) as unknown;
+      } catch {
+        parsedPayload = null;
+      }
+    }
 
     if (!response.ok && response.status !== 304) {
-      if (response.status === 409) {
+      const githubMessage = createErrorMessage(response.status, parsedPayload);
+      const isConflict =
+        response.status === 409 ||
+        (response.status === 422 &&
+          /fast[- ]forward|does not match|sha wasn't supplied|already exists|Conflict/i.test(githubMessage));
+
+      if (isConflict) {
         throw new Error(
-          `${response.status}: This file was updated elsewhere. Reload the admin page and try saving again.`
+          `${response.status}: This file was updated elsewhere. Your edits are kept. Save again to overwrite, or Reset to load the latest.`
         );
       }
 
-      throw new Error(`${response.status}: ${createErrorMessage(response.status, parsedPayload)}`);
+      throw new Error(`${response.status}: ${githubMessage || response.statusText || 'GitHub request failed.'}`);
     }
 
     return {

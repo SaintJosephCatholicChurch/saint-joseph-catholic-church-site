@@ -448,14 +448,19 @@
                   "notes": [],
                   "time": "9:00 AM",
                   "end_time": "4:00 PM"
+                },
+                {
+                  "id": "046db7f3-ab0d-42c7-ae5f-9afd191449bd",
+                  "notes": [
+                    {
+                      "id": "2f57ee47-8597-427d-8549-fdcb3d290a83",
+                      "note": "Due to the Labor Day Holiday Weekend, there will be no First Friday Adoration in September 2026. The Church remains open for prayer before the Blessed Sacrament reserved in the tabernacle."
+                    }
+                  ]
                 }
               ]
             }
           ]
-        },
-        {
-          "id": "6a73e259-842d-4228-9214-bc97192c5ce7",
-          "name": "Please Note: Adoration will be held in the Parish Conference Room starting December 30, 2025."
         }
       ],
       "id": "92ac4474-522a-4b8c-9139-72634ebfec2d"

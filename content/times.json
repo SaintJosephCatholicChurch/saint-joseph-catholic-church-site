@@ -211,7 +211,7 @@
                   "notes": [
                     {
                       "id": "0d769238-dac0-49dd-98f9-0f8aa9c5ce53",
-                      "note": ""
+                      "note": "Parish Office closed on Monday, Sept. 7, 2026 for Labor Day Holiday"
                     }
                   ]
                 }
@@ -233,6 +233,10 @@
                     {
                       "id": "c6f9f1c5-a9c8-4389-bee9-11bc3205adea",
                       "note": "Accepted on Mondays when Parish Office is open"
+                    },
+                    {
+                      "id": "97d57140-cb89-433f-9311-5444ae4cd1a5",
+                      "note": "Accept on Tuesday, Sept. 8, 2026 due to Labor Day Holiday"
                     }
                   ]
                 }

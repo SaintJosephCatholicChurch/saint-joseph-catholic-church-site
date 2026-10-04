@@ -531,24 +531,15 @@
       "sections": [
         {
           "id": "99704f3e-0d32-4803-b239-0062de0150e7",
-          "name": "Memorial Day - May 25, 2026",
+          "name": "Fridays during Lent",
           "days": [
             {
               "id": "7689161d-a4ce-4e95-9f86-f1ea476bc656",
-              "day": "Mass",
+              "day": "Stations of the Cross",
               "times": [
                 {
                   "id": "31d1096c-5998-4182-8ad1-588c4cdbf308",
-                  "time": "10:00 AM"
-                },
-                {
-                  "id": "ab503bec-f71a-4687-920f-3c5059eea7cb",
-                  "notes": [
-                    {
-                      "id": "837a4a97-7a78-4832-a1d4-f38757719a3d",
-                      "note": "Mass at St. Joseph Catholic Cemetery (103 Elm Grove Rd, Bluffton)"
-                    }
-                  ]
+                  "time": "7:00 PM"
                 }
               ]
             }

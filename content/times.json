@@ -227,6 +227,79 @@
           "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
         },
         {
+          "id": "23b0439c-d76c-440c-88df-86578917070d",
+          "name": "Retirement Community Mass*",
+          "days": [
+            {
+              "id": "bf8ed694-9e95-4dbe-b5a7-54ea0789a2d8",
+              "day": "River Terrace Retirement Community",
+              "times": [
+                {
+                  "id": "365fb27e-33bc-4ec5-809c-42bcdb3b5b54",
+                  "time": "10:30 AM",
+                  "notes": [
+                    {
+                      "id": "3f6d1d6d-7aa1-4380-9674-66fac4901a6d",
+                      "note": "2nd and 4th Thursdays"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "24d0c382-4f66-4d8c-8c36-66af488ce720",
+              "day": "Christian Care Retirement Community",
+              "times": [
+                {
+                  "id": "a9751b8f-7bbe-4933-b91a-b8eba854df3e",
+                  "time": "10:30 AM",
+                  "notes": [
+                    {
+                      "id": "a6e8890c-3109-40b6-af13-bf1d6b07c06a",
+                      "note": "3rd Thursdays"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "b003f347-4ee2-49d4-b7c6-25d930d93c62",
+              "day": "Heritage Pointe of Warren",
+              "times": [
+                {
+                  "id": "507cede0-022a-42b0-ba53-d2ed5bb2c200",
+                  "time": "1:00 PM",
+                  "notes": [
+                    {
+                      "id": "28a52bec-5db4-4e17-8692-ec6d3792de28",
+                      "note": "Every Sunday"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "edbd3d56-9342-4052-a9f1-ac0b99ab357c",
+              "day": "",
+              "times": [
+                {
+                  "id": "dbec6432-3c79-4570-bb7d-8dee2aa03a60",
+                  "notes": [
+                    {
+                      "id": "42211cbe-6c1a-4f7f-b205-ef10e5320d58",
+                      "note": "*Masses are offered for members of our local retirement communities several times a month. Parishioners are welcome and invited to join in these Masses."
+                    },
+                    {
+                      "id": "dd5a0c05-0737-4674-9d83-c502eff170d1",
+                      "note": "Note: Weekday Mass times at our retirement communities are subject to change. Please check the Parish Schedule in the Bulletin for up-to-date information.</I "
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "e46d9b5a-77e2-473a-839d-85de33fbc90b",
           "name": "",
           "days": [

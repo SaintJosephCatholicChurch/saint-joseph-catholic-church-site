@@ -222,32 +222,39 @@
                 }
               ],
               "id": "de1b2401-9326-4916-953e-7888bc4a6626"
-            },
+            }
+          ],
+          "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
+        },
+        {
+          "id": "e46d9b5a-77e2-473a-839d-85de33fbc90b",
+          "name": "",
+          "days": [
             {
-              "id": "f9942dec-0f80-4173-b255-2a1c301ddb0d",
-              "day": ""
-            },
-            {
-              "id": "bf758169-d0e9-4640-8898-2166c2f73f4c",
+              "id": "13c1df10-2b80-47e5-a139-7d3e60efe7e3",
               "day": "",
               "times": [
                 {
-                  "id": "c2cfd1a2-808b-4635-8add-0f3346d75752",
+                  "id": "930c2789-0d0b-463f-9cec-1eaebfc391e4",
                   "notes": [
                     {
-                      "id": "8888ee10-5848-4262-9652-e373544a50da",
-                      "note": "v.p. - Mass offered <i>versus populum</i>"
-                    },
+                      "id": "3b908a96-1485-4806-adb6-fa014c465227",
+                      "note": "v.p. - Mass offered: <i>versus populum</i>"
+                    }
+                  ]
+                },
+                {
+                  "id": "fcdab55f-1c08-45a7-b37e-4bcddc6b1b6f",
+                  "notes": [
                     {
-                      "id": "2305092c-8221-4314-8773-c48bc757cf21",
-                      "note": "a.d. - Mass offered <i>ad orientem</i>"
+                      "id": "35ef0b8e-6c7c-4ec4-9f9f-daf9ebea43e6",
+                      "note": "a.d. - Mass offered: <i>ad orientem</i>"
                     }
                   ]
                 }
               ]
             }
-          ],
-          "id": "532b22a5-f5b1-4e35-951a-faba3830ac10"
+          ]
         }
       ],
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"

@@ -14,11 +14,20 @@
                   "time": "5:00 PM",
                   "notes": [
                     {
-                      "note": "Rosary at 4:35 PM",
+                      "note": "(v.p.)",
                       "id": "488cd181-546a-4195-9525-667c962cc1cb"
                     }
                   ],
                   "id": "b8168f22-98d5-48fd-8b2f-6bc6b830b499"
+                },
+                {
+                  "id": "670a625f-84ff-4903-a581-522e79c6adb3",
+                  "notes": [
+                    {
+                      "id": "6ef9437d-9aa0-4f65-a691-8ac82ce5ebbd",
+                      "note": "Rosary at 4:35 PM"
+                    }
+                  ]
                 }
               ],
               "id": "25705afe-5200-495d-820b-8bdf8aa91e09"
@@ -30,7 +39,7 @@
                   "time": "7:30 AM",
                   "notes": [
                     {
-                      "note": "Rosary at 7:10 AM",
+                      "note": "(v.p.)",
                       "id": "e799ed13-86cb-4b67-8ebd-80300e494d0d"
                     }
                   ],
@@ -38,15 +47,42 @@
                   "id": "de1c02c1-c4de-4d9e-8e40-34360a5398f4"
                 },
                 {
+                  "id": "58f366d8-ef45-4a62-ad55-f0c7269e9342",
+                  "notes": [
+                    {
+                      "id": "e7093bc9-fe4f-4f65-bbf7-e49636ec34fb",
+                      "note": "Rosary at 7:10 AM"
+                    }
+                  ]
+                },
+                {
                   "time": "10:00 AM",
                   "notes": [
                     {
-                      "note": "Rosary at 9:40 AM",
+                      "note": "(a.o.)",
                       "id": "abae934f-911a-4029-befc-730927486e8f"
                     }
                   ],
                   "end_time": "",
                   "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
+                },
+                {
+                  "id": "300042de-d8a6-49b3-9f88-6f994afca3b1",
+                  "notes": [
+                    {
+                      "id": "f95d9118-28bb-4171-85b0-41464928532a",
+                      "note": "Rosary at 9:40 AM"
+                    }
+                  ]
+                },
+                {
+                  "id": "dca0125e-1ccd-420c-9827-fe5072eaeeb7",
+                  "notes": [
+                    {
+                      "id": "412daf52-79b4-4abb-9318-1f0c4e76716b",
+                      "note": "Note: Incense may be used at the 10 AM Mass"
+                    }
+                  ]
                 }
               ],
               "id": "0ccf4552-f32b-4b3a-84cf-acc120c3182f"
@@ -78,7 +114,12 @@
                 {
                   "time": "8:00 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "67e2cbed-09f3-4ea7-81c7-f8f76aee3996",
+                      "note": "(v.p.)"
+                    }
+                  ]
                 },
                 {
                   "notes": [
@@ -103,7 +144,12 @@
                   "time": "7:00 PM",
                   "end_time": "",
                   "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe",
-                  "notes": []
+                  "notes": [
+                    {
+                      "id": "de54aa5d-cb72-41ae-a01f-70aaa373b264",
+                      "note": "(v.p.)"
+                    }
+                  ]
                 },
                 {
                   "notes": [
@@ -127,7 +173,7 @@
                   "notes": [
                     {
                       "id": "e6f96318-7f6d-4ef5-b0ed-fecb75b6e48d",
-                      "note": ""
+                      "note": "(v.p.)"
                     }
                   ]
                 }
@@ -140,7 +186,13 @@
                 {
                   "time": "8:30 AM",
                   "end_time": "",
-                  "id": "08e04d04-53e4-4f2b-8733-625ab18f4cf2"
+                  "id": "08e04d04-53e4-4f2b-8733-625ab18f4cf2",
+                  "notes": [
+                    {
+                      "id": "e5c772be-4539-491f-81bd-dbd553cc2ffa",
+                      "note": "(a.o.)"
+                    }
+                  ]
                 }
               ],
               "id": "3ac7fa94-de8f-42f0-a2b9-acd8ed080bdd"
@@ -151,7 +203,13 @@
                 {
                   "time": "8:00 AM",
                   "end_time": "",
-                  "id": "95518a16-b6e6-46e8-ad0b-1221309d268b"
+                  "id": "95518a16-b6e6-46e8-ad0b-1221309d268b",
+                  "notes": [
+                    {
+                      "id": "0b8258f7-8452-426b-9f2d-e3b2779a5c38",
+                      "note": "(v.p.)"
+                    }
+                  ]
                 },
                 {
                   "notes": [
@@ -166,6 +224,10 @@
               "id": "de1b2401-9326-4916-953e-7888bc4a6626"
             },
             {
+              "id": "f9942dec-0f80-4173-b255-2a1c301ddb0d",
+              "day": ""
+            },
+            {
               "id": "bf758169-d0e9-4640-8898-2166c2f73f4c",
               "day": "",
               "times": [
@@ -174,7 +236,11 @@
                   "notes": [
                     {
                       "id": "8888ee10-5848-4262-9652-e373544a50da",
-                      "note": "Please Note: Week Day Masses will resume in the Church starting August 28, 2026."
+                      "note": "v.p. - Mass offered <i>versus populum</i>"
+                    },
+                    {
+                      "id": "2305092c-8221-4314-8773-c48bc757cf21",
+                      "note": "a.d. - Mass offered <i>ad orientem</i>"
                     }
                   ]
                 }

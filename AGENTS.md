@@ -20,9 +20,10 @@ There is no Sanity, Payload, Prisma, Supabase, Firebase, Tailwind, NextAuth, or 
 2. Prefer editing **public components** and feeding draft data into admin previews. Do not fork markup for the CMS.
 3. Persist through `src/admin/content/` adapters. Do not write `content/` files ad hoc from admin UI.
 4. Match Prettier (`singleQuote`, `trailingComma: 'none'`, `printWidth: 120`) and ESLint (`import/order`, `consistent-type-imports`, MUI import restrictions).
-5. Verify with `npm run type-check`. `npm run lint` only lints `**/*.ts`, not `.tsx`. Use `npm run build` before treating a UI change as done. Use `npm run smoke:gate` before dependency upgrades.
+5. On Windows, run agent commands in PowerShell rather than Git Bash and check the version before using version-specific syntax. On Linux/macOS, use the native shell; do not change the user's interactive terminal preference.
+6. Verify with `npm run type-check`; CircleCI does not run that script and production builds ignore TypeScript errors. `npm run lint` only lints `**/*.ts`, not `.tsx`; run `npx --no-install eslint` with changed `.tsx` paths. Use `npm run build` before treating a UI change as done. Use `npm run smoke:gate` before dependency upgrades.
 
-Do not follow `src/app/README.md` (it still describes a Pages Router migration that already finished). `README.md` documents `npm run local-cms`, which is not a script. `plan.md` is a Times-editor checklist; several paths in it are stale (`ComplexStructuredContentEditor`, `src/admin/times/`). Trust the tree.
+Do not follow `src/app/README.md` (it still describes a Pages Router migration that already finished). `plan.md` is a Times-editor checklist; several paths in it are stale (`ComplexStructuredContentEditor`, `src/admin/times/`). Trust the tree.
 
 ---
 
@@ -268,13 +269,15 @@ No Next.js API routes. Static export forbids them.
 | `npm run dev` | Webpack dev server |
 | `npm run build` | Static export to `out/` |
 | `npm run type-check` | `tsc --noEmit` (use this; production build ignores TS errors) |
-| `npm run lint` | ESLint `**/*.ts` only |
+| `npm run lint` | ESLint `**/*.ts` only; use `npx --no-install eslint` with changed `.tsx` paths |
 | `npm run prettier` | Format `src/**/*.{js,jsx,ts,tsx}` |
 | `npm run smoke:gate` | type-check + lint + build + Playwright (required before dependency upgrades) |
 | `npm run smoke:test` | Playwright against exported site |
 | `npm run smoke:test:update` | Update visual baselines **after manual review only** |
 | `npm run bulletins` / `bulletins-ci` | PDF → images |
 | `npm run smoke:install -- chromium firefox webkit` | One-time Playwright browsers |
+
+CircleCI does not run the separate `type-check` or `lint` scripts.
 
 CI is **CircleCI**, not GitHub Actions. `main` → Netlify prod `./out`; `beta` → Netlify branch deploy. `netlify.toml` is not what production deploy uses.
 

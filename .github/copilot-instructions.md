@@ -6,11 +6,13 @@ This file is kept in sync with Cursor: `AGENTS.md` (full repo map) and `.cursor/
 
 - Next.js 16 App Router **static export**. Do not add Next API routes, Pages Router files, or request-time SSR data.
 - Keep **webpack** (`next dev --webpack` / `next build --webpack`). Leave PWA off unless `NEXT_ENABLE_PWA=true` is set on purpose.
-- Production builds ignore TypeScript errors; always run `npm run type-check`. `npm run lint` only covers `**/*.ts`.
+- On Windows, run agent commands in PowerShell rather than Git Bash and check the version before using version-specific syntax. On Linux/macOS, use the native shell; do not change the user's interactive terminal preference.
+- Production builds ignore TypeScript errors, and CircleCI runs neither the separate `type-check` nor `lint` script; always run `npm run type-check`.
+- `npm run lint` only covers `**/*.ts`; run `npx --no-install eslint` with changed `.tsx` paths.
 - Prefer relative imports. Use `import type { X } from '...'`. Prettier: single quotes, no trailing commas, print width 120.
 - Import MUI as a default or 2nd-level path, never `@mui/material` barrel imports and never `@mui/*/*/*`.
 - Domain types live in `src/interface.ts`. Content lives in `content/` and is persisted through `src/admin/content/`.
-- Do not treat `src/app/README.md`, `README.md`'s `local-cms` step, or stale paths in `plan.md` as current. Trust the source tree.
+- Do not treat `src/app/README.md` or stale paths in `plan.md` as current. Trust the source tree.
 - Full map of folders, routes, CMS paths, and gotchas: `AGENTS.md`.
 
 ## Admin preview standardization

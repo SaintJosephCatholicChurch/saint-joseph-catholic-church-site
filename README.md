@@ -33,8 +33,8 @@ Current intentional smoke baseline constraints:
 ## Local Development
 
 1. Install dependencies: `npm install`
-2. Start local authication service for cms `npm run local-cms`
-3. Start dev build `npm run dev`
+2. Start the development server: `npm run dev`
+3. To use the local-only CMS preview, open `/admin?mode=preview` on the development server (normally `http://localhost:3000/admin?mode=preview`) in a browser without an active connected CMS session. Preview changes stay in that browser and are not published.
 
 ## License
 

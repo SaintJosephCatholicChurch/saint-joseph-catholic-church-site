@@ -342,9 +342,22 @@ function buildMenuItemValue(draft: MenuItemDraft, itemIndex: number): MenuItem {
   const menuLinks = draft.menuLinks.map((link, linkIndex) =>
     buildMenuLinkValue(link, `Menu item ${itemIndex + 1} sub-link ${linkIndex + 1}`)
   );
+  const title = draft.title.trim();
+  const page = trimOptionalValue(draft.page);
+  const url = trimOptionalValue(draft.url);
+
+  if (!title) {
+    throw new Error(`Menu item ${itemIndex + 1} requires a title.`);
+  }
+
+  if (!page && !url && menuLinks.length === 0) {
+    throw new Error(`Menu item ${itemIndex + 1} requires a page or URL unless it has sub-links.`);
+  }
 
   return {
-    ...buildMenuLinkValue(draft, `Menu item ${itemIndex + 1}`),
+    page,
+    title,
+    url,
     menu_links: menuLinks.length ? menuLinks : undefined
   };
 }
@@ -447,7 +460,9 @@ export async function loadStructuredContent(
     uniqueSectionIds.push('churchDetails');
   }
   const content = createEmptyStructuredContent();
-  const loadedSections = await Promise.all(uniqueSectionIds.map((sectionId) => loadStructuredSection(repoClient, sectionId)));
+  const loadedSections = await Promise.all(
+    uniqueSectionIds.map((sectionId) => loadStructuredSection(repoClient, sectionId))
+  );
 
   uniqueSectionIds.forEach((sectionId, index) => {
     switch (sectionId) {

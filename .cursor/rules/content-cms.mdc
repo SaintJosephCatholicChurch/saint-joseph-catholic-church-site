@@ -8,6 +8,10 @@ alwaysApply: false
 
 Content lives in Git, not a database. Paths are `SITE_CONTENT_PATHS` in `src/admin/content/contentRepository.ts`.
 
+During admin coexistence, `/admin` is the legacy Static CMS (`src/cms/` and `src/components/previews/`): keep it working, but do not extend it. `/new-admin` is the custom CMS in `src/admin/`; all new admin work goes there.
+
+`ADMIN_BASE_PATH` and `LEGACY_ADMIN_PATH` in `src/admin/adminConfig.ts` own the route paths. Switch between admins with full page loads; the admins have separate logins and sessions. Reload after switching, and do not edit the same item in both admins at once because the legacy CMS can overwrite concurrent saves. Run `npm run local-cms` alongside `npm run dev` to test the legacy CMS locally. ESLint intentionally ignores `src/cms/**` and `src/components/previews/**` during coexistence, while TypeScript still checks them. See the [Phase 5 cutover checklist](../../plan.md#phase-5-cutover-after-feedback-separate-session-later) before removing the legacy CMS.
+
 | Concern | File | Loader | Admin writer |
 |---|---|---|---|
 | Site config | `content/config.json` | `src/lib/config.ts` | `writableStructuredContent.ts` |

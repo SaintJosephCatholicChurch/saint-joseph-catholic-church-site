@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
 import AppPageShell from '../AppPageShell';
+import AdminErrorBoundary from '../../admin/AdminErrorBoundary';
 import SearchBox from '../../components/SearchBox';
 import PageContentView from '../../components/pages/PageContentView';
 import { REDIRECTS } from '../../constants';
@@ -12,6 +13,18 @@ import { REDIRECTS } from '../../constants';
 import type { SidebarProps } from '../../lib/sidebar';
 
 export const AdminPageView = () => {
+  const CMSViewNoSSR = useMemo(
+    () =>
+      dynamic(() => import('../../cms/CMSView'), {
+        ssr: false
+      }),
+    []
+  );
+
+  return <CMSViewNoSSR key="admin" />;
+};
+
+export const NewAdminPageView = () => {
   const AdminShellNoSSR = useMemo(
     () =>
       dynamic(() => import('../../admin/AdminShell'), {
@@ -20,7 +33,11 @@ export const AdminPageView = () => {
     []
   );
 
-  return <AdminShellNoSSR key="admin" />;
+  return (
+    <AdminErrorBoundary>
+      <AdminShellNoSSR key="new-admin" />
+    </AdminErrorBoundary>
+  );
 };
 
 export const NotFoundPageView = ({ ...sidebarProps }: SidebarProps) => {

@@ -32,6 +32,8 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 
 import Help from './help/Help';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuthProvider';
+import { ADMIN_BASE_PATH } from './adminConfig';
+import SwitchToOldAdminButton from './components/SwitchToOldAdminButton';
 import { BulletinMediaEditor } from './BulletinMediaEditor';
 import { ContentEditor } from './ContentEditor';
 import { DocumentContentEditor } from './documents/DocumentContentEditor';
@@ -912,12 +914,13 @@ function AdminLoginPage({
           <Button variant="contained" onClick={() => void login()} disabled={isBusy}>
             Connect GitHub
           </Button>
-          <Button variant="outlined" color="inherit" href="/admin?view=help">
+          <Button variant="outlined" color="inherit" href={`${ADMIN_BASE_PATH}?view=help`}>
             Help
           </Button>
           <Button variant="outlined" color="inherit" href="/">
             Return to site
           </Button>
+          <SwitchToOldAdminButton />
         </Stack>
       </LoginCardBody>
     </LoginCard>
@@ -1093,6 +1096,7 @@ function AdminShellSurface() {
         {session ? (
           <Typography sx={{ color: '#616169', fontSize: '0.9rem', lineHeight: 1.5 }}>{session.user.name}</Typography>
         ) : null}
+        <SwitchToOldAdminButton fullWidth />
         <Button
           variant="outlined"
           color="inherit"
@@ -1207,6 +1211,7 @@ function AdminShellSurface() {
             <ShellToolbarAction variant="outlined" color="inherit" href="/">
               Return to site
             </ShellToolbarAction>
+            <SwitchToOldAdminButton />
           </ShellToolbar>
         </ShellAppBar>
 

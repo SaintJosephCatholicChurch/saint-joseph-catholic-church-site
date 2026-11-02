@@ -20,3 +20,6 @@ export const ADMIN_READ_PROBE = {
   filePath: 'content/config.json',
   folderPath: 'content'
 } as const;
+
+export const ADMIN_BASE_PATH = '/new-admin';
+export const LEGACY_ADMIN_PATH = '/admin';

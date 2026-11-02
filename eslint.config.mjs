@@ -157,5 +157,14 @@ export default defineConfig([
       'import/no-unresolved': [0]
     }
   },
-  globalIgnores(['next-env.d.ts', 'public/sw.js', 'public/workbox-*.js', 'src/util/pdf/**', 'next.config.js'])
+  globalIgnores([
+    'next-env.d.ts',
+    'public/sw.js',
+    'public/workbox-*.js',
+    'src/util/pdf/**',
+    'next.config.js',
+    // Legacy Static CMS admin, kept as-is during coexistence; delete at cutover
+    'src/cms/**',
+    'src/components/previews/**'
+  ])
 ]);

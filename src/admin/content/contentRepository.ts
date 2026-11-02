@@ -542,7 +542,7 @@ class JsonFileAdapter<TValue> {
   }
 
   serialize(value: TValue) {
-    return `${JSON.stringify(value, null, 2)}\n`;
+    return JSON.stringify(value, null, 2);
   }
 
   write(
@@ -593,7 +593,7 @@ class BulletinCollectionAdapter {
   }
 
   serialize(value: Bulletin) {
-    return `${JSON.stringify(value, null, 2)}\n`;
+    return JSON.stringify(value, null, 2);
   }
 
   write(
@@ -691,7 +691,7 @@ export const siteContentAdapters = {
   ),
   posts: new FrontmatterCollectionAdapter<AdminPostFrontmatter>(
     SITE_CONTENT_PATHS.posts,
-    ['slug', 'title', 'image', 'date', 'tags'] as const,
+    ['title', 'image', 'date', 'tags', 'slug'] as const,
     validatePostFrontmatter
   ),
   staff: new JsonFileAdapter(SITE_CONTENT_PATHS.staff, validateStaffFile),

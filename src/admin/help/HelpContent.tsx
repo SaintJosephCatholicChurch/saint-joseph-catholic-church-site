@@ -117,6 +117,13 @@ const HelpContent = () => {
         from the admin panel, rest assured all of the changes are saved. Reach out to your site admin for help restoring
         the lost data.
       </p>
+      <HelpHeading variant="h2">Working with both admins</HelpHeading>
+      <p>
+        Edit an item in only one admin at a time. The old admin can overwrite another person&apos;s recent save. After
+        switching admins, reload before editing so you pick up the latest content. A saved change can take up to a
+        minute to appear in the other admin.
+      </p>
+      <p>Bulletins with multiple PDFs can only be edited in the new admin.</p>
       <HelpHeading variant="h2">Church Details</HelpHeading>
       <p>
         This section controls general details about the church. It has three tabs:{' '}

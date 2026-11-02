@@ -11,8 +11,11 @@ This file is kept in sync with Cursor: `AGENTS.md` (full repo map) and `.cursor/
 - `npm run lint` only covers `**/*.ts`; run `npx --no-install eslint` with changed `.tsx` paths.
 - Prefer relative imports. Use `import type { X } from '...'`. Prettier: single quotes, no trailing commas, print width 120.
 - Import MUI as a default or 2nd-level path, never `@mui/material` barrel imports and never `@mui/*/*/*`.
-- Domain types live in `src/interface.ts`. Content lives in `content/` and is persisted through `src/admin/content/`.
-- Do not treat `src/app/README.md` or stale paths in `plan.md` as current. Trust the source tree.
+- Domain types live in `src/interface.ts`. Content lives in `content/`; the custom admin persists it through `src/admin/content/`.
+- Do not treat `src/app/README.md` as current. Verify plan paths against the source tree.
+- During admin coexistence, `/admin` is the legacy Static CMS (`src/cms/`, `src/components/previews/`): keep it working but do not extend it. `/new-admin` is `src/admin/`; all new admin work goes there.
+- `ADMIN_BASE_PATH` and `LEGACY_ADMIN_PATH` in `src/admin/adminConfig.ts` define the routes. Switch admins with full page loads; their logins and sessions are separate. Run `npm run local-cms` alongside `npm run dev` to test the legacy CMS locally. ESLint ignores `src/cms/**` and `src/components/previews/**` until the [Phase 5 cutover](../plan.md#phase-5-cutover-after-feedback-separate-session-later); TypeScript still checks them.
+- After switching admins, reload before editing and avoid editing the same item in both at once. The legacy CMS can overwrite concurrent saves.
 - Full map of folders, routes, CMS paths, and gotchas: `AGENTS.md`.
 
 ## Admin preview standardization
@@ -30,7 +33,7 @@ This file is kept in sync with Cursor: `AGENTS.md` (full repo map) and `.cursor/
 
 - Routes: `src/app/` (App Router is production; `src/pages/` is unused leftover).
 - Public UI: `src/components/` (custom pages under `src/components/pages/custom/`).
-- CMS UI: `src/admin/` (client-only; `/admin` loads `AdminShell` with `ssr: false`).
+- CMS UI: `src/cms/` (legacy `/admin`) and `src/admin/` (custom `/new-admin`), both client-only.
 - Content loaders: `src/lib/`. Content files: `content/` (JSON + HTML-in-MDX). Path map: `SITE_CONTENT_PATHS` in `src/admin/content/contentRepository.ts`.
 - Events are Google Calendar, not `content/`. Ministries are ordinary MDX pages.
 - Hosting: CircleCI deploys `./out` to Netlify. No GitHub Actions.

@@ -477,7 +477,7 @@ export async function savePageDocument(
   const slug = normalizeRequiredSlug(input.draft.slug, 'Page slug');
   const title = trimRequiredValue(input.draft.title, 'Page title');
   const currentPath = input.document.path;
-  const nextPath = siteContentAdapters.pages.buildPath(slug);
+  const nextPath = slug === input.document.data.slug ? currentPath : siteContentAdapters.pages.buildPath(slug);
 
   assertUniquePageSlug(input.content.pages, slug, currentPath);
 
@@ -519,7 +519,7 @@ export async function savePostDocument(
   const image = normalizeOptionalValue(input.draft.image);
   const tags = parseTagList(input.draft.tags);
   const currentPath = input.document.path;
-  const nextPath = siteContentAdapters.posts.buildPath(slug);
+  const nextPath = slug === input.document.data.slug ? currentPath : siteContentAdapters.posts.buildPath(slug);
 
   assertUniquePostSlug(input.content.posts, slug, currentPath);
 

@@ -34,7 +34,11 @@ Current intentional smoke baseline constraints:
 
 1. Install dependencies: `npm install`
 2. Start the development server: `npm run dev`
-3. To use the local-only CMS preview, open `/admin?mode=preview` on the development server (normally `http://localhost:3000/admin?mode=preview`) in a browser without an active connected CMS session. Preview changes stay in that browser and are not published.
+3. During the admin coexistence period, `/admin` is the legacy Static CMS and `/new-admin` is the custom admin. The admins have separate logins and sessions; use their switch controls to move between them.
+4. To test the legacy CMS locally, run `npm run local-cms` in a second terminal alongside `npm run dev`.
+5. To use the custom admin's local-only preview, open `/new-admin?mode=preview` (normally `http://localhost:3000/new-admin?mode=preview`). Preview changes stay in that browser and are not published.
+
+After switching admins, reload before editing and avoid editing the same item in both admins at once. The legacy CMS can overwrite concurrent saves. See the [Phase 5 cutover checklist](./plan.md#phase-5-cutover-after-feedback-separate-session-later) for the later removal of the legacy admin.
 
 ## License
 

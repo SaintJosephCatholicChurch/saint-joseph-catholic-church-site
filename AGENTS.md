@@ -8,7 +8,7 @@ Cursor also loads focused rules from `.cursor/rules/`. GitHub Copilot reads `.gi
 
 ## What this repo is
 
-A statically exported Next.js app. Parish content is JSON and MDX in `content/`, committed to Git. Staff edit it in `/admin`, which writes through the GitHub Contents API (Netlify GitHub OAuth) or a local preview mode that never pushes.
+A statically exported Next.js app. Parish content is JSON and MDX in `content/`, committed to Git. During admin coexistence, `/admin` is the legacy Static CMS and `/new-admin` is the custom GitHub-backed admin.
 
 There is no Sanity, Payload, Prisma, Supabase, Firebase, Tailwind, NextAuth, or i18n. Events come from Google Calendar, not from `content/`. Contact, parish registration, and live-stream status hit `api.stjosephchurchbluffton.org` (separate Netlify functions), not routes in this app.
 
@@ -23,7 +23,7 @@ There is no Sanity, Payload, Prisma, Supabase, Firebase, Tailwind, NextAuth, or 
 5. On Windows, run agent commands in PowerShell rather than Git Bash and check the version before using version-specific syntax. On Linux/macOS, use the native shell; do not change the user's interactive terminal preference.
 6. Verify with `npm run type-check`; CircleCI does not run that script and production builds ignore TypeScript errors. `npm run lint` only lints `**/*.ts`, not `.tsx`; run `npx --no-install eslint` with changed `.tsx` paths. Use `npm run build` before treating a UI change as done. Use `npm run smoke:gate` before dependency upgrades.
 
-Do not follow `src/app/README.md` (it still describes a Pages Router migration that already finished). `plan.md` is a Times-editor checklist; several paths in it are stale (`ComplexStructuredContentEditor`, `src/admin/times/`). Trust the tree.
+Do not follow `src/app/README.md` (it still describes a Pages Router migration that already finished). Verify paths in plans against the current source tree.
 
 ---
 
@@ -54,7 +54,9 @@ content/          CMS source of truth (JSON + MDX + bulletin metadata)
 public/           Static assets, fonts, bulletin PDFs/images, global CSS
 src/app/          Production App Router (routes, metadata, client page views)
 src/admin/        Custom CMS UI (client-only)
+src/cms/          Legacy Static CMS UI, retained during coexistence
 src/components/   Public-site React UI, grouped by domain
+src/components/previews/ Legacy Static CMS previews
 src/lib/          Build-time content loaders
 src/util/         Shared hooks/utils (container queries, sanitize, fetch)
 src/interface.ts  Shared domain types
@@ -121,7 +123,8 @@ Routes:
 | `/events` | FullCalendar |
 | `/mass-confession-times` | Schedule |
 | `/staff`, `/contact`, `/ask`, `/live-stream`, `/search` | Feature pages |
-| `/admin` | CMS (client-only) |
+| `/admin` | Legacy Static CMS (client-only) |
+| `/new-admin` | Custom admin (client-only) |
 | `/help` | Help (also used from admin) |
 | `/test-parish-registration` | Registration test page |
 
@@ -171,7 +174,16 @@ Media: `public/files`, `public/staff`, `public/bulletins` (`SITE_MEDIA_RULES`). 
 
 ## Admin CMS
 
-Route `/admin` → `src/app/admin/page.tsx` → `AdminPageView` dynamically imports `AdminShell` with `ssr: false`.
+During coexistence:
+
+- `/admin` dynamically imports the legacy Static CMS from `src/cms/`. Keep it working, but do not extend it.
+- `/new-admin` dynamically imports the custom CMS from `src/admin/`. All new admin work goes here.
+- `ADMIN_BASE_PATH` and `LEGACY_ADMIN_PATH` in `src/admin/adminConfig.ts` define `/new-admin` and `/admin`.
+- The old admin switches to the new one through its sidebar link and floating pill. The new admin links back from its login screen, app bar, mobile drawer, and error boundary. Keep switches as full page loads.
+- The admins have separate logins and sessions. Reload after switching, and do not edit the same item in both admins at once; the legacy CMS can overwrite a concurrent save.
+- Run `npm run local-cms` alongside `npm run dev` when testing the legacy CMS locally.
+- ESLint intentionally ignores `src/cms/**` and `src/components/previews/**` during coexistence; TypeScript still checks those files. Remove that ignore at cutover.
+- Follow the [Phase 5 cutover checklist](./plan.md#phase-5-cutover-after-feedback-separate-session-later) only after staff feedback is complete.
 
 ### Auth
 

@@ -10,6 +10,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { format, parse } from 'date-fns';
@@ -48,6 +50,7 @@ const StyledDayTimeLineTimeContent = styled('div')(
 
 const StyledDayTimeLineTimeTimesWrapper = styled('div')`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 `;
@@ -90,11 +93,12 @@ const StyledTimesHeaderWrapper = styled('div')`
 
 export interface TimesWidgetTimeProps {
   time: TimesTime;
+  isMass: boolean;
   onChange: (time: TimesTime) => void;
   onDelete: (time: TimesTime) => void;
 }
 
-const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete }) => {
+const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, isMass, onChange, onDelete }) => {
   const stopPropagation = useCallback((event: MouseEvent) => {
     event.stopPropagation();
   }, []);
@@ -190,6 +194,24 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, onChange, onDelete })
                     format="h:mm a"
                     ampm
                   />
+                  {isMass && isNotEmpty(time.time) ? (
+                    <TextField
+                      select
+                      label="Mass orientation"
+                      size="small"
+                      value={time.mass_orientation ?? 'versus_populum'}
+                      onClick={stopPropagation}
+                      onChange={(event) =>
+                        handleChange({
+                          mass_orientation: event.target.value === 'ad_orientem' ? 'ad_orientem' : 'versus_populum'
+                        })
+                      }
+                      sx={{ minWidth: 180 }}
+                    >
+                      <MenuItem value="versus_populum">Versus populum (v.p.)</MenuItem>
+                      <MenuItem value="ad_orientem">Ad orientem (a.o.)</MenuItem>
+                    </TextField>
+                  ) : null}
                   <IconButton onClick={handleDelete} color="error">
                     <DeleteIcon />
                   </IconButton>

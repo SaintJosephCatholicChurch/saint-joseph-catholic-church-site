@@ -28,10 +28,11 @@ const StyledAddButtonWrapper = styled('div')`
 
 interface TimesWidgetSectionsProps {
   sections?: TimesWidgetSectionValue[];
+  isMass: boolean;
   onChange: (sections: TimesWidgetSectionValue[]) => void;
 }
 
-const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSections = [], onChange }) => {
+const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSections = [], isMass, onChange }) => {
   const hasMissingIds = Boolean(rawSections.find((i) => !i.id));
   const sections = useMemo(
     () =>
@@ -121,6 +122,7 @@ const TimesWidgetSections: FC<TimesWidgetSectionsProps> = ({ sections: rawSectio
                 <TimesWidgetSection
                   key={section.id}
                   section={section}
+                  isMass={isMass}
                   onChange={handleChange}
                   onDelete={handleDelete}
                 />

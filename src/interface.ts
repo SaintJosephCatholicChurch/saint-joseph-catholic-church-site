@@ -54,10 +54,13 @@ export interface Slide {
   readonly title: string;
 }
 
+export type MassOrientation = 'versus_populum' | 'ad_orientem';
+
 export interface TimesTime {
   readonly id: string | undefined;
   readonly time?: string;
   readonly end_time?: string;
+  readonly mass_orientation?: MassOrientation;
   readonly notes?: TimesTimeNote[];
 }
 
@@ -86,6 +89,7 @@ export interface TimesNoteSection {
 export interface Times {
   readonly id: string | undefined;
   readonly name: string;
+  readonly is_mass?: boolean;
   readonly sections?: (TimesSection | TimesNoteSection)[];
 }
 

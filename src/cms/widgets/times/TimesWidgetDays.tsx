@@ -26,10 +26,11 @@ const StyledAddButtonWrapper = styled('div')`
 
 interface TimesWidgetDaysProps {
   days?: TimesDay[];
+  isMass: boolean;
   onChange: (days: TimesDay[]) => void;
 }
 
-const TimesWidgetDays: FC<TimesWidgetDaysProps> = ({ days: rawDays = [], onChange }) => {
+const TimesWidgetDays: FC<TimesWidgetDaysProps> = ({ days: rawDays = [], isMass, onChange }) => {
   const hasMissingIds = Boolean(rawDays.find((i) => !i.id));
 
   const days = useMemo(
@@ -110,7 +111,7 @@ const TimesWidgetDays: FC<TimesWidgetDaysProps> = ({ days: rawDays = [], onChang
           {internalValue.length > 0 ? (
             <StyledDayTimeLines>
               {internalValue?.map((day) => (
-                <TimesWidgetDay key={day.id} day={day} onChange={handleChange} onDelete={handleDelete} />
+                <TimesWidgetDay key={day.id} day={day} isMass={isMass} onChange={handleChange} onDelete={handleDelete} />
               ))}
             </StyledDayTimeLines>
           ) : null}

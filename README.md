@@ -32,6 +32,12 @@ Current intentional smoke baseline constraints:
 2. Start local authication service for cms `npm run local-cms`
 3. Start dev build `npm run dev`
 
+## Mass Schedule Editing
+
+In the admin schedule editor, enable **Contains Mass times** at the top of a category that contains Masses. Each entry with a start time then offers a **Mass orientation** dropdown, defaulting to **Versus populum (v.p.)**. Select **Ad orientem (a.o.)** where appropriate; separate abbreviation notes are not needed.
+
+The public schedule shows a small outlined badge next to each Mass time. Hover, focus with the keyboard, or click/tap the badge to read its meaning. Other categories and note-only rows have no badges. Disabling **Contains Mass times** hides the controls and badges without deleting saved orientation choices.
+
 ## License
 
 MIT

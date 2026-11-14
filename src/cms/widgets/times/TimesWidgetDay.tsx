@@ -67,11 +67,12 @@ const StyledDragHandle = styled('div')(
 
 export interface TimesWidgetDayProps {
   day: TimesDay;
+  isMass: boolean;
   onChange: (day: TimesDay) => void;
   onDelete: (day: TimesDay) => void;
 }
 
-const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) => {
+const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, isMass, onChange, onDelete }) => {
   const stopPropagation = useCallback((event: MouseEvent) => {
     event.stopPropagation();
   }, []);
@@ -140,7 +141,7 @@ const TimesWidgetDay: FC<TimesWidgetDayProps> = ({ day, onChange, onDelete }) =>
             }
           >
             <StyledDayTimeLineTimes>
-              <TimesWidgetTimes times={day.times} onChange={(times) => handleChange({ times })} />
+              <TimesWidgetTimes times={day.times} isMass={isMass} onChange={(times) => handleChange({ times })} />
             </StyledDayTimeLineTimes>
           </CollapseSection>
         </StyledDayTimeLineContent>

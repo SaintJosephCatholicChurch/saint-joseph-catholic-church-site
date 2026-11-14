@@ -104,12 +104,14 @@ const StyledDragHandle = styled('div')(
 
 export interface TimesWidgetSectionProps<T extends TimesSection | TimesNoteSection> {
   section: T;
+  isMass: boolean;
   onChange: (section: T) => void;
   onDelete: (section: T) => void;
 }
 
 const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>({
   section,
+  isMass,
   onChange,
   onDelete
 }: TimesWidgetSectionProps<T>) {
@@ -243,7 +245,7 @@ const TimesWidgetSection = function <T extends TimesSection | TimesNoteSection>(
               </StyledSectionHeaderWrapper>
             }
           >
-            <TimesWidgetDays days={section.days} onChange={(days) => handleChange({ days } as T)} />
+            <TimesWidgetDays days={section.days} isMass={isMass} onChange={(days) => handleChange({ days } as T)} />
           </CollapseSection>
         </StyledSectionContent>
       </StyledSection>

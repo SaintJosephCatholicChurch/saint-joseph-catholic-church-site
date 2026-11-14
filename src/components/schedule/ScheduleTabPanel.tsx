@@ -6,6 +6,7 @@ import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
 import TabPanel from '../TabPanel';
+import MassOrientationBadge from './MassOrientationBadge';
 
 import type { Times } from '../../interface';
 
@@ -141,22 +142,13 @@ const StyledDayTimeLineTimes = styled('div')`
   gap: 4px;
 `;
 
-interface StyledDayTimeLineTimeProps {
-  $inlineNotes: boolean;
-}
-
-const StyledDayTimeLineTime = styled(
-  'div',
-  transientOptions
-)<StyledDayTimeLineTimeProps>(
-  ({ $inlineNotes }) => `
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    align-items: center;
-    gap: ${$inlineNotes ? '12' : '4'}px;
-  `
-);
+const StyledDayTimeLineTime = styled('div')`
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+`;
 
 const StyledDayTimeLineTimeTimes = styled('div')(
   ({ theme }) => `
@@ -239,56 +231,82 @@ const ScheduleTabPanel = memo(
             return (
               <StyledSections key={`section-${sectionIndex}`} $variant={variant}>
                 {isNotEmpty(section.name) ? <StyledSectionTitle>{section.name}</StyledSectionTitle> : null}
-                {section.days?.map((day, dayIndex) => (
-                  <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
-                    <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
-                    <StyledDayTimeLineTimes>
-                      {day.times?.map((time, timeIndex) => (
-                        <StyledDayTimeLineTime
-                          key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}
-                          $inlineNotes={!isNotEmpty(time.end_time)}
-                        >
-                          <StyledDayTimeLineTimeTimes>
-                            {isNotEmpty(time.time) ? time.time : null}
-                          </StyledDayTimeLineTimeTimes>
-                          {isNotEmpty(time.end_time) ? (
-                            <>
-                              <StyledDivider
-                                key={`section-${sectionIndex}-day-${dayIndex}-divider-end-time-${timeIndex}`}
-                              >
-                                -
-                              </StyledDivider>
-                              <StyledDayTimeLineTimeTimes
-                                key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
-                              >
-                                {time.end_time}
-                              </StyledDayTimeLineTimeTimes>
-                            </>
-                          ) : null}
-                          {time.notes && time.notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
-                            <StyledDayTimeLineTimeNotes>
-                              {time.notes
-                                .filter((note) => isNotEmpty(note.note))
-                                .map((note) => (
-                                  <StyledDayTimeLineTimeComment
-                                    key={`section-${sectionIndex}-day-${dayIndex}-note-${note.id}`}
-                                    dangerouslySetInnerHTML={{
-                                      __html: sanitizeHtmlImages(
-                                        note.note.replace(
-                                          new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),
-                                          '$1<br>'
+                {section.days?.map((day, dayIndex) => {
+                  if (
+                    !isNotEmpty(day.day) &&
+                    day.times?.every((time) => !isNotEmpty(time.time) && !isNotEmpty(time.end_time))
+                  ) {
+                    return (
+                      <StyledDayTimeLine
+                        key={`section-${sectionIndex}-day-${dayIndex}`}
+                        sx={{ flexDirection: 'column', alignItems: 'stretch', gap: '4px' }}
+                      >
+                        {day.times.flatMap((time) =>
+                          (time.notes ?? [])
+                            .filter((note) => isNotEmpty(note.note))
+                            .map((note) => (
+                              <StyledDayTimeLineTimeComment
+                                key={note.id}
+                                sx={{ justifyContent: 'flex-end', textWrap: 'balance' }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtmlImages(note.note) }}
+                              />
+                            ))
+                        )}
+                      </StyledDayTimeLine>
+                    );
+                  }
+
+                  return (
+                    <StyledDayTimeLine key={`section-${sectionIndex}-day-${dayIndex}`}>
+                      <StyledDayTimeLineTitle>{day.day}</StyledDayTimeLineTitle>
+                      <StyledDayTimeLineTimes>
+                        {day.times?.map((time, timeIndex) => (
+                          <StyledDayTimeLineTime key={`section-${sectionIndex}-day-${dayIndex}-times-${timeIndex}`}>
+                            <StyledDayTimeLineTimeTimes>
+                              {isNotEmpty(time.time) ? time.time : null}
+                            </StyledDayTimeLineTimeTimes>
+                            {isNotEmpty(time.end_time) ? (
+                              <>
+                                <StyledDivider
+                                  key={`section-${sectionIndex}-day-${dayIndex}-divider-end-time-${timeIndex}`}
+                                >
+                                  -
+                                </StyledDivider>
+                                <StyledDayTimeLineTimeTimes
+                                  key={`section-${sectionIndex}-day-${dayIndex}-end-time-${timeIndex}`}
+                                >
+                                  {time.end_time}
+                                </StyledDayTimeLineTimeTimes>
+                              </>
+                            ) : null}
+                            {times.is_mass && isNotEmpty(time.time) ? (
+                              <MassOrientationBadge orientation={time.mass_orientation} />
+                            ) : null}
+                            {time.notes && time.notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
+                              <StyledDayTimeLineTimeNotes>
+                                {time.notes
+                                  .filter((note) => isNotEmpty(note.note))
+                                  .map((note) => (
+                                    <StyledDayTimeLineTimeComment
+                                      key={`section-${sectionIndex}-day-${dayIndex}-note-${note.id}`}
+                                      dangerouslySetInnerHTML={{
+                                        __html: sanitizeHtmlImages(
+                                          note.note.replace(
+                                            new RegExp(`(.{${NOTE_MAX_LINE_LENGTH}}(?:[^ ]*)[ ])`, 'g'),
+                                            '$1<br>'
+                                          )
                                         )
-                                      )
-                                    }}
-                                  />
-                                ))}
-                            </StyledDayTimeLineTimeNotes>
-                          ) : null}
-                        </StyledDayTimeLineTime>
-                      ))}
-                    </StyledDayTimeLineTimes>
-                  </StyledDayTimeLine>
-                ))}
+                                      }}
+                                    />
+                                  ))}
+                              </StyledDayTimeLineTimeNotes>
+                            ) : null}
+                          </StyledDayTimeLineTime>
+                        ))}
+                      </StyledDayTimeLineTimes>
+                    </StyledDayTimeLine>
+                  );
+                })}
               </StyledSections>
             );
           })}

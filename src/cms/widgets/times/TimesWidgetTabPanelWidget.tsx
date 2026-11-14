@@ -5,6 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { memo, useCallback, useState } from 'react';
@@ -85,7 +87,17 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
               Delete
             </Button>
           </StyledTabPanelTitleWrapper>
-          <TimesWidgetSections sections={times.sections} onChange={(sections) => onChange({ sections })} />
+          <FormControlLabel
+            control={
+              <Switch checked={times.is_mass ?? false} onChange={(_, checked) => onChange({ is_mass: checked })} />
+            }
+            label="Contains Mass times"
+          />
+          <TimesWidgetSections
+            sections={times.sections}
+            isMass={times.is_mass ?? false}
+            onChange={(sections) => onChange({ sections })}
+          />
         </StyledTabPanelContent>
       </TabPanel>
       <Dialog

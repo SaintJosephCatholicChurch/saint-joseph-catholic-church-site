@@ -173,6 +173,43 @@ async function expectRouteScreenshot(
 }
 
 test.describe('public site smoke coverage', () => {
+  test('homepage featured content stays below the schedule during hydration', async ({ page }) => {
+    const hydrationErrors: string[] = [];
+    page.on('pageerror', (error) => {
+      if (/hydration/i.test(error.message)) {
+        hydrationErrors.push(error.message);
+      }
+    });
+
+    let releaseScripts!: () => void;
+    const scriptsReady = new Promise<void>((resolve) => {
+      releaseScripts = resolve;
+    });
+    await page.route(/\/_next\/.*\.js(?:\?|$)/, async (route) => {
+      await scriptsReady;
+      await route.continue();
+    });
+
+    const featuredHeading = page.getByRole('heading', { name: 'Pastoral Associate for Youth and Parish Life' });
+    let initialTop: number;
+    try {
+      await page.goto('/', { waitUntil: 'commit' });
+      await expect(featuredHeading).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Weekly Schedule' })).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      initialTop = await featuredHeading.evaluate((element) => element.getBoundingClientRect().top + scrollY);
+    } finally {
+      releaseScripts();
+    }
+
+    await page.waitForLoadState('load');
+    await expect(page.getByRole('heading', { name: 'Upcoming Events' })).toBeVisible();
+    const hydratedTop = await featuredHeading.evaluate((element) => element.getBoundingClientRect().top + scrollY);
+
+    expect(Math.abs(hydratedTop - initialTop)).toBeLessThanOrEqual(2);
+    expect(hydrationErrors).toEqual([]);
+  });
+
   test('homepage renders key sections and calls to action', async ({ page, isMobileProject }) => {
     await page.goto('/');
 
@@ -186,6 +223,108 @@ test.describe('public site smoke coverage', () => {
 
     await expectShellLayout(page);
     await expectRouteScreenshot(page, 'homepage', isMobileProject);
+  });
+
+  test('desktop schedule note-only rows use the full row width', async ({ page, isMobileProject }) => {
+    test.skip(isMobileProject, 'Mobile uses a separate schedule layout.');
+    await page.goto('/');
+
+    const note = page.getByText(/^\*Masses are offered for members/).last();
+    await expect(note).toBeVisible();
+    await expect(note.locator('br')).toHaveCount(0);
+
+    const widths = await note.evaluate((element) => ({
+      note: element.getBoundingClientRect().width,
+      row: element.parentElement.getBoundingClientRect().width
+    }));
+    expect(widths.note).toBeGreaterThan(0);
+    expect(Math.abs(widths.note - widths.row)).toBeLessThanOrEqual(1);
+  });
+
+  test('Mass orientation badges replace abbreviation notes without changing other schedule details', async ({
+    page,
+    isMobileProject
+  }) => {
+    await page.goto('/');
+
+    const badges = page.getByRole('button', { name: /^Mass orientation:/ });
+    await expect(badges).toHaveCount(11);
+    await expect(page.getByRole('button', { name: 'Mass orientation: versus populum', exact: true })).toHaveCount(9);
+    const adOrientem = page.getByRole('button', { name: 'Mass orientation: ad orientem', exact: true });
+    await expect(adOrientem).toHaveCount(2);
+    await expect(adOrientem.nth(0).locator('..')).toContainText('10:00 AM');
+    await expect(adOrientem.nth(1).locator('..')).toContainText('8:30 AM');
+    for (const note of [
+      '2nd and 4th Thursdays',
+      '3rd Thursdays',
+      'Every Sunday',
+      'Rosary at 9:40 AM',
+      'No Public Mass'
+    ]) {
+      await expect(page.getByText(note, { exact: true }).filter({ visible: true })).toBeVisible();
+    }
+    await expect(page.getByText(/\([av]\.[op]\.\)|[av]\.[dpo]\. - Mass offered:/)).toHaveCount(0);
+
+    if (isMobileProject) {
+      await page.setViewportSize({ width: 320, height: 851 });
+      const bounds = await badges.evaluateAll((elements) =>
+        elements.map((element) => {
+          const { left, right } = element.getBoundingClientRect();
+          return { left, right };
+        })
+      );
+      for (const { left, right } of bounds) {
+        expect(left).toBeGreaterThanOrEqual(0);
+        expect(right).toBeLessThanOrEqual(320);
+      }
+    }
+
+    for (const category of ['Confession Times', 'Adoration Times', 'Parish Office Hours']) {
+      if (isMobileProject) {
+        const categoryButton = page.getByRole('button', { name: category, exact: true });
+        await categoryButton.click();
+        await expect(categoryButton.locator('..').getByRole('button', { name: /^Mass orientation:/ })).toHaveCount(0);
+      } else {
+        await page.getByRole('tab', { name: category, exact: true }).click();
+        await expect(
+          page.getByRole('tabpanel', { name: category }).getByRole('button', { name: /^Mass orientation:/ })
+        ).toHaveCount(0);
+      }
+    }
+  });
+
+  test('Mass orientation tooltips support keyboard, hover, and single click or tap', async ({
+    page,
+    isMobileProject
+  }) => {
+    await page.goto('/');
+    const badge = page.getByRole('button', { name: 'Mass orientation: ad orientem', exact: true }).first();
+    const tooltip = page.getByRole('tooltip');
+
+    if (!isMobileProject) {
+      await badge.hover();
+      await expect(tooltip).toHaveText('Mass offered: ad orientem');
+      await page.getByRole('heading', { name: 'Weekly Schedule' }).hover();
+      await expect(tooltip).not.toBeVisible();
+    }
+
+    await badge.focus();
+    await expect(tooltip).toHaveText('Mass offered: ad orientem');
+    await badge.press('Escape');
+    await expect(tooltip).not.toBeVisible();
+
+    if (isMobileProject) {
+      await badge.tap();
+    } else {
+      await badge.click();
+    }
+    await expect(tooltip).toHaveText('Mass offered: ad orientem');
+    await page.getByRole('heading', { name: 'Weekly Schedule' }).click();
+    await expect(tooltip).not.toBeVisible();
+
+    const versusPopulum = page.getByRole('button', { name: 'Mass orientation: versus populum', exact: true }).first();
+    await versusPopulum.click();
+    await expect(tooltip).toHaveText('Mass offered: versus populum');
   });
 
   test('live stream page loads', async ({ page, isMobileProject }) => {

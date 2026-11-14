@@ -24,10 +24,11 @@ const StyledDayTimeLineTimes = styled('div')`
 
 interface TimesWidgetTimesProps {
   times?: TimesTime[];
+  isMass: boolean;
   onChange: (times: TimesTime[]) => void;
 }
 
-const TimesWidgetTimes: FC<TimesWidgetTimesProps> = ({ times: rawTimes = [], onChange }) => {
+const TimesWidgetTimes: FC<TimesWidgetTimesProps> = ({ times: rawTimes = [], isMass, onChange }) => {
   const hasMissingIds = Boolean(rawTimes.find((i) => !i.id));
   const times = useMemo(
     () =>
@@ -107,7 +108,13 @@ const TimesWidgetTimes: FC<TimesWidgetTimesProps> = ({ times: rawTimes = [], onC
           {internalValue.length > 0 ? (
             <StyledDayTimeLineTimes>
               {internalValue?.map((time) => (
-                <TimesWidgetTime key={time.id} time={time} onChange={handleChange} onDelete={handleDelete} />
+                <TimesWidgetTime
+                  key={time.id}
+                  time={time}
+                  isMass={isMass}
+                  onChange={handleChange}
+                  onDelete={handleDelete}
+                />
               ))}
             </StyledDayTimeLineTimes>
           ) : null}

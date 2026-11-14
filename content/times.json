@@ -2,6 +2,7 @@
   "times": [
     {
       "name": "Mass Times",
+      "is_mass": true,
       "sections": [
         {
           "name": "Sunday Mass",
@@ -12,12 +13,7 @@
                 {
                   "end_time": "",
                   "time": "5:00 PM",
-                  "notes": [
-                    {
-                      "note": "(v.p.)",
-                      "id": "488cd181-546a-4195-9525-667c962cc1cb"
-                    }
-                  ],
+                  "mass_orientation": "versus_populum",
                   "id": "b8168f22-98d5-48fd-8b2f-6bc6b830b499"
                 },
                 {
@@ -37,12 +33,7 @@
               "times": [
                 {
                   "time": "7:30 AM",
-                  "notes": [
-                    {
-                      "note": "(v.p.)",
-                      "id": "e799ed13-86cb-4b67-8ebd-80300e494d0d"
-                    }
-                  ],
+                  "mass_orientation": "versus_populum",
                   "end_time": "",
                   "id": "de1c02c1-c4de-4d9e-8e40-34360a5398f4"
                 },
@@ -57,12 +48,7 @@
                 },
                 {
                   "time": "10:00 AM",
-                  "notes": [
-                    {
-                      "note": "(a.o.)",
-                      "id": "abae934f-911a-4029-befc-730927486e8f"
-                    }
-                  ],
+                  "mass_orientation": "ad_orientem",
                   "end_time": "",
                   "id": "b8a9f03e-1277-4480-965c-792f63da6b14"
                 },
@@ -114,12 +100,7 @@
                 {
                   "time": "8:00 AM",
                   "id": "42ae1116-87eb-4299-868f-a53975ff440c",
-                  "notes": [
-                    {
-                      "id": "67e2cbed-09f3-4ea7-81c7-f8f76aee3996",
-                      "note": "(v.p.)"
-                    }
-                  ]
+                  "mass_orientation": "versus_populum"
                 },
                 {
                   "notes": [
@@ -144,12 +125,7 @@
                   "time": "7:00 PM",
                   "end_time": "",
                   "id": "1178e3c4-1157-4676-b7d2-e55377a2dbfe",
-                  "notes": [
-                    {
-                      "id": "de54aa5d-cb72-41ae-a01f-70aaa373b264",
-                      "note": "(v.p.)"
-                    }
-                  ]
+                  "mass_orientation": "versus_populum"
                 },
                 {
                   "notes": [
@@ -170,12 +146,7 @@
                   "time": "8:00 AM",
                   "end_time": "",
                   "id": "c15a42b6-df7f-4182-83c3-73ecc7afa6c7",
-                  "notes": [
-                    {
-                      "id": "e6f96318-7f6d-4ef5-b0ed-fecb75b6e48d",
-                      "note": "(v.p.)"
-                    }
-                  ]
+                  "mass_orientation": "versus_populum"
                 }
               ],
               "id": "e4dac0ed-2694-4f3e-b203-9fd652bf0570"
@@ -187,12 +158,7 @@
                   "time": "8:30 AM",
                   "end_time": "",
                   "id": "08e04d04-53e4-4f2b-8733-625ab18f4cf2",
-                  "notes": [
-                    {
-                      "id": "e5c772be-4539-491f-81bd-dbd553cc2ffa",
-                      "note": "(a.o.)"
-                    }
-                  ]
+                  "mass_orientation": "ad_orientem"
                 }
               ],
               "id": "3ac7fa94-de8f-42f0-a2b9-acd8ed080bdd"
@@ -204,12 +170,7 @@
                   "time": "8:00 AM",
                   "end_time": "",
                   "id": "95518a16-b6e6-46e8-ad0b-1221309d268b",
-                  "notes": [
-                    {
-                      "id": "0b8258f7-8452-426b-9f2d-e3b2779a5c38",
-                      "note": "(v.p.)"
-                    }
-                  ]
+                  "mass_orientation": "versus_populum"
                 },
                 {
                   "notes": [
@@ -237,10 +198,11 @@
                 {
                   "id": "365fb27e-33bc-4ec5-809c-42bcdb3b5b54",
                   "time": "10:30 AM",
+                  "mass_orientation": "versus_populum",
                   "notes": [
                     {
                       "id": "3f6d1d6d-7aa1-4380-9674-66fac4901a6d",
-                      "note": "(v.p.) 2nd and 4th Thursdays"
+                      "note": "2nd and 4th Thursdays"
                     }
                   ]
                 }
@@ -253,10 +215,11 @@
                 {
                   "id": "a9751b8f-7bbe-4933-b91a-b8eba854df3e",
                   "time": "10:30 AM",
+                  "mass_orientation": "versus_populum",
                   "notes": [
                     {
                       "id": "a6e8890c-3109-40b6-af13-bf1d6b07c06a",
-                      "note": "(v.p.) 3rd Thursdays"
+                      "note": "3rd Thursdays"
                     }
                   ]
                 }
@@ -269,10 +232,11 @@
                 {
                   "id": "507cede0-022a-42b0-ba53-d2ed5bb2c200",
                   "time": "1:00 PM",
+                  "mass_orientation": "versus_populum",
                   "notes": [
                     {
                       "id": "28a52bec-5db4-4e17-8692-ec6d3792de28",
-                      "note": "(v.p.) Every Sunday"
+                      "note": "Every Sunday"
                     }
                   ]
                 }
@@ -291,37 +255,7 @@
                     },
                     {
                       "id": "dd5a0c05-0737-4674-9d83-c502eff170d1",
-                      "note": "Note: Weekday Mass times at our retirement communities are subject to change. Please check the Parish Schedule in the Bulletin for up-to-date information.</I "
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "e46d9b5a-77e2-473a-839d-85de33fbc90b",
-          "name": "",
-          "days": [
-            {
-              "id": "13c1df10-2b80-47e5-a139-7d3e60efe7e3",
-              "day": "",
-              "times": [
-                {
-                  "id": "930c2789-0d0b-463f-9cec-1eaebfc391e4",
-                  "notes": [
-                    {
-                      "id": "3b908a96-1485-4806-adb6-fa014c465227",
-                      "note": "v.p. - Mass offered: <i>versus populum</i>"
-                    }
-                  ]
-                },
-                {
-                  "id": "fcdab55f-1c08-45a7-b37e-4bcddc6b1b6f",
-                  "notes": [
-                    {
-                      "id": "35ef0b8e-6c7c-4ec4-9f9f-daf9ebea43e6",
-                      "note": "a.d. - Mass offered: <i>ad orientem</i>"
+                      "note": "Note: Weekday Mass times at our retirement communities are subject to change. Please check the Parish Schedule in the Bulletin for up-to-date information."
                     }
                   ]
                 }

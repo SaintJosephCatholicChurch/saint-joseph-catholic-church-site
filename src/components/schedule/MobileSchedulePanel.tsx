@@ -11,6 +11,7 @@ import getContainerQuery from '../../util/container.util';
 import { isNotEmpty } from '../../util/string.util';
 import transientOptions from '../../util/transientOptions';
 import sanitizeHtmlImages from '../../util/sanitizeHtmlImages';
+import MassOrientationBadge from './MassOrientationBadge';
 
 import type { Times } from '../../interface';
 
@@ -249,6 +250,9 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                                 </StyledDayTimeLineTimeTimes>
                               </>
                             ) : null}
+                            {times.is_mass && isNotEmpty(day.times[0].time) ? (
+                              <MassOrientationBadge orientation={day.times[0].mass_orientation} />
+                            ) : null}
                           </StyledDayTimeLineTime>
                         ) : day.times[0].notes &&
                           day.times[0].notes.filter((note) => isNotEmpty(note.note)).length > 0 ? (
@@ -305,6 +309,9 @@ const MobileScheduleTabPanel = memo(({ times, index }: MobileScheduleTabPanelPro
                                     {time.end_time}
                                   </StyledDayTimeLineTimeTimes>
                                 </>
+                              ) : null}
+                              {times.is_mass && isNotEmpty(time.time) ? (
+                                <MassOrientationBadge orientation={time.mass_orientation} />
                               ) : null}
                             </StyledDayTimeLineTime>
                           ) : null}

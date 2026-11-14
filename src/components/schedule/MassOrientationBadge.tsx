@@ -11,6 +11,10 @@ interface MassOrientationBadgeProps {
 
 export default function MassOrientationBadge({ orientation = 'versus_populum' }: MassOrientationBadgeProps) {
   const [open, setOpen] = useState(false);
+  if (orientation === '') {
+    return null;
+  }
+
   const adOrientem = orientation === 'ad_orientem';
   const name = adOrientem ? 'ad orientem' : 'versus populum';
 
@@ -39,7 +43,10 @@ export default function MassOrientationBadge({ orientation = 'versus_populum' }:
             textTransform: 'none',
             color: '#bc2f3b',
             borderColor: 'rgba(188, 47, 59, 0.4)',
-            flexShrink: 0
+            flexShrink: 0,
+            '& .MuiChip-label': {
+              transform: 'translateY(1px)'
+            }
           }}
         />
       </Tooltip>

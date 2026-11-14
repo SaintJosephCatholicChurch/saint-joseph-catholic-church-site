@@ -54,7 +54,7 @@ export interface Slide {
   readonly title: string;
 }
 
-export type MassOrientation = 'versus_populum' | 'ad_orientem';
+export type MassOrientation = '' | 'versus_populum' | 'ad_orientem';
 
 export interface TimesTime {
   readonly id: string | undefined;

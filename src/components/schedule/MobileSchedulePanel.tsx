@@ -93,10 +93,10 @@ const StyledDayTimeLineTimes = styled('div')(
     display: flex;
     flex-direction: column;
     gap: 4px;
+    margin-bottom: 5px;
 
     ${getContainerQuery(theme.breakpoints.down('sm'))} {
       gap: 6px;
-      margin-bottom: 5px;
       flex-wrap: nowrap;
       white-space: nowrap;
     }
@@ -119,7 +119,7 @@ const StyledDayTimeLineTimeWrapper = styled('div')(
 
 const StyledDayTimeLineTime = styled('div')`
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: flex-end;
   gap: 4px;
 `;

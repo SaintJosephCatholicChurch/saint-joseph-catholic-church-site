@@ -144,7 +144,6 @@ const StyledDayTimeLineTimes = styled('div')`
 
 const StyledDayTimeLineTime = styled('div')`
   display: flex;
-  align-items: baseline;
   justify-content: flex-end;
   align-items: center;
   gap: 4px;

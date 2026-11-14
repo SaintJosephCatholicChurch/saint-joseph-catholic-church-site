@@ -92,6 +92,7 @@ const ScheduleTabPanel = memo(({ times, value, index, onChange, onDelete }: Sche
               <Switch checked={times.is_mass ?? false} onChange={(_, checked) => onChange({ is_mass: checked })} />
             }
             label="Contains Mass times"
+            sx={{ color: 'text.primary' }}
           />
           <TimesWidgetSections
             sections={times.sections}

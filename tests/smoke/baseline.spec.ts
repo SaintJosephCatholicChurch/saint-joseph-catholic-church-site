@@ -1,5 +1,8 @@
 import { type Locator, type Page } from '@playwright/test';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
+import MassOrientationBadge from '../../src/components/schedule/MassOrientationBadge';
 import { expectShellLayout } from './helpers/layout';
 import { getLatestBulletinRoute, loadInternalMenuTargets, routeMatches } from './helpers/site';
 import { expectStableScreenshot } from './helpers/visual';
@@ -241,6 +244,33 @@ test.describe('public site smoke coverage', () => {
     expect(Math.abs(widths.note - widths.row)).toBeLessThanOrEqual(1);
   });
 
+  test('schedule notes retain bottom spacing across responsive breakpoints', async ({ page }) => {
+    await page.goto('/');
+    const note = page
+      .getByText('Note: Incense may be used at the 10 AM Mass', { exact: true })
+      .filter({ visible: true });
+
+    for (const width of [915, 899, 768, 600, 599, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(note).toBeVisible();
+      const bottomSpacing = await note.evaluate((element) => {
+        let row = element.parentElement;
+        while (row && getComputedStyle(row).borderBottomWidth !== '1px') {
+          row = row.parentElement;
+        }
+        if (!row) {
+          throw new Error('Schedule note is missing its row divider');
+        }
+        return row.getBoundingClientRect().bottom - 1 - element.getBoundingClientRect().bottom;
+      });
+      expect(bottomSpacing, `Note spacing at ${width}px`).toBeGreaterThanOrEqual(5);
+    }
+  });
+
+  test('Mass orientation None renders no badge', () => {
+    expect(renderToStaticMarkup(createElement(MassOrientationBadge, { orientation: '' }))).toBe('');
+  });
+
   test('Mass orientation badges replace abbreviation notes without changing other schedule details', async ({
     page,
     isMobileProject
@@ -267,13 +297,22 @@ test.describe('public site smoke coverage', () => {
 
     if (isMobileProject) {
       await page.setViewportSize({ width: 320, height: 851 });
-      const bounds = await badges.evaluateAll((elements) =>
-        elements.map((element) => {
-          const { left, right } = element.getBoundingClientRect();
-          return { left, right };
-        })
-      );
-      for (const { left, right } of bounds) {
+    }
+
+    const bounds = await badges.evaluateAll((elements) =>
+      elements.map((element) => {
+        const time = element.previousElementSibling;
+        if (!time) {
+          throw new Error('Mass badge is missing its adjacent time');
+        }
+        const { left, right, top, height } = element.getBoundingClientRect();
+        const timeBounds = time.getBoundingClientRect();
+        return { left, right, centerOffset: top + height / 2 - (timeBounds.top + timeBounds.height / 2) };
+      })
+    );
+    for (const { left, right, centerOffset } of bounds) {
+      expect(Math.abs(centerOffset)).toBeLessThanOrEqual(1);
+      if (isMobileProject) {
         expect(left).toBeGreaterThanOrEqual(0);
         expect(right).toBeLessThanOrEqual(320);
       }

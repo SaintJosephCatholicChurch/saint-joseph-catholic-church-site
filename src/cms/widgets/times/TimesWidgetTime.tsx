@@ -201,13 +201,18 @@ const TimesWidgetTime: FC<TimesWidgetTimeProps> = ({ time, isMass, onChange, onD
                       size="small"
                       value={time.mass_orientation ?? 'versus_populum'}
                       onClick={stopPropagation}
-                      onChange={(event) =>
+                      onChange={(event) => {
+                        const orientation = event.target.value;
                         handleChange({
-                          mass_orientation: event.target.value === 'ad_orientem' ? 'ad_orientem' : 'versus_populum'
-                        })
-                      }
+                          mass_orientation:
+                            orientation === '' || orientation === 'ad_orientem' ? orientation : 'versus_populum'
+                        });
+                      }}
+                      SelectProps={{ displayEmpty: true }}
+                      InputLabelProps={{ shrink: true }}
                       sx={{ minWidth: 180 }}
                     >
+                      <MenuItem value="">None</MenuItem>
                       <MenuItem value="versus_populum">Versus populum (v.p.)</MenuItem>
                       <MenuItem value="ad_orientem">Ad orientem (a.o.)</MenuItem>
                     </TextField>

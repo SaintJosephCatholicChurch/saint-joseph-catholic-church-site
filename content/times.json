@@ -199,9 +199,13 @@
                   "id": "365fb27e-33bc-4ec5-809c-42bcdb3b5b54",
                   "time": "10:30 AM",
                   "mass_orientation": "versus_populum",
+                  "notes": []
+                },
+                {
+                  "id": "d22005d2-e9ca-46bc-aeb5-b5ece324ff54",
                   "notes": [
                     {
-                      "id": "3f6d1d6d-7aa1-4380-9674-66fac4901a6d",
+                      "id": "5e2ced65-fe55-4071-93ff-e64ee43cb395",
                       "note": "2nd and 4th Thursdays"
                     }
                   ]
@@ -216,9 +220,13 @@
                   "id": "a9751b8f-7bbe-4933-b91a-b8eba854df3e",
                   "time": "10:30 AM",
                   "mass_orientation": "versus_populum",
+                  "notes": []
+                },
+                {
+                  "id": "564a5322-c68e-4c6b-9e59-63078129b5bc",
                   "notes": [
                     {
-                      "id": "a6e8890c-3109-40b6-af13-bf1d6b07c06a",
+                      "id": "7f3097f7-e1b0-4229-839f-abfa23509a05",
                       "note": "3rd Thursdays"
                     }
                   ]
@@ -233,9 +241,13 @@
                   "id": "507cede0-022a-42b0-ba53-d2ed5bb2c200",
                   "time": "1:00 PM",
                   "mass_orientation": "versus_populum",
+                  "notes": []
+                },
+                {
+                  "id": "9b0e240a-ce6e-46a4-b1cb-e283078e4473",
                   "notes": [
                     {
-                      "id": "28a52bec-5db4-4e17-8692-ec6d3792de28",
+                      "id": "1c495d4b-3e88-4202-b834-0d0d153c7255",
                       "note": "Every Sunday"
                     }
                   ]

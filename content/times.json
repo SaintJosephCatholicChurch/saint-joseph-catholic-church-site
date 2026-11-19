@@ -279,6 +279,28 @@
       "id": "191c3d06-36e2-48fe-a1e0-bc318251cee5"
     },
     {
+      "id": "5b69bf09-8aae-4706-a386-c7e790abb87d",
+      "name": "Thanksgiving Day Mass",
+      "sections": [
+        {
+          "id": "4fd93b27-79ee-477d-9a22-92a139914108",
+          "name": "Thanksgiving Day - November 26, 2026",
+          "days": [
+            {
+              "id": "c2e8b587-e117-4fb8-b24b-6ca55901c128",
+              "day": "Thanksgiving Day Mass",
+              "times": [
+                {
+                  "id": "0cc7d24f-79cf-48c2-9146-92313a52fc42",
+                  "time": "9:00 AM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Parish Office Hours",
       "sections": [
         {
@@ -543,6 +565,94 @@
         }
       ],
       "id": "767c2690-cb03-47a3-ba8a-b4168f3dc086"
+    },
+    {
+      "id": "10f1f7ee-6df4-4ddc-98b0-951ec8ba77f5",
+      "name": "Advent Parish Mission",
+      "sections": [
+        {
+          "id": "14a6e959-81a7-42f4-99f6-b86ed1e991ad",
+          "name": "Advent Parish Mission Talks with Fr. Ben Cameron, CPM",
+          "days": [
+            {
+              "id": "a7c8e850-5804-422f-9f1d-cc54c81722b9",
+              "day": "Sunday, Dec. 6th",
+              "times": [
+                {
+                  "id": "b7bdd3d5-515a-4c5c-b9d5-2771d1adb408",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "164644b6-a393-4f98-8073-a6d66ad6d550",
+              "day": "Monday, Dec. 7th",
+              "times": [
+                {
+                  "id": "dc0da762-f2cb-4872-a4b1-7382d4989955",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "30d77055-3763-4c41-aed1-4ab4d82b1033",
+              "day": "Tuesday, Dec. 8th",
+              "times": [
+                {
+                  "id": "c133caa6-0d3b-4e9b-acca-a7ae7cfcba9b",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "01d39738-2ae1-4535-8f0a-d7727f163be7",
+              "day": "Wednesday, Dec. 9th",
+              "times": [
+                {
+                  "id": "37bcab97-93de-4b88-811b-7f1a5d77ac8c",
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "df253b1f-96cc-4b8d-93e1-32f144c27ff6",
+          "name": "Forty Hours Devotion during Advent Parish Mission",
+          "days": [
+            {
+              "id": "6da4ed94-22df-459c-a7ff-83c25d40df7d",
+              "day": "Start of Forty Hours Devotion - Monday, Dec. 7th (Mass)",
+              "times": [
+                {
+                  "id": "15d798e3-345a-4bb9-9176-5a4967aef392",
+                  "time": "7:00 PM"
+                }
+              ]
+            },
+            {
+              "id": "6905fc94-dafb-429b-b025-61f5c1894269",
+              "day": "End of Forty Hours Devotion - Wednesday, Dec. 9th (Mass)",
+              "times": [
+                {
+                  "id": "763aa693-b7a9-4117-80c5-2d50fec39f80",
+                  "time": "7:00 PM"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3a6700d4-210d-4388-b216-0eaf979c375b",
+      "name": "Holy Day (Dec. 8, 2026)",
+      "sections": [
+        {
+          "id": "704c8927-14a5-4dcf-bc34-8bfe7f126514",
+          "name": "TBA"
+        }
+      ]
     }
   ]
 }
